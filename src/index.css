@@ -1,0 +1,110 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* 
+* @Containers
+*/
+.con-75 {
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.app-body {
+  padding-top: 24px;
+}
+
+
+/* 
+* @Form
+* Form elements 
+*/
+label {
+  font-weight: bold;
+  font-size: 14px;
+  color: #303030;
+}
+input, textarea {
+  padding: 10px;
+  width: 98%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+input:focus, textarea:focus {
+  border: 1px solid #4da6ff;
+  outline: none;
+}
+
+button {
+  padding: 6px 24px;
+  text-align: center;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 5px;
+}
+button:hover {
+  cursor: pointer;
+  background-color: #f0f0f0;
+}
+
+.form-section {
+  margin-top: 14px;
+  margin-bottom: 14px;
+}
+
+/* 
+* @Card
+*/
+.card {
+  min-width: 16%;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  height: 210px;
+}
+.card-image {
+  height: 150px;
+  background-color: #f0f0f0;
+}
+.card-body {
+  padding: 5px;
+}
+.card-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+.card-body {
+
+}
+
+
+/* 
+* @Page
+*/
+.page-title {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+/* 
+* @Global
+*/
+.cursor:hover {
+  cursor: pointer;
+}
