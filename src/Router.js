@@ -1,9 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Create a context to store routing information
+/**
+ * Building the React Router
+ * Create a router context
+ * Router context should have two state and one function. States: {location, state}. Function: {navigate}
+ * Export functions that links to RouterContext. Exported functions: { Link, Route, Redirect, useParams, useHistory, useNavigate}
+ */
 const RouterContext = createContext();
 
-// Custom Router component
 export function BrowserRouter({ children }) {
   const [location, setLocation] = useState(window.location.pathname);
   const [state, setState] = useState({});
@@ -13,14 +17,21 @@ export function BrowserRouter({ children }) {
       setLocation(window.location.pathname);
     };
 
+    const handlePageShow = () => {
+      setState(window.history.state);
+    };
+
     window.addEventListener('popstate', handlePopState);
+    window.addEventListener('pageshow', handlePageShow);
+
     return () => {
       window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('pageshow', handlePageShow);
     };
   }, []);
 
   const navigate = (to, state) => {
-    window.history.pushState({}, '', to);
+    window.history.pushState(state, '', to);
     setLocation(to);
     setState(state);
   };
@@ -32,7 +43,6 @@ export function BrowserRouter({ children }) {
   );
 }
 
-// Custom Link component
 export function Link({ to, children }) {
   const { navigate } = useContext(RouterContext);
 
@@ -48,17 +58,14 @@ export function Link({ to, children }) {
   );
 }
 
-// Custom Route component
 export function Route({ path, component: Component }) {
   const { location } = useContext(RouterContext);
 
-  // Check if the current location matches the route path
   const match = location === path;
 
   return match ? Component : null;
 }
 
-// Custom Redirect component
 export function Redirect({ to }) {
   const { navigate } = useContext(RouterContext);
 
@@ -73,11 +80,10 @@ export function useParams() {
   const { location } = useContext(RouterContext);
   const params = {};
 
-  // Extract parameters from the route path
   const match = location.match(/\/:([^/]+)/g);
   if (match) {
     match.forEach((param) => {
-      const paramName = param.substring(2); // Remove leading '/'
+      const paramName = param.substring(2);
       params[paramName] = location.params[paramName];
     });
   }

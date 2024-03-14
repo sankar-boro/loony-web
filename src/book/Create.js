@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import Markdown from 'react-markdown';
-import { axiosInstance } from './query';
+import { axiosInstance } from '../query';
 
 export default function App() {
   const [body, setBody] = useState('');
