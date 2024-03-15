@@ -31,6 +31,19 @@ export const orderBlogNodes = (data) => {
   return elements;
 };
 
+export const deleteBookNode = (nodes, submitData, delete_node_index) => {
+  const copyNodes = nodes.filter((node, node_index) => {
+    if (submitData.delete_node_id === node.uid) {
+      return false;
+    }
+    return true;
+  });
+  if (copyNodes[delete_node_index + 1]) {
+    copyNodes[delete_node_index + 1].parent_id = submitData.update_parent_id;
+  }
+  return copyNodes;
+};
+
 export const parseUrl = (urlString) => {
   const url = new URL(urlString);
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
 import AddNode from './AddNode';
-import { orderBlogNodes } from 'loony-utils';
+import { orderBlogNodes, deleteBookNode } from 'loony-utils';
 
 export default function Edit() {
   const [bookNodes, setBookNodes] = useState(null);
@@ -15,14 +15,18 @@ export default function Edit() {
     });
   }, [book_id]);
 
-  const deleteNode = (book_node, node_index) => {
+  const deleteNode = (delete_node, delete_node_index) => {
     if (bookNodes) {
-      const updateNode = bookNodes[node_index + 1] || null;
+      const updateNode = bookNodes[delete_node_index + 1] || null;
+      const submitData = {
+        update_parent_id: delete_node.parent_id,
+        delete_node_id: delete_node.uid,
+        update_node_id: updateNode ? updateNode.uid : null,
+      };
       axiosInstance
-        .post(`/book/delete_book_node`, {
-          update_parent_id: book_node.parent_id,
-          delete_node_id: book_node.uid,
-          update_node_id: updateNode ? updateNode.uid : null,
+        .post(`/book/delete_book_node`, submitData)
+        .then(() => {
+          setBookNodes(deleteBookNode(bookNodes, submitData, delete_node_index));
         })
         .catch((err) => {
           console.log(err);
