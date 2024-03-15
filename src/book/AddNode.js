@@ -13,12 +13,19 @@ const AddNode = ({ activeNode, setActiveNode, book_id }) => {
     }
   }, [activeNode]);
   const addNode = () => {
-    axiosInstance.post('/book/append_book_node', {
-      title,
-      body,
-      book_id,
-      parent_id: activeNode.uid,
-    });
+    axiosInstance
+      .post('/book/append_book_node', {
+        title,
+        body,
+        book_id,
+        parent_id: activeNode.uid,
+      })
+      .then(() => {
+        onCloseModal();
+      })
+      .catch(() => {
+        onCloseModal();
+      });
   };
   const onCloseModal = () => {
     setVisible(false);

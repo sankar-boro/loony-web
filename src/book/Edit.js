@@ -3,7 +3,7 @@ import Markdown from 'react-markdown';
 import { useHistory } from '../Router';
 import { axiosInstance } from '../query';
 import AddNode from './AddNode';
-import { orderBlogNodes } from '../utils';
+import { orderBlogNodes } from 'loony-utils';
 
 export default function Edit() {
   const { state } = useHistory();
