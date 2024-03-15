@@ -17,18 +17,17 @@ const View = () => {
   const navigateEdit = () => {
     navigate('/edit_book', state);
   };
-
   if (!books) return null;
 
   return (
-    <div>
-      <div className='page-title'>{state.title}</div>
+    <div className='con-75'>
+      <div className='page-heading'>{state.title}</div>
       <Markdown>{state.body}</Markdown>
       {books.map((book_node) => {
         return (
-          <div key={book_node.uid}>
-            <div>{book_node.title}</div>
-            <div>{book_node.body}</div>
+          <div className='page-section' key={book_node.uid}>
+            <div className='section-title'>{book_node.title}</div>
+            <Markdown>{book_node.body}</Markdown>
           </div>
         );
       })}

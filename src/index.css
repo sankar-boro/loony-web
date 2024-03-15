@@ -93,15 +93,30 @@ button:hover {
 
 }
 
+/** 
+* @Navbar
+*/
 
+.top-navbar {
+  display: flex;
+  align-items: center;
+  min-height: 45px;
+}
 /* 
 * @Page
 */
-.page-title {
+.page-heading {
   font-weight: bold;
-  font-size: 24px;
+  font-size: 32px;
 }
-
+.section-title {
+  font-weight: bold;
+  font-size: 18px;
+}
+.page-section {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 /*
 * @Modal
 */

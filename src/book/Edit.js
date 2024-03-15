@@ -7,7 +7,6 @@ import { orderBlogNodes } from '../utils';
 
 export default function Edit() {
   const { state } = useHistory();
-
   const [bookNodes, setBookNodes] = useState(null);
   const [activeNode, setActiveNode] = useState(null);
 
@@ -20,11 +19,11 @@ export default function Edit() {
   if (!bookNodes) return null;
 
   return (
-    <div>
+    <div className='con-75'>
       {bookNodes.map((book_node) => {
         return (
           <div key={book_node.uid}>
-            <div>{book_node.title}</div>
+            <div className='section-title'>{book_node.title}</div>
             <Markdown>{book_node.body}</Markdown>
             <button
               onClick={() => {
