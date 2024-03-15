@@ -17,7 +17,7 @@ const AddNode = ({ activeNode, setActiveNode, book_id }) => {
       .post('/book/append_book_node', {
         title,
         body,
-        book_id,
+        book_id: parseInt(book_id, 10),
         parent_id: activeNode.uid,
       })
       .then(() => {

@@ -15,11 +15,25 @@ export default function Edit() {
     });
   }, [book_id]);
 
+  const deleteNode = (book_node, node_index) => {
+    if (bookNodes) {
+      const updateNode = bookNodes[node_index + 1] || null;
+      axiosInstance
+        .post(`/book/delete_book_node`, {
+          update_parent_id: book_node.parent_id,
+          delete_node_id: book_node.uid,
+          update_node_id: updateNode ? updateNode.uid : null,
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   if (!bookNodes) return null;
 
   return (
     <div className='con-75'>
-      {bookNodes.map((book_node) => {
+      {bookNodes.map((book_node, node_index) => {
         return (
           <div key={book_node.uid}>
             <div className='section-title'>{book_node.title}</div>
@@ -30,6 +44,13 @@ export default function Edit() {
               }}
             >
               Add Node
+            </button>
+            <button
+              onClick={() => {
+                deleteNode(book_node, node_index);
+              }}
+            >
+              Delete
             </button>
           </div>
         );
