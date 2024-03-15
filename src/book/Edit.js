@@ -3,6 +3,7 @@ import Markdown from 'react-markdown';
 import { useHistory } from '../Router';
 import { axiosInstance } from '../query';
 import AddNode from './AddNode';
+import { orderBlogNodes } from '../utils';
 
 export default function Edit() {
   const { state } = useHistory();
@@ -12,7 +13,7 @@ export default function Edit() {
 
   useEffect(() => {
     axiosInstance.get(`/book/get_all_book_nodes?book_id=${state.book_id}`).then(({ data }) => {
-      setBookNodes(data.data);
+      setBookNodes(orderBlogNodes(data.data));
     });
   }, [state.book_id]);
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { useHistory, useNavigate } from '../Router';
 import { axiosInstance } from '../query';
+import { orderBlogNodes } from '../utils';
 
 const View = () => {
   const { state } = useHistory();
@@ -9,7 +10,7 @@ const View = () => {
   const [books, setBooks] = useState(null);
   useEffect(() => {
     axiosInstance.get(`/book/get_all_book_nodes?book_id=${state.book_id}`).then(({ data }) => {
-      setBooks(data.data);
+      setBooks(orderBlogNodes(data.data));
     });
   }, [state.book_id]);
 
