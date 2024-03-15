@@ -24,7 +24,7 @@ const Home = () => {
                   <div
                     className='card-title cursor'
                     onClick={() => {
-                      navigate('/view_book', book);
+                      navigate(`/view?book_id=${book.book_id}`, book);
                     }}
                   >
                     {book.title}

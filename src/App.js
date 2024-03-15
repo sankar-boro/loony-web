@@ -26,8 +26,8 @@ function App() {
       <Navigation />
       <Route path='/' component={<Home />} />
       <Route path='/create_book' component={<Create />} />
-      <Route path='/view_book' component={<View />} />
-      <Route path='/edit_book' component={<Edit />} />
+      <Route path='/view' component={<View />} />
+      <Route path='/edit' component={<Edit />} />
     </BrowserRouter>
   );
 }
