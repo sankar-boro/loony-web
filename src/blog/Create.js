@@ -10,13 +10,13 @@ export default function App() {
 
   const createDoc = useCallback(() => {
     axiosInstance
-      .post('/book/create_book', { title, body, images, password, author_id: 1 })
+      .post('/blog/create_blog', { title, body, images, password, author_id: 1 })
       .then(({ data }) => {})
       .catch((err) => {});
   }, [title, body, images, password]);
 
   return (
-    <div>
+    <div className='con-75'>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ flex: 1 }}>
           <div className='form-section'>

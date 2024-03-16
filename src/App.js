@@ -1,8 +1,8 @@
 import './App.css';
-import Home from './book/Home';
-import Create from './book/Create';
-import View from './book/View';
-import Edit from './book/Edit';
+import Home from './blog/Home';
+import Create from './blog/Create';
+import View from './blog/View';
+import Edit from './blog/Edit';
 import { BrowserRouter, Route, useNavigate } from './Router';
 
 const Navigation = () => {
@@ -24,10 +24,12 @@ function App() {
   return (
     <BrowserRouter>
       <Navigation />
-      <Route path='/' component={<Home />} />
-      <Route path='/create_book' component={<Create />} />
-      <Route path='/view' component={<View />} />
-      <Route path='/edit' component={<Edit />} />
+      <div style={{ paddingTop: 16 }}>
+        <Route path='/' component={<Home />} />
+        <Route path='/create_blog' component={<Create />} />
+        <Route path='/view' component={<View />} />
+        <Route path='/edit' component={<Edit />} />
+      </div>
     </BrowserRouter>
   );
 }

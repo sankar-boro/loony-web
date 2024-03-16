@@ -100,7 +100,14 @@ button:hover {
 .top-navbar {
   display: flex;
   align-items: center;
-  min-height: 45px;
+  min-height: 55px;
+  border-bottom: 1px solid #ccc;
+}
+.nav-item {
+  text-decoration: none;
+  font-size: 21px;
+  font-weight: bold;
+  color: #2d2d2d;
 }
 /* 
 * @Page
@@ -111,7 +118,7 @@ button:hover {
 }
 .section-title {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 24px;
 }
 .page-section {
   padding-top: 10px;

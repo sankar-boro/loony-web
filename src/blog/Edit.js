@@ -2,56 +2,56 @@ import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
 import AddNode from './AddNode';
-import { orderBlogNodes, deleteBookNode } from 'loony-utils';
+import { orderBlogNodes, deleteBlogNode } from 'loony-utils';
 
 export default function Edit() {
-  const [bookNodes, setBookNodes] = useState(null);
+  const [blogNodes, setBlogNodes] = useState(null);
   const [activeNode, setActiveNode] = useState(null);
   const searchParams = new URLSearchParams(window.location.search);
-  const book_id = searchParams.get('book_id');
+  const blog_id = searchParams.get('blog_id');
   useEffect(() => {
-    axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
-      setBookNodes(orderBlogNodes(data.data));
+    axiosInstance.get(`/blog/get_all_blog_nodes?blog_id=${blog_id}`).then(({ data }) => {
+      setBlogNodes(orderBlogNodes(data.data));
     });
-  }, [book_id]);
+  }, [blog_id]);
 
   const deleteNode = (delete_node, delete_node_index) => {
-    if (bookNodes) {
-      const updateNode = bookNodes[delete_node_index + 1] || null;
+    if (blogNodes) {
+      const updateNode = blogNodes[delete_node_index + 1] || null;
       const submitData = {
         update_parent_id: delete_node.parent_id,
         delete_node_id: delete_node.uid,
         update_node_id: updateNode ? updateNode.uid : null,
       };
       axiosInstance
-        .post(`/book/delete_book_node`, submitData)
+        .post(`/blog/delete_blog_node`, submitData)
         .then(() => {
-          setBookNodes(deleteBookNode(bookNodes, submitData, delete_node_index));
+          setBlogNodes(deleteBlogNode(blogNodes, submitData, delete_node_index));
         })
         .catch((err) => {
           console.log(err);
         });
     }
   };
-  if (!bookNodes) return null;
+  if (!blogNodes) return null;
 
   return (
     <div className='con-75'>
-      {bookNodes.map((book_node, node_index) => {
+      {blogNodes.map((blog_node, node_index) => {
         return (
-          <div key={book_node.uid}>
-            <div className='section-title'>{book_node.title}</div>
-            <Markdown>{book_node.body}</Markdown>
+          <div key={blog_node.uid}>
+            <div className='section-title'>{blog_node.title}</div>
+            <Markdown>{blog_node.body}</Markdown>
             <button
               onClick={() => {
-                setActiveNode(book_node);
+                setActiveNode(blog_node);
               }}
             >
               Add Node
             </button>
             <button
               onClick={() => {
-                deleteNode(book_node, node_index);
+                deleteNode(blog_node, node_index);
               }}
             >
               Delete
@@ -63,9 +63,9 @@ export default function Edit() {
       <AddNode
         activeNode={activeNode}
         setActiveNode={setActiveNode}
-        book_id={book_id}
-        setBookNodes={setBookNodes}
-        bookNodes={bookNodes}
+        blog_id={blog_id}
+        setBlogNodes={setBlogNodes}
+        blogNodes={blogNodes}
       />
     </div>
   );

@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { ModalMd, ModalBodyContainer } from '../components';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
-import { appendBookNode } from 'loony-utils';
+import { appendBlogNode } from 'loony-utils';
 
-const AddNode = ({ activeNode, setActiveNode, book_id, bookNodes, setBookNodes }) => {
+const AddNode = ({ activeNode, setActiveNode, blog_id, blogNodes, setBlogNodes }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [visible, setVisible] = useState(false);
@@ -15,14 +15,14 @@ const AddNode = ({ activeNode, setActiveNode, book_id, bookNodes, setBookNodes }
   }, [activeNode]);
   const addNode = () => {
     axiosInstance
-      .post('/book/append_book_node', {
+      .post('/blog/append_blog_node', {
         title,
         body,
-        book_id: parseInt(book_id, 10),
+        blog_id: parseInt(blog_id, 10),
         parent_id: activeNode.uid,
       })
       .then(({ data }) => {
-        setBookNodes(appendBookNode(bookNodes, activeNode, data));
+        setBlogNodes(appendBlogNode(blogNodes, activeNode, data));
         onCloseModal();
       })
       .catch(() => {
@@ -34,7 +34,7 @@ const AddNode = ({ activeNode, setActiveNode, book_id, bookNodes, setBookNodes }
     setActiveNode(null);
   };
   return (
-    <ModalMd visible={visible} onClose={onCloseModal} title='Add Book Node'>
+    <ModalMd visible={visible} onClose={onCloseModal} title='Add Blog Node'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div style={{ width: '45%' }}>

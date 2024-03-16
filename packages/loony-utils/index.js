@@ -31,7 +31,7 @@ export const orderBlogNodes = (data) => {
   return elements;
 };
 
-export const deleteBookNode = (nodes, submitData, delete_node_index) => {
+export const deleteBlogNode = (nodes, submitData, delete_node_index) => {
   const copyNodes = nodes.filter((node, node_index) => {
     if (submitData.delete_node_id === node.uid) {
       return false;
@@ -44,7 +44,7 @@ export const deleteBookNode = (nodes, submitData, delete_node_index) => {
   return copyNodes;
 };
 
-export const appendBookNode = (nodes, topData, resData) => {
+export const appendBlogNode = (nodes, topData, resData) => {
   let newNodes = [];
   for (let index = 0; index < nodes.length; index++) {
     const element = nodes[index];

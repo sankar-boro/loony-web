@@ -5,10 +5,10 @@ import { useNavigate } from '../Router';
 const Home = () => {
   const navigate = useNavigate();
 
-  const [books, setBooks] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   useEffect(() => {
-    axiosInstance.get('/book/get_all_books').then(({ data }) => {
-      setBooks(data.data);
+    axiosInstance.get('/blog/get_all_blogs').then(({ data }) => {
+      setBlogs(data.data);
     });
   }, []);
 
@@ -16,18 +16,18 @@ const Home = () => {
     <div className='con-75'>
       <div className='app-body'>
         <div className='flex-row'>
-          {books.map((book) => {
+          {blogs.map((blog) => {
             return (
-              <div className='card' key={book.book_id}>
+              <div className='card' key={blog.blog_id}>
                 <div className='card-image' />
                 <div className='card-body'>
                   <div
                     className='card-title cursor'
                     onClick={() => {
-                      navigate(`/view?book_id=${book.book_id}`, book);
+                      navigate(`/view?blog_id=${blog.blog_id}`, blog);
                     }}
                   >
-                    {book.title}
+                    {blog.title}
                   </div>
                   <div className='card-body' />
                 </div>
