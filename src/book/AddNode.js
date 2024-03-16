@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { ModalMd, ModalBodyContainer } from '../components';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
+import { appendBookNode } from 'loony-utils';
 
-const AddNode = ({ activeNode, setActiveNode, book_id }) => {
+const AddNode = ({ activeNode, setActiveNode, book_id, bookNodes, setBookNodes }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [visible, setVisible] = useState(false);
@@ -20,7 +21,8 @@ const AddNode = ({ activeNode, setActiveNode, book_id }) => {
         book_id: parseInt(book_id, 10),
         parent_id: activeNode.uid,
       })
-      .then(() => {
+      .then(({ data }) => {
+        setBookNodes(appendBookNode(bookNodes, activeNode, data));
         onCloseModal();
       })
       .catch(() => {

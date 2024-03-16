@@ -44,6 +44,23 @@ export const deleteBookNode = (nodes, submitData, delete_node_index) => {
   return copyNodes;
 };
 
+export const appendBookNode = (nodes, topData, resData) => {
+  let newNodes = [];
+  for (let index = 0; index < nodes.length; index++) {
+    const element = nodes[index];
+    if (topData.uid === element.uid) {
+      newNodes.push(element);
+      newNodes.push(resData.new_node);
+      if (nodes[index + 1]) {
+        nodes[index + 1].parent_id = resData.update_node.update_row_parent_id;
+      }
+    } else {
+      newNodes.push(element);
+    }
+  }
+  return newNodes;
+};
+
 export const parseUrl = (urlString) => {
   const url = new URL(urlString);
 

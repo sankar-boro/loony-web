@@ -60,7 +60,13 @@ export default function Edit() {
         );
       })}
 
-      <AddNode activeNode={activeNode} setActiveNode={setActiveNode} book_id={book_id} />
+      <AddNode
+        activeNode={activeNode}
+        setActiveNode={setActiveNode}
+        book_id={book_id}
+        setBookNodes={setBookNodes}
+        bookNodes={bookNodes}
+      />
     </div>
   );
 }
