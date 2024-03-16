@@ -36,8 +36,12 @@ export function BrowserRouter({ children }) {
     setState(state);
   };
 
+  const goBack = () => {
+    window.history.back();
+  };
+
   return (
-    <RouterContext.Provider value={{ location, navigate, state }}>
+    <RouterContext.Provider value={{ location, navigate, goBack, state }}>
       {children}
     </RouterContext.Provider>
   );
@@ -90,8 +94,8 @@ export function useParams() {
 }
 
 export function useHistory() {
-  const { location, state } = useContext(RouterContext);
-  return { location, state };
+  const { location, state, goBack } = useContext(RouterContext);
+  return { location, state, goBack };
 }
 
 export function useNavigate() {

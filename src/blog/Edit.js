@@ -3,8 +3,10 @@ import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
 import AddNode from './AddNode';
 import { orderBlogNodes, deleteBlogNode } from 'loony-utils';
+import { useHistory } from '../Router';
 
 export default function Edit() {
+  const { goBack } = useHistory();
   const [blogNodes, setBlogNodes] = useState(null);
   const [activeNode, setActiveNode] = useState(null);
   const searchParams = new URLSearchParams(window.location.search);
@@ -33,29 +35,38 @@ export default function Edit() {
         });
     }
   };
+
   if (!blogNodes) return null;
 
   return (
     <div className='con-75'>
+      <div onClick={goBack} className='button-none' style={{ marginBottom: 16 }}>
+        Back
+      </div>
       {blogNodes.map((blog_node, node_index) => {
         return (
-          <div key={blog_node.uid}>
+          <div style={{ marginBottom: 16 }} key={blog_node.uid}>
             <div className='section-title'>{blog_node.title}</div>
             <Markdown>{blog_node.body}</Markdown>
-            <button
-              onClick={() => {
-                setActiveNode(blog_node);
-              }}
-            >
-              Add Node
-            </button>
-            <button
-              onClick={() => {
-                deleteNode(blog_node, node_index);
-              }}
-            >
-              Delete
-            </button>
+            <div className='flex-row'>
+              <div
+                className='button-none cursor'
+                onClick={() => {
+                  setActiveNode(blog_node);
+                }}
+                style={{ marginRight: 16 }}
+              >
+                Add Node
+              </div>
+              <div
+                className='delete-button-none cursor'
+                onClick={() => {
+                  deleteNode(blog_node, node_index);
+                }}
+              >
+                Delete
+              </div>
+            </div>
           </div>
         );
       })}

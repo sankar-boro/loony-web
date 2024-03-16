@@ -57,6 +57,16 @@ button {
   background-color: white;
   border-radius: 5px;
 }
+.button-none {
+  border: none;
+  background-color: transparent;
+  color: blue;
+}
+.delete-button-none {
+  border: none;
+  background-color: transparent;
+  color: red;
+}
 button:hover {
   cursor: pointer;
   background-color: #f0f0f0;
