@@ -26,7 +26,7 @@ function App() {
       <Navigation />
       <div style={{ paddingTop: 16 }}>
         <Route path='/' component={<Home />} />
-        <Route path='/create_blog' component={<Create />} />
+        <Route path='/create' component={<Create />} />
         <Route path='/view' component={<View />} />
         <Route path='/edit' component={<Edit />} />
       </div>

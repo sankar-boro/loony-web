@@ -8,14 +8,24 @@ import { useHistory } from '../Router';
 export default function Edit() {
   const { goBack } = useHistory();
   const [blogNodes, setBlogNodes] = useState(null);
+  const [bookNodes, setBookNodes] = useState(null);
   const [activeNode, setActiveNode] = useState(null);
   const searchParams = new URLSearchParams(window.location.search);
   const blog_id = searchParams.get('blog_id');
+  const book_id = searchParams.get('book_id');
+
   useEffect(() => {
-    axiosInstance.get(`/blog/get_all_blog_nodes?blog_id=${blog_id}`).then(({ data }) => {
-      setBlogNodes(orderBlogNodes(data.data));
-    });
-  }, [blog_id]);
+    if (blog_id) {
+      axiosInstance.get(`/blog/get_all_blog_nodes?blog_id=${blog_id}`).then(({ data }) => {
+        setBlogNodes(orderBlogNodes(data.data));
+      });
+    }
+    if (book_id) {
+      axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
+        setBookNodes(orderBlogNodes(data.data));
+      });
+    }
+  }, [book_id, blog_id]);
 
   const deleteNode = (delete_node, delete_node_index) => {
     if (blogNodes) {
@@ -36,14 +46,14 @@ export default function Edit() {
     }
   };
 
-  if (!blogNodes) return null;
+  if (!blogNodes && !bookNodes) return null;
 
   return (
     <div className='con-75'>
       <div onClick={goBack} className='button-none' style={{ marginBottom: 16 }}>
         Back
       </div>
-      {blogNodes.map((blog_node, node_index) => {
+      {(blogNodes || bookNodes).map((blog_node, node_index) => {
         return (
           <div style={{ marginBottom: 16 }} key={blog_node.uid}>
             <div className='section-title'>{blog_node.title}</div>

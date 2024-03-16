@@ -7,20 +7,32 @@ import { orderBlogNodes } from 'loony-utils';
 const View = () => {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState(null);
+  const [books, setBooks] = useState(null);
 
   const searchParams = new URLSearchParams(window.location.search);
   const blog_id = searchParams.get('blog_id');
-  useEffect(() => {
-    axiosInstance.get(`/blog/get_all_blog_nodes?blog_id=${blog_id}`).then(({ data }) => {
-      setBlogs(orderBlogNodes(data.data));
-    });
-  }, [blog_id]);
+  const book_id = searchParams.get('book_id');
 
-  const mainNode = blogs && blogs[0];
+  useEffect(() => {
+    if (blog_id) {
+      axiosInstance.get(`/blog/get_all_blog_nodes?blog_id=${blog_id}`).then(({ data }) => {
+        setBlogs(orderBlogNodes(data.data));
+      });
+    }
+
+    if (book_id) {
+      axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
+        setBooks(orderBlogNodes(data.data));
+      });
+    }
+  }, [blog_id, book_id]);
+
+  const mainNode = (blogs && blogs[0]) || (books && books[0]);
   const navigateEdit = () => {
-    navigate(`/edit?blog_id=${blog_id}`, mainNode);
+    navigate(`/edit?${blog_id ? 'blog_id' : 'book_id'}=${blog_id ? blog_id : book_id}`, mainNode);
   };
-  if (!blogs) return null;
+  if (!blogs && !books) return null;
+
   return (
     <div className='con-75'>
       <div className='page-heading flex-row'>
@@ -30,7 +42,7 @@ const View = () => {
         </div>
       </div>
       <Markdown>{mainNode.body}</Markdown>
-      {blogs.slice(1).map((blog_node) => {
+      {((blogs && blogs) || (books && books)).slice(1).map((blog_node) => {
         return (
           <div className='page-section' key={blog_node.uid}>
             <div className='section-title'>{blog_node.title}</div>

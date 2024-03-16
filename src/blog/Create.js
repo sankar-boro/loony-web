@@ -6,19 +6,46 @@ export default function App() {
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
   const [password, setPassword] = useState('');
+  const [createType, setCreateType] = useState('');
   const [images] = useState('');
 
   const createDoc = useCallback(() => {
+    const url = createType === 'book' ? '/book/create' : '/blog/create';
     axiosInstance
-      .post('/blog/create_blog', { title, body, images, password, author_id: 1 })
+      .post(url, { title, body, images, password, author_id: 1 })
       .then(({ data }) => {})
       .catch((err) => {});
-  }, [title, body, images, password]);
+  }, [createType, title, body, images, password]);
 
   return (
     <div className='con-75'>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ flex: 1 }}>
+          <div>
+            <input
+              type='radio'
+              id='book'
+              name='option'
+              value='book'
+              onClick={() => {
+                setCreateType('book');
+              }}
+            />
+            <label for='book'>Book</label>
+            <br />
+
+            <input
+              type='radio'
+              id='blog'
+              name='option'
+              value='blog'
+              onClick={() => {
+                setCreateType('blog');
+              }}
+            />
+            <label for='blog'>Blog</label>
+            <br />
+          </div>
           <div className='form-section'>
             <label>Title</label>
             <br />
