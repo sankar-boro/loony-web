@@ -1,8 +1,8 @@
 import './App.css';
-import Home from './blog/Home';
-import Create from './blog/Create';
-import View from './blog/View';
-import Edit from './blog/Edit';
+import Home from './Home';
+import Create from './Create';
+import View from './View';
+import Edit from './Edit';
 import { BrowserRouter, Route, useNavigate } from './Router';
 
 const Navigation = () => {

@@ -5,18 +5,21 @@ import AddNode from './AddNode';
 import { orderBlogNodes, deleteBlogNode } from 'loony-utils';
 import { useHistory } from '../Router';
 
-export default function Edit({ blog_id }) {
+export default function Edit() {
   const { goBack } = useHistory();
   const [blogNodes, setBlogNodes] = useState(null);
+  const [bookNodes, setBookNodes] = useState(null);
   const [activeNode, setActiveNode] = useState(null);
+  const searchParams = new URLSearchParams(window.location.search);
+  const book_id = searchParams.get('book_id');
 
   useEffect(() => {
-    if (blog_id) {
-      axiosInstance.get(`/blog/get_all_blog_nodes?blog_id=${blog_id}`).then(({ data }) => {
-        setBlogNodes(orderBlogNodes(data.data));
+    if (book_id) {
+      axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
+        setBookNodes(orderBlogNodes(data.data));
       });
     }
-  }, [blog_id]);
+  }, [book_id]);
 
   const deleteNode = (delete_node, delete_node_index) => {
     if (blogNodes) {
@@ -37,14 +40,14 @@ export default function Edit({ blog_id }) {
     }
   };
 
-  if (!blogNodes) return null;
+  if (!blogNodes && !bookNodes) return null;
 
   return (
     <div className='con-75'>
       <div onClick={goBack} className='button-none' style={{ marginBottom: 16 }}>
         Back
       </div>
-      {blogNodes.map((blog_node, node_index) => {
+      {(blogNodes || bookNodes).map((blog_node, node_index) => {
         return (
           <div style={{ marginBottom: 16 }} key={blog_node.uid}>
             <div className='section-title'>{blog_node.title}</div>
@@ -75,7 +78,7 @@ export default function Edit({ blog_id }) {
       <AddNode
         activeNode={activeNode}
         setActiveNode={setActiveNode}
-        blog_id={blog_id}
+        book_id={book_id}
         setBlogNodes={setBlogNodes}
         blogNodes={blogNodes}
       />
