@@ -134,6 +134,10 @@ button:hover {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+.book-nav-title {
+  font-weight: bold;
+  font-size: 18px;
+}
 /*
 * @Modal
 */

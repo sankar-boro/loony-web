@@ -5,13 +5,10 @@ import AddNode from './AddNode';
 import { orderBlogNodes, deleteBlogNode } from 'loony-utils';
 import { useHistory } from '../Router';
 
-export default function Edit() {
+export default function Edit({ book_id }) {
   const { goBack } = useHistory();
-  const [blogNodes, setBlogNodes] = useState(null);
   const [bookNodes, setBookNodes] = useState(null);
   const [activeNode, setActiveNode] = useState(null);
-  const searchParams = new URLSearchParams(window.location.search);
-  const book_id = searchParams.get('book_id');
 
   useEffect(() => {
     if (book_id) {
@@ -22,8 +19,8 @@ export default function Edit() {
   }, [book_id]);
 
   const deleteNode = (delete_node, delete_node_index) => {
-    if (blogNodes) {
-      const updateNode = blogNodes[delete_node_index + 1] || null;
+    if (bookNodes) {
+      const updateNode = bookNodes[delete_node_index + 1] || null;
       const submitData = {
         update_parent_id: delete_node.parent_id,
         delete_node_id: delete_node.uid,
@@ -32,7 +29,7 @@ export default function Edit() {
       axiosInstance
         .post(`/blog/delete_blog_node`, submitData)
         .then(() => {
-          setBlogNodes(deleteBlogNode(blogNodes, submitData, delete_node_index));
+          setBookNodes(deleteBlogNode(bookNodes, submitData, delete_node_index));
         })
         .catch((err) => {
           console.log(err);
@@ -40,14 +37,14 @@ export default function Edit() {
     }
   };
 
-  if (!blogNodes && !bookNodes) return null;
+  if (!bookNodes) return null;
 
   return (
     <div className='con-75'>
       <div onClick={goBack} className='button-none' style={{ marginBottom: 16 }}>
         Back
       </div>
-      {(blogNodes || bookNodes).map((blog_node, node_index) => {
+      {bookNodes.map((blog_node, node_index) => {
         return (
           <div style={{ marginBottom: 16 }} key={blog_node.uid}>
             <div className='section-title'>{blog_node.title}</div>
@@ -79,8 +76,8 @@ export default function Edit() {
         activeNode={activeNode}
         setActiveNode={setActiveNode}
         book_id={book_id}
-        setBlogNodes={setBlogNodes}
-        blogNodes={blogNodes}
+        setBookNodes={setBookNodes}
+        bookNodes={bookNodes}
       />
     </div>
   );

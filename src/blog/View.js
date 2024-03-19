@@ -18,7 +18,7 @@ const View = ({ blog_id }) => {
 
   const mainNode = (blogs && blogs[0]) || null;
   const navigateEdit = () => {
-    navigate(`/edit?blog_id=${blog_id}`, mainNode);
+    navigate(`/edit?name=blog&blog_id=${blog_id}`, mainNode);
   };
   if (!blogs) return null;
 

@@ -6,10 +6,13 @@ export default function Edit() {
   const name = searchParams.get('name');
 
   if (name === 'blog') {
-    return <EditBlog />;
+    const blog_id = searchParams.get('blog_id');
+
+    return <EditBlog blog_id={blog_id} />;
   }
 
   if (name === 'book') {
-    return <EditBook />;
+    const book_id = searchParams.get('book_id');
+    return <EditBook book_id={book_id} />;
   }
 }

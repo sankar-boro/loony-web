@@ -18,27 +18,40 @@ const View = ({ book_id }) => {
 
   const mainNode = books && books[0];
   const navigateEdit = () => {
-    navigate(`/edit?book_id=${book_id}`, mainNode);
+    navigate(`/edit?name=book&book_id=${book_id}`, mainNode);
   };
   if (!books) return null;
 
   return (
     <div className='con-75'>
-      <div className='page-heading flex-row'>
-        <div style={{ width: '90%' }}>{mainNode.title}</div>
-        <div style={{ width: '10%', display: 'flex', justifyContent: 'flex-end' }}>
-          <button onClick={navigateEdit}>Edit</button>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div style={{ width: '20%' }}>
+          {(books && books).map((blog_node) => {
+            return (
+              <div className='page-section' key={blog_node.uid}>
+                <div className='book-nav-title'>{blog_node.title}</div>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ width: '80%' }}>
+          <div className='page-heading flex-row'>
+            <div style={{ width: '90%' }}>{mainNode.title}</div>
+            <div style={{ width: '10%', display: 'flex', justifyContent: 'flex-end' }}>
+              <button onClick={navigateEdit}>Edit</button>
+            </div>
+          </div>
+          <Markdown>{mainNode.body}</Markdown>
+          {(books && books).slice(1).map((blog_node) => {
+            return (
+              <div className='page-section' key={blog_node.uid}>
+                <div className='section-title'>{blog_node.title}</div>
+                <Markdown>{blog_node.body}</Markdown>
+              </div>
+            );
+          })}
         </div>
       </div>
-      <Markdown>{mainNode.body}</Markdown>
-      {(books && books).slice(1).map((blog_node) => {
-        return (
-          <div className='page-section' key={blog_node.uid}>
-            <div className='section-title'>{blog_node.title}</div>
-            <Markdown>{blog_node.body}</Markdown>
-          </div>
-        );
-      })}
     </div>
   );
 };

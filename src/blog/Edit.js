@@ -36,7 +36,7 @@ export default function Edit({ blog_id }) {
         });
     }
   };
-
+  console.log(blogNodes, 'blogNodes');
   if (!blogNodes) return null;
 
   return (
