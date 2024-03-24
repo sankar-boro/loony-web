@@ -31,44 +31,44 @@ export const orderBlogNodes = (data) => {
   return elements;
 };
 
-export const orderBookNodes = (data) => {
-  const totalNodes = data.length;
-  // const nodesMap = new Map();
-  const parentNodesMap = new Map();
+// export const orderBookNodes = (data) => {
+//   const totalNodes = data.length;
+//   // const nodesMap = new Map();
+//   const parentNodesMap = new Map();
 
-  // data.forEach((node) => nodesMap.set(node.uid, node));
-  data.forEach((node) => {
-    let newNode = node;
-    if (!newNode.page_id) {
-      newNode.page_id = node.uid;
-    }
-    node.parent_id && parentNodesMap.set(node.parent_id, newNode);
-  });
+//   // data.forEach((node) => nodesMap.set(node.uid, node));
+//   data.forEach((node) => {
+//     let newNode = node;
+//     if (!newNode.page_id) {
+//       newNode.page_id = node.uid;
+//     }
+//     node.parent_id && parentNodesMap.set(node.parent_id, newNode);
+//   });
 
-  const elements = [];
-  let currentIndex = 0;
-  let parentData = null;
-  let found = false;
+//   const elements = [];
+//   let currentIndex = 0;
+//   let parentData = null;
+//   let found = false;
 
-  while (!found) {
-    if (!data[currentIndex].parent_id) {
-      found = true;
-      parentData = data[currentIndex];
-      break;
-    } else {
-      currentIndex += 1;
-    }
-  }
+//   while (!found) {
+//     if (!data[currentIndex].parent_id) {
+//       found = true;
+//       parentData = data[currentIndex];
+//       break;
+//     } else {
+//       currentIndex += 1;
+//     }
+//   }
 
-  elements.push(parentData);
-  while (elements.length !== totalNodes) {
-    const cElement = parentNodesMap.get(parentData.uid);
-    elements.push(cElement);
-    parentData = cElement;
-  }
+//   elements.push(parentData);
+//   while (elements.length !== totalNodes) {
+//     const cElement = parentNodesMap.get(parentData.uid);
+//     elements.push(cElement);
+//     parentData = cElement;
+//   }
 
-  return elements;
-};
+//   return elements;
+// };
 
 export const deleteBlogNode = (nodes, submitData, delete_node_index) => {
   const copyNodes = nodes.filter((node, node_index) => {
@@ -129,4 +129,128 @@ export const parseUrl = (urlString) => {
 
   // Getting specific query parameter
   const blogId = url.searchParams.get('blogId'); // "1"
+};
+
+//
+
+const groupSiblingsForParent = (parent, child) => {
+  let pId = parent.uid;
+  const siblings = [];
+  let c = 0;
+
+  const removeIds = [];
+  const newSiblings = [];
+
+  while (c !== child.length) {
+    // eslint-disable-next-line no-loop-func
+    child.forEach((ss) => {
+      if (ss.parent_id === pId) {
+        siblings.push(ss);
+        pId = ss.uid;
+        removeIds.push(ss.uid);
+      }
+    });
+    c++;
+  }
+
+  child.forEach((ss) => {
+    if (!removeIds.includes(ss.uid)) {
+      newSiblings.push(ss);
+    }
+  });
+  const newParent = parent;
+  newParent.child = siblings;
+  return { newParent, newSiblings, removeIds };
+};
+
+const groupSectionsForPage = groupSiblingsForParent;
+const groupSubSectionsForSection = groupSiblingsForParent;
+
+function reOrderFrontPage(frontPage, samples) {
+  let { allSubSectionGroups } = samples;
+  const { allSectionGroups } = samples;
+  const frontPages = groupSectionsForPage(frontPage, allSectionGroups);
+
+  if (frontPages.newParent.child.length === 0) {
+    return frontPages;
+  }
+
+  if (frontPages.newParent.child.length > 0) {
+    const newSubSections = frontPages.newParent.child.map((section) => {
+      const allSubSections = groupSubSectionsForSection(section, allSubSectionGroups);
+      allSubSectionGroups = allSubSections.newSiblings;
+      return allSubSections.newParent;
+    });
+    frontPages.newParent.child = newSubSections;
+    return frontPages;
+  }
+  return frontPages;
+}
+
+function groupWithIdentity(apiData) {
+  const identityGroups = {
+    100: [], // Front page
+    101: [], // Chapter
+    102: [], // Section
+    103: [], // Section Nodes
+  };
+
+  apiData.forEach((node) => {
+    if (identityGroups[node.identity]) {
+      identityGroups[node.identity].push(node);
+    }
+  });
+  return identityGroups;
+}
+
+const groupChapters = (parent_id, chapters) => {
+  let currentparent_id = parent_id;
+  const orders = [];
+  while (orders.length !== chapters.length) {
+    // eslint-disable-next-line no-loop-func
+    for (let i = 0; i < chapters.length; i++) {
+      const thisChapter = chapters[i];
+      if (currentparent_id === thisChapter.parent_id) {
+        orders.push(thisChapter);
+        currentparent_id = thisChapter.uid;
+        break;
+      }
+    }
+  }
+  return orders;
+};
+
+export const orderBookNodes = (rawApi, removeIds = []) => {
+  let data = rawApi;
+  if (removeIds.length > 0) {
+    data = rawApi.filter((d) => {
+      if (removeIds.includes(d.uid)) {
+        return false;
+      }
+      return true;
+    });
+  }
+
+  const allGroups = groupWithIdentity(data);
+  const samples = {
+    allSectionGroups: allGroups[102],
+    allSubSectionGroups: allGroups[103],
+  };
+
+  const allFrontPages = {
+    100: allGroups[100],
+    101: allGroups[101],
+  };
+
+  allFrontPages[101] = groupChapters(allGroups[100][0].uid, allFrontPages[101]);
+
+  const chapters = [];
+  Object.values(allFrontPages).forEach((frontPageObjectValue) => {
+    frontPageObjectValue.forEach((frontPage) => {
+      const { newParent, newSiblings } = reOrderFrontPage(frontPage, samples);
+      samples.allSectionGroups = newSiblings;
+      chapters.push(newParent);
+    });
+  });
+  return chapters;
 };

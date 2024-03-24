@@ -14,6 +14,7 @@ const View = ({ book_id }) => {
     if (book_id) {
       axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
         const books_ = orderBookNodes(data.data);
+        // console.log(books_, 'books');
         const mainNode_ = books_ && books_[0];
         if (mainNode_) {
           setBooks(books_);
@@ -22,7 +23,7 @@ const View = ({ book_id }) => {
         }
       });
     }
-  }, []);
+  }, [book_id]);
 
   const navigateEdit = () => {
     navigate(`/edit?name=book&book_id=${book_id}`, mainNode);
