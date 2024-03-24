@@ -11,7 +11,9 @@ export default function CreateBook() {
   const createDoc = useCallback(() => {
     axiosInstance
       .post('/book/create', { title, body, images, password, author_id: 1 })
-      .then(({ data }) => {})
+      .then(({ data }) => {
+        window.history.replaceState('/', {});
+      })
       .catch((err) => {});
   }, [title, body, images, password]);
 

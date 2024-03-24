@@ -9,6 +9,7 @@ export default function Edit({ book_id }) {
   const { goBack } = useHistory();
   const [bookNodes, setBookNodes] = useState(null);
   const [activeNode, setActiveNode] = useState(null);
+  const [page_id, setPageId] = useState('');
 
   useEffect(() => {
     if (book_id) {
@@ -27,7 +28,7 @@ export default function Edit({ book_id }) {
         update_node_id: updateNode ? updateNode.uid : null,
       };
       axiosInstance
-        .post(`/blog/delete_blog_node`, submitData)
+        .post(`/blog/delete_book_node`, submitData)
         .then(() => {
           setBookNodes(deleteBlogNode(bookNodes, submitData, delete_node_index));
         })
@@ -44,33 +45,58 @@ export default function Edit({ book_id }) {
       <div onClick={goBack} className='button-none' style={{ marginBottom: 16 }}>
         Back
       </div>
-      {bookNodes.map((blog_node, node_index) => {
-        return (
-          <div style={{ marginBottom: 16 }} key={blog_node.uid}>
-            <div className='section-title'>{blog_node.title}</div>
-            <Markdown>{blog_node.body}</Markdown>
-            <div className='flex-row'>
-              <div
-                className='button-none cursor'
-                onClick={() => {
-                  setActiveNode(blog_node);
-                }}
-                style={{ marginRight: 16 }}
-              >
-                Add Node
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div style={{ width: '20%' }}>
+          {bookNodes.map((book_node, node_index) => {
+            return (
+              <div style={{ marginBottom: 16 }} key={book_node.uid}>
+                <div className='section-title'>{book_node.title}</div>
+                <div className='flex-row'>
+                  <div
+                    className='button-none cursor'
+                    onClick={() => {
+                      setActiveNode(book_node);
+                      setPageId(book_node.uid);
+                    }}
+                    style={{ marginRight: 16 }}
+                  >
+                    Add Node
+                  </div>
+                </div>
               </div>
-              <div
-                className='delete-button-none cursor'
-                onClick={() => {
-                  deleteNode(blog_node, node_index);
-                }}
-              >
-                Delete
+            );
+          })}
+        </div>
+        <div style={{ width: '80%' }}>
+          {bookNodes.map((book_node, node_index) => {
+            return (
+              <div style={{ marginBottom: 16 }} key={book_node.uid}>
+                <div className='section-title'>{book_node.title}</div>
+                <Markdown>{book_node.body}</Markdown>
+                <div className='flex-row'>
+                  <div
+                    className='button-none cursor'
+                    onClick={() => {
+                      setActiveNode(book_node);
+                    }}
+                    style={{ marginRight: 16 }}
+                  >
+                    Add Node
+                  </div>
+                  <div
+                    className='delete-button-none cursor'
+                    onClick={() => {
+                      deleteNode(book_node, node_index);
+                    }}
+                  >
+                    Delete
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        );
-      })}
+            );
+          })}
+        </div>
+      </div>
 
       <AddNode
         activeNode={activeNode}
@@ -78,6 +104,7 @@ export default function Edit({ book_id }) {
         book_id={book_id}
         setBookNodes={setBookNodes}
         bookNodes={bookNodes}
+        page_id={page_id}
       />
     </div>
   );

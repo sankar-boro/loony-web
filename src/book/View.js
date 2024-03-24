@@ -7,16 +7,22 @@ import { orderBlogNodes } from 'loony-utils';
 const View = ({ book_id }) => {
   const navigate = useNavigate();
   const [books, setBooks] = useState(null);
+  const [page_id, setPageId] = useState('');
+  const [mainNode, setMainNode] = useState(null);
 
   useEffect(() => {
     if (book_id) {
       axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
         setBooks(orderBlogNodes(data.data));
+        const mainNode_ = books && books[0];
+        if (mainNode_) {
+          setMainNode(mainNode_);
+          setPageId(mainNode_.uid);
+        }
       });
     }
-  }, [book_id]);
+  }, [book_id, books]);
 
-  const mainNode = books && books[0];
   const navigateEdit = () => {
     navigate(`/edit?name=book&book_id=${book_id}`, mainNode);
   };
@@ -43,12 +49,15 @@ const View = ({ book_id }) => {
           </div>
           <Markdown>{mainNode.body}</Markdown>
           {(books && books).slice(1).map((blog_node) => {
-            return (
-              <div className='page-section' key={blog_node.uid}>
-                <div className='section-title'>{blog_node.title}</div>
-                <Markdown>{blog_node.body}</Markdown>
-              </div>
-            );
+            if (blog_node.page_id === page_id) {
+              return (
+                <div className='page-section' key={blog_node.uid}>
+                  <div className='section-title'>{blog_node.title}</div>
+                  <Markdown>{blog_node.body}</Markdown>
+                </div>
+              );
+            }
+            return null;
           })}
         </div>
       </div>
