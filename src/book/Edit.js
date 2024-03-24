@@ -56,7 +56,7 @@ export default function Edit({ book_id }) {
                     className='button-none cursor'
                     onClick={() => {
                       setActiveNode(book_node);
-                      setPageId(book_node.uid);
+                      setPageId('');
                     }}
                     style={{ marginRight: 16 }}
                   >

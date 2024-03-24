@@ -1,8 +1,10 @@
 import { useState, useCallback } from 'react';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
+import { useHistory } from '../Router';
 
 export default function CreateBook() {
+  const { replaceState } = useHistory();
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
   const [password, setPassword] = useState('');
@@ -12,7 +14,7 @@ export default function CreateBook() {
     axiosInstance
       .post('/book/create', { title, body, images, password, author_id: 1 })
       .then(({ data }) => {
-        window.history.replaceState('/', {});
+        replaceState({}, null, '/');
       })
       .catch((err) => {});
   }, [title, body, images, password]);
@@ -42,9 +44,8 @@ export default function CreateBook() {
               }}
               rows={24}
               cols={100}
-            >
-              {body}
-            </textarea>
+              value={body}
+            />
           </div>
           <div className='form-section'>
             <label>Password</label>

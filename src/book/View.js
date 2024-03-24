@@ -58,7 +58,7 @@ const View = ({ book_id }) => {
           </div>
           <Markdown>{mainNode.body}</Markdown>
           {(books && books).map((book_node) => {
-            if (book_node.page_id === page_id) {
+            if (book_node.page_id === page_id || book_node.uid === page_id) {
               return (
                 <div className='page-section' key={book_node.uid}>
                   <div className='section-title'>{book_node.title}</div>

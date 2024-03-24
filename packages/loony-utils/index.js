@@ -33,11 +33,17 @@ export const orderBlogNodes = (data) => {
 
 export const orderBookNodes = (data) => {
   const totalNodes = data.length;
-  const nodesMap = new Map();
+  // const nodesMap = new Map();
   const parentNodesMap = new Map();
 
-  data.forEach((node) => nodesMap.set(node.uid, node));
-  data.forEach((node) => node.parent_id && parentNodesMap.set(node.parent_id, node));
+  // data.forEach((node) => nodesMap.set(node.uid, node));
+  data.forEach((node) => {
+    let newNode = node;
+    if (!newNode.page_id) {
+      newNode.page_id = node.uid;
+    }
+    node.parent_id && parentNodesMap.set(node.parent_id, newNode);
+  });
 
   const elements = [];
   let currentIndex = 0;

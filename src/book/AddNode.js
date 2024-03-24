@@ -21,7 +21,7 @@ const AddNode = ({ activeNode, setActiveNode, book_id, bookNodes, setBookNodes, 
         book_id: parseInt(book_id, 10),
         parent_id: activeNode.uid,
         identity: 101,
-        page_id,
+        page_id: page_id || null,
       })
       .then(({ data }) => {
         setBookNodes(appendBookNode(bookNodes, activeNode, data));
