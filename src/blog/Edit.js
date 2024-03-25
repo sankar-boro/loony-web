@@ -4,15 +4,22 @@ import { axiosInstance } from '../query';
 import AddNode from './AddNode';
 import { orderBlogNodes, deleteBlogNode } from 'loony-utils';
 import { useHistory } from '../Router';
+import EditNode from './EditNode';
 
 export default function Edit({ blog_id }) {
   const { goBack } = useHistory();
+  const [rawNodes, setRawNodes] = useState([]);
   const [blogNodes, setBlogNodes] = useState(null);
-  const [activeNode, setActiveNode] = useState(null);
+  const [activity, setActivity] = useState({
+    modal: '',
+    mainNode: null,
+    activeNode: null,
+  });
 
   useEffect(() => {
     if (blog_id) {
       axiosInstance.get(`/blog/get_all_blog_nodes?blog_id=${blog_id}`).then(({ data }) => {
+        setRawNodes(data.data);
         setBlogNodes(orderBlogNodes(data.data));
       });
     }
@@ -53,11 +60,28 @@ export default function Edit({ blog_id }) {
               <div
                 className='button-none cursor'
                 onClick={() => {
-                  setActiveNode(blog_node);
+                  setActivity({
+                    ...activity,
+                    modal: 'add_node',
+                    activeNode: blog_node,
+                  });
                 }}
                 style={{ marginRight: 16 }}
               >
-                Add Node
+                Add
+              </div>
+              <div
+                className='button-none cursor'
+                onClick={() => {
+                  setActivity({
+                    ...activity,
+                    modal: 'edit_node',
+                    activeNode: blog_node,
+                  });
+                }}
+                style={{ marginRight: 16 }}
+              >
+                Edit
               </div>
               <div
                 className='delete-button-none cursor'
@@ -72,13 +96,29 @@ export default function Edit({ blog_id }) {
         );
       })}
 
-      <AddNode
-        activeNode={activeNode}
-        setActiveNode={setActiveNode}
-        blog_id={blog_id}
-        setBlogNodes={setBlogNodes}
-        blogNodes={blogNodes}
-      />
+      {activity.modal === 'add_node' ? (
+        <AddNode
+          activeNode={activity.activeNode}
+          setActivity={setActivity}
+          blog_id={blog_id}
+          setBlogNodes={setBlogNodes}
+          blogNodes={blogNodes}
+          rawNodes={rawNodes}
+          setRawNodes={setRawNodes}
+        />
+      ) : null}
+
+      {activity.modal === 'edit_node' ? (
+        <EditNode
+          activeNode={activity.activeNode}
+          setActivity={setActivity}
+          blog_id={blog_id}
+          setBlogNodes={setBlogNodes}
+          blogNodes={blogNodes}
+          rawNodes={rawNodes}
+          setRawNodes={setRawNodes}
+        />
+      ) : null}
     </div>
   );
 }

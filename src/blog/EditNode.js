@@ -1,28 +1,32 @@
 import { useEffect, useState } from 'react';
-import { ModalMd, ModalBodyContainer } from './components';
+import { ModalMd, ModalBodyContainer } from '../components';
 import Markdown from 'react-markdown';
-import { axiosInstance } from './query';
-import { appendBlogNode } from 'loony-utils';
+import { axiosInstance } from '../query';
+import { updateBlogNode, orderBlogNodes } from 'loony-utils';
 
-const AddNode = ({ activeNode, setActiveNode, blog_id, blogNodes, setBlogNodes }) => {
+const EditNode = ({ activeNode, rawNodes, setRawNodes, setBlogNodes, setActivity }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     if (activeNode) {
+      setTitle(activeNode.title);
+      setBody(activeNode.body);
       setVisible(true);
     }
   }, [activeNode]);
   const addNode = () => {
+    const submitData = {
+      title,
+      body,
+      uid: activeNode.uid,
+    };
     axiosInstance
-      .post('/blog/append_blog_node', {
-        title,
-        body,
-        blog_id: parseInt(blog_id, 10),
-        parent_id: activeNode.uid,
-      })
+      .post('/blog/edit_blog_node', submitData)
       .then(({ data }) => {
-        setBlogNodes(appendBlogNode(blogNodes, activeNode, data));
+        const updatedNodes = updateBlogNode(rawNodes, submitData);
+        setRawNodes(rawNodes);
+        setBlogNodes(orderBlogNodes(updatedNodes));
         onCloseModal();
       })
       .catch(() => {
@@ -30,8 +34,14 @@ const AddNode = ({ activeNode, setActiveNode, blog_id, blogNodes, setBlogNodes }
       });
   };
   const onCloseModal = () => {
+    setTitle('');
+    setBody('');
     setVisible(false);
-    setActiveNode(null);
+    setActivity((prevState) => ({
+      ...prevState,
+      activeNode: null,
+      modal: '',
+    }));
   };
   return (
     <ModalMd visible={visible} onClose={onCloseModal} title='Add Blog Node'>
@@ -74,4 +84,4 @@ const AddNode = ({ activeNode, setActiveNode, blog_id, blogNodes, setBlogNodes }
   );
 };
 
-export default AddNode;
+export default EditNode;

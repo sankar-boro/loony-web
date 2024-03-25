@@ -1,9 +1,7 @@
 export const orderBlogNodes = (data) => {
   const totalNodes = data.length;
-  const nodesMap = new Map();
   const parentNodesMap = new Map();
 
-  data.forEach((node) => nodesMap.set(node.uid, node));
   data.forEach((node) => node.parent_id && parentNodesMap.set(node.parent_id, node));
 
   const elements = [];
@@ -72,6 +70,17 @@ export const appendBlogNode = (nodes, topData, resData) => {
 };
 
 export const updateBookNode = (nodes, updatedNode) => {
+  let newNodes = nodes.map((n) => {
+    if (updatedNode.uid === n.uid) {
+      return { ...n, ...updatedNode };
+    }
+    return n;
+  });
+
+  return newNodes;
+};
+
+export const updateBlogNode = (nodes, updatedNode) => {
   let newNodes = nodes.map((n) => {
     if (updatedNode.uid === n.uid) {
       return { ...n, ...updatedNode };

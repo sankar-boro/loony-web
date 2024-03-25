@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { ModalMd, ModalBodyContainer } from '../components';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
-import { appendBlogNode } from 'loony-utils';
+import { appendBlogNode, orderBlogNodes } from 'loony-utils';
 
-const AddNode = ({ activeNode, setActiveNode, blog_id, blogNodes, setBlogNodes }) => {
+const AddNode = ({ activeNode, blog_id, rawNodes, setBlogNodes, setRawNodes }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [visible, setVisible] = useState(false);
@@ -22,7 +22,9 @@ const AddNode = ({ activeNode, setActiveNode, blog_id, blogNodes, setBlogNodes }
         parent_id: activeNode.uid,
       })
       .then(({ data }) => {
-        setBlogNodes(appendBlogNode(blogNodes, activeNode, data));
+        const newNodes = appendBlogNode(rawNodes, activeNode, data);
+        setRawNodes(newNodes);
+        setBlogNodes(orderBlogNodes(newNodes));
         onCloseModal();
       })
       .catch(() => {
@@ -33,7 +35,6 @@ const AddNode = ({ activeNode, setActiveNode, blog_id, blogNodes, setBlogNodes }
     setTitle('');
     setBody('');
     setVisible(false);
-    setActiveNode(null);
   };
   return (
     <ModalMd visible={visible} onClose={onCloseModal} title='Add Blog Node'>
