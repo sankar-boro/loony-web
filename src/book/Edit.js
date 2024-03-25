@@ -43,8 +43,8 @@ export default function Edit({ book_id }) {
   }, [book_id]);
 
   const deleteNode = (delete_node, delete_node_index) => {
-    if (bookNodes) {
-      const updateNode = bookNodes[delete_node_index + 1] || null;
+    if (childNodes) {
+      const updateNode = childNodes[delete_node_index + 1] || null;
       const submitData = {
         update_parent_id: delete_node.parent_id,
         delete_node_id: delete_node.uid,
@@ -52,9 +52,7 @@ export default function Edit({ book_id }) {
       };
       axiosInstance
         .post(`/book/delete_book_node`, submitData)
-        .then(() => {
-          setBookNodes(deleteBlogNode(bookNodes, submitData, delete_node_index));
-        })
+        .then(() => {})
         .catch((err) => {
           console.log(err);
         });
@@ -175,19 +173,19 @@ export default function Edit({ book_id }) {
             </div>
           ) : null}
           {mainNode.identity !== 101 &&
-            childNodes.map((section, node_index) => {
+            childNodes.map((node, node_index) => {
               return (
-                <div style={{ marginBottom: 16 }} key={section.uid}>
-                  <div className='section-title'>{section.title}</div>
-                  <Markdown>{section.body}</Markdown>
+                <div style={{ marginBottom: 16 }} key={node.uid}>
+                  <div className='section-title'>{node.title}</div>
+                  <Markdown>{node.body}</Markdown>
                   <div className='flex-row'>
                     <div
                       className='button-none cursor'
                       onClick={() => {
                         setActivity({
                           ...activity,
-                          activeNode: section,
-                          page_id: section.uid,
+                          activeNode: node,
+                          page_id: node.uid,
                           modal: 'add_sub_section',
                         });
                       }}
@@ -198,7 +196,7 @@ export default function Edit({ book_id }) {
                     <div
                       className='delete-button-none cursor'
                       onClick={() => {
-                        deleteNode(section, node_index);
+                        deleteNode(node, node_index);
                       }}
                     >
                       Delete
