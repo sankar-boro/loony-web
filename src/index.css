@@ -130,9 +130,13 @@ button:hover {
   font-weight: bold;
   font-size: 24px;
 }
-.page-section {
-  padding-top: 10px;
-  padding-bottom: 10px;
+.chapter-nav {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.section-nav {
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 .book-nav-title {
   font-weight: bold;

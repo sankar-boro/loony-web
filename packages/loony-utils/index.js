@@ -71,6 +71,17 @@ export const appendBlogNode = (nodes, topData, resData) => {
   return newNodes;
 };
 
+export const updateBookNode = (nodes, updatedNode) => {
+  let newNodes = nodes.map((n) => {
+    if (updatedNode.uid === n.uid) {
+      return { ...n, ...updatedNode };
+    }
+    return n;
+  });
+
+  return newNodes;
+};
+
 export const appendBookNode = (nodes, topData, resData) => {
   let newNodes = [];
   for (let index = 0; index < nodes.length; index++) {

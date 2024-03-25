@@ -6,6 +6,7 @@ import { orderBookNodes, deleteBookNode } from 'loony-utils';
 import { useHistory } from '../Router';
 import AddSection from './AddSection';
 import AddSubSection from './AddSubSection';
+import EditSubSection from './EditSubSection';
 
 export default function Edit({ book_id }) {
   const { goBack } = useHistory();
@@ -83,6 +84,8 @@ export default function Edit({ book_id }) {
     }
   };
 
+  const deleteBook = () => {};
+
   if (!bookNodes) return null;
 
   return (
@@ -94,53 +97,54 @@ export default function Edit({ book_id }) {
         <div style={{ width: '20%' }}>
           {bookNodes.map((book_node) => {
             return (
-              <div style={{ marginBottom: 16 }} key={book_node.uid}>
-                <div
-                  className='section-title'
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setMainNode(book_node);
-                    setChildNodes(book_node.child);
-                  }}
-                >
-                  {book_node.title}
-                </div>
-                <div className='flex-row'>
+              <>
+                <div className='chapter-nav' key={book_node.uid}>
+                  <div
+                    className='book-nav-title'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMainNode(book_node);
+                      setChildNodes(book_node.child);
+                    }}
+                  >
+                    {book_node.title}
+                  </div>
+                  <div className='flex-row'>
+                    <div
+                      className='button-none cursor'
+                      onClick={() => {
+                        setActivity({
+                          ...activity,
+                          activeNode: book_node,
+                          page_id: book_node.uid,
+                          modal: 'add_chapter',
+                        });
+                      }}
+                      style={{ marginRight: 16 }}
+                    >
+                      Add Chapter
+                    </div>
+                  </div>
                   <div
                     className='button-none cursor'
+                    style={{ paddingLeft: 20 }}
                     onClick={() => {
                       setActivity({
                         ...activity,
                         activeNode: book_node,
                         page_id: book_node.uid,
-                        modal: 'add_chapter',
+                        modal: 'add_section',
                       });
                     }}
-                    style={{ marginRight: 16 }}
                   >
-                    Add Chapter
+                    Add Section
                   </div>
-                </div>
-                <div
-                  className='button-none cursor'
-                  style={{ paddingLeft: 20 }}
-                  onClick={() => {
-                    setActivity({
-                      ...activity,
-                      activeNode: book_node,
-                      page_id: book_node.uid,
-                      modal: 'add_section',
-                    });
-                  }}
-                >
-                  Add Section
                 </div>
                 <div style={{ paddingLeft: 20 }}>
                   {book_node.child.map((section) => {
                     return (
-                      <div key={section.uid}>
+                      <div key={section.uid} className='section-nav'>
                         <div
-                          style={{ fontSize: 18, fontWeight: 'bold' }}
                           onClick={(e) => {
                             e.stopPropagation();
                             setMainNode(section);
@@ -166,63 +170,117 @@ export default function Edit({ book_id }) {
                     );
                   })}
                 </div>
-              </div>
+              </>
             );
           })}
         </div>
         <div style={{ width: '80%' }}>
-          <div className='page-section'>
-            <div className='section-title'>{mainNode.title}</div>
+          <div>
+            <div className='page-heading'>{mainNode.title}</div>
+            {mainNode.identity === 100 ? (
+              <div style={{ marginTop: 50 }} className='flex-row'>
+                <div className='button-none cursor' onClick={deleteBook}>
+                  Delete Book
+                </div>
+                <div
+                  className='button-none cursor'
+                  onClick={() => {
+                    setActivity({
+                      ...activity,
+                      activeNode: mainNode,
+                      page_id: mainNode.uid,
+                      modal: 'edit_sub_section',
+                    });
+                  }}
+                  style={{ marginLeft: 16 }}
+                >
+                  Edit
+                </div>
+              </div>
+            ) : null}
             <Markdown>{mainNode.body}</Markdown>
           </div>
           {mainNode.identity === 102 ? (
-            <div
-              className='button-none cursor'
-              onClick={() => {
-                setActivity({
-                  ...activity,
-                  activeNode: mainNode,
-                  page_id: mainNode.uid,
-                  modal: 'add_sub_section',
-                });
-              }}
-            >
-              Add Node
+            <div className='flex-row'>
+              <div
+                className='button-none cursor'
+                onClick={() => {
+                  setActivity({
+                    ...activity,
+                    activeNode: mainNode,
+                    page_id: mainNode.uid,
+                    modal: 'add_sub_section',
+                  });
+                }}
+              >
+                Add Node
+              </div>
+              <div
+                className='button-none cursor'
+                onClick={() => {
+                  setActivity({
+                    ...activity,
+                    activeNode: mainNode,
+                    page_id: mainNode.uid,
+                    modal: 'edit_sub_section',
+                  });
+                }}
+                style={{ marginLeft: 16 }}
+              >
+                Edit
+              </div>
             </div>
           ) : null}
-          {mainNode.identity !== 101 &&
-            childNodes.map((node, node_index) => {
-              return (
-                <div style={{ marginBottom: 16 }} key={node.uid}>
-                  <div className='section-title'>{node.title}</div>
-                  <Markdown>{node.body}</Markdown>
-                  <div className='flex-row'>
-                    <div
-                      className='button-none cursor'
-                      onClick={() => {
-                        setActivity({
-                          ...activity,
-                          activeNode: node,
-                          page_id: node.uid,
-                          modal: 'add_sub_section',
-                        });
-                      }}
-                      style={{ marginRight: 16 }}
-                    >
-                      Add Node
-                    </div>
-                    <div
-                      className='delete-button-none cursor'
-                      onClick={() => {
-                        deleteNode(node);
-                      }}
-                    >
-                      Delete
+
+          <div style={{ marginTop: 16 }}>
+            {mainNode.identity !== 101 &&
+              childNodes.map((node, node_index) => {
+                return (
+                  <div style={{ marginBottom: 16 }} key={node.uid}>
+                    <div className='section-title'>{node.title}</div>
+                    <Markdown>{node.body}</Markdown>
+                    <div className='flex-row'>
+                      <div
+                        className='button-none cursor'
+                        onClick={() => {
+                          setActivity({
+                            ...activity,
+                            activeNode: node,
+                            page_id: node.uid,
+                            modal: 'add_sub_section',
+                          });
+                        }}
+                        style={{ marginRight: 16 }}
+                      >
+                        Add Node
+                      </div>
+                      <div
+                        className='button-none cursor'
+                        onClick={() => {
+                          setActivity({
+                            ...activity,
+                            activeNode: node,
+                            page_id: node.uid,
+                            modal: 'edit_sub_section',
+                          });
+                        }}
+                        style={{ marginRight: 16 }}
+                      >
+                        Edit
+                      </div>
+                      <div
+                        className='delete-button-none cursor'
+                        onClick={() => {
+                          deleteNode(node);
+                        }}
+                      >
+                        Delete
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+          </div>
         </div>
       </div>
 
@@ -258,6 +316,21 @@ export default function Edit({ book_id }) {
 
       {activity.modal === 'add_sub_section' ? (
         <AddSubSection
+          activeNode={activity.activeNode}
+          setActivity={setActivity}
+          book_id={book_id}
+          setBookNodes={setBookNodes}
+          setRawNodes={setRawNodes}
+          setMainNode={setMainNode}
+          setChildNodes={setChildNodes}
+          rawNodes={rawNodes}
+          bookNodes={bookNodes}
+          page_id={activity.page_id}
+        />
+      ) : null}
+
+      {activity.modal === 'edit_sub_section' ? (
+        <EditSubSection
           activeNode={activity.activeNode}
           setActivity={setActivity}
           book_id={book_id}

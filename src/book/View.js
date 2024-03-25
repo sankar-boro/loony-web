@@ -39,20 +39,23 @@ const View = ({ book_id }) => {
         <div style={{ width: '20%' }}>
           {(books && books).map((book_node) => {
             return (
-              <div className='page-section' key={book_node.uid}>
-                <div
-                  className='book-nav-title'
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setMainNode(book_node);
-                    setChildNodes(book_node.child);
-                  }}
-                >
-                  {book_node.title}
+              <>
+                <div className='chapter-nav' key={book_node.uid}>
+                  <div
+                    className='book-nav-title'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMainNode(book_node);
+                      setChildNodes(book_node.child);
+                    }}
+                  >
+                    {book_node.title}
+                  </div>
                 </div>
                 {book_node.child.map((section) => {
                   return (
                     <div
+                      className='section-nav'
                       style={{ paddingLeft: 20 }}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -64,18 +67,18 @@ const View = ({ book_id }) => {
                     </div>
                   );
                 })}
-              </div>
+              </>
             );
           })}
         </div>
         <div style={{ width: '80%' }}>
-          <div className='page-heading flex-row'>
-            <div>
-              <button onClick={navigateEdit}>Edit</button>
-            </div>
-          </div>
-          <div className='page-section'>
-            <div className='section-title'>{mainNode.title}</div>
+          <div>
+            <div className='page-heading'>{mainNode.title}</div>
+            {mainNode.identity === 100 ? (
+              <div style={{ marginTop: 50 }}>
+                <button onClick={navigateEdit}>Edit</button>
+              </div>
+            ) : null}
             <Markdown>{mainNode.body}</Markdown>
           </div>
           {childNodes.map((book_node) => {
