@@ -49,6 +49,8 @@ const AddNode = ({
       });
   };
   const onCloseModal = () => {
+    setTitle('');
+    setBody('');
     setVisible(false);
     setActivity((prevState) => ({
       ...prevState,

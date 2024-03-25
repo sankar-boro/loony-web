@@ -49,6 +49,8 @@ const AddSubSection = ({
       });
   };
   const onCloseModal = () => {
+    setTitle('');
+    setBody('');
     setVisible(false);
     setActivity((prevState) => ({
       ...prevState,

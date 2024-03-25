@@ -30,6 +30,8 @@ const AddNode = ({ activeNode, setActiveNode, blog_id, blogNodes, setBlogNodes }
       });
   };
   const onCloseModal = () => {
+    setTitle('');
+    setBody('');
     setVisible(false);
     setActiveNode(null);
   };
