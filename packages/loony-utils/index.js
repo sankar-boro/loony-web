@@ -44,6 +44,16 @@ export const deleteBlogNode = (nodes, submitData, delete_node_index) => {
   return copyNodes;
 };
 
+export const deleteBookNode = (allNodes, delete_node, submitData) => {
+  const copyNodes = allNodes.filter((x) => x.uid !== delete_node.uid);
+  copyNodes.forEach((x, i) => {
+    if (x.uid === submitData.update_node_id) {
+      copyNodes[i].parent_id = submitData.update_parent_id;
+    }
+  });
+  return copyNodes;
+};
+
 export const appendBlogNode = (nodes, topData, resData) => {
   let newNodes = [];
   for (let index = 0; index < nodes.length; index++) {

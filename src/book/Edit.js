@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
 import AddNode from './AddNode';
-import { orderBookNodes, deleteBlogNode } from 'loony-utils';
+import { orderBookNodes, deleteBookNode } from 'loony-utils';
 import { useHistory } from '../Router';
 import AddSection from './AddSection';
 import AddSubSection from './AddSubSection';
@@ -42,9 +42,16 @@ export default function Edit({ book_id }) {
     }
   }, [book_id]);
 
-  const deleteNode = (delete_node, delete_node_index) => {
+  const deleteNode = (delete_node) => {
     if (childNodes) {
-      const updateNode = childNodes[delete_node_index + 1] || null;
+      let updateNode = null;
+      childNodes.forEach((c, i) => {
+        if (delete_node.uid === c.uid) {
+          if (childNodes[i + 1]) {
+            updateNode = childNodes[i + 1];
+          }
+        }
+      });
       const submitData = {
         update_parent_id: delete_node.parent_id,
         delete_node_id: delete_node.uid,
@@ -52,7 +59,24 @@ export default function Edit({ book_id }) {
       };
       axiosInstance
         .post(`/book/delete_book_node`, submitData)
-        .then(() => {})
+        .then(() => {
+          const newNodes = deleteBookNode(rawNodes, delete_node, submitData);
+          setRawNodes(newNodes);
+          const books_ = orderBookNodes(newNodes);
+          const mainNode_ = books_ && books_[0];
+          const childNodes_ = mainNode_.child;
+
+          if (mainNode_) {
+            setMainNode(mainNode_);
+            setChildNodes(childNodes_);
+            setBookNodes(books_);
+            setActivity({
+              ...activity,
+              mainNode: mainNode_,
+              page_id: mainNode_.uid,
+            });
+          }
+        })
         .catch((err) => {
           console.log(err);
         });
@@ -68,17 +92,11 @@ export default function Edit({ book_id }) {
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '20%' }}>
-          {bookNodes.map((book_node, node_index) => {
+          {bookNodes.map((book_node) => {
             return (
               <div style={{ marginBottom: 16 }} key={book_node.uid}>
                 <div
                   className='section-title'
-                  // onClick={() => {
-                  //   setActivity({
-                  //     ...activity,
-                  //     page_id: book_node.uid,
-                  //   });
-                  // }}
                   onClick={(e) => {
                     e.stopPropagation();
                     setMainNode(book_node);
@@ -196,7 +214,7 @@ export default function Edit({ book_id }) {
                     <div
                       className='delete-button-none cursor'
                       onClick={() => {
-                        deleteNode(node, node_index);
+                        deleteNode(node);
                       }}
                     >
                       Delete
@@ -215,7 +233,10 @@ export default function Edit({ book_id }) {
           book_id={book_id}
           setBookNodes={setBookNodes}
           setRawNodes={setRawNodes}
-          bookNodes={rawNodes}
+          setMainNode={setMainNode}
+          setChildNodes={setChildNodes}
+          rawNodes={rawNodes}
+          bookNodes={bookNodes}
           page_id={activity.page_id}
         />
       ) : null}
@@ -227,7 +248,10 @@ export default function Edit({ book_id }) {
           book_id={book_id}
           setBookNodes={setBookNodes}
           setRawNodes={setRawNodes}
-          bookNodes={rawNodes}
+          setMainNode={setMainNode}
+          setChildNodes={setChildNodes}
+          rawNodes={rawNodes}
+          bookNodes={bookNodes}
           page_id={activity.page_id}
         />
       ) : null}
@@ -239,7 +263,10 @@ export default function Edit({ book_id }) {
           book_id={book_id}
           setBookNodes={setBookNodes}
           setRawNodes={setRawNodes}
-          bookNodes={rawNodes}
+          setMainNode={setMainNode}
+          setChildNodes={setChildNodes}
+          rawNodes={rawNodes}
+          bookNodes={bookNodes}
           page_id={activity.page_id}
         />
       ) : null}

@@ -4,7 +4,17 @@ import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
 import { appendBookNode, orderBookNodes } from 'loony-utils';
 
-const AddSection = ({ activeNode, setActivity, book_id, bookNodes, setBookNodes, page_id }) => {
+const AddSection = ({
+  activeNode,
+  setActivity,
+  book_id,
+  rawNodes,
+  setRawNodes,
+  setBookNodes,
+  page_id,
+  setMainNode,
+  setChildNodes,
+}) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [visible, setVisible] = useState(false);
@@ -24,8 +34,14 @@ const AddSection = ({ activeNode, setActivity, book_id, bookNodes, setBookNodes,
         page_id: page_id || null,
       })
       .then(({ data }) => {
-        const nodes = appendBookNode(bookNodes, activeNode, data);
-        setBookNodes(orderBookNodes(nodes));
+        const newRawNodes = appendBookNode(rawNodes, activeNode, data);
+        setRawNodes(newRawNodes);
+        const orderedNodes = orderBookNodes(newRawNodes);
+        const mainNode_ = orderedNodes && orderedNodes[0];
+        const childNodes_ = mainNode_.child;
+        setMainNode(mainNode_);
+        setChildNodes(childNodes_);
+        setBookNodes(orderedNodes);
         onCloseModal();
       })
       .catch(() => {
