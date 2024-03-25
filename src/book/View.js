@@ -9,15 +9,18 @@ const View = ({ book_id }) => {
   const [books, setBooks] = useState(null);
   const [page_id, setPageId] = useState('');
   const [mainNode, setMainNode] = useState(null);
+  const [childNodes, setChildNodes] = useState([]);
 
   useEffect(() => {
     if (book_id) {
       axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
         const books_ = orderBookNodes(data.data);
         const mainNode_ = books_ && books_[0];
+        const childNodes_ = mainNode_.child;
         if (mainNode_) {
           setBooks(books_);
           setMainNode(mainNode_);
+          setChildNodes(childNodes_);
           setPageId(mainNode_.uid);
         }
       });
@@ -39,8 +42,10 @@ const View = ({ book_id }) => {
               <div className='page-section' key={book_node.uid}>
                 <div
                   className='book-nav-title'
-                  onClick={() => {
-                    setPageId(book_node.uid);
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setMainNode(book_node);
+                    setChildNodes(book_node.child);
                   }}
                 >
                   {book_node.title}
@@ -49,8 +54,10 @@ const View = ({ book_id }) => {
                   return (
                     <div
                       style={{ paddingLeft: 20 }}
-                      onClick={() => {
-                        setPageId(section.uid);
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setMainNode(section);
+                        setChildNodes(section.child);
                       }}
                     >
                       {section.title}
@@ -67,16 +74,17 @@ const View = ({ book_id }) => {
               <button onClick={navigateEdit}>Edit</button>
             </div>
           </div>
-          {(books && books).map((book_node) => {
-            if (book_node.page_id === page_id || book_node.uid === page_id) {
-              return (
-                <div className='page-section' key={book_node.uid}>
-                  <div className='section-title'>{book_node.title}</div>
-                  <Markdown>{book_node.body}</Markdown>
-                </div>
-              );
-            }
-            return null;
+          <div className='page-section'>
+            <div className='section-title'>{mainNode.title}</div>
+            <Markdown>{mainNode.body}</Markdown>
+          </div>
+          {childNodes.map((book_node) => {
+            return (
+              <div className='page-section' key={book_node.uid}>
+                <div className='section-title'>{book_node.title}</div>
+                <Markdown>{book_node.body}</Markdown>
+              </div>
+            );
           })}
         </div>
       </div>
