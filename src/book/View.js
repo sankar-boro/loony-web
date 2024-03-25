@@ -14,7 +14,6 @@ const View = ({ book_id }) => {
     if (book_id) {
       axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
         const books_ = orderBookNodes(data.data);
-        // console.log(books_, 'books');
         const mainNode_ = books_ && books_[0];
         if (mainNode_) {
           setBooks(books_);
@@ -46,18 +45,28 @@ const View = ({ book_id }) => {
                 >
                   {book_node.title}
                 </div>
+                {book_node.child.map((section) => {
+                  return (
+                    <div
+                      style={{ paddingLeft: 20 }}
+                      onClick={() => {
+                        setPageId(section.uid);
+                      }}
+                    >
+                      {section.title}
+                    </div>
+                  );
+                })}
               </div>
             );
           })}
         </div>
         <div style={{ width: '80%' }}>
           <div className='page-heading flex-row'>
-            <div style={{ width: '90%' }}>{mainNode.title}</div>
-            <div style={{ width: '10%', display: 'flex', justifyContent: 'flex-end' }}>
+            <div>
               <button onClick={navigateEdit}>Edit</button>
             </div>
           </div>
-          <Markdown>{mainNode.body}</Markdown>
           {(books && books).map((book_node) => {
             if (book_node.page_id === page_id || book_node.uid === page_id) {
               return (

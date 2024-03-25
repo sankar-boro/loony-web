@@ -4,7 +4,7 @@ import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
 import { appendBookNode, orderBookNodes } from 'loony-utils';
 
-const AddNode = ({ activeNode, setActivity, book_id, bookNodes, setBookNodes, page_id }) => {
+const AddSection = ({ activeNode, setActivity, book_id, bookNodes, setBookNodes, page_id }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [visible, setVisible] = useState(false);
@@ -20,7 +20,7 @@ const AddNode = ({ activeNode, setActivity, book_id, bookNodes, setBookNodes, pa
         body,
         book_id: parseInt(book_id, 10),
         parent_id: activeNode.uid,
-        identity: 101,
+        identity: 102,
         page_id: page_id || null,
       })
       .then(({ data }) => {
@@ -40,7 +40,7 @@ const AddNode = ({ activeNode, setActivity, book_id, bookNodes, setBookNodes, pa
     }));
   };
   return (
-    <ModalMd visible={visible} onClose={onCloseModal} title='Add Chapter'>
+    <ModalMd visible={visible} onClose={onCloseModal} title='Add Section'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div style={{ width: '45%' }}>
@@ -80,4 +80,4 @@ const AddNode = ({ activeNode, setActivity, book_id, bookNodes, setBookNodes, pa
   );
 };
 
-export default AddNode;
+export default AddSection;
