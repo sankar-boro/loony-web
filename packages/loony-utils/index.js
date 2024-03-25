@@ -108,22 +108,6 @@ export const appendBookNode = (nodes, topData, resData) => {
   return newNodes;
 };
 
-export const parseUrl = (urlString) => {
-  const url = new URL(urlString);
-
-  // Getting different parts of the URL
-  const protocol = url.protocol; // "http:"
-  const hostname = url.hostname; // "localhost"
-  const port = url.port; // "3000"
-  const pathname = url.pathname; // "/view"
-  const searchParams = url.searchParams; // URLSearchParams object
-
-  // Getting specific query parameter
-  const blogId = url.searchParams.get('blogId'); // "1"
-};
-
-//
-
 const groupSiblingsForParent = (parent, child) => {
   let pId = parent.uid;
   const siblings = [];

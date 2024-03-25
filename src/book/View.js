@@ -39,8 +39,8 @@ const View = ({ book_id }) => {
         <div style={{ width: '20%' }}>
           {(books && books).map((book_node) => {
             return (
-              <>
-                <div className='chapter-nav' key={book_node.uid}>
+              <div key={book_node.uid}>
+                <div className='chapter-nav'>
                   <div
                     className='book-nav-title'
                     onClick={(e) => {
@@ -55,6 +55,7 @@ const View = ({ book_id }) => {
                 {book_node.child.map((section) => {
                   return (
                     <div
+                      key={section.uid}
                       className='section-nav'
                       style={{ paddingLeft: 20 }}
                       onClick={(e) => {
@@ -67,7 +68,7 @@ const View = ({ book_id }) => {
                     </div>
                   );
                 })}
-              </>
+              </div>
             );
           })}
         </div>

@@ -13,9 +13,19 @@ const Navigation = () => {
   return (
     <div className='top-navbar'>
       <div className='con-75 cursor' onClick={navHome}>
-        <a className='nav-item' href='/'>
-          Home
-        </a>
+        <div className='flex-row'>
+          <div style={{ flex: 2 }}>
+            <a className='nav-item' href='/'>
+              Home
+            </a>
+          </div>
+          <div style={{ flex: 1 }}>
+            <a href='/create?name=book' style={{ marginRight: 16 }}>
+              Create Book
+            </a>
+            <a href='/create?name=blog'>Create Blog</a>
+          </div>
+        </div>
       </div>
     </div>
   );

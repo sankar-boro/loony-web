@@ -41,9 +41,8 @@ export default function CreateBlog() {
               }}
               rows={24}
               cols={100}
-            >
-              {body}
-            </textarea>
+              value={body}
+            />
           </div>
           <div className='form-section'>
             <label>Password</label>

@@ -18,29 +18,9 @@ const Home = () => {
     });
   }, []);
 
-  const navigateCreate = (createType) => {
-    navigate(`/create?name=${createType}`);
-  };
-
   return (
     <div className='con-75'>
       <div className='app-body'>
-        <div>
-          <button
-            onClick={() => {
-              navigateCreate('book');
-            }}
-          >
-            Create Book
-          </button>
-          <button
-            onClick={() => {
-              navigateCreate('blog');
-            }}
-          >
-            Create Blog
-          </button>
-        </div>
         <h3>Blogs</h3>
         <div className='flex-row'>
           {blogs.map((blog) => {
