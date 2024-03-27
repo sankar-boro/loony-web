@@ -7,7 +7,7 @@ import { useHistory } from '../Router';
 import EditNode from './EditNode';
 
 export default function Edit({ blog_id }) {
-  const { goBack } = useHistory();
+  const { goBack, replaceState } = useHistory();
   const [rawNodes, setRawNodes] = useState([]);
   const [blogNodes, setBlogNodes] = useState(null);
   const [activity, setActivity] = useState({
@@ -44,12 +44,26 @@ export default function Edit({ blog_id }) {
     }
   };
 
+  const deleteBlog = () => {
+    axiosInstance
+      .post(`/blog/delete_blog`, { blog_id: parseInt(blog_id) })
+      .then(() => {
+        replaceState({}, null, '/');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   if (!blogNodes) return null;
 
   return (
     <div className='con-75'>
-      <div onClick={goBack} className='button-none' style={{ marginBottom: 16 }}>
-        Back
+      <div>
+        <div onClick={goBack} className='button-none' style={{ marginBottom: 16 }}>
+          Back
+        </div>
+        <div onClick={deleteBlog}>Delete</div>
       </div>
       {blogNodes.map((blog_node, node_index) => {
         return (

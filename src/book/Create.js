@@ -8,7 +8,7 @@ export default function CreateBook() {
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
   const [password, setPassword] = useState('');
-  const [images] = useState('');
+  const [images, setImages] = useState([]);
 
   const createDoc = useCallback(() => {
     axiosInstance
@@ -18,6 +18,26 @@ export default function CreateBook() {
       })
       .catch((err) => {});
   }, [title, body, images, password]);
+
+  const uploadFile = (selectedFile) => {
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    axiosInstance
+      .post('/upload_file', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(({ data }) => {
+        setImages([
+          ...images,
+          {
+            name: data.data.uploaded_filename,
+          },
+        ]);
+      })
+      .catch((err) => {});
+  };
 
   return (
     <div className='con-75'>
@@ -45,6 +65,16 @@ export default function CreateBook() {
               rows={24}
               cols={100}
               value={body}
+            />
+          </div>
+          <div className='form-section'>
+            <label>Body</label>
+            <br />
+            <input
+              type='file'
+              onChange={(e) => {
+                uploadFile(e.target.files[0]);
+              }}
             />
           </div>
           <div className='form-section'>

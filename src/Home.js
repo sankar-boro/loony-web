@@ -45,6 +45,8 @@ const Home = () => {
         <h3>Books</h3>
         <div className='flex-row'>
           {books.map((book) => {
+            const images = JSON.parse(book.images);
+            console.log(images);
             return (
               <div className='card' key={book.book_id}>
                 <div className='card-image' />

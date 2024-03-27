@@ -9,7 +9,7 @@ import AddSubSection from './AddSubSection';
 import EditSubSection from './EditSubSection';
 
 export default function Edit({ book_id }) {
-  const { goBack } = useHistory();
+  const { goBack, replaceState } = useHistory();
   const [rawNodes, setRawNodes] = useState([]);
   const [bookNodes, setBookNodes] = useState(null);
   const [activity, setActivity] = useState({
@@ -84,7 +84,11 @@ export default function Edit({ book_id }) {
     }
   };
 
-  const deleteBook = () => {};
+  const deleteBook = () => {
+    axiosInstance.post('/book/delete_book', { book_id: parseInt(book_id) }).then(() => {
+      replaceState({}, null, '/');
+    });
+  };
 
   if (!bookNodes) return null;
 
