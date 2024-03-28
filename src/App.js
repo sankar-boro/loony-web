@@ -4,9 +4,11 @@ import Create from './Create';
 import View from './View';
 import Edit from './Edit';
 import { BrowserRouter, Route, useNavigate } from './Router';
+import { useState } from 'react';
 
 const Navigation = () => {
   const navigate = useNavigate();
+  const [viewMenu, setViewMenu] = useState(false);
   const navHome = () => {
     navigate('/', {});
   };
@@ -20,10 +22,30 @@ const Navigation = () => {
             </a>
           </div>
           <div style={{ flex: 1 }}>
-            <a href='/create?name=book' style={{ marginRight: 16 }}>
-              Create Book
-            </a>
-            <a href='/create?name=blog'>Create Blog</a>
+            <div
+              onMouseOver={() => {
+                setViewMenu(true);
+              }}
+            >
+              Create
+            </div>
+            {viewMenu ? (
+              <div
+                className='top-menu-dropdown'
+                onMouseLeave={() => {
+                  setViewMenu(false);
+                }}
+              >
+                <ul>
+                  <li>
+                    <a href='/create?name=book'>Create Book</a>
+                  </li>
+                  <li>
+                    <a href='/create?name=blog'>Create Blog</a>
+                  </li>
+                </ul>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
