@@ -97,7 +97,7 @@ const View = ({ book_id }) => {
         <div style={{ width: '20%' }}>
           <ul>
             <li onClick={navigateEdit}>Edit this page</li>
-            <li onClick={navigateEdit}>Report</li>
+            <li>Report</li>
           </ul>
         </div>
       </div>

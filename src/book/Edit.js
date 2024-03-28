@@ -96,9 +96,6 @@ export default function Edit({ book_id }) {
 
   return (
     <div className='con-75'>
-      <div onClick={goBack} className='button-none' style={{ marginBottom: 16 }}>
-        Back
-      </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '20%' }}>
           {bookNodes.map((book_node) => {
@@ -181,38 +178,9 @@ export default function Edit({ book_id }) {
             );
           })}
         </div>
-        <div style={{ width: '80%' }}>
+        <div style={{ width: '60%' }}>
           <div>
             <div className='page-heading'>{mainNode.title}</div>
-            {mainNode.identity === 100 ? (
-              <div style={{ marginTop: 50 }} className='flex-row'>
-                <div
-                  className='button-none cursor'
-                  onClick={() => {
-                    setActivity({
-                      ...activity,
-                      modal: 'delete_book',
-                    });
-                  }}
-                >
-                  Delete Book
-                </div>
-                <div
-                  className='button-none cursor'
-                  onClick={() => {
-                    setActivity({
-                      ...activity,
-                      activeNode: mainNode,
-                      page_id: mainNode.uid,
-                      modal: 'edit_sub_section',
-                    });
-                  }}
-                  style={{ marginLeft: 16 }}
-                >
-                  Edit
-                </div>
-              </div>
-            ) : null}
             {image ? (
               <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
                 <img src={`http://localhost:5002/api/i/${image.name}`} alt='' width='100%' />
@@ -300,6 +268,37 @@ export default function Edit({ book_id }) {
                   </div>
                 );
               })}
+          </div>
+        </div>
+        <div>
+          <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
+            <li
+              onClick={() => {
+                setActivity({
+                  ...activity,
+                  modal: 'delete_book',
+                });
+              }}
+            >
+              Delete Book
+            </li>
+            <li>Report</li>
+          </ul>
+          <div style={{ borderTop: '1px solid #ccc', marginTop: 5, paddingTop: 5 }}>
+            <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
+              <li
+                onClick={() => {
+                  setActivity({
+                    ...activity,
+                    activeNode: mainNode,
+                    page_id: mainNode.uid,
+                    modal: 'edit_sub_section',
+                  });
+                }}
+              >
+                {mainNode.title}
+              </li>
+            </ul>
           </div>
         </div>
       </div>

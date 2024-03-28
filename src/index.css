@@ -138,6 +138,14 @@ button:hover {
   text-decoration: none;
   color: black;
 }
+.book-right-nav ul li {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.book-right-nav ul li:hover {
+  cursor: pointer;
+}
+
 /* 
 * @Page
 */
