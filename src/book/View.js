@@ -95,7 +95,7 @@ const View = ({ book_id }) => {
           })}
         </div>
         <div style={{ width: '20%' }}>
-          <ul>
+          <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
             <li onClick={navigateEdit}>Edit this page</li>
             <li>Report</li>
           </ul>

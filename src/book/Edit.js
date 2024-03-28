@@ -10,7 +10,7 @@ import EditSubSection from './EditSubSection';
 import ConfirmAction from './ConfirmAction';
 
 export default function Edit({ book_id }) {
-  const { goBack, replaceState } = useHistory();
+  const { replaceState } = useHistory();
   const [rawNodes, setRawNodes] = useState([]);
   const [bookNodes, setBookNodes] = useState(null);
   const [activity, setActivity] = useState({
@@ -272,6 +272,13 @@ export default function Edit({ book_id }) {
         </div>
         <div>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
+            <li
+              onClick={() => {
+                replaceState({}, null, `/view?name=book&book_id=${book_id}`);
+              }}
+            >
+              Read Book
+            </li>
             <li
               onClick={() => {
                 setActivity({
