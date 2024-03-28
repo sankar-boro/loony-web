@@ -18,6 +18,8 @@ const AddSubSection = ({
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [visible, setVisible] = useState(false);
+  const [images, setImages] = useState([]);
+
   useEffect(() => {
     if (activeNode) {
       setVisible(true);
@@ -32,6 +34,7 @@ const AddSubSection = ({
         parent_id: activeNode.uid,
         identity: 103,
         page_id: page_id || null,
+        images,
       })
       .then(({ data }) => {
         const newRawNodes = appendBookNode(rawNodes, activeNode, data);

@@ -18,6 +18,8 @@ const AddNode = ({
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [visible, setVisible] = useState(false);
+  const [images, setImages] = useState([]);
+
   useEffect(() => {
     if (activeNode) {
       setVisible(true);
@@ -32,6 +34,7 @@ const AddNode = ({
         parent_id: activeNode.uid,
         identity: 101,
         page_id: page_id || null,
+        images,
       })
       .then(({ data }) => {
         const newRawNodes = appendBookNode(rawNodes, activeNode, data);
