@@ -229,3 +229,13 @@ export const orderBookNodes = (rawApi, removeIds = []) => {
   });
   return chapters;
 };
+
+export const extractImage = (images) => {
+  let parsedImage = null;
+  const image = images && JSON.parse(images);
+  if (image && Array.isArray(image) && image.length > 0) {
+    parsedImage = image[0];
+  }
+
+  return parsedImage;
+};

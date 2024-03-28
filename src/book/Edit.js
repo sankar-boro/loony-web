@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
 import AddNode from './AddNode';
-import { orderBookNodes, deleteBookNode } from 'loony-utils';
+import { orderBookNodes, deleteBookNode, extractImage } from 'loony-utils';
 import { useHistory } from '../Router';
 import AddSection from './AddSection';
 import AddSubSection from './AddSubSection';
 import EditSubSection from './EditSubSection';
+import ConfirmAction from './ConfirmAction';
 
 export default function Edit({ book_id }) {
   const { goBack, replaceState } = useHistory();
@@ -91,7 +92,7 @@ export default function Edit({ book_id }) {
   };
 
   if (!bookNodes) return null;
-  const image = JSON.parse(mainNode.images)[0];
+  const image = extractImage(mainNode.images);
 
   return (
     <div className='con-75'>
@@ -103,7 +104,7 @@ export default function Edit({ book_id }) {
           {bookNodes.map((book_node) => {
             return (
               <>
-                <div className='chapter-nav' key={book_node.uid}>
+                <div className='chapter-nav cursor' key={book_node.uid}>
                   <div
                     className='book-nav-title'
                     onClick={(e) => {
@@ -114,9 +115,9 @@ export default function Edit({ book_id }) {
                   >
                     {book_node.title}
                   </div>
-                  <div className='flex-row'>
+                  <div className='flex-row' style={{ paddingTop: 5, paddingBottom: 5 }}>
                     <div
-                      className='button-none cursor'
+                      className='button-none'
                       onClick={() => {
                         setActivity({
                           ...activity,
@@ -131,7 +132,7 @@ export default function Edit({ book_id }) {
                     </div>
                   </div>
                   <div
-                    className='button-none cursor'
+                    className='button-none'
                     style={{ paddingLeft: 20 }}
                     onClick={() => {
                       setActivity({
@@ -148,7 +149,7 @@ export default function Edit({ book_id }) {
                 <div style={{ paddingLeft: 20 }}>
                   {book_node.child.map((section) => {
                     return (
-                      <div key={section.uid} className='section-nav'>
+                      <div key={section.uid} className='section-nav cursor'>
                         <div
                           onClick={(e) => {
                             e.stopPropagation();
@@ -159,7 +160,8 @@ export default function Edit({ book_id }) {
                           {section.title}
                         </div>
                         <div
-                          className='button-none cursor'
+                          className='button-none'
+                          style={{ paddingTop: 5, paddingBottom: 5 }}
                           onClick={() => {
                             setActivity({
                               ...activity,
@@ -184,7 +186,15 @@ export default function Edit({ book_id }) {
             <div className='page-heading'>{mainNode.title}</div>
             {mainNode.identity === 100 ? (
               <div style={{ marginTop: 50 }} className='flex-row'>
-                <div className='button-none cursor' onClick={deleteBook}>
+                <div
+                  className='button-none cursor'
+                  onClick={() => {
+                    setActivity({
+                      ...activity,
+                      modal: 'delete_book',
+                    });
+                  }}
+                >
                   Delete Book
                 </div>
                 <div
@@ -203,9 +213,11 @@ export default function Edit({ book_id }) {
                 </div>
               </div>
             ) : null}
-            <div>
-              <img src={`http://localhost:5002/api/i/${image.name}`} alt='' width='75%' />
-            </div>
+            {image ? (
+              <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
+                <img src={`http://localhost:5002/api/i/${image.name}`} alt='' width='100%' />
+              </div>
+            ) : null}
             <Markdown>{mainNode.body}</Markdown>
           </div>
           {mainNode.identity === 102 ? (
@@ -349,6 +361,17 @@ export default function Edit({ book_id }) {
           rawNodes={rawNodes}
           bookNodes={bookNodes}
           page_id={activity.page_id}
+        />
+      ) : null}
+
+      {activity.modal === 'delete_book' ? (
+        <ConfirmAction
+          confirmTitle='Are you sure you want to delete Book?'
+          confirmAction={deleteBook}
+          title='Delete Book'
+          onClose={() => {
+            setActivity({ ...activity, modal: '' });
+          }}
         />
       ) : null}
     </div>
