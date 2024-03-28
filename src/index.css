@@ -1,6 +1,5 @@
 body, ul, li {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -12,13 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-ul li {
-  list-style: none;
-}
-li a {
-  text-decoration: none;
-  color: black;
-}
+
 /* 
 * @Containers
 */
@@ -133,11 +126,21 @@ button:hover {
   border-bottom-right-radius: 5px;
   border: 1px solid #ccc;
 }
+.top-menu-dropdown ul{
+  margin: 0px;
+  padding: 0px;
+}
 .top-menu-dropdown ul li {
   padding: 10px 15px;
+  list-style: none;
 }
 .top-menu-dropdown ul li:hover {
   background-color: #f4f4f4;
+}
+
+.top-menu-dropdown ul li a {
+  text-decoration: none;
+  color: black;
 }
 /* 
 * @Page
