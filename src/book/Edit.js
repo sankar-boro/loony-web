@@ -91,6 +91,7 @@ export default function Edit({ book_id }) {
   };
 
   if (!bookNodes) return null;
+  const image = JSON.parse(mainNode.images)[0];
 
   return (
     <div className='con-75'>
@@ -202,6 +203,9 @@ export default function Edit({ book_id }) {
                 </div>
               </div>
             ) : null}
+            <div>
+              <img src={`http://localhost:5002/api/i/${image.name}`} alt='' width='75%' />
+            </div>
             <Markdown>{mainNode.body}</Markdown>
           </div>
           {mainNode.identity === 102 ? (

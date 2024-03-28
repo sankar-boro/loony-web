@@ -33,6 +33,8 @@ const View = ({ book_id }) => {
 
   if (!books) return null;
   if (!page_id) return null;
+
+  const image = JSON.parse(mainNode.images)[0];
   return (
     <div className='con-75'>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -80,6 +82,9 @@ const View = ({ book_id }) => {
                 <button onClick={navigateEdit}>Edit</button>
               </div>
             ) : null}
+            <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
+              <img src={`http://localhost:5002/api/i/${image.name}`} alt='' width='100%' />
+            </div>
             <Markdown>{mainNode.body}</Markdown>
           </div>
           {childNodes.map((book_node) => {
