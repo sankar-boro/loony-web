@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { useNavigate } from '../Router';
 import { axiosInstance } from '../query';
-import { orderBookNodes } from 'loony-utils';
+import { extractImage, orderBookNodes } from 'loony-utils';
 
 const View = ({ book_id }) => {
   const navigate = useNavigate();
@@ -34,7 +34,8 @@ const View = ({ book_id }) => {
   if (!books) return null;
   if (!page_id) return null;
 
-  const image = JSON.parse(mainNode.images)[0];
+  const image = extractImage(mainNode.images);
+
   return (
     <div className='con-75'>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -74,17 +75,14 @@ const View = ({ book_id }) => {
             );
           })}
         </div>
-        <div style={{ width: '80%' }}>
+        <div style={{ width: '60%' }}>
           <div>
             <div className='page-heading'>{mainNode.title}</div>
-            {mainNode.identity === 100 ? (
-              <div style={{ marginTop: 50 }}>
-                <button onClick={navigateEdit}>Edit</button>
+            {image ? (
+              <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
+                <img src={`http://localhost:5002/api/i/${image.name}`} alt='' width='100%' />
               </div>
             ) : null}
-            <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
-              <img src={`http://localhost:5002/api/i/${image.name}`} alt='' width='100%' />
-            </div>
             <Markdown>{mainNode.body}</Markdown>
           </div>
           {childNodes.map((book_node) => {
@@ -95,6 +93,12 @@ const View = ({ book_id }) => {
               </div>
             );
           })}
+        </div>
+        <div style={{ width: '20%' }}>
+          <ul>
+            <li onClick={navigateEdit}>Edit this page</li>
+            <li onClick={navigateEdit}>Report</li>
+          </ul>
         </div>
       </div>
     </div>

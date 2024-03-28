@@ -18,7 +18,7 @@ const Navigation = () => {
         <div className='flex-row'>
           <div style={{ flex: 2 }}>
             <a className='nav-item' href='/'>
-              Home
+              LOONY
             </a>
           </div>
           <div style={{ flex: 1 }}>
