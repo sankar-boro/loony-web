@@ -16,7 +16,6 @@ code {
 * @Containers
 */
 .con-75 {
-  width: 75%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -24,9 +23,6 @@ code {
   display: flex;
   flex-direction: row;
 }
-.app-body {
-}
-
 
 /* 
 * @Form
@@ -258,6 +254,52 @@ button:hover {
     width: 90%;
   }
 }
+
+@media (max-width: 2560px) {
+  .project-card {
+    width: calc(18.33% - 20px);
+  }
+  .con-75 {
+    width: 60%;
+  }
+}
+
+@media (max-width: 1980px) {
+  .project-card {
+    width: calc(18.33% - 20px);
+  }
+  .con-75 {
+    width: 75%;
+  }
+}
+
+@media (max-width: 1280px) {
+  .project-card {
+    width: calc(33.33% - 20px);
+  }
+  .con-75 {
+    width: 85%;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-card {
+    width: calc(50% - 20px);
+  }
+  .con-75 {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-card {
+    width: calc(100% - 30px);
+  }
+  .con-75 {
+    width: 100%;
+  }
+}
+
 
 .close-button {
   background: none;
