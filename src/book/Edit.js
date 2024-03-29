@@ -15,7 +15,9 @@ export default function Edit({ book_id }) {
   const [bookNodes, setBookNodes] = useState(null);
   const [activity, setActivity] = useState({
     modal: '',
-    page_id: '',
+    page_id: null,
+    page_id_101: null,
+    page_id_102: null,
     mainNode: null,
     activeNode: null,
   });
@@ -98,19 +100,19 @@ export default function Edit({ book_id }) {
     <div className='con-75'>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '20%' }}>
-          {bookNodes.map((book_node) => {
+          {bookNodes.map((chapter) => {
             return (
               <>
-                <div className='chapter-nav cursor' key={book_node.uid}>
+                <div className='chapter-nav cursor' key={chapter.uid}>
                   <div
                     className='book-nav-title'
                     onClick={(e) => {
                       e.stopPropagation();
-                      setMainNode(book_node);
-                      setChildNodes(book_node.child);
+                      setMainNode(chapter);
+                      setChildNodes(chapter.child);
                     }}
                   >
-                    {book_node.title}
+                    {chapter.title}
                   </div>
                   <div className='flex-row' style={{ paddingTop: 5, paddingBottom: 5 }}>
                     <div
@@ -118,8 +120,7 @@ export default function Edit({ book_id }) {
                       onClick={() => {
                         setActivity({
                           ...activity,
-                          activeNode: book_node,
-                          page_id: book_node.uid,
+                          activeNode: chapter,
                           modal: 'add_chapter',
                         });
                       }}
@@ -134,8 +135,8 @@ export default function Edit({ book_id }) {
                     onClick={() => {
                       setActivity({
                         ...activity,
-                        activeNode: book_node,
-                        page_id: book_node.uid,
+                        activeNode: chapter,
+                        page_id_101: chapter.uid,
                         modal: 'add_section',
                       });
                     }}
@@ -143,8 +144,9 @@ export default function Edit({ book_id }) {
                     Add Section
                   </div>
                 </div>
+                {/* Sections */}
                 <div style={{ paddingLeft: 20 }}>
-                  {book_node.child.map((section) => {
+                  {chapter.child.map((section) => {
                     return (
                       <div key={section.uid} className='section-nav cursor'>
                         <div
@@ -163,7 +165,7 @@ export default function Edit({ book_id }) {
                             setActivity({
                               ...activity,
                               activeNode: section,
-                              page_id: section.uid,
+                              page_id_101: chapter.uid,
                               modal: 'add_section',
                             });
                           }}
@@ -188,7 +190,7 @@ export default function Edit({ book_id }) {
             ) : null}
             <Markdown>{mainNode.body}</Markdown>
           </div>
-          {mainNode.identity === 102 ? (
+          {mainNode.identity >= 101 ? (
             <div className='flex-row'>
               <div
                 className='button-none cursor'
@@ -196,33 +198,18 @@ export default function Edit({ book_id }) {
                   setActivity({
                     ...activity,
                     activeNode: mainNode,
-                    page_id: mainNode.uid,
                     modal: 'add_sub_section',
                   });
                 }}
               >
                 Add Node
               </div>
-              <div
-                className='button-none cursor'
-                onClick={() => {
-                  setActivity({
-                    ...activity,
-                    activeNode: mainNode,
-                    page_id: mainNode.uid,
-                    modal: 'edit_sub_section',
-                  });
-                }}
-                style={{ marginLeft: 16 }}
-              >
-                Edit
-              </div>
             </div>
           ) : null}
 
           <div style={{ marginTop: 16 }}>
             {mainNode.identity !== 101 &&
-              childNodes.map((node, node_index) => {
+              childNodes.map((node) => {
                 return (
                   <div style={{ marginBottom: 16 }} key={node.uid}>
                     <div className='section-title'>{node.title}</div>
@@ -234,7 +221,7 @@ export default function Edit({ book_id }) {
                           setActivity({
                             ...activity,
                             activeNode: node,
-                            page_id: node.uid,
+                            page_id_102: mainNode.uid,
                             modal: 'add_sub_section',
                           });
                         }}
@@ -336,7 +323,7 @@ export default function Edit({ book_id }) {
           setChildNodes={setChildNodes}
           rawNodes={rawNodes}
           bookNodes={bookNodes}
-          page_id={activity.page_id}
+          page_id={activity.page_id_101}
         />
       ) : null}
 
@@ -351,7 +338,7 @@ export default function Edit({ book_id }) {
           setChildNodes={setChildNodes}
           rawNodes={rawNodes}
           bookNodes={bookNodes}
-          page_id={activity.page_id}
+          page_id={activity.page_id_102}
         />
       ) : null}
 
@@ -366,7 +353,7 @@ export default function Edit({ book_id }) {
           setChildNodes={setChildNodes}
           rawNodes={rawNodes}
           bookNodes={bookNodes}
-          page_id={activity.page_id}
+          page_id={activity.page_id_102}
         />
       ) : null}
 
