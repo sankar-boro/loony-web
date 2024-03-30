@@ -114,7 +114,28 @@ button:hover {
   font-weight: bold;
   color: #2d2d2d;
 }
-.top-menu-dropdown {
+.view-dropdown-menu {
+  display: block;
+}
+
+.dropdown-content ul{
+  margin: 0px;
+  padding: 0px;
+}
+.dropdown-content ul li {
+  padding: 10px 15px;
+  list-style: none;
+}
+.dropdown-content ul li:hover {
+  background-color: #f4f4f4;
+}
+
+.dropdown-content ul li a {
+  text-decoration: none;
+  color: black;
+}
+.dropdown-content{
+  display: none;
   position: absolute;
   width: 350px;
   top: 55px;
@@ -122,21 +143,8 @@ button:hover {
   border-bottom-right-radius: 5px;
   border: 1px solid #ccc;
 }
-.top-menu-dropdown ul{
-  margin: 0px;
-  padding: 0px;
-}
-.top-menu-dropdown ul li {
-  padding: 10px 15px;
-  list-style: none;
-}
-.top-menu-dropdown ul li:hover {
-  background-color: #f4f4f4;
-}
-
-.top-menu-dropdown ul li a {
-  text-decoration: none;
-  color: black;
+.view-dropdown-menu:hover .dropdown-content {
+  display: block;
 }
 .book-right-nav ul li {
   padding-top: 5px;

@@ -23,19 +23,13 @@ const Navigation = () => {
           </div>
           <div style={{ flex: 1 }}>
             <div
-              onMouseOver={() => {
-                setViewMenu(true);
+              className='view-dropdown-menu'
+              onMouseLeave={() => {
+                setViewMenu(false);
               }}
             >
               Create
-            </div>
-            {viewMenu ? (
-              <div
-                className='top-menu-dropdown'
-                onMouseLeave={() => {
-                  setViewMenu(false);
-                }}
-              >
+              <div className='dropdown-content'>
                 <ul>
                   <li>
                     <a href='/create?name=book'>Create Book</a>
@@ -45,7 +39,7 @@ const Navigation = () => {
                   </li>
                 </ul>
               </div>
-            ) : null}
+            </div>
           </div>
         </div>
       </div>
