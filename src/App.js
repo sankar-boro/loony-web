@@ -1,14 +1,11 @@
-import './App.css';
 import Home from './Home';
 import Create from './Create';
 import View from './View';
 import Edit from './Edit';
 import { BrowserRouter, Route, useNavigate } from './Router';
-import { useState } from 'react';
 
 const Navigation = () => {
   const navigate = useNavigate();
-  const [viewMenu, setViewMenu] = useState(false);
   const navHome = () => {
     navigate('/', {});
   };
@@ -26,9 +23,6 @@ const Navigation = () => {
           <div style={{ flex: 1, height: 55 }}>
             <div
               className='view-dropdown-menu'
-              onMouseLeave={() => {
-                setViewMenu(false);
-              }}
               style={{ height: 55, display: 'flex', alignItems: 'center' }}
             >
               <div style={{ color: 'white', fontWeight: 'bold', textDecoration: 'none' }}>
