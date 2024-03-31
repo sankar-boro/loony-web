@@ -37,7 +37,7 @@ const View = ({ book_id }) => {
   const image = extractImage(mainNode.images);
 
   return (
-    <div className='con-75'>
+    <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '20%' }}>
           {(books && books).map((book_node) => {

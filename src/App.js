@@ -14,7 +14,7 @@ const Navigation = () => {
   };
   return (
     <div className='top-navbar' style={{ backgroundColor: 'black' }}>
-      <div className='con-75 cursor' onClick={navHome} style={{ height: 55 }}>
+      <div className='book-container cursor' onClick={navHome} style={{ height: 55 }}>
         <div className='flex-row' style={{ height: 55 }}>
           <div style={{ flex: 2 }}>
             <div style={{ height: 55, display: 'flex', alignItems: 'center' }}>

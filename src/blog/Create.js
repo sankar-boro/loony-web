@@ -43,7 +43,7 @@ export default function CreateBlog() {
   };
 
   return (
-    <div className='con-75'>
+    <div className='book-container'>
       <h2>Create Blog</h2>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ flex: 1 }}>

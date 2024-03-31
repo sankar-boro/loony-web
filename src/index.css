@@ -15,7 +15,7 @@ code {
 /* 
 * @Containers
 */
-.con-75 {
+.book-container {
   margin-left: auto;
   margin-right: auto;
 }
@@ -275,7 +275,10 @@ button:hover {
   .project-card {
     width: calc(18.33% - 20px);
   }
-  .con-75 {
+  .book-container {
+    width: 60%;
+  }
+  .blog-container {
     width: 60%;
   }
 }
@@ -284,7 +287,7 @@ button:hover {
   .project-card {
     width: calc(18.33% - 20px);
   }
-  .con-75 {
+  .book-container {
     width: 75%;
   }
 }
@@ -293,7 +296,7 @@ button:hover {
   .project-card {
     width: calc(33.33% - 20px);
   }
-  .con-75 {
+  .book-container {
     width: 85%;
   }
 }
@@ -302,7 +305,7 @@ button:hover {
   .project-card {
     width: calc(50% - 20px);
   }
-  .con-75 {
+  .book-container {
     width: 100%;
   }
 }
@@ -311,7 +314,7 @@ button:hover {
   .project-card {
     width: calc(100% - 30px);
   }
-  .con-75 {
+  .book-container {
     width: 100%;
   }
 }

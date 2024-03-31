@@ -108,7 +108,7 @@ export default function Edit({ book_id }) {
   const image = extractImage(mainNode.images);
 
   return (
-    <div className='con-75'>
+    <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ width: '20%' }}>
           {bookNodes.map((chapter) => {

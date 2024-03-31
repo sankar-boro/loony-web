@@ -55,7 +55,7 @@ export default function CreateBook() {
   };
 
   return (
-    <div className='con-75'>
+    <div className='book-container'>
       <h2>Create Book</h2>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ flex: 1 }}>

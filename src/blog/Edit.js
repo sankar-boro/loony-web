@@ -58,7 +58,7 @@ export default function Edit({ blog_id }) {
   if (!blogNodes) return null;
 
   return (
-    <div className='con-75'>
+    <div className='book-container'>
       <div>
         <div onClick={goBack} className='button-none' style={{ marginBottom: 16 }}>
           Back

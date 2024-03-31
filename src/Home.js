@@ -19,7 +19,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className='con-75'>
+    <div className='book-container'>
       <div className='app-body'>
         <h3>Blogs</h3>
         <div className='flex-row'>

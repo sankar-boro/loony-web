@@ -2,49 +2,79 @@ import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { useNavigate } from '../Router';
 import { axiosInstance } from '../query';
-import { orderBlogNodes } from 'loony-utils';
+import { extractImage, orderBlogNodes } from 'loony-utils';
 
 const View = ({ blog_id }) => {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState(null);
+  const [page_id, setPageId] = useState('');
+  const [mainNode, setMainNode] = useState(null);
+  const [childNodes, setChildNodes] = useState([]);
 
   useEffect(() => {
     if (blog_id) {
       axiosInstance.get(`/blog/get_all_blog_nodes?blog_id=${blog_id}`).then(({ data }) => {
-        setBlogs(orderBlogNodes(data.data));
+        const blogs_ = orderBlogNodes(data.data);
+        const mainNode_ = blogs_ && blogs_[0];
+        const childNodes_ = blogs_.slice(1);
+        if (mainNode_) {
+          setBlogs(blogs_);
+          setMainNode(mainNode_);
+          setChildNodes(childNodes_);
+          setPageId(mainNode_.uid);
+        }
       });
     }
   }, [blog_id]);
 
-  const mainNode = (blogs && blogs[0]) || null;
   const navigateEdit = () => {
     navigate(`/edit?name=blog&blog_id=${blog_id}`, mainNode);
   };
+
   if (!blogs) return null;
-  const image = JSON.parse(mainNode.images)[0];
+  if (!page_id) return null;
+  const image = extractImage(mainNode.images);
 
   return (
-    <div className='con-75'>
-      <div className='page-heading flex-row'>
-        <div style={{ width: '90%' }}>{mainNode.title}</div>
-        <div style={{ width: '10%', display: 'flex', justifyContent: 'flex-end' }}>
-          <button onClick={navigateEdit}>Edit</button>
+    <div className='book-container'>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div style={{ width: '20%' }}>
+          {(blogs && blogs).map((blog_node) => {
+            return (
+              <div key={blog_node.uid}>
+                <div className='chapter-nav'>
+                  <div className='blog-nav-title'>{blog_node.title}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ width: '60%' }}>
+          <div>
+            <div className='page-heading'>{mainNode.title}</div>
+            {image ? (
+              <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
+                <img src={`http://localhost:5002/api/i/${image.name}`} alt='' width='100%' />
+              </div>
+            ) : null}
+            <Markdown>{mainNode.body}</Markdown>
+          </div>
+          {childNodes.map((blog_node) => {
+            return (
+              <div className='page-section' key={blog_node.uid}>
+                <div className='section-title'>{blog_node.title}</div>
+                <Markdown>{blog_node.body}</Markdown>
+              </div>
+            );
+          })}
+        </div>
+        <div style={{ width: '20%' }}>
+          <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
+            <li onClick={navigateEdit}>Edit this page</li>
+            <li>Report</li>
+          </ul>
         </div>
       </div>
-      {image ? (
-        <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
-          <img src={`http://localhost:5002/api/i/${image.name}`} alt='' width='100%' />
-        </div>
-      ) : null}
-      <Markdown>{mainNode.body}</Markdown>
-      {(blogs && blogs).slice(1).map((blog_node) => {
-        return (
-          <div className='page-section' key={blog_node.uid}>
-            <div className='section-title'>{blog_node.title}</div>
-            <Markdown>{blog_node.body}</Markdown>
-          </div>
-        );
-      })}
     </div>
   );
 };
