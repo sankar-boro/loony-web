@@ -137,6 +137,8 @@ button:hover {
 .dropdown-content{
   display: none;
   position: absolute;
+  z-index: 1;
+  background-color: white;
   width: 350px;
   top: 55px;
   border-bottom-left-radius: 5px;
@@ -173,7 +175,7 @@ button:hover {
   padding-top: 3px;
   padding-bottom: 3px;
 }
-.book-nav-title {
+.blog-nav-title, .book-nav-title {
   font-weight: bold;
   font-size: 18px;
 }

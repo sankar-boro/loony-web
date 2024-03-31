@@ -4,7 +4,15 @@ import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
 import { updateBlogNode, orderBlogNodes } from 'loony-utils';
 
-const EditNode = ({ activeNode, rawNodes, setRawNodes, setBlogNodes, setActivity }) => {
+const EditNode = ({
+  activeNode,
+  rawNodes,
+  setRawNodes,
+  setBlogNodes,
+  setChildNodes,
+  setActivity,
+  setMainNode,
+}) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [visible, setVisible] = useState(false);
@@ -24,9 +32,17 @@ const EditNode = ({ activeNode, rawNodes, setRawNodes, setBlogNodes, setActivity
     axiosInstance
       .post('/blog/edit_blog_node', submitData)
       .then(({ data }) => {
-        const updatedNodes = updateBlogNode(rawNodes, submitData);
-        setRawNodes(rawNodes);
-        setBlogNodes(orderBlogNodes(updatedNodes));
+        const newRawNodes = updateBlogNode(rawNodes, submitData);
+        setRawNodes(newRawNodes);
+        const blogs_ = orderBlogNodes(newRawNodes);
+        const mainNode_ = blogs_ && blogs_[0];
+        const childNodes_ = blogs_.slice(1);
+
+        if (mainNode_) {
+          setMainNode(mainNode_);
+          setChildNodes(childNodes_);
+          setBlogNodes(blogs_);
+        }
         onCloseModal();
       })
       .catch(() => {
