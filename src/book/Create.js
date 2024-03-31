@@ -121,7 +121,6 @@ export default function CreateBook() {
           </div>
         </div>
         <div style={{ flex: 1, padding: 25 }}>
-          <div>Markdown View</div>
           <Markdown>{body}</Markdown>
         </div>
       </div>

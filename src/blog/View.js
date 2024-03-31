@@ -21,6 +21,7 @@ const View = ({ blog_id }) => {
     navigate(`/edit?name=blog&blog_id=${blog_id}`, mainNode);
   };
   if (!blogs) return null;
+  const image = JSON.parse(mainNode.images)[0];
 
   return (
     <div className='con-75'>
@@ -30,6 +31,11 @@ const View = ({ blog_id }) => {
           <button onClick={navigateEdit}>Edit</button>
         </div>
       </div>
+      {image ? (
+        <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
+          <img src={`http://localhost:5002/api/i/${image.name}`} alt='' width='100%' />
+        </div>
+      ) : null}
       <Markdown>{mainNode.body}</Markdown>
       {(blogs && blogs).slice(1).map((blog_node) => {
         return (

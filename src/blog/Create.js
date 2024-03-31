@@ -6,7 +6,7 @@ export default function CreateBlog() {
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
   const [password, setPassword] = useState('');
-  const [images] = useState('');
+  const [images, setImages] = useState('');
 
   const createDoc = useCallback(() => {
     const url = '/blog/create';
@@ -15,6 +15,32 @@ export default function CreateBlog() {
       .then(({ data }) => {})
       .catch((err) => {});
   }, [title, body, images, password]);
+
+  const uploadFile = (selectedFile) => {
+    // setCropImage(selectedFile);
+    // const reader = new FileReader();
+    // reader.readAsDataURL(selectedFile);
+    // reader.addEventListener('load', () => {
+    //   setCropImage(reader.result);
+    // });
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    axiosInstance
+      .post('/upload_file', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(({ data }) => {
+        setImages([
+          ...images,
+          {
+            name: data.data.uploaded_filename,
+          },
+        ]);
+      })
+      .catch((err) => {});
+  };
 
   return (
     <div className='con-75'>
@@ -55,12 +81,21 @@ export default function CreateBlog() {
               }}
             />
           </div>
+          <div className='form-section'>
+            <label>Body</label>
+            <br />
+            <input
+              type='file'
+              onChange={(e) => {
+                uploadFile(e.target.files[0]);
+              }}
+            />
+          </div>
           <div>
             <button onClick={createDoc}>Create</button>
           </div>
         </div>
         <div style={{ flex: 1, padding: 25 }}>
-          <div>Markdown View</div>
           <Markdown>{body}</Markdown>
         </div>
       </div>

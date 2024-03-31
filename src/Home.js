@@ -24,9 +24,12 @@ const Home = () => {
         <h3>Blogs</h3>
         <div className='flex-row'>
           {blogs.map((blog) => {
+            const image = JSON.parse(blog.images)[0];
             return (
               <div className='card' key={blog.blog_id}>
-                <div className='card-image' />
+                <div className='card-image'>
+                  <img src={`http://localhost:5002/api/i/${image.name}`} height='100%' alt='' />
+                </div>
                 <div className='card-body'>
                   <div
                     className='card-title cursor'

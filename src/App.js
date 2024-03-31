@@ -13,22 +13,27 @@ const Navigation = () => {
     navigate('/', {});
   };
   return (
-    <div className='top-navbar'>
-      <div className='con-75 cursor' onClick={navHome}>
-        <div className='flex-row'>
+    <div className='top-navbar' style={{ backgroundColor: 'black' }}>
+      <div className='con-75 cursor' onClick={navHome} style={{ height: 55 }}>
+        <div className='flex-row' style={{ height: 55 }}>
           <div style={{ flex: 2 }}>
-            <a className='nav-item' href='/'>
-              LOONY
-            </a>
+            <div style={{ height: 55, display: 'flex', alignItems: 'center' }}>
+              <a className='nav-item' href='/' style={{ color: 'white' }}>
+                LOONY
+              </a>
+            </div>
           </div>
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, height: 55 }}>
             <div
               className='view-dropdown-menu'
               onMouseLeave={() => {
                 setViewMenu(false);
               }}
+              style={{ height: 55, display: 'flex', alignItems: 'center' }}
             >
-              Create
+              <div style={{ color: 'white', fontWeight: 'bold', textDecoration: 'none' }}>
+                Create
+              </div>
               <div className='dropdown-content'>
                 <ul>
                   <li>
@@ -50,7 +55,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navigation />
-      <div style={{ paddingTop: 16 }}>
+      <div style={{ paddingTop: 16, paddingBottom: 80 }}>
         <Route path='/' component={<Home />} />
         <Route path='/create' component={<Create />} />
         <Route path='/view' component={<View />} />
