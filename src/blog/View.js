@@ -37,8 +37,8 @@ const View = ({ blog_id }) => {
 
   return (
     <div className='book-container'>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div style={{ width: '20%' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+        <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
           {(blogs && blogs).map((blog_node) => {
             return (
               <div key={blog_node.uid}>
@@ -49,7 +49,15 @@ const View = ({ blog_id }) => {
             );
           })}
         </div>
-        <div style={{ width: '60%' }}>
+        <div
+          style={{
+            width: '60%',
+            paddingTop: 15,
+            paddingLeft: '5%',
+            paddingRight: '5%',
+            background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+          }}
+        >
           <div>
             <div className='page-heading'>{mainNode.title}</div>
             {image ? (
@@ -68,7 +76,7 @@ const View = ({ blog_id }) => {
             );
           })}
         </div>
-        <div style={{ width: '20%' }}>
+        <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
             <li onClick={navigateEdit}>Edit this page</li>
             <li>Report</li>

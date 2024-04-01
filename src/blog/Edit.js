@@ -96,8 +96,8 @@ export default function Edit({ blog_id }) {
 
   return (
     <div className='book-container'>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div style={{ width: '20%' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+        <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
           {blogNodes.map((chapter) => {
             return (
               <div className='chapter-nav cursor' key={chapter.uid}>
@@ -119,7 +119,15 @@ export default function Edit({ blog_id }) {
             );
           })}
         </div>
-        <div style={{ width: '60%' }}>
+        <div
+          style={{
+            width: '60%',
+            paddingTop: 15,
+            paddingLeft: '5%',
+            paddingRight: '5%',
+            background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+          }}
+        >
           <div>
             <div className='page-heading'>{mainNode.title}</div>
             {image ? (
@@ -129,35 +137,33 @@ export default function Edit({ blog_id }) {
             ) : null}
             <Markdown>{mainNode.body}</Markdown>
           </div>
-          {mainNode.identity >= 101 ? (
-            <div className='flex-row'>
-              <div
-                className='button-none cursor'
-                onClick={() => {
-                  setActivity({
-                    ...activity,
-                    activeNode: mainNode,
-                    modal: 'add_sub_section',
-                  });
-                }}
-                style={{ marginRight: 10 }}
-              >
-                Add Node
-              </div>
-              <div
-                className='button-none cursor'
-                onClick={() => {
-                  setActivity({
-                    ...activity,
-                    activeNode: mainNode,
-                    modal: 'delete_page',
-                  });
-                }}
-              >
-                Delete Page
-              </div>
+          <div className='flex-row'>
+            <div
+              className='button-none cursor'
+              onClick={() => {
+                setActivity({
+                  ...activity,
+                  activeNode: mainNode,
+                  modal: 'add_node',
+                });
+              }}
+              style={{ marginRight: 10 }}
+            >
+              Add Node
             </div>
-          ) : null}
+            <div
+              className='button-none cursor'
+              onClick={() => {
+                setActivity({
+                  ...activity,
+                  activeNode: mainNode,
+                  modal: 'delete_blog',
+                });
+              }}
+            >
+              Delete
+            </div>
+          </div>
 
           <div style={{ marginTop: 16 }}>
             {mainNode.identity !== 101 &&
@@ -214,7 +220,7 @@ export default function Edit({ blog_id }) {
               })}
           </div>
         </div>
-        <div>
+        <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
             <li
               onClick={() => {

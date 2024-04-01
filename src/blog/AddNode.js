@@ -15,6 +15,7 @@ const AddNode = ({
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [images, setImages] = useState([]);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     if (activeNode) {
@@ -28,6 +29,7 @@ const AddNode = ({
         body,
         blog_id: parseInt(blog_id, 10),
         parent_id: activeNode.uid,
+        images,
       })
       .then(({ data }) => {
         const newNodes = appendBlogNode(rawNodes, activeNode, data);
@@ -51,6 +53,31 @@ const AddNode = ({
     setTitle('');
     setBody('');
     setVisible(false);
+  };
+  const uploadFile = (selectedFile) => {
+    // setCropImage(selectedFile);
+    // const reader = new FileReader();
+    // reader.readAsDataURL(selectedFile);
+    // reader.addEventListener('load', () => {
+    //   setCropImage(reader.result);
+    // });
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    axiosInstance
+      .post('/upload_file', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(({ data }) => {
+        setImages([
+          ...images,
+          {
+            name: data.data.uploaded_filename,
+          },
+        ]);
+      })
+      .catch((err) => {});
   };
   return (
     <ModalMd visible={visible} onClose={onCloseModal} title='Add Blog Node'>
@@ -78,6 +105,16 @@ const AddNode = ({
                 rows={24}
                 cols={100}
                 value={body}
+              />
+            </div>
+            <div className='form-section'>
+              <label>Body</label>
+              <br />
+              <input
+                type='file'
+                onChange={(e) => {
+                  uploadFile(e.target.files[0]);
+                }}
               />
             </div>
             <div>

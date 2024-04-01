@@ -38,8 +38,8 @@ const View = ({ book_id }) => {
 
   return (
     <div className='book-container'>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <div style={{ width: '20%' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+        <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
           {(books && books).map((book_node) => {
             return (
               <div key={book_node.uid}>
@@ -75,7 +75,15 @@ const View = ({ book_id }) => {
             );
           })}
         </div>
-        <div style={{ width: '60%' }}>
+        <div
+          style={{
+            width: '60%',
+            paddingTop: 15,
+            paddingLeft: '5%',
+            paddingRight: '5%',
+            background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+          }}
+        >
           <div>
             <div className='page-heading'>{mainNode.title}</div>
             {image ? (
@@ -94,7 +102,7 @@ const View = ({ book_id }) => {
             );
           })}
         </div>
-        <div style={{ width: '20%' }}>
+        <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
             <li onClick={navigateEdit}>Edit this page</li>
             <li>Report</li>

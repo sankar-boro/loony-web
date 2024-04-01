@@ -49,7 +49,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navigation />
-      <div style={{ paddingTop: 16, paddingBottom: 80 }}>
+      <div style={{ paddingBottom: 80, height: '100%' }}>
         <Route path='/' component={<Home />} />
         <Route path='/create' component={<Create />} />
         <Route path='/view' component={<View />} />
