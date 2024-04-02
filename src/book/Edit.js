@@ -14,12 +14,6 @@ export default function Edit({ book_id }) {
   const [rawNodes, setRawNodes] = useState([]);
   const [mainChapter, setMainchapter] = useState(null);
   const [bookNodes, setBookNodes] = useState(null);
-  // const [activity, setActivity] = useState({
-  //   modal: '',
-  //   page_id: null,
-  //   mainNode: null,
-  //   activeNode: null,
-  // });
   const [mainNode, setMainNode] = useState(null);
   const [childNodes, setChildNodes] = useState([]);
   const [navNodes, setNavNodes] = useState([]);
@@ -217,16 +211,19 @@ export default function Edit({ book_id }) {
           </div>
           {mainNode.identity >= 101 ? (
             <div className='flex-row'>
-              <div
-                className='button-none cursor'
-                onClick={() => {
-                  setActiveNode(mainNode);
-                  setModal('add_sub_section');
-                }}
-                style={{ marginRight: 10 }}
-              >
-                Add Node
-              </div>
+              {mainNode.identity === 102 && (
+                <div
+                  className='button-none cursor'
+                  onClick={() => {
+                    setActiveNode(mainNode);
+                    setModal('add_sub_section');
+                  }}
+                  style={{ marginRight: 10 }}
+                >
+                  Add Node
+                </div>
+              )}
+
               <div
                 className='button-none cursor'
                 onClick={() => {

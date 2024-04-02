@@ -57,6 +57,25 @@ const AddSubSection = ({
     setVisible(false);
     onClose();
   };
+  const uploadFile = (selectedFile) => {
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    axiosInstance
+      .post('/upload_file', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(({ data }) => {
+        setImages([
+          ...images,
+          {
+            name: data.data.uploaded_filename,
+          },
+        ]);
+      })
+      .catch((err) => {});
+  };
   return (
     <ModalMd visible={visible} onClose={onCloseModal} title='Add Sub Section'>
       <ModalBodyContainer>
@@ -83,6 +102,16 @@ const AddSubSection = ({
                 rows={24}
                 cols={100}
                 value={body}
+              />
+            </div>
+            <div className='form-section'>
+              <label>Image</label>
+              <br />
+              <input
+                type='file'
+                onChange={(e) => {
+                  uploadFile(e.target.files[0]);
+                }}
               />
             </div>
             <div>

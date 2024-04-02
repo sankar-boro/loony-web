@@ -18,6 +18,7 @@ const View = ({ book_id }) => {
     if (book_id) {
       axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
         const books_ = orderBookNodes(data.data);
+        console.log(books_, 'books');
         const mainNode_ = books_ && books_[0];
         const childNodes_ = books_.slice(1);
         if (mainNode_) {
@@ -40,7 +41,6 @@ const View = ({ book_id }) => {
   if (!page_id) return null;
 
   const image = extractImage(mainNode.images);
-
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
