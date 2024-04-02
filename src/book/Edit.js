@@ -12,6 +12,7 @@ import ConfirmAction from './ConfirmAction';
 export default function Edit({ book_id }) {
   const { replaceState } = useHistory();
   const [rawNodes, setRawNodes] = useState([]);
+  const [mainChapter, setMainchapter] = useState(null);
   const [bookNodes, setBookNodes] = useState(null);
   const [activity, setActivity] = useState({
     modal: '',
@@ -21,6 +22,7 @@ export default function Edit({ book_id }) {
   });
   const [mainNode, setMainNode] = useState(null);
   const [childNodes, setChildNodes] = useState([]);
+  const [navNodes, setNavNodes] = useState([]);
 
   useEffect(() => {
     if (book_id) {
@@ -28,11 +30,13 @@ export default function Edit({ book_id }) {
         setRawNodes(data.data);
         const books_ = orderBookNodes(data.data);
         const mainNode_ = books_ && books_[0];
-        const childNodes_ = mainNode_.child;
+        const childNodes_ = books_.slice(1);
 
         if (mainNode_) {
           setMainNode(mainNode_);
+          setMainchapter(mainNode_);
           setChildNodes(childNodes_);
+          setNavNodes(childNodes_);
           setBookNodes(books_);
           setActivity({
             ...activity,
@@ -83,6 +87,7 @@ export default function Edit({ book_id }) {
           if (mainNode_) {
             setMainNode(mainNode_);
             setChildNodes(childNodes_);
+            setNavNodes(childNodes_);
             setBookNodes(books_);
             setActivity({
               ...activity,
@@ -111,7 +116,17 @@ export default function Edit({ book_id }) {
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
         <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
-          {bookNodes.map((chapter) => {
+          <div className='chapter-nav cursor'>
+            <div
+              className='book-nav-title'
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              {mainChapter.title}
+            </div>
+          </div>
+          {navNodes.map((chapter) => {
             return (
               <div key={chapter.uid}>
                 <div className='chapter-nav cursor' key={chapter.uid}>
@@ -120,7 +135,7 @@ export default function Edit({ book_id }) {
                     onClick={(e) => {
                       e.stopPropagation();
                       setMainNode(chapter);
-                      setChildNodes(chapter.child);
+                      // setChildNodes(chapter.child);
                       setActivity({
                         ...activity,
                         page_id: chapter.uid,

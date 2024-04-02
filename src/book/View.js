@@ -7,22 +7,26 @@ import { extractImage, orderBookNodes } from 'loony-utils';
 const View = ({ book_id }) => {
   const navigate = useNavigate();
   const [books, setBooks] = useState(null);
+  const [mainChapter, setMainchapter] = useState(null);
   const [page_id, setPageId] = useState('');
   const [mainNode, setMainNode] = useState(null);
   const [nav_id, setNavId] = useState(null);
   const [childNodes, setChildNodes] = useState([]);
+  const [navNodes, setNavNodes] = useState([]);
 
   useEffect(() => {
     if (book_id) {
       axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
         const books_ = orderBookNodes(data.data);
         const mainNode_ = books_ && books_[0];
-        const childNodes_ = mainNode_.child;
+        const childNodes_ = books_.slice(1);
         if (mainNode_) {
+          setMainchapter(mainNode_);
           setBooks(books_);
           setMainNode(mainNode_);
           setNavId(mainNode_.uid);
           setChildNodes(childNodes_);
+          setNavNodes(childNodes_);
           setPageId(mainNode_.uid);
         }
       });
@@ -42,7 +46,17 @@ const View = ({ book_id }) => {
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
         <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
-          {(books && books).map((book_node) => {
+          <div className='chapter-nav'>
+            <div
+              className='book-nav-title'
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              {mainChapter.title}
+            </div>
+          </div>
+          {navNodes.map((book_node) => {
             return (
               <div key={book_node.uid}>
                 <div className='chapter-nav'>
@@ -55,7 +69,7 @@ const View = ({ book_id }) => {
                       // setChildNodes(book_node.child);
                     }}
                   >
-                    {book_node.title}
+                    {book_node.title} {`>`}
                   </div>
                 </div>
                 {nav_id === book_node.uid &&
