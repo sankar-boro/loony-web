@@ -9,6 +9,7 @@ const View = ({ book_id }) => {
   const [books, setBooks] = useState(null);
   const [page_id, setPageId] = useState('');
   const [mainNode, setMainNode] = useState(null);
+  const [nav_id, setNavId] = useState(null);
   const [childNodes, setChildNodes] = useState([]);
 
   useEffect(() => {
@@ -20,6 +21,7 @@ const View = ({ book_id }) => {
         if (mainNode_) {
           setBooks(books_);
           setMainNode(mainNode_);
+          setNavId(mainNode_.uid);
           setChildNodes(childNodes_);
           setPageId(mainNode_.uid);
         }
@@ -49,28 +51,30 @@ const View = ({ book_id }) => {
                     onClick={(e) => {
                       e.stopPropagation();
                       setMainNode(book_node);
-                      setChildNodes(book_node.child);
+                      setNavId(book_node.uid);
+                      // setChildNodes(book_node.child);
                     }}
                   >
                     {book_node.title}
                   </div>
                 </div>
-                {book_node.child.map((section) => {
-                  return (
-                    <div
-                      key={section.uid}
-                      className='section-nav'
-                      style={{ paddingLeft: 20 }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setMainNode(section);
-                        setChildNodes(section.child);
-                      }}
-                    >
-                      {section.title}
-                    </div>
-                  );
-                })}
+                {nav_id === book_node.uid &&
+                  book_node.child.map((section) => {
+                    return (
+                      <div
+                        key={section.uid}
+                        className='section-nav'
+                        style={{ paddingLeft: 20 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setMainNode(section);
+                          setChildNodes(section.child);
+                        }}
+                      >
+                        {section.title}
+                      </div>
+                    );
+                  })}
               </div>
             );
           })}

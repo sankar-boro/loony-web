@@ -113,7 +113,7 @@ export default function Edit({ book_id }) {
         <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
           {bookNodes.map((chapter) => {
             return (
-              <>
+              <div key={chapter.uid}>
                 <div className='chapter-nav cursor' key={chapter.uid}>
                   <div
                     className='book-nav-title'
@@ -161,41 +161,42 @@ export default function Edit({ book_id }) {
                 </div>
                 {/* Sections */}
                 <div style={{ paddingLeft: 20 }}>
-                  {chapter.child.map((section) => {
-                    return (
-                      <div key={section.uid} className='section-nav cursor'>
-                        <div
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setMainNode(section);
-                            setChildNodes(section.child);
-                            setActivity({
-                              ...activity,
-                              page_id: section.uid,
-                            });
-                          }}
-                        >
-                          {section.title}
+                  {mainNode.uid === chapter.uid &&
+                    chapter.child.map((section) => {
+                      return (
+                        <div key={section.uid} className='section-nav cursor'>
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setMainNode(section);
+                              setChildNodes(section.child);
+                              setActivity({
+                                ...activity,
+                                page_id: section.uid,
+                              });
+                            }}
+                          >
+                            {section.title}
+                          </div>
+                          <div
+                            className='button-none'
+                            style={{ paddingTop: 5, paddingBottom: 5 }}
+                            onClick={() => {
+                              setActivity({
+                                ...activity,
+                                activeNode: section,
+                                page_id: chapter.uid,
+                                modal: 'add_section',
+                              });
+                            }}
+                          >
+                            Add Section
+                          </div>
                         </div>
-                        <div
-                          className='button-none'
-                          style={{ paddingTop: 5, paddingBottom: 5 }}
-                          onClick={() => {
-                            setActivity({
-                              ...activity,
-                              activeNode: section,
-                              page_id: chapter.uid,
-                              modal: 'add_section',
-                            });
-                          }}
-                        >
-                          Add Section
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
                 </div>
-              </>
+              </div>
             );
           })}
         </div>
