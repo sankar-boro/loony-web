@@ -14,16 +14,19 @@ export default function Edit({ book_id }) {
   const [rawNodes, setRawNodes] = useState([]);
   const [mainChapter, setMainchapter] = useState(null);
   const [bookNodes, setBookNodes] = useState(null);
-  const [activity, setActivity] = useState({
-    modal: '',
-    page_id: null,
-    mainNode: null,
-    activeNode: null,
-  });
+  // const [activity, setActivity] = useState({
+  //   modal: '',
+  //   page_id: null,
+  //   mainNode: null,
+  //   activeNode: null,
+  // });
   const [mainNode, setMainNode] = useState(null);
   const [childNodes, setChildNodes] = useState([]);
   const [navNodes, setNavNodes] = useState([]);
   const [nav_id, setNavId] = useState(null);
+  const [modal, setModal] = useState('');
+  const [page_id, setPageId] = useState(null);
+  const [activeNode, setActiveNode] = useState(null);
 
   useEffect(() => {
     if (book_id) {
@@ -39,18 +42,14 @@ export default function Edit({ book_id }) {
           setNavNodes(childNodes_);
           setBookNodes(books_);
           setNavId(mainNode_.uid);
-          setActivity({
-            ...activity,
-            mainNode: mainNode_,
-            page_id: mainNode_.uid,
-          });
+          setPageId(mainNode_.uid);
         }
       });
     }
   }, [book_id]);
 
   const deleteNode = () => {
-    const delete_node = activity.activeNode;
+    const delete_node = activeNode;
     if (childNodes) {
       let updateNode = null;
       bookNodes.forEach((b, i) => {
@@ -70,7 +69,7 @@ export default function Edit({ book_id }) {
       });
 
       const submitData = {
-        page_id: activity.page_id,
+        page_id,
         identity: delete_node.identity,
         update_parent_id: delete_node.parent_id,
         delete_node_id: delete_node.uid,
@@ -90,12 +89,8 @@ export default function Edit({ book_id }) {
             setChildNodes(childNodes_);
             setNavNodes(childNodes_);
             setBookNodes(books_);
-            setActivity({
-              ...activity,
-              mainNode: mainNode_,
-              page_id: mainNode_.uid,
-              modal: '',
-            });
+            setPageId(mainNode_.uid);
+            setModal('');
           }
         })
         .catch((err) => {
@@ -138,10 +133,7 @@ export default function Edit({ book_id }) {
                       e.stopPropagation();
                       setMainNode(chapter);
                       setNavId(chapter.uid);
-                      setActivity({
-                        ...activity,
-                        page_id: chapter.uid,
-                      });
+                      setPageId(chapter.uid);
                     }}
                   >
                     {chapter.title} {`>`}
@@ -150,11 +142,8 @@ export default function Edit({ book_id }) {
                     <div
                       className='button-none'
                       onClick={() => {
-                        setActivity({
-                          ...activity,
-                          activeNode: chapter,
-                          modal: 'add_chapter',
-                        });
+                        setActiveNode(chapter);
+                        setModal('add_chapter');
                       }}
                       style={{ marginRight: 16 }}
                     >
@@ -165,12 +154,9 @@ export default function Edit({ book_id }) {
                     className='button-none'
                     style={{ paddingLeft: 20 }}
                     onClick={() => {
-                      setActivity({
-                        ...activity,
-                        activeNode: chapter,
-                        page_id: chapter.uid,
-                        modal: 'add_section',
-                      });
+                      setActiveNode(chapter);
+                      setPageId(chapter.uid);
+                      setModal('add_chapter');
                     }}
                   >
                     Add Section
@@ -187,10 +173,7 @@ export default function Edit({ book_id }) {
                               e.stopPropagation();
                               setMainNode(section);
                               setChildNodes(section.child);
-                              setActivity({
-                                ...activity,
-                                page_id: section.uid,
-                              });
+                              setPageId(section.uid);
                             }}
                           >
                             {section.title}
@@ -199,12 +182,9 @@ export default function Edit({ book_id }) {
                             className='button-none'
                             style={{ paddingTop: 5, paddingBottom: 5 }}
                             onClick={() => {
-                              setActivity({
-                                ...activity,
-                                activeNode: section,
-                                page_id: chapter.uid,
-                                modal: 'add_section',
-                              });
+                              setActiveNode(section);
+                              setPageId(chapter.uid);
+                              setModal('add_section');
                             }}
                           >
                             Add Section
@@ -240,11 +220,8 @@ export default function Edit({ book_id }) {
               <div
                 className='button-none cursor'
                 onClick={() => {
-                  setActivity({
-                    ...activity,
-                    activeNode: mainNode,
-                    modal: 'add_sub_section',
-                  });
+                  setActiveNode(mainNode);
+                  setModal('add_sub_section');
                 }}
                 style={{ marginRight: 10 }}
               >
@@ -253,11 +230,8 @@ export default function Edit({ book_id }) {
               <div
                 className='button-none cursor'
                 onClick={() => {
-                  setActivity({
-                    ...activity,
-                    activeNode: mainNode,
-                    modal: 'delete_page',
-                  });
+                  setActiveNode(mainNode);
+                  setModal('delete_page');
                 }}
               >
                 Delete Page
@@ -276,12 +250,9 @@ export default function Edit({ book_id }) {
                       <div
                         className='button-none cursor'
                         onClick={() => {
-                          setActivity({
-                            ...activity,
-                            activeNode: node,
-                            page_id: mainNode.uid,
-                            modal: 'add_sub_section',
-                          });
+                          setActiveNode(node);
+                          setPageId(mainNode.uid);
+                          setModal('add_sub_section');
                         }}
                         style={{ marginRight: 16 }}
                       >
@@ -290,12 +261,9 @@ export default function Edit({ book_id }) {
                       <div
                         className='button-none cursor'
                         onClick={() => {
-                          setActivity({
-                            ...activity,
-                            activeNode: node,
-                            page_id: node.uid,
-                            modal: 'edit_sub_section',
-                          });
+                          setActiveNode(node);
+                          setPageId(node.uid);
+                          setModal('edit_sub_section');
                         }}
                         style={{ marginRight: 16 }}
                       >
@@ -304,11 +272,8 @@ export default function Edit({ book_id }) {
                       <div
                         className='delete-button-none cursor'
                         onClick={() => {
-                          setActivity({
-                            ...activity,
-                            activeNode: node,
-                            modal: 'delete_node',
-                          });
+                          setActiveNode(node);
+                          setModal('delete_node');
                         }}
                       >
                         Delete
@@ -330,10 +295,7 @@ export default function Edit({ book_id }) {
             </li>
             <li
               onClick={() => {
-                setActivity({
-                  ...activity,
-                  modal: 'delete_book',
-                });
+                setModal('delete_book');
               }}
             >
               Delete Book
@@ -344,12 +306,9 @@ export default function Edit({ book_id }) {
             <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
               <li
                 onClick={() => {
-                  setActivity({
-                    ...activity,
-                    activeNode: mainNode,
-                    page_id: mainNode.uid,
-                    modal: 'edit_sub_section',
-                  });
+                  setActiveNode(mainNode);
+                  setPageId(mainNode.uid);
+                  setModal('edit_sub_section');
                 }}
               >
                 {mainNode.title}
@@ -359,10 +318,9 @@ export default function Edit({ book_id }) {
         </div>
       </div>
 
-      {activity.modal === 'add_chapter' ? (
+      {modal === 'add_chapter' ? (
         <AddNode
-          activeNode={activity.activeNode}
-          setActivity={setActivity}
+          activeNode={activeNode}
           book_id={book_id}
           setBookNodes={setBookNodes}
           setRawNodes={setRawNodes}
@@ -370,14 +328,16 @@ export default function Edit({ book_id }) {
           setChildNodes={setChildNodes}
           rawNodes={rawNodes}
           bookNodes={bookNodes}
-          page_id={activity.page_id}
+          page_id={page_id}
+          onClose={() => {
+            setActiveNode(null);
+          }}
         />
       ) : null}
 
-      {activity.modal === 'add_section' ? (
+      {modal === 'add_section' ? (
         <AddSection
-          activeNode={activity.activeNode}
-          setActivity={setActivity}
+          activeNode={activeNode}
           book_id={book_id}
           setBookNodes={setBookNodes}
           setRawNodes={setRawNodes}
@@ -385,14 +345,16 @@ export default function Edit({ book_id }) {
           setChildNodes={setChildNodes}
           rawNodes={rawNodes}
           bookNodes={bookNodes}
-          page_id={activity.page_id}
+          page_id={page_id}
+          onClose={() => {
+            setActiveNode(null);
+          }}
         />
       ) : null}
 
-      {activity.modal === 'add_sub_section' ? (
+      {modal === 'add_sub_section' ? (
         <AddSubSection
-          activeNode={activity.activeNode}
-          setActivity={setActivity}
+          activeNode={activeNode}
           book_id={book_id}
           setBookNodes={setBookNodes}
           setRawNodes={setRawNodes}
@@ -400,14 +362,16 @@ export default function Edit({ book_id }) {
           setChildNodes={setChildNodes}
           rawNodes={rawNodes}
           bookNodes={bookNodes}
-          page_id={activity.page_id}
+          page_id={page_id}
+          onClose={() => {
+            setActiveNode(null);
+          }}
         />
       ) : null}
 
-      {activity.modal === 'edit_sub_section' ? (
+      {modal === 'edit_sub_section' ? (
         <EditSubSection
-          activeNode={activity.activeNode}
-          setActivity={setActivity}
+          activeNode={activeNode}
           book_id={book_id}
           setBookNodes={setBookNodes}
           setRawNodes={setRawNodes}
@@ -415,39 +379,42 @@ export default function Edit({ book_id }) {
           setChildNodes={setChildNodes}
           rawNodes={rawNodes}
           bookNodes={bookNodes}
-          page_id={activity.page_id}
+          page_id={page_id}
+          onClose={() => {
+            setActiveNode(null);
+          }}
         />
       ) : null}
 
-      {activity.modal === 'delete_book' ? (
+      {modal === 'delete_book' ? (
         <ConfirmAction
           confirmTitle='Are you sure you want to delete Book?'
           confirmAction={deleteBook}
           title='Delete Book'
           onClose={() => {
-            setActivity({ ...activity, modal: '' });
+            setModal('');
           }}
         />
       ) : null}
 
-      {activity.modal === 'delete_page' ? (
+      {modal === 'delete_page' ? (
         <ConfirmAction
           confirmTitle='Are you sure you want to delete Page?'
           confirmAction={deleteNode}
           title='Delete Book'
           onClose={() => {
-            setActivity({ ...activity, modal: '' });
+            setModal('');
           }}
         />
       ) : null}
 
-      {activity.modal === 'delete_node' ? (
+      {modal === 'delete_node' ? (
         <ConfirmAction
           confirmTitle='Are you sure you want to delete Node?'
           confirmAction={deleteNode}
           title='Delete Book'
           onClose={() => {
-            setActivity({ ...activity, modal: '' });
+            setModal('');
           }}
         />
       ) : null}

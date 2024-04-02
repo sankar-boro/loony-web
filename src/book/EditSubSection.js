@@ -6,14 +6,12 @@ import { updateBookNode, orderBookNodes } from 'loony-utils';
 
 const EditSubSection = ({
   activeNode,
-  setActivity,
-  book_id,
   rawNodes,
   setRawNodes,
   setBookNodes,
-  page_id,
   setMainNode,
   setChildNodes,
+  onClose,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -52,10 +50,7 @@ const EditSubSection = ({
     setTitle('');
     setBody('');
     setVisible(false);
-    setActivity((prevState) => ({
-      ...prevState,
-      activeNode: null,
-    }));
+    onClose();
   };
   return (
     <ModalMd visible={visible} onClose={onCloseModal} title='Add Sub Section'>
