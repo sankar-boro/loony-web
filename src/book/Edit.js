@@ -23,6 +23,7 @@ export default function Edit({ book_id }) {
   const [mainNode, setMainNode] = useState(null);
   const [childNodes, setChildNodes] = useState([]);
   const [navNodes, setNavNodes] = useState([]);
+  const [nav_id, setNavId] = useState(null);
 
   useEffect(() => {
     if (book_id) {
@@ -35,9 +36,9 @@ export default function Edit({ book_id }) {
         if (mainNode_) {
           setMainNode(mainNode_);
           setMainchapter(mainNode_);
-          setChildNodes(childNodes_);
           setNavNodes(childNodes_);
           setBookNodes(books_);
+          setNavId(mainNode_.uid);
           setActivity({
             ...activity,
             mainNode: mainNode_,
@@ -121,6 +122,7 @@ export default function Edit({ book_id }) {
               className='book-nav-title'
               onClick={(e) => {
                 e.stopPropagation();
+                setMainNode(mainChapter);
               }}
             >
               {mainChapter.title}
@@ -135,14 +137,14 @@ export default function Edit({ book_id }) {
                     onClick={(e) => {
                       e.stopPropagation();
                       setMainNode(chapter);
-                      // setChildNodes(chapter.child);
+                      setNavId(chapter.uid);
                       setActivity({
                         ...activity,
                         page_id: chapter.uid,
                       });
                     }}
                   >
-                    {chapter.title}
+                    {chapter.title} {`>`}
                   </div>
                   <div className='flex-row' style={{ paddingTop: 5, paddingBottom: 5 }}>
                     <div
@@ -176,7 +178,7 @@ export default function Edit({ book_id }) {
                 </div>
                 {/* Sections */}
                 <div style={{ paddingLeft: 20 }}>
-                  {mainNode.uid === chapter.uid &&
+                  {nav_id === chapter.uid &&
                     chapter.child.map((section) => {
                       return (
                         <div key={section.uid} className='section-nav cursor'>

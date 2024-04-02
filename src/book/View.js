@@ -25,7 +25,6 @@ const View = ({ book_id }) => {
           setBooks(books_);
           setMainNode(mainNode_);
           setNavId(mainNode_.uid);
-          setChildNodes(childNodes_);
           setNavNodes(childNodes_);
           setPageId(mainNode_.uid);
         }
@@ -51,6 +50,7 @@ const View = ({ book_id }) => {
               className='book-nav-title'
               onClick={(e) => {
                 e.stopPropagation();
+                setMainNode(mainChapter);
               }}
             >
               {mainChapter.title}
