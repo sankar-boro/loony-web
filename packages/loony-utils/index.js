@@ -69,11 +69,11 @@ export const appendBookNode = (nodes, topData, resData) => {
     if (topData.uid === element.uid) {
       newNodes.push(element);
       newNodes.push(resData.new_node);
-      if (nodes[index + 1]) {
-        nodes[index + 1].parent_id = resData.update_node.update_row_parent_id;
-      }
     } else {
       newNodes.push(element);
+    }
+    if (nodes[index].uid === resData.update_node.update_row_id) {
+      nodes[index].parent_id = resData.update_node.update_row_parent_id;
     }
   }
   return newNodes;
@@ -166,6 +166,43 @@ const groupChapters = (parent_id, chapters) => {
   return orders;
 };
 
+export const orderTestNodes = (rawApi, removeIds = []) => {
+  let data = rawApi;
+  if (removeIds.length > 0) {
+    data = rawApi.filter((d) => {
+      if (removeIds.includes(d.uid)) {
+        return false;
+      }
+      return true;
+    });
+  }
+
+  const allGroups = groupWithIdentity(data);
+  console.log(allGroups, 'allGroups');
+  const samples = {
+    allSectionGroups: allGroups[102],
+    allSubSectionGroups: allGroups[103],
+  };
+
+  const allFrontPages = {
+    100: allGroups[100],
+    101: allGroups[101],
+  };
+  console.log(allFrontPages, 'allFrontPages');
+  // allFrontPages[101] = groupChapters(allGroups[100][0].uid, allFrontPages[101]);
+
+  // const chapters = [];
+  // Object.values(allFrontPages).forEach((frontPageObjectValue) => {
+  //   frontPageObjectValue.forEach((frontPage) => {
+  //     const { newParent, newSiblings } = reOrderFrontPage(frontPage, samples);
+  //     samples.allSectionGroups = newSiblings;
+  //     chapters.push(newParent);
+  //   });
+  // });
+  // return chapters;
+  return [];
+};
+
 export const orderBookNodes = (rawApi, removeIds = []) => {
   let data = rawApi;
   if (removeIds.length > 0) {
@@ -178,6 +215,7 @@ export const orderBookNodes = (rawApi, removeIds = []) => {
   }
 
   const allGroups = groupWithIdentity(data);
+  console.log(allGroups, 'allGroups');
   const samples = {
     allSectionGroups: allGroups[102],
     allSubSectionGroups: allGroups[103],
@@ -187,7 +225,6 @@ export const orderBookNodes = (rawApi, removeIds = []) => {
     100: allGroups[100],
     101: allGroups[101],
   };
-
   allFrontPages[101] = groupChapters(allGroups[100][0].uid, allFrontPages[101]);
 
   const chapters = [];

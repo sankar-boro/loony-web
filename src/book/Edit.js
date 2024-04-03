@@ -111,11 +111,27 @@ export default function Edit({ book_id }) {
               className='book-nav-title'
               onClick={(e) => {
                 e.stopPropagation();
+                setActiveNode(mainChapter);
                 setMainNode(mainChapter);
+                setNavId(mainChapter.uid);
+                setPageId(mainChapter.uid);
               }}
             >
               {mainChapter.title}
             </div>
+          </div>
+          <div
+            className='button-none'
+            onClick={() => {
+              setActiveNode(mainChapter);
+              setMainNode(mainChapter);
+              setNavId(mainChapter.uid);
+              setPageId(mainChapter.uid);
+              setModal('add_chapter');
+            }}
+            style={{ marginRight: 16 }}
+          >
+            Add Chapter
           </div>
           {navNodes.map((chapter) => {
             return (
@@ -150,7 +166,7 @@ export default function Edit({ book_id }) {
                     onClick={() => {
                       setActiveNode(chapter);
                       setPageId(chapter.uid);
-                      setModal('add_chapter');
+                      setModal('add_section');
                     }}
                   >
                     Add Section
@@ -177,7 +193,7 @@ export default function Edit({ book_id }) {
                             style={{ paddingTop: 5, paddingBottom: 5 }}
                             onClick={() => {
                               setActiveNode(section);
-                              setPageId(chapter.uid);
+                              setPageId(section.uid);
                               setModal('add_section');
                             }}
                           >
@@ -211,18 +227,19 @@ export default function Edit({ book_id }) {
           </div>
           {mainNode.identity >= 101 ? (
             <div className='flex-row'>
-              {mainNode.identity === 102 && (
+              {mainNode.identity === 102 ? (
                 <div
                   className='button-none cursor'
                   onClick={() => {
                     setActiveNode(mainNode);
+                    setPageId(mainNode.uid);
                     setModal('add_sub_section');
                   }}
                   style={{ marginRight: 10 }}
                 >
                   Add Node
                 </div>
-              )}
+              ) : null}
 
               <div
                 className='button-none cursor'
@@ -322,7 +339,7 @@ export default function Edit({ book_id }) {
           setBookNodes={setBookNodes}
           setRawNodes={setRawNodes}
           setMainNode={setMainNode}
-          setChildNodes={setChildNodes}
+          setNavNodes={setNavNodes}
           rawNodes={rawNodes}
           bookNodes={bookNodes}
           page_id={page_id}

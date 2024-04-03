@@ -12,7 +12,7 @@ const AddNode = ({
   setBookNodes,
   page_id,
   setMainNode,
-  setChildNodes,
+  setNavNodes,
   onClose,
 }) => {
   const [title, setTitle] = useState('');
@@ -25,7 +25,7 @@ const AddNode = ({
       setVisible(true);
     }
   }, [activeNode]);
-  const addNode = () => {
+  const onCreate = () => {
     axiosInstance
       .post('/book/append_book_node', {
         title,
@@ -41,10 +41,10 @@ const AddNode = ({
         setRawNodes(newRawNodes);
         const orderedNodes = orderBookNodes(newRawNodes);
         const mainNode_ = orderedNodes && orderedNodes[0];
-        const childNodes_ = mainNode_.child;
-        setMainNode(mainNode_);
-        setChildNodes(childNodes_);
+        const childNodes_ = orderedNodes.slice(1);
         setBookNodes(orderedNodes);
+        setMainNode(mainNode_);
+        setNavNodes(childNodes_);
         onCloseModal();
       })
       .catch(() => {
@@ -115,7 +115,7 @@ const AddNode = ({
               />
             </div>
             <div>
-              <button onClick={addNode}>Create</button>
+              <button onClick={onCreate}>Create</button>
             </div>
           </div>
           <div style={{ width: '50%' }}>
