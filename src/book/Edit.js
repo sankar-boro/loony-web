@@ -46,19 +46,9 @@ export default function Edit({ book_id }) {
     const delete_node = activeNode;
     if (childNodes) {
       let updateNode = null;
-      bookNodes.forEach((b, i) => {
-        if (b.uid === delete_node.uid) {
-          if (bookNodes[i + 1]) {
-            updateNode = childNodes[i + 1];
-          }
-        } else {
-          b.child.forEach((x, ii) => {
-            if (x.uid === delete_node.uid) {
-              if (b.child[ii + 1]) {
-                updateNode = b.child[ii + 1];
-              }
-            }
-          });
+      rawNodes.forEach((r) => {
+        if (r.parent_id === delete_node.uid) {
+          updateNode = r;
         }
       });
 
@@ -76,11 +66,10 @@ export default function Edit({ book_id }) {
           setRawNodes(newNodes);
           const books_ = orderBookNodes(newNodes);
           const mainNode_ = books_ && books_[0];
-          const childNodes_ = mainNode_.child;
+          const childNodes_ = books_.slice(1);
 
           if (mainNode_) {
             setMainNode(mainNode_);
-            setChildNodes(childNodes_);
             setNavNodes(childNodes_);
             setBookNodes(books_);
             setPageId(mainNode_.uid);
