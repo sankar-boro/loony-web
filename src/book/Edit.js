@@ -345,7 +345,7 @@ export default function Edit({ book_id }) {
           setBookNodes={setBookNodes}
           setRawNodes={setRawNodes}
           setMainNode={setMainNode}
-          setChildNodes={setChildNodes}
+          setNavNodes={setNavNodes}
           rawNodes={rawNodes}
           bookNodes={bookNodes}
           page_id={page_id}
@@ -380,6 +380,7 @@ export default function Edit({ book_id }) {
           setRawNodes={setRawNodes}
           setMainNode={setMainNode}
           setChildNodes={setChildNodes}
+          setNavNodes={setNavNodes}
           rawNodes={rawNodes}
           bookNodes={bookNodes}
           page_id={page_id}

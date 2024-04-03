@@ -12,7 +12,7 @@ const AddSection = ({
   setBookNodes,
   page_id,
   setMainNode,
-  setChildNodes,
+  setNavNodes,
   onClose,
 }) => {
   const [title, setTitle] = useState('');
@@ -41,9 +41,9 @@ const AddSection = ({
         setRawNodes(newRawNodes);
         const orderedNodes = orderBookNodes(newRawNodes);
         const mainNode_ = orderedNodes && orderedNodes[0];
-        const childNodes_ = mainNode_.child;
+        const childNodes_ = orderedNodes.slice(1);
         setMainNode(mainNode_);
-        setChildNodes(childNodes_);
+        setNavNodes(childNodes_);
         setBookNodes(orderedNodes);
         onCloseModal();
       })

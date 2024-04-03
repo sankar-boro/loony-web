@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ModalMd, ModalBodyContainer } from '../components';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
-import { appendBookNode, orderTestNodes } from 'loony-utils';
+import { appendBookNode, orderBookNodes } from 'loony-utils';
 
 const AddSubSection = ({
   activeNode,
@@ -12,7 +12,7 @@ const AddSubSection = ({
   setBookNodes,
   page_id,
   setMainNode,
-  setChildNodes,
+  setNavNodes,
   onClose,
 }) => {
   const [title, setTitle] = useState('');
@@ -39,15 +39,13 @@ const AddSubSection = ({
       .then(({ data }) => {
         const newRawNodes = appendBookNode(rawNodes, activeNode, data);
         setRawNodes(newRawNodes);
-        console.log(newRawNodes);
-        const orderedNodes = orderTestNodes(newRawNodes);
-        // console.log(orderedNodes, 'sdjfls');
-        // const mainNode_ = orderedNodes && orderedNodes[0];
-        // const childNodes_ = mainNode_.child;
-        // setMainNode(mainNode_);
-        // setChildNodes(childNodes_);
-        // setBookNodes(orderedNodes);
-        // onCloseModal();
+        const orderedNodes = orderBookNodes(newRawNodes);
+        const mainNode_ = orderedNodes && orderedNodes[0];
+        const childNodes_ = orderedNodes.slice(1);
+        setMainNode(mainNode_);
+        setNavNodes(childNodes_);
+        setBookNodes(orderedNodes);
+        onCloseModal();
       })
       .catch(() => {
         onCloseModal();
