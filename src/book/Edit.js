@@ -172,7 +172,7 @@ export default function Edit({ book_id }) {
                               e.stopPropagation();
                               setMainNode(section);
                               setChildNodes(section.child);
-                              setPageId(section.uid);
+                              setPageId(chapter.uid);
                             }}
                           >
                             {section.title}
@@ -182,7 +182,7 @@ export default function Edit({ book_id }) {
                             style={{ paddingTop: 5, paddingBottom: 5 }}
                             onClick={() => {
                               setActiveNode(section);
-                              setPageId(section.uid);
+                              setPageId(chapter.uid);
                               setModal('add_section');
                             }}
                           >
