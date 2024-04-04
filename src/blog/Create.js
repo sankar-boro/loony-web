@@ -1,8 +1,10 @@
 import { useState, useCallback } from 'react';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
+import { useHistory } from '../Router';
 
 export default function CreateBlog() {
+  const { replaceState } = useHistory();
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
   const [password, setPassword] = useState('');
@@ -12,7 +14,9 @@ export default function CreateBlog() {
     const url = '/blog/create';
     axiosInstance
       .post(url, { title, body, images, password, author_id: 1 })
-      .then(({ data }) => {})
+      .then(({ data }) => {
+        replaceState({}, null, '/');
+      })
       .catch((err) => {});
   }, [title, body, images, password]);
 

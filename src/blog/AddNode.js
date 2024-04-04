@@ -12,6 +12,7 @@ const AddNode = ({
   setRawNodes,
   setMainNode,
   setChildNodes,
+  setActivity,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -53,6 +54,12 @@ const AddNode = ({
     setTitle('');
     setBody('');
     setVisible(false);
+    setActivity((prevState) => ({
+      ...prevState,
+      activeNode: null,
+      page_id: null,
+      modal: '',
+    }));
   };
   const uploadFile = (selectedFile) => {
     // setCropImage(selectedFile);

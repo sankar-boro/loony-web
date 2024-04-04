@@ -105,12 +105,6 @@ export default function Edit({ blog_id }) {
                   className='blog-nav-title'
                   onClick={(e) => {
                     e.stopPropagation();
-                    setMainNode(chapter);
-                    setChildNodes(chapter.child);
-                    setActivity({
-                      ...activity,
-                      page_id: chapter.uid,
-                    });
                   }}
                 >
                   {chapter.title}
