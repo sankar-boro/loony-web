@@ -8,7 +8,7 @@ export default function CreateBlog() {
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
   const [password, setPassword] = useState('');
-  const [images, setImages] = useState('');
+  const [images, setImages] = useState([]);
 
   const createDoc = useCallback(() => {
     const url = '/blog/create';

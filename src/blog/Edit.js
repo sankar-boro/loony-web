@@ -243,7 +243,7 @@ export default function Edit({ blog_id }) {
                     ...activity,
                     activeNode: mainNode,
                     page_id: mainNode.uid,
-                    modal: 'edit_sub_section',
+                    modal: 'edit_node',
                   });
                 }}
               >

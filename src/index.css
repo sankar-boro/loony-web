@@ -350,3 +350,15 @@ button:hover {
   cursor: pointer;
 }
 
+/** Markdown */
+pre {
+  background-color: #f4f4f4;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+/* Style for code element */
+code {
+  font-family: "Courier New", Courier, monospace;
+}

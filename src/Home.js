@@ -28,7 +28,9 @@ const Home = () => {
             return (
               <div className='card' key={blog.blog_id}>
                 <div className='card-image'>
-                  <img src={`http://localhost:5002/api/i/${image.name}`} height='100%' alt='' />
+                  {image ? (
+                    <img src={`http://localhost:5002/api/i/${image.name}`} height='100%' alt='' />
+                  ) : null}
                 </div>
                 <div className='card-body'>
                   <div
