@@ -44,11 +44,9 @@ export default function Edit({ blog_id: blogId }) {
     const delete_node = activity.activeNode;
     if (childNodes) {
       let updateNode = null;
-      blogNodes.forEach((b, i) => {
-        if (b.uid === delete_node.uid) {
-          if (blogNodes[i + 1]) {
-            updateNode = childNodes[i + 1];
-          }
+      rawNodes.forEach((r) => {
+        if (r.parent_id === delete_node.uid) {
+          updateNode = r;
         }
       });
 
@@ -94,6 +92,8 @@ export default function Edit({ blog_id: blogId }) {
 
   if (!blogNodes) return null;
   const image = extractImage(mainNode.images);
+
+  console.log('blogNodes', blogNodes);
 
   return (
     <div className='book-container'>
