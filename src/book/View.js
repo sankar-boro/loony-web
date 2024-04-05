@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
+import { LuFileEdit } from 'react-icons/lu';
+import { LuFileWarning } from 'react-icons/lu';
+import { extractImage, orderBookNodes } from 'loony-utils';
+
 import { useNavigate } from '../Router';
 import { axiosInstance } from '../query';
-import { extractImage, orderBookNodes } from 'loony-utils';
 
 const View = ({ book_id }) => {
   const navigate = useNavigate();
@@ -121,10 +124,19 @@ const View = ({ book_id }) => {
           })}
         </div>
         <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
-          <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-            <li onClick={navigateEdit}>Edit this page</li>
-            <li>Report</li>
+          <ul className='list-item' style={{ paddingLeft: 0, listStyle: 'none' }}>
+            <li onClick={navigateEdit}>
+              <LuFileEdit color='#2d2d2d' size={16} /> Edit this page
+            </li>
+            <li>
+              <LuFileWarning color='#2d2d2d' size={16} /> Report
+            </li>
           </ul>
+          <div style={{ borderTop: '1px solid #ccc', marginTop: 5, paddingTop: 5 }}>
+            <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
+              <li>{mainNode.title}</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

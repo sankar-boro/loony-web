@@ -26,7 +26,7 @@ const Navigation = () => {
               style={{ height: 55, display: 'flex', alignItems: 'center' }}
             >
               <div style={{ color: 'white', fontWeight: 'bold', textDecoration: 'none' }}>
-                Create
+                <button>Create</button>
               </div>
               <div className='dropdown-content'>
                 <ul>

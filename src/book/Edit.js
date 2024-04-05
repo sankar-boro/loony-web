@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
-import { axiosInstance } from '../query';
-import AddNode from './AddNode';
 import { orderBookNodes, deleteBookNode, extractImage } from 'loony-utils';
+import { RxReader } from 'react-icons/rx';
+
+import AddNode from './AddNode';
+import { axiosInstance } from '../query';
 import { useHistory } from '../Router';
 import AddSection from './AddSection';
 import AddSubSection from './AddSubSection';
 import EditNode from './EditNode';
 import ConfirmAction from './ConfirmAction';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { LuFileWarning } from 'react-icons/lu';
 
 export default function Edit({ book_id }) {
   const { replaceState } = useHistory();
@@ -288,22 +292,24 @@ export default function Edit({ book_id }) {
           </div>
         </div>
         <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
-          <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
+          <ul style={{ paddingLeft: 0, listStyle: 'none' }} className='list-item'>
             <li
               onClick={() => {
                 replaceState({}, null, `/view?name=book&book_id=${book_id}`);
               }}
             >
-              Read Book
+              <RxReader size={16} color='#2d2d2d' /> Read Book
             </li>
             <li
               onClick={() => {
                 setModal('delete_book');
               }}
             >
-              Delete Book
+              <AiOutlineDelete size={16} color='#2d2d2d' /> Delete Book
             </li>
-            <li>Report</li>
+            <li>
+              <LuFileWarning size={16} color='#2d2d2d' /> Report
+            </li>
           </ul>
           <div style={{ borderTop: '1px solid #ccc', marginTop: 5, paddingTop: 5 }}>
             <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
