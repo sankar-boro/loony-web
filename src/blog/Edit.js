@@ -8,7 +8,8 @@ import AddNode from './AddNode';
 import EditNode from './EditNode';
 import ConfirmAction from './ConfirmAction';
 
-export default function Edit({ blog_id }) {
+export default function Edit({ blog_id: blogId }) {
+  const blog_id = parseInt(blogId);
   const { replaceState } = useHistory();
   const [rawNodes, setRawNodes] = useState([]);
   const [blogNodes, setBlogNodes] = useState(null);

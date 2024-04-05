@@ -4,7 +4,7 @@ import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
 import { updateBookNode, orderBookNodes } from 'loony-utils';
 
-const EditSubSection = ({
+const EditNode = ({
   activeNode,
   rawNodes,
   setRawNodes,
@@ -12,6 +12,7 @@ const EditSubSection = ({
   setMainNode,
   setChildNodes,
   onClose,
+  book_id,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -28,6 +29,8 @@ const EditSubSection = ({
       title,
       body,
       uid: activeNode.uid,
+      book_id,
+      identity: activeNode.identity,
     };
     axiosInstance
       .post('/book/edit_book_node', submitData)
@@ -93,4 +96,4 @@ const EditSubSection = ({
   );
 };
 
-export default EditSubSection;
+export default EditNode;

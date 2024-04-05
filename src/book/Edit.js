@@ -6,7 +6,7 @@ import { orderBookNodes, deleteBookNode, extractImage } from 'loony-utils';
 import { useHistory } from '../Router';
 import AddSection from './AddSection';
 import AddSubSection from './AddSubSection';
-import EditSubSection from './EditSubSection';
+import EditNode from './EditNode';
 import ConfirmAction from './ConfirmAction';
 
 export default function Edit({ book_id }) {
@@ -266,7 +266,7 @@ export default function Edit({ book_id }) {
                         onClick={() => {
                           setActiveNode(node);
                           setPageId(node.uid);
-                          setModal('edit_sub_section');
+                          setModal('edit_node');
                         }}
                         style={{ marginRight: 16 }}
                       >
@@ -311,7 +311,7 @@ export default function Edit({ book_id }) {
                 onClick={() => {
                   setActiveNode(mainNode);
                   setPageId(mainNode.uid);
-                  setModal('edit_sub_section');
+                  setModal('edit_node');
                 }}
               >
                 {mainNode.title}
@@ -372,8 +372,8 @@ export default function Edit({ book_id }) {
         />
       ) : null}
 
-      {modal === 'edit_sub_section' ? (
-        <EditSubSection
+      {modal === 'edit_node' ? (
+        <EditNode
           activeNode={activeNode}
           book_id={book_id}
           setBookNodes={setBookNodes}

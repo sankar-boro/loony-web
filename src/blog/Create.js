@@ -7,18 +7,17 @@ export default function CreateBlog() {
   const { replaceState } = useHistory();
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
-  const [password, setPassword] = useState('');
   const [images, setImages] = useState([]);
 
   const createDoc = useCallback(() => {
     const url = '/blog/create';
     axiosInstance
-      .post(url, { title, body, images, password, author_id: 1 })
+      .post(url, { title, body, images, author_id: 1 })
       .then(({ data }) => {
         replaceState({}, null, '/');
       })
       .catch((err) => {});
-  }, [title, body, images, password]);
+  }, [title, body, images]);
 
   const uploadFile = (selectedFile) => {
     // setCropImage(selectedFile);
@@ -72,17 +71,6 @@ export default function CreateBlog() {
               rows={24}
               cols={100}
               value={body}
-            />
-          </div>
-          <div className='form-section'>
-            <label>Password</label>
-            <br />
-            <input
-              type='text'
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
             />
           </div>
           <div className='form-section'>

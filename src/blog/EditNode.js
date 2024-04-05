@@ -12,6 +12,7 @@ const EditNode = ({
   setChildNodes,
   setActivity,
   setMainNode,
+  blog_id,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -27,7 +28,9 @@ const EditNode = ({
     const submitData = {
       title,
       body,
+      blog_id,
       uid: activeNode.uid,
+      identity: activeNode.parent_id ? 101 : 100,
     };
     axiosInstance
       .post('/blog/edit_blog_node', submitData)
