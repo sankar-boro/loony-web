@@ -1,5 +1,5 @@
 // import './CustomModal.css';
-// import { MdClose } from 'react-icons/md';
+import { MdClose } from 'react-icons/md';
 
 export const ModalFull = ({ visible, children }) => {
   if (!visible) {
@@ -60,8 +60,8 @@ export const ModalMd = ({ visible, children, onClose, title }) => {
               }}
               className='hover'
             >
-              {/* <MdClose size={16} className='close-icon' /> */}
-              Close
+              <MdClose size={16} className='close-icon' />
+              {/* Close */}
             </div>
           </div>
         </div>
@@ -110,8 +110,8 @@ export const Modal = ({ visible, children, onClose, title }) => {
               }}
               className='hover'
             >
-              {/* <MdClose size={16} className='close-icon' /> */}
-              Close
+              <MdClose size={16} className='close-icon' />
+              {/* Close */}
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ModalMd, ModalBodyContainer } from '../components';
+import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
 import { updateBookNode, orderBookNodes } from 'loony-utils';
@@ -83,15 +83,15 @@ const EditNode = ({
                 value={body}
               />
             </div>
-            <div>
-              <button onClick={addNode}>Create</button>
-            </div>
           </div>
           <div style={{ width: '50%' }}>
             <Markdown>{body}</Markdown>
           </div>
         </div>
       </ModalBodyContainer>
+      <ModalButtonContainer>
+        <button onClick={addNode}>Create</button>
+      </ModalButtonContainer>
     </ModalMd>
   );
 };
