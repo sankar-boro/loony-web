@@ -195,6 +195,9 @@ button:hover {
   padding-bottom: 3px;
 }
 .blog-nav-title, .book-nav-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   font-weight: 600;
   font-size: 16px;
 }

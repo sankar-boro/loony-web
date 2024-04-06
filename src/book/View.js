@@ -3,6 +3,7 @@ import Markdown from 'react-markdown';
 import { LuFileEdit } from 'react-icons/lu';
 import { LuFileWarning } from 'react-icons/lu';
 import { extractImage, orderBookNodes } from 'loony-utils';
+import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
 
 import { useNavigate } from '../Router';
 import { axiosInstance } from '../query';
@@ -73,7 +74,14 @@ const View = ({ book_id: bookId }) => {
                       // setChildNodes(book_node.child);
                     }}
                   >
-                    {book_node.title} {`>`}
+                    <span>{book_node.title}</span>
+                    <span>
+                      {mainNode.uid === book_node.uid ? (
+                        <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
+                      ) : (
+                        <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
+                      )}
+                    </span>
                   </div>
                 </div>
                 {nav_id === book_node.uid &&
