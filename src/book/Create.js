@@ -11,6 +11,7 @@ export default function CreateBook() {
   const [images, setImages] = useState([]);
 
   const createDoc = useCallback(() => {
+    if (!title || !body) return;
     axiosInstance
       .post('/book/create', { title, body, images, author_id: 1 })
       .then(({ data }) => {

@@ -10,6 +10,7 @@ export default function CreateBlog() {
   const [images, setImages] = useState([]);
 
   const createDoc = useCallback(() => {
+    if (!title || !body) return null;
     const url = '/blog/create';
     axiosInstance
       .post(url, { title, body, images, author_id: 1 })

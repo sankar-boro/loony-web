@@ -24,6 +24,9 @@ const AddNode = ({
     }
   }, [activeNode]);
   const addNode = () => {
+    if (!title || !body) {
+      return;
+    }
     axiosInstance
       .post('/blog/append_blog_node', {
         title,
