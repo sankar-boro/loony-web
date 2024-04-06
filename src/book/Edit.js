@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { orderBookNodes, deleteBookNode, extractImage } from 'loony-utils';
 import { RxReader } from 'react-icons/rx';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { LuFileWarning } from 'react-icons/lu';
 
 import AddNode from './AddNode';
 import { axiosInstance } from '../query';
@@ -10,10 +12,9 @@ import AddSection from './AddSection';
 import AddSubSection from './AddSubSection';
 import EditNode from './EditNode';
 import ConfirmAction from './ConfirmAction';
-import { AiOutlineDelete } from 'react-icons/ai';
-import { LuFileWarning } from 'react-icons/lu';
 
-export default function Edit({ book_id }) {
+export default function Edit({ book_id: bookId }) {
+  const book_id = parseInt(bookId);
   const { replaceState } = useHistory();
   const [rawNodes, setRawNodes] = useState([]);
   const [mainChapter, setMainchapter] = useState(null);
@@ -104,6 +105,7 @@ export default function Edit({ book_id }) {
               className='book-nav-title'
               onClick={(e) => {
                 e.stopPropagation();
+                setModal('');
                 setActiveNode(mainChapter);
                 setMainNode(mainChapter);
                 setNavId(mainChapter.uid);
@@ -250,7 +252,7 @@ export default function Edit({ book_id }) {
             {mainNode.identity !== 101 &&
               childNodes.map((node) => {
                 return (
-                  <div style={{ marginBottom: 16 }} key={node.uid}>
+                  <div style={{ marginBottom: 25, marginTop: 25 }} key={node.uid}>
                     <div className='section-title'>{node.title}</div>
                     <Markdown>{node.body}</Markdown>
                     <div className='flex-row'>

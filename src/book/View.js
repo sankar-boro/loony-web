@@ -7,7 +7,8 @@ import { extractImage, orderBookNodes } from 'loony-utils';
 import { useNavigate } from '../Router';
 import { axiosInstance } from '../query';
 
-const View = ({ book_id }) => {
+const View = ({ book_id: bookId }) => {
+  const book_id = parseInt(bookId);
   const navigate = useNavigate();
   const [books, setBooks] = useState(null);
   const [mainChapter, setMainchapter] = useState(null);

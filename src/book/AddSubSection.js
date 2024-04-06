@@ -26,6 +26,7 @@ const AddSubSection = ({
     }
   }, [activeNode]);
   const addNode = () => {
+    if (!title || !body) return;
     axiosInstance
       .post('/book/append_book_node', {
         title,

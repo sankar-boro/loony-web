@@ -3,6 +3,8 @@ import Markdown from 'react-markdown';
 import { useNavigate } from '../Router';
 import { axiosInstance } from '../query';
 import { extractImage, orderBlogNodes } from 'loony-utils';
+import { LuFileEdit } from 'react-icons/lu';
+import { LuFileWarning } from 'react-icons/lu';
 
 const View = ({ blog_id }) => {
   const navigate = useNavigate();
@@ -77,9 +79,13 @@ const View = ({ blog_id }) => {
           })}
         </div>
         <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
-          <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-            <li onClick={navigateEdit}>Edit this page</li>
-            <li>Report</li>
+          <ul style={{ paddingLeft: 0, listStyle: 'none' }} className='list-item'>
+            <li onClick={navigateEdit}>
+              <LuFileEdit color='#2d2d2d' size={16} /> Edit this page
+            </li>
+            <li>
+              <LuFileWarning color='#2d2d2d' size={16} /> Report
+            </li>
           </ul>
         </div>
       </div>

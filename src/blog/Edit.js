@@ -1,8 +1,11 @@
 import Markdown from 'react-markdown';
 import { useState, useEffect } from 'react';
 import { orderBlogNodes, deleteBlogNode, extractImage } from 'loony-utils';
-import { useHistory } from '../Router';
+import { RxReader } from 'react-icons/rx';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { LuFileWarning } from 'react-icons/lu';
 
+import { useHistory } from '../Router';
 import { axiosInstance } from '../query';
 import AddNode from './AddNode';
 import EditNode from './EditNode';
@@ -164,7 +167,7 @@ export default function Edit({ blog_id: blogId }) {
             {mainNode.identity !== 101 &&
               childNodes.map((node, node_index) => {
                 return (
-                  <div style={{ marginBottom: 16 }} key={node.uid}>
+                  <div style={{ marginBottom: 50, marginTop: 50 }} key={node.uid}>
                     <div className='section-title'>{node.title}</div>
                     <Markdown>{node.body}</Markdown>
                     <div className='flex-row'>
@@ -216,13 +219,13 @@ export default function Edit({ blog_id: blogId }) {
           </div>
         </div>
         <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
-          <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
+          <ul style={{ paddingLeft: 0, listStyle: 'none' }} className='list-item'>
             <li
               onClick={() => {
                 replaceState({}, null, `/view?name=blog&blog_id=${blog_id}`);
               }}
             >
-              Read Blog
+              <RxReader size={16} color='#2d2d2d' /> Read Blog
             </li>
             <li
               onClick={() => {
@@ -232,9 +235,11 @@ export default function Edit({ blog_id: blogId }) {
                 });
               }}
             >
-              Delete Blog
+              <AiOutlineDelete size={16} color='#2d2d2d' /> Delete Blog
             </li>
-            <li>Report</li>
+            <li>
+              <LuFileWarning size={16} color='#2d2d2d' /> Report
+            </li>
           </ul>
           <div style={{ borderTop: '1px solid #ccc', marginTop: 5, paddingTop: 5 }}>
             <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
