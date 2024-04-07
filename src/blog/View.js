@@ -43,10 +43,8 @@ const View = ({ blog_id }) => {
         <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
           {(blogs && blogs).map((blog_node) => {
             return (
-              <div key={blog_node.uid}>
-                <div className='chapter-nav'>
-                  <div className='blog-nav-title'>{blog_node.title}</div>
-                </div>
+              <div className='chapter-nav-con' key={blog_node.uid}>
+                <div className='chapter-nav'>{blog_node.title}</div>
               </div>
             );
           })}

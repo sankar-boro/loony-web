@@ -106,9 +106,9 @@ export default function Edit({ blog_id: blogId }) {
         <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
           {blogNodes.map((chapter) => {
             return (
-              <div className='chapter-nav cursor' key={chapter.uid}>
+              <div className='chapter-nav-con cursor' key={chapter.uid}>
                 <div
-                  className='blog-nav-title'
+                  className='chapter-nav'
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
@@ -149,7 +149,9 @@ export default function Edit({ blog_id: blogId }) {
               }}
               style={{ marginRight: 10 }}
             >
-              Add Node
+              <div className='btn-action'>
+                <MdAdd size={16} color='#9c9c9c' />
+              </div>
             </div>
             <div
               className='button-none cursor'
@@ -161,7 +163,9 @@ export default function Edit({ blog_id: blogId }) {
                 });
               }}
             >
-              Delete
+              <div className='btn-action'>
+                <AiOutlineDelete size={16} color='#9c9c9c' />
+              </div>
             </div>
           </div>
 

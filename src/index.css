@@ -196,7 +196,7 @@ button:hover {
   font-weight: bold;
   font-size: 24px;
 }
-.chapter-nav {
+.chapter-nav-con {
   padding-top: 5px;
   padding-bottom: 5px;
 }
@@ -204,10 +204,9 @@ button:hover {
   padding-top: 3px;
   padding-bottom: 3px;
 }
-.blog-nav-title, .book-nav-title {
+.chapter-nav {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   font-weight: 600;
   font-size: 16px;
 }

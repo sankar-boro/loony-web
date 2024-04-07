@@ -105,7 +105,7 @@ export default function Edit({ book_id: bookId }) {
         <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
           <div className='chapter-nav cursor'>
             <div
-              className='book-nav-title'
+              className='chapter-nav'
               onClick={(e) => {
                 e.stopPropagation();
                 setModal('');
@@ -134,9 +134,9 @@ export default function Edit({ book_id: bookId }) {
           {navNodes.map((chapter) => {
             return (
               <div key={chapter.uid}>
-                <div className='chapter-nav cursor' key={chapter.uid}>
+                <div className='chapter-nav-con cursor' key={chapter.uid}>
                   <div
-                    className='book-nav-title'
+                    className='chapter-nav'
                     onClick={(e) => {
                       e.stopPropagation();
                       setMainNode(chapter);
@@ -144,14 +144,14 @@ export default function Edit({ book_id: bookId }) {
                       setPageId(chapter.uid);
                     }}
                   >
-                    <span>{chapter.title}</span>
-                    <span>
+                    <div style={{ width: '90%' }}>{chapter.title}</div>
+                    <div>
                       {mainNode.uid === chapter.uid ? (
                         <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
                       ) : (
                         <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
                       )}
-                    </span>
+                    </div>
                   </div>
                   <div className='flex-row' style={{ paddingTop: 5, paddingBottom: 5 }}>
                     <div

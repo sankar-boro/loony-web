@@ -23,7 +23,6 @@ const View = ({ book_id: bookId }) => {
     if (book_id) {
       axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
         const books_ = orderBookNodes(data.data);
-        console.log(books_, 'books');
         const mainNode_ = books_ && books_[0];
         const childNodes_ = books_.slice(1);
         if (mainNode_) {
@@ -50,9 +49,9 @@ const View = ({ book_id: bookId }) => {
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
         <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
-          <div className='chapter-nav'>
+          <div className='chapter-nav-con'>
             <div
-              className='book-nav-title'
+              className='chapter-nav'
               onClick={(e) => {
                 e.stopPropagation();
                 setMainNode(mainChapter);
@@ -64,24 +63,23 @@ const View = ({ book_id: bookId }) => {
           {navNodes.map((book_node) => {
             return (
               <div key={book_node.uid}>
-                <div className='chapter-nav'>
+                <div className='chapter-nav-con'>
                   <div
-                    className='book-nav-title'
+                    className='chapter-nav'
                     onClick={(e) => {
                       e.stopPropagation();
                       setMainNode(book_node);
                       setNavId(book_node.uid);
-                      // setChildNodes(book_node.child);
                     }}
                   >
-                    <span>{book_node.title}</span>
-                    <span>
+                    <div style={{ width: '90%' }}>{book_node.title}</div>
+                    <div>
                       {mainNode.uid === book_node.uid ? (
                         <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
                       ) : (
                         <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
                       )}
-                    </span>
+                    </div>
                   </div>
                 </div>
                 {nav_id === book_node.uid &&
