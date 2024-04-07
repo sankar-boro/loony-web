@@ -1,3 +1,7 @@
+:root {
+  --blue: #1885F2;
+}
+
 html, body, ul, li {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -55,25 +59,29 @@ input:focus, textarea:focus {
 }
 
 button {
-  padding: 6px 24px;
+  font-weight: bold;
+  padding: 8px 24px 8px 24px;
   text-align: center;
   border: 1px solid #ccc;
   background-color: white;
-  border-radius: 5px;
+  border-radius: 20px;
+}
+.black-bg {
+  background-color: #2d2d2d;
+  color: white;
+}
+button:hover {
+  cursor: pointer;
 }
 .button-none {
   border: none;
   background-color: transparent;
-  color: blue;
+  color: var(--blue);
 }
 .delete-button-none {
   border: none;
   background-color: transparent;
   color: red;
-}
-button:hover {
-  cursor: pointer;
-  background-color: #f0f0f0;
 }
 .btn-action {
   border: 1px solid #dddddd;

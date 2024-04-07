@@ -122,7 +122,9 @@ const AddSection = ({
         </div>
       </ModalBodyContainer>
       <ModalButtonContainer>
-        <button onClick={addNode}>Create</button>
+        <button onClick={addNode} className='black-bg'>
+          Create
+        </button>
       </ModalButtonContainer>
     </ModalMd>
   );

@@ -79,7 +79,9 @@ export default function CreateBook() {
             />
           </div>
           <div>
-            <button onClick={createDoc}>Create</button>
+            <button className='black-bg' onClick={createDoc}>
+              Create
+            </button>
           </div>
         </div>
         <div style={{ flex: 1, padding: 25 }}>

@@ -85,7 +85,9 @@ export default function CreateBlog() {
             />
           </div>
           <div>
-            <button onClick={createDoc}>Create</button>
+            <button onClick={createDoc} className='black-bg'>
+              Create
+            </button>
           </div>
         </div>
         <div style={{ flex: 1, padding: 25 }}>

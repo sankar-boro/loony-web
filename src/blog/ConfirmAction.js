@@ -5,7 +5,9 @@ const ConfirmAction = ({ onClose, title, confirmTitle, confirmAction }) => {
     <Modal visible={true} onClose={onClose} title={title}>
       <ModalBodyContainer>{confirmTitle}</ModalBodyContainer>
       <ModalButtonContainer>
-        <button onClick={confirmAction}>Confirm</button>
+        <button onClick={confirmAction} className='black-bg'>
+          Confirm
+        </button>
       </ModalButtonContainer>
     </Modal>
   );
