@@ -75,6 +75,16 @@ button:hover {
   cursor: pointer;
   background-color: #f0f0f0;
 }
+.btn-action {
+  border: 1px solid #dddddd;
+  padding: 3px;
+  border-radius: 3px;
+  color: #dddddd;
+}
+.btn-action:hover {
+  cursor: pointer;
+  border: 1px solid #2d2d2d;
+}
 
 .form-section {
   margin-top: 14px;

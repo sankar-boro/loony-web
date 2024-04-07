@@ -3,7 +3,10 @@ import Markdown from 'react-markdown';
 import { orderBookNodes, deleteBookNode, extractImage } from 'loony-utils';
 import { RxReader } from 'react-icons/rx';
 import { AiOutlineDelete } from 'react-icons/ai';
+import { MdAdd } from 'react-icons/md';
 import { LuFileWarning } from 'react-icons/lu';
+import { FiEdit } from 'react-icons/fi';
+import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
 
 import AddNode from './AddNode';
 import { axiosInstance } from '../query';
@@ -141,7 +144,14 @@ export default function Edit({ book_id: bookId }) {
                       setPageId(chapter.uid);
                     }}
                   >
-                    {chapter.title} {`>`}
+                    <span>{chapter.title}</span>
+                    <span>
+                      {mainNode.uid === chapter.uid ? (
+                        <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
+                      ) : (
+                        <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
+                      )}
+                    </span>
                   </div>
                   <div className='flex-row' style={{ paddingTop: 5, paddingBottom: 5 }}>
                     <div
@@ -232,7 +242,9 @@ export default function Edit({ book_id: bookId }) {
                   }}
                   style={{ marginRight: 10 }}
                 >
-                  Add Node
+                  <div className='btn-action'>
+                    <MdAdd size={16} color='#9c9c9c' />
+                  </div>
                 </div>
               ) : null}
 
@@ -243,7 +255,9 @@ export default function Edit({ book_id: bookId }) {
                   setModal('delete_page');
                 }}
               >
-                Delete Page
+                <div className='btn-action'>
+                  <AiOutlineDelete size={16} color='#9c9c9c' />
+                </div>
               </div>
             </div>
           ) : null}
@@ -265,7 +279,9 @@ export default function Edit({ book_id: bookId }) {
                         }}
                         style={{ marginRight: 16 }}
                       >
-                        Add Node
+                        <div className='btn-action'>
+                          <MdAdd size={16} color='#9c9c9c' />
+                        </div>
                       </div>
                       <div
                         className='button-none cursor'
@@ -276,7 +292,9 @@ export default function Edit({ book_id: bookId }) {
                         }}
                         style={{ marginRight: 16 }}
                       >
-                        Edit
+                        <div className='btn-action'>
+                          <FiEdit size={16} color='#9c9c9c' />
+                        </div>
                       </div>
                       <div
                         className='delete-button-none cursor'
@@ -285,7 +303,9 @@ export default function Edit({ book_id: bookId }) {
                           setModal('delete_node');
                         }}
                       >
-                        Delete
+                        <div className='btn-action'>
+                          <AiOutlineDelete size={16} color='#9c9c9c' />
+                        </div>
                       </div>
                     </div>
                   </div>

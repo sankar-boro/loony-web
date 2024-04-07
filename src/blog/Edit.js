@@ -4,6 +4,8 @@ import { orderBlogNodes, deleteBlogNode, extractImage } from 'loony-utils';
 import { RxReader } from 'react-icons/rx';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { LuFileWarning } from 'react-icons/lu';
+import { MdAdd } from 'react-icons/md';
+import { FiEdit } from 'react-icons/fi';
 
 import { useHistory } from '../Router';
 import { axiosInstance } from '../query';
@@ -183,7 +185,9 @@ export default function Edit({ blog_id: blogId }) {
                         }}
                         style={{ marginRight: 16 }}
                       >
-                        Add Node
+                        <div className='btn-action'>
+                          <MdAdd size={16} color='#9c9c9c' />
+                        </div>
                       </div>
                       <div
                         className='button-none cursor'
@@ -197,7 +201,9 @@ export default function Edit({ blog_id: blogId }) {
                         }}
                         style={{ marginRight: 16 }}
                       >
-                        Edit
+                        <div className='btn-action'>
+                          <FiEdit size={16} color='#9c9c9c' />
+                        </div>
                       </div>
                       <div
                         className='delete-button-none cursor'
@@ -210,7 +216,9 @@ export default function Edit({ blog_id: blogId }) {
                           });
                         }}
                       >
-                        Delete
+                        <div className='btn-action'>
+                          <AiOutlineDelete size={16} color='#9c9c9c' />
+                        </div>
                       </div>
                     </div>
                   </div>
