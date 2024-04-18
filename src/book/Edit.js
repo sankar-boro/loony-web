@@ -5,7 +5,7 @@ import { RxReader } from 'react-icons/rx';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { MdAdd } from 'react-icons/md';
 import { LuFileWarning } from 'react-icons/lu';
-import { FiEdit } from 'react-icons/fi';
+import { FiEdit2 } from 'react-icons/fi';
 import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
 
 import AddNode from './AddNode';
@@ -293,7 +293,7 @@ export default function Edit({ book_id: bookId }) {
                         style={{ marginRight: 16 }}
                       >
                         <div className='btn-action'>
-                          <FiEdit size={16} color='#9c9c9c' />
+                          <FiEdit2 size={16} color='#9c9c9c' />
                         </div>
                       </div>
                       <div

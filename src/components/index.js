@@ -1,4 +1,3 @@
-// import './CustomModal.css';
 import { MdClose } from 'react-icons/md';
 
 export const ModalFull = ({ visible, children }) => {
@@ -29,7 +28,7 @@ export const ModalMd = ({ visible, children, onClose, title }) => {
   return (
     <div className='modal-overlay'>
       <div className='modal-md'>
-        <div className='modal-header' style={{ padding: '15px 45px' }}>
+        <div className='modal-header'>
           <div
             style={{
               display: 'flex',
@@ -47,25 +46,12 @@ export const ModalMd = ({ visible, children, onClose, title }) => {
             >
               {title}
             </div>
-            <div
-              onClick={onClose}
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                cursor: 'pointer',
-                backgroundColor: '#f4f4f4',
-                padding: 5,
-                borderRadius: 3,
-              }}
-              className='hover'
-            >
+            <div onClick={onClose} className='modal-close hover'>
               <MdClose size={16} className='close-icon' />
-              {/* Close */}
             </div>
           </div>
         </div>
-        {children}
+        <div className='modal-body'>{children}</div>
       </div>
     </div>
   );
@@ -79,7 +65,7 @@ export const Modal = ({ visible, children, onClose, title }) => {
   return (
     <div className='modal-overlay'>
       <div className='modal'>
-        <div className='modal-header' style={{ padding: '15px 45px' }}>
+        <div className='modal-header'>
           <div
             style={{
               display: 'flex',
@@ -97,25 +83,12 @@ export const Modal = ({ visible, children, onClose, title }) => {
             >
               {title}
             </div>
-            <div
-              onClick={onClose}
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                cursor: 'pointer',
-                backgroundColor: '#f4f4f4',
-                padding: 5,
-                borderRadius: 3,
-              }}
-              className='hover'
-            >
+            <div onClick={onClose} className='modal-close hover'>
               <MdClose size={16} className='close-icon' />
-              {/* Close */}
             </div>
           </div>
         </div>
-        {children}
+        <div className='modal-body'>{children}</div>
       </div>
     </div>
   );

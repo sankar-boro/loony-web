@@ -23,20 +23,33 @@ const Navigation = () => {
           <div style={{ flex: 1, height: 55 }}>
             <div
               className='view-dropdown-menu'
-              style={{ height: 55, display: 'flex', alignItems: 'center' }}
+              style={{
+                height: 55,
+                display: 'flex',
+                alignItems: 'center',
+              }}
             >
-              <div style={{ color: 'white', fontWeight: 'bold', textDecoration: 'none' }}>
-                <button>Create</button>
-              </div>
-              <div className='dropdown-content'>
-                <ul>
-                  <li>
-                    <a href='/create?name=book'>Create Book</a>
-                  </li>
-                  <li>
-                    <a href='/create?name=blog'>Create Blog</a>
-                  </li>
-                </ul>
+              <div
+                style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                className='create-button'
+              >
+                <button style={{ fontWeight: 'bold' }}>Create</button>
+                <div className='dropdown-content'>
+                  <ul>
+                    <li>
+                      <a href='/create?name=book'>Create Book</a>
+                    </li>
+                    <li>
+                      <a href='/create?name=blog'>Create Blog</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

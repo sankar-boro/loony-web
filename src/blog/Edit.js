@@ -5,7 +5,7 @@ import { RxReader } from 'react-icons/rx';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { LuFileWarning } from 'react-icons/lu';
 import { MdAdd } from 'react-icons/md';
-import { FiEdit } from 'react-icons/fi';
+import { FiEdit2 } from 'react-icons/fi';
 
 import { useHistory } from '../Router';
 import { axiosInstance } from '../query';
@@ -206,7 +206,7 @@ export default function Edit({ blog_id: blogId }) {
                         style={{ marginRight: 16 }}
                       >
                         <div className='btn-action'>
-                          <FiEdit size={16} color='#9c9c9c' />
+                          <FiEdit2 size={16} color='#9c9c9c' />
                         </div>
                       </div>
                       <div

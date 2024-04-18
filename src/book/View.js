@@ -18,6 +18,7 @@ const View = ({ book_id: bookId }) => {
   const [nav_id, setNavId] = useState(null);
   const [childNodes, setChildNodes] = useState([]);
   const [navNodes, setNavNodes] = useState([]);
+  const [navOpen, setNavOpen] = useState(false);
 
   useEffect(() => {
     if (book_id) {
@@ -70,14 +71,21 @@ const View = ({ book_id: bookId }) => {
                       e.stopPropagation();
                       setMainNode(book_node);
                       setNavId(book_node.uid);
+                      setNavOpen(true);
                     }}
                   >
                     <div style={{ width: '90%' }}>{book_node.title}</div>
                     <div>
-                      {mainNode.uid === book_node.uid ? (
+                      {mainNode.uid === book_node.uid && navOpen ? (
                         <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
                       ) : (
-                        <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
+                        <MdOutlineKeyboardArrowRight
+                          size={16}
+                          color='#2d2d2d'
+                          onClick={() => {
+                            setNavOpen(false);
+                          }}
+                        />
                       )}
                     </div>
                   </div>
