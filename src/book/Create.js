@@ -68,14 +68,26 @@ export default function CreateBook() {
               value={body}
             />
           </div>
-          <div className='form-section'>
-            <label>Body</label>
+          <div
+            className='form-section'
+            style={{
+              display: 'flex',
+              border: '1px dashed #ccc',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              padding: '15px 0px',
+            }}
+          >
+            <label>Drop file here</label>
             <br />
+            <span>or</span>
             <input
               type='file'
               onChange={(e) => {
                 uploadFile(e.target.files[0]);
               }}
+              style={{ marginTop: 20 }}
             />
           </div>
           <div>
