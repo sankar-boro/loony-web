@@ -7,18 +7,19 @@ export default function CreateBlog() {
   const { replaceState } = useHistory();
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
-  const [images, setImages] = useState([]);
+  // const [images, setImages] = useState([]);
+  const [uploadedImage, setUploadedImage] = useState('');
 
   const createDoc = useCallback(() => {
     if (!title || !body) return null;
     const url = '/blog/create';
     axiosInstance
-      .post(url, { title, body, images, author_id: 1 })
+      .post(url, { title, body, images: [{ name: uploadedImage }], author_id: 1 })
       .then(({ data }) => {
         replaceState({}, null, '/');
       })
       .catch((err) => {});
-  }, [title, body, images]);
+  }, [title, body, uploadedImage]);
 
   const uploadFile = (selectedFile) => {
     // setCropImage(selectedFile);
@@ -36,15 +37,12 @@ export default function CreateBlog() {
         },
       })
       .then(({ data }) => {
-        setImages([
-          ...images,
-          {
-            name: data.data.uploaded_filename,
-          },
-        ]);
+        setUploadedImage(data.data.uploaded_filename);
       })
       .catch((err) => {});
   };
+
+  const changeFile = uploadFile;
 
   return (
     <div className='book-container'>
@@ -74,16 +72,60 @@ export default function CreateBlog() {
               value={body}
             />
           </div>
-          <div className='form-section'>
-            <label>Body</label>
-            <br />
-            <input
-              type='file'
-              onChange={(e) => {
-                uploadFile(e.target.files[0]);
-              }}
-            />
-          </div>
+          {uploadedImage ? (
+            <div className='form-section'>
+              <label>Image</label>
+              <div
+                style={{
+                  display: 'flex',
+                  border: '1px dashed #ccc',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  padding: '15px 0px',
+                }}
+              >
+                <img src={`http://localhost:5002/api/u/${uploadedImage}`} alt='' width='50%' />;
+                <div style={{ marginTop: 24 }}>
+                  <label>Choose another file</label>
+                  <br />
+                  <input
+                    type='file'
+                    title='Change file'
+                    onChange={(e) => {
+                      changeFile(e.target.files[0]);
+                    }}
+                    style={{ marginTop: 20 }}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className='form-section'>
+              <label>Image</label>
+              <div
+                style={{
+                  display: 'flex',
+                  border: '1px dashed #ccc',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  padding: '15px 0px',
+                }}
+              >
+                <label>Drop file here</label>
+                <br />
+                <span>or</span>
+                <input
+                  type='file'
+                  onChange={(e) => {
+                    uploadFile(e.target.files[0]);
+                  }}
+                  style={{ marginTop: 20 }}
+                />
+              </div>
+            </div>
+          )}
           <div>
             <button onClick={createDoc} className='black-bg'>
               Create
