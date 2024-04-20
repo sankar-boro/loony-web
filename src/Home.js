@@ -24,14 +24,26 @@ const Home = () => {
         <h3>Blogs</h3>
         <div className='flex-row'>
           {blogs.map((blog) => {
-            const image = JSON.parse(blog.images)[0];
+            const images = blog.images ? JSON.parse(blog.images) : [];
+            const image = images.length > 0 ? images[0] : null;
             return (
               <div className='card' key={blog.blog_id}>
-                <div className='card-image'>
-                  {image ? (
-                    <img src={`http://localhost:5002/api/i/${image.name}`} height='100%' alt='' />
-                  ) : null}
-                </div>
+                <div
+                  className='card-image'
+                  style={{
+                    backgroundImage: image
+                      ? `url("http://localhost:5002/api/i/${image.name}")`
+                      : null,
+                    overflow: 'hidden',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    borderTopLeftRadius: 3,
+                    borderTopRightRadius: 3,
+                  }}
+                  onClick={() => {
+                    navigate(`/view?blog_id=${blog.blog_id}`, blog);
+                  }}
+                />
                 <div className='card-body'>
                   <div
                     className='card-title cursor'
