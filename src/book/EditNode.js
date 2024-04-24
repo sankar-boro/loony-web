@@ -17,6 +17,8 @@ const EditNode = ({
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [visible, setVisible] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState('');
+
   useEffect(() => {
     if (activeNode) {
       setTitle(activeNode.title);
@@ -31,6 +33,7 @@ const EditNode = ({
       uid: activeNode.uid,
       book_id,
       identity: activeNode.identity,
+      images: [{ name: uploadedImage }],
     };
     axiosInstance
       .post('/book/edit_book_node', submitData)
@@ -55,8 +58,23 @@ const EditNode = ({
     setVisible(false);
     onClose();
   };
+  const uploadFile = (selectedFile) => {
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    axiosInstance
+      .post('/upload_file', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(({ data }) => {
+        setUploadedImage(data.data.uploaded_filename);
+      })
+      .catch((err) => {});
+  };
+  const changeFile = uploadFile;
   return (
-    <ModalMd visible={visible} onClose={onCloseModal} title='Add Sub Section'>
+    <ModalMd visible={visible} onClose={onCloseModal} title='Update Node'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div style={{ width: '45%' }}>
@@ -87,6 +105,60 @@ const EditNode = ({
           <div style={{ width: '50%' }}>
             <Markdown>{body}</Markdown>
           </div>
+          {uploadedImage ? (
+            <div className='form-section'>
+              <label>Image</label>
+              <div
+                style={{
+                  display: 'flex',
+                  border: '1px dashed #ccc',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  padding: '15px 0px',
+                }}
+              >
+                <img src={`http://localhost:5002/api/u/${uploadedImage}`} alt='' width='50%' />;
+                <div style={{ marginTop: 24 }}>
+                  <label>Choose another file</label>
+                  <br />
+                  <input
+                    type='file'
+                    title='Change file'
+                    onChange={(e) => {
+                      changeFile(e.target.files[0]);
+                    }}
+                    style={{ marginTop: 20 }}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className='form-section'>
+              <label>Image</label>
+              <div
+                style={{
+                  display: 'flex',
+                  border: '1px dashed #ccc',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column',
+                  padding: '15px 0px',
+                }}
+              >
+                <label>Drop file here</label>
+                <br />
+                <span>or</span>
+                <input
+                  type='file'
+                  onChange={(e) => {
+                    uploadFile(e.target.files[0]);
+                  }}
+                  style={{ marginTop: 20 }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </ModalBodyContainer>
       <ModalButtonContainer>

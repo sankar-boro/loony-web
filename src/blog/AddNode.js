@@ -16,8 +16,9 @@ const AddNode = ({
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [images, setImages] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [uploadedImage, setUploadedImage] = useState('');
+
   useEffect(() => {
     if (activeNode) {
       setVisible(true);
@@ -33,7 +34,7 @@ const AddNode = ({
         body,
         blog_id: parseInt(blog_id, 10),
         parent_id: activeNode.uid,
-        images,
+        images: { name: uploadedImage },
       })
       .then(({ data }) => {
         const newNodes = appendBlogNode(rawNodes, activeNode, data);
@@ -65,12 +66,6 @@ const AddNode = ({
     }));
   };
   const uploadFile = (selectedFile) => {
-    // setCropImage(selectedFile);
-    // const reader = new FileReader();
-    // reader.readAsDataURL(selectedFile);
-    // reader.addEventListener('load', () => {
-    //   setCropImage(reader.result);
-    // });
     const formData = new FormData();
     formData.append('file', selectedFile);
     axiosInstance
@@ -80,15 +75,13 @@ const AddNode = ({
         },
       })
       .then(({ data }) => {
-        setImages([
-          ...images,
-          {
-            name: data.data.uploaded_filename,
-          },
-        ]);
+        setUploadedImage(data.data.uploaded_filename);
       })
       .catch((err) => {});
   };
+
+  const changeFile = uploadFile;
+
   return (
     <ModalMd visible={visible} onClose={onCloseModal} title='Add Blog Node'>
       <ModalBodyContainer>
@@ -117,16 +110,60 @@ const AddNode = ({
                 value={body}
               />
             </div>
-            <div className='form-section'>
-              <label>Body</label>
-              <br />
-              <input
-                type='file'
-                onChange={(e) => {
-                  uploadFile(e.target.files[0]);
-                }}
-              />
-            </div>
+            {uploadedImage ? (
+              <div className='form-section'>
+                <label>Image</label>
+                <div
+                  style={{
+                    display: 'flex',
+                    border: '1px dashed #ccc',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    padding: '15px 0px',
+                  }}
+                >
+                  <img src={`http://localhost:5002/api/u/${uploadedImage}`} alt='' width='50%' />;
+                  <div style={{ marginTop: 24 }}>
+                    <label>Choose another file</label>
+                    <br />
+                    <input
+                      type='file'
+                      title='Change file'
+                      onChange={(e) => {
+                        changeFile(e.target.files[0]);
+                      }}
+                      style={{ marginTop: 20 }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className='form-section'>
+                <label>Image</label>
+                <div
+                  style={{
+                    display: 'flex',
+                    border: '1px dashed #ccc',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    padding: '15px 0px',
+                  }}
+                >
+                  <label>Drop file here</label>
+                  <br />
+                  <span>or</span>
+                  <input
+                    type='file'
+                    onChange={(e) => {
+                      uploadFile(e.target.files[0]);
+                    }}
+                    style={{ marginTop: 20 }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
           <div style={{ width: '50%' }}>
             <Markdown>{body}</Markdown>

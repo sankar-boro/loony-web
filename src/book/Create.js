@@ -9,7 +9,6 @@ export default function CreateBook() {
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
   const [uploadedImage, setUploadedImage] = useState('');
-  // const [images, setImages] = useState([]);
 
   const createDoc = useCallback(() => {
     if (!title || !body) return;

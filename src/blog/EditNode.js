@@ -63,7 +63,7 @@ const EditNode = ({
     }));
   };
   return (
-    <ModalMd visible={visible} onClose={onCloseModal} title='Add Blog Node'>
+    <ModalMd visible={visible} onClose={onCloseModal} title='Update Node'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div style={{ width: '45%' }}>
