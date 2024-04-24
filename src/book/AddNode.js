@@ -102,74 +102,64 @@ const AddNode = ({
                 value={body}
               />
             </div>
-            <div className='form-section'>
-              <label>Image</label>
-              <br />
-              <input
-                type='file'
-                onChange={(e) => {
-                  uploadFile(e.target.files[0]);
-                }}
-              />
-            </div>
-          </div>
-          <div style={{ width: '50%' }}>
-            <Markdown>{body}</Markdown>
-          </div>
-          {uploadedImage ? (
-            <div className='form-section'>
-              <label>Image</label>
-              <div
-                style={{
-                  display: 'flex',
-                  border: '1px dashed #ccc',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  padding: '15px 0px',
-                }}
-              >
-                <img src={`http://localhost:5002/api/u/${uploadedImage}`} alt='' width='50%' />;
-                <div style={{ marginTop: 24 }}>
-                  <label>Choose another file</label>
+            {uploadedImage ? (
+              <div className='form-section'>
+                <label>Image</label>
+                <div
+                  style={{
+                    display: 'flex',
+                    border: '1px dashed #ccc',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    padding: '15px 0px',
+                  }}
+                >
+                  <img src={`http://localhost:5002/api/u/${uploadedImage}`} alt='' width='50%' />;
+                  <div style={{ marginTop: 24 }}>
+                    <label>Choose another file</label>
+                    <br />
+                    <input
+                      type='file'
+                      title='Change file'
+                      onChange={(e) => {
+                        changeFile(e.target.files[0]);
+                      }}
+                      style={{ marginTop: 20 }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className='form-section'>
+                <label>Image</label>
+                <div
+                  style={{
+                    display: 'flex',
+                    border: '1px dashed #ccc',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    padding: '15px 0px',
+                  }}
+                >
+                  <label>Drop file here</label>
                   <br />
+                  <span>or</span>
                   <input
                     type='file'
-                    title='Change file'
                     onChange={(e) => {
-                      changeFile(e.target.files[0]);
+                      uploadFile(e.target.files[0]);
                     }}
                     style={{ marginTop: 20 }}
                   />
                 </div>
               </div>
-            </div>
-          ) : (
-            <div className='form-section'>
-              <label>Image</label>
-              <div
-                style={{
-                  display: 'flex',
-                  border: '1px dashed #ccc',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  padding: '15px 0px',
-                }}
-              >
-                <label>Drop file here</label>
-                <br />
-                <span>or</span>
-                <input
-                  type='file'
-                  onChange={(e) => {
-                    uploadFile(e.target.files[0]);
-                  }}
-                  style={{ marginTop: 20 }}
-                />
-              </div>
-            </div>
-          )}
+            )}
+          </div>
+          <div style={{ width: '50%' }}>
+            <Markdown>{body}</Markdown>
+          </div>
         </div>
       </ModalBodyContainer>
       <ModalButtonContainer>

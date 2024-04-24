@@ -239,6 +239,9 @@ export const orderBookNodes = (rawApi, removeIds = []) => {
 };
 
 export const extractImage = (images) => {
+  if (typeof images === 'object') {
+    return images[0];
+  }
   let parsedImage = null;
   const image = images && JSON.parse(images);
   if (image && Array.isArray(image) && image.length > 0) {
