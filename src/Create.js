@@ -1,15 +1,14 @@
-import CreateBook from './book/Create';
-import CreateBlog from './blog/Create';
+import CreateFormComponent from './form/index';
 
 export default function Create() {
   const searchParams = new URLSearchParams(window.location.search);
   const name = searchParams.get('name');
 
   if (name === 'blog') {
-    return <CreateBlog />;
+    return <CreateFormComponent url='/blog/create' />;
   }
 
   if (name === 'book') {
-    return <CreateBook />;
+    return <CreateFormComponent editNode='' url='/book/create' />;
   }
 }

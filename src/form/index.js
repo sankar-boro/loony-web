@@ -1,19 +1,32 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
 import { useHistory } from '../Router';
 import 'react-easy-crop/react-easy-crop.css';
 
-export default function CreateBook() {
+const url = '';
+
+export default function FormComponent({ editNode, url }) {
   const { replaceState } = useHistory();
-  const [body, setBody] = useState('');
+
   const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
   const [uploadedImage, setUploadedImage] = useState('');
+
+  useEffect(() => {
+    if (editNode) {
+      setTitle(editNode.title);
+      setBody(editNode.title);
+      const images = editNode.images ? JSON.parse(editNode.images) : [];
+      const image = images.length > 0 ? images[0].name : '';
+      setUploadedImage(image);
+    }
+  }, []);
 
   const createDoc = useCallback(() => {
     if (!title || !body) return;
     axiosInstance
-      .post('/book/create', { title, body, images: [{ name: uploadedImage }], author_id: 1 })
+      .post(url, { title, body, images: [{ name: uploadedImage }], author_id: 1 })
       .then(({ data }) => {
         replaceState({}, null, '/');
       })

@@ -65,11 +65,22 @@ const Home = () => {
             const image = JSON.parse(book.images)[0];
             return (
               <div className='card' key={book.book_id}>
-                <div className='card-image'>
-                  {image && (
-                    <img src={`http://localhost:5002/api/i/${image.name}`} height='100%' alt='' />
-                  )}
-                </div>
+                <div
+                  className='card-image'
+                  style={{
+                    backgroundImage: image
+                      ? `url("http://localhost:5002/api/i/${image.name}")`
+                      : null,
+                    overflow: 'hidden',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    borderTopLeftRadius: 3,
+                    borderTopRightRadius: 3,
+                  }}
+                  onClick={() => {
+                    navigate(`/view?blog_id=${book.book_id}`, book);
+                  }}
+                />
                 <div className='card-body'>
                   <div
                     className='card-title cursor'
