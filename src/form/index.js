@@ -4,34 +4,32 @@ import { axiosInstance } from '../query';
 import { useHistory } from '../Router';
 import 'react-easy-crop/react-easy-crop.css';
 
-const url = '';
-
-export default function FormComponent({ editNode, url }) {
+export default function FormComponent({ editNode, url, title }) {
   const { replaceState } = useHistory();
 
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const [uploadedImage, setUploadedImage] = useState('');
+  const [formTitle, setFormTitle] = useState('');
+  const [formBody, setFormBody] = useState('');
+  const [formImage, setFormImage] = useState('');
 
   useEffect(() => {
     if (editNode) {
-      setTitle(editNode.title);
-      setBody(editNode.title);
+      setFormTitle(editNode.title);
+      setFormBody(editNode.title);
       const images = editNode.images ? JSON.parse(editNode.images) : [];
       const image = images.length > 0 ? images[0].name : '';
-      setUploadedImage(image);
+      setFormImage(image);
     }
   }, []);
 
   const createDoc = useCallback(() => {
-    if (!title || !body) return;
+    if (!formTitle || !formBody) return;
     axiosInstance
-      .post(url, { title, body, images: [{ name: uploadedImage }], author_id: 1 })
+      .post(url, { title: formTitle, body: formBody, images: [{ name: formImage }], author_id: 1 })
       .then(({ data }) => {
         replaceState({}, null, '/');
       })
       .catch((err) => {});
-  }, [title, body, uploadedImage]);
+  }, [formTitle, formBody, formImage]);
 
   const uploadFile = (selectedFile) => {
     const formData = new FormData();
@@ -43,7 +41,7 @@ export default function FormComponent({ editNode, url }) {
         },
       })
       .then(({ data }) => {
-        setUploadedImage(data.data.uploaded_filename);
+        setFormImage(data.data.uploaded_filename);
       })
       .catch((err) => {});
   };
@@ -52,7 +50,7 @@ export default function FormComponent({ editNode, url }) {
 
   return (
     <div className='book-container'>
-      <h2>Create Book</h2>
+      <h2>{title}</h2>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ flex: 1 }}>
           <div className='form-section'>
@@ -60,9 +58,9 @@ export default function FormComponent({ editNode, url }) {
             <br />
             <input
               type='text'
-              value={title}
+              value={formTitle}
               onChange={(e) => {
-                setTitle(e.target.value);
+                setFormTitle(e.target.value);
               }}
             />
           </div>
@@ -71,14 +69,14 @@ export default function FormComponent({ editNode, url }) {
             <br />
             <textarea
               onChange={(e) => {
-                setBody(e.target.value);
+                setFormBody(e.target.value);
               }}
               rows={24}
               cols={100}
-              value={body}
+              value={formBody}
             />
           </div>
-          {uploadedImage ? (
+          {formImage ? (
             <div className='form-section'>
               <label>Image</label>
               <div
@@ -91,7 +89,7 @@ export default function FormComponent({ editNode, url }) {
                   padding: '15px 0px',
                 }}
               >
-                <img src={`http://localhost:5002/api/u/${uploadedImage}`} alt='' width='50%' />;
+                <img src={`http://localhost:5002/api/u/${formImage}`} alt='' width='50%' />;
                 <div style={{ marginTop: 24 }}>
                   <label>Choose another file</label>
                   <br />
@@ -139,7 +137,7 @@ export default function FormComponent({ editNode, url }) {
           </div>
         </div>
         <div style={{ flex: 1, padding: 25 }}>
-          <Markdown>{body}</Markdown>
+          <Markdown>{formBody}</Markdown>
         </div>
       </div>
     </div>

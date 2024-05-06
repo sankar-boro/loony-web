@@ -5,10 +5,10 @@ export default function Create() {
   const name = searchParams.get('name');
 
   if (name === 'blog') {
-    return <CreateFormComponent url='/blog/create' />;
+    return <CreateFormComponent url='/blog/create' title='Create Blog' />;
   }
 
   if (name === 'book') {
-    return <CreateFormComponent editNode='' url='/book/create' />;
+    return <CreateFormComponent editNode='' url='/book/create' title='Create Book' />;
   }
 }
