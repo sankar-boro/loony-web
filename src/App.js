@@ -1,8 +1,13 @@
 import Home from './Home';
-import Create from './Create';
 import View from './View';
 import Edit from './Edit';
+import Create from './Create';
+import Profile from './profile';
+import Login from './auth/Login';
+import Signup from './auth/Signup';
 import { BrowserRouter, Route, useNavigate } from './Router';
+
+import { LiaUserSolid } from 'react-icons/lia';
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -36,6 +41,7 @@ const Navigation = () => {
                   height: '100%',
                   display: 'flex',
                   alignItems: 'center',
+                  width: 120,
                 }}
                 className='create-button'
               >
@@ -50,6 +56,21 @@ const Navigation = () => {
                     </li>
                   </ul>
                 </div>
+              </div>
+
+              <div
+                style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                className='profile-button'
+              >
+                <a href='/login' style={{ color: 'white' }}>
+                  <LiaUserSolid size={32} />
+                </a>
               </div>
             </div>
           </div>
@@ -67,6 +88,9 @@ function App() {
         <Route path='/create' component={<Create />} />
         <Route path='/view' component={<View />} />
         <Route path='/edit' component={<Edit />} />
+        <Route path='/profile' component={<Profile />} />
+        <Route path='/login' component={<Login />} />
+        <Route path='/signup' component={<Signup />} />
       </div>
     </BrowserRouter>
   );
