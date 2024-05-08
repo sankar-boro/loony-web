@@ -1,31 +1,28 @@
 import { useState } from 'react';
+import { axiosInstance } from '../query';
 
 const Signup = () => {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
-  const [phone, setPhone] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [request, setRequest] = useState(false);
   const [viewPassword, setViewPassword] = useState(false);
 
   const signup = () => {
-    if (request) {
-      return;
-    }
-    handleVerifyCredentials();
-    if (handleVerifyCredentials()) {
-      setRequest(true);
-      const data = {
-        fname: fname.trim(),
-        lname: lname.trim(),
-        phone: phone.trim(),
+    if (fname && lname && username && password) {
+      const formData = {
+        fname,
+        lname,
+        username,
         password,
       };
+      axiosInstance
+        .post('/auth/signup', formData)
+        .then(({ data }) => {
+          console.log(data);
+        })
+        .catch((err) => {});
     }
-  };
-
-  const handleVerifyCredentials = () => {
-    return true;
   };
 
   return (
@@ -132,9 +129,9 @@ const Signup = () => {
                   type='number'
                   min='0'
                   required
-                  value={phone}
+                  value={username}
                   onChange={(e) => {
-                    setPhone(e.target.value);
+                    setUsername(e.target.value);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
@@ -177,13 +174,8 @@ const Signup = () => {
                   <span style={{ marginLeft: 10 }}>Show password</span>
                 </div>
               </div>
-              <button
-                style={{ width: '100%' }}
-                onClick={signup}
-                disabled={request === true || false}
-                className='btn-md blue-bg'
-              >
-                {request ? 'Signing up...' : 'Sign Up'}
+              <button style={{ width: '100%' }} onClick={signup} className='btn-md blue-bg'>
+                Sign Up
               </button>
 
               <div
@@ -195,12 +187,10 @@ const Signup = () => {
                 }}
               >
                 <span style={{ color: '#6d6d6d' }}>Already have an account? </span>
-                <span
-                  onClick={() => {}}
-                  style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}
-                  className='hover'
-                >
-                  Login
+                <span className='hover'>
+                  <a href='/login' style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}>
+                    Login
+                  </a>
                 </span>
               </div>
             </div>

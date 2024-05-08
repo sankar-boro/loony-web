@@ -46,7 +46,7 @@ const Navigation = () => {
                 className='create-button'
               >
                 <button style={{ fontWeight: 'bold' }}>Create</button>
-                <div className='dropdown-content'>
+                <div className='dropdown-content list-items'>
                   <ul>
                     <li>
                       <a href='/create?name=book'>Create Book</a>
@@ -68,9 +68,14 @@ const Navigation = () => {
                 }}
                 className='profile-button'
               >
-                <a href='/login' style={{ color: 'white' }}>
-                  <LiaUserSolid size={32} />
-                </a>
+                <LiaUserSolid size={32} />
+                <div className='profile-content list-items'>
+                  <ul>
+                    <li>
+                      <a href='/login'>Login</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>

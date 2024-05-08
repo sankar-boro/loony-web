@@ -175,23 +175,23 @@ select {
   display: block;
 }
 
-.dropdown-content ul{
+.list-items ul{
   margin: 0px;
   padding: 0px;
 }
-.dropdown-content ul li {
+.list-items ul li {
   padding: 10px 15px;
   list-style: none;
 }
-.dropdown-content ul li:hover {
+.list-items ul li:hover {
   background-color: #f4f4f4;
 }
 
-.dropdown-content ul li a {
+.list-items ul li a {
   text-decoration: none;
   color: black;
 }
-.dropdown-content{
+.dropdown-content, .profile-content{
   display: none;
   position: absolute;
   z-index: 1;
@@ -203,6 +203,9 @@ select {
   border: 1px solid #ccc;
 }
 .create-button:hover .dropdown-content {
+  display: block;
+}
+.profile-button:hover .profile-content {
   display: block;
 }
 .book-right-nav ul li {

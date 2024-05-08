@@ -1,13 +1,26 @@
 import { useState } from 'react';
+import { axiosInstance } from '../query';
 
 const Login = () => {
-  const [phone, setPhone] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [request, setRequest] = useState(false);
   const [viewPassword, setViewPassword] = useState(false);
 
   const login = (e) => {
     e.preventDefault();
+    if (username && password) {
+      const formData = {
+        username,
+        password,
+      };
+      axiosInstance
+        .post('/auth/login', formData)
+        .then(({ data }) => {
+          console.log(data);
+        })
+        .catch((err) => {});
+    }
   };
   return (
     <div className='book-container'>
@@ -78,9 +91,9 @@ const Login = () => {
                   type='number'
                   min='0'
                   id='phone'
-                  value={phone}
+                  value={username}
                   onChange={(e) => {
-                    setPhone(e.target.value);
+                    setUsername(e.target.value);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
@@ -143,12 +156,10 @@ const Login = () => {
                 }}
               >
                 <span style={{ color: '#6d6d6d' }}>Dont have an account? </span>
-                <span
-                  onClick={() => {}}
-                  style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}
-                  className='hover'
-                >
-                  Create account
+                <span onClick={() => {}} className='hover'>
+                  <a href='/signup' style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}>
+                    Create Account
+                  </a>
                 </span>
               </div>
             </div>
