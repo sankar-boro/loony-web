@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { axiosInstance } from './query';
-import { useNavigate } from './Router';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const navigate = useNavigate();

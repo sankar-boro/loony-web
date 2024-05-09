@@ -10,15 +10,16 @@ import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-i
 
 import AddNode from './AddNode';
 import { axiosInstance } from '../query';
-import { useHistory } from '../Router';
+import { useHistory, useParams } from '../Router';
 import AddSection from './AddSection';
 import AddSubSection from './AddSubSection';
 import EditNode from './EditNode';
 import ConfirmAction from './ConfirmAction';
 
-export default function Edit({ book_id: bookId }) {
-  const book_id = parseInt(bookId);
+export default function Edit() {
   const { replaceState } = useHistory();
+  const { bookId } = useParams();
+  const book_id = parseInt(bookId);
   const [rawNodes, setRawNodes] = useState([]);
   const [mainChapter, setMainchapter] = useState(null);
   const [bookNodes, setBookNodes] = useState(null);

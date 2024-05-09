@@ -1,11 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
 import Markdown from 'react-markdown';
 import { axiosInstance } from '../query';
-import { useHistory } from '../Router';
+import {} from 'react-router-dom';
 import 'react-easy-crop/react-easy-crop.css';
 
 export default function FormComponent({ editNode, url, title }) {
-  const { replaceState } = useHistory();
+  // const { replaceState } = useHistory();
 
   const [formTitle, setFormTitle] = useState('');
   const [formBody, setFormBody] = useState('');
@@ -26,7 +26,7 @@ export default function FormComponent({ editNode, url, title }) {
     axiosInstance
       .post(url, { title: formTitle, body: formBody, images: [{ name: formImage }], author_id: 1 })
       .then(({ data }) => {
-        replaceState({}, null, '/');
+        // replaceState({}, null, '/');
       })
       .catch((err) => {});
   }, [formTitle, formBody, formImage]);

@@ -1,28 +1,30 @@
 import Home from './Home';
 import View from './View';
-import Edit from './Edit';
-import Create from './Create';
+import EditBlog from './blog/Edit';
+import EditBook from './book/Edit';
+import Create from './form';
 import Profile from './profile';
 import Login from './auth/Login';
 import Signup from './auth/Signup';
-import { BrowserRouter, Route, useNavigate } from './Router';
+import { Routes, Route as ReactRoute, useNavigate, BrowserRouter, Link } from 'react-router-dom';
 
 import { LiaUserSolid } from 'react-icons/lia';
+import { AuthContext, AuthProvider } from './context/AuthContext';
 
 const Navigation = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const navHome = () => {
-    navigate('/', {});
+    // navigate('/', {});
   };
   return (
     <div className='top-navbar' style={{ backgroundColor: 'black' }}>
-      <div className='book-container cursor' onClick={navHome} style={{ height: 55 }}>
+      <div className='book-container cursor' style={{ height: 55 }}>
         <div className='flex-row' style={{ height: 55 }}>
           <div style={{ flex: 2 }}>
             <div style={{ height: 55, display: 'flex', alignItems: 'center' }}>
-              <a className='nav-item' href='/' style={{ color: 'white' }}>
+              <Link className='nav-item' to='/' style={{ color: 'white' }}>
                 LOONY
-              </a>
+              </Link>
             </div>
           </div>
           <div style={{ flex: 1, height: 55 }}>
@@ -49,10 +51,14 @@ const Navigation = () => {
                 <div className='dropdown-content list-items'>
                   <ul>
                     <li>
-                      <a href='/create?name=book'>Create Book</a>
+                      <Link to='create/book' state={{}}>
+                        Create Book
+                      </Link>
                     </li>
                     <li>
-                      <a href='/create?name=blog'>Create Blog</a>
+                      <Link to='create/blog' state={{}}>
+                        Create Blog
+                      </Link>
                     </li>
                   </ul>
                 </div>
@@ -72,7 +78,7 @@ const Navigation = () => {
                 <div className='profile-content list-items'>
                   <ul>
                     <li>
-                      <a href='/login'>Login</a>
+                      <Link to='login'>Login</Link>
                     </li>
                   </ul>
                 </div>
@@ -86,18 +92,43 @@ const Navigation = () => {
 };
 function App() {
   return (
-    <BrowserRouter>
-      <Navigation />
-      <div style={{ paddingBottom: 80, height: '100%' }}>
-        <Route path='/' component={<Home />} />
-        <Route path='/create' component={<Create />} />
-        <Route path='/view' component={<View />} />
-        <Route path='/edit' component={<Edit />} />
-        <Route path='/profile' component={<Profile />} />
-        <Route path='/login' component={<Login />} />
-        <Route path='/signup' component={<Signup />} />
-      </div>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Navigation />
+        <AuthContext.Consumer>
+          {({ auth }) => {
+            return (
+              <>
+                {auth && (
+                  <Routes>
+                    <ReactRoute path='/' element={<Home />} />
+                    <ReactRoute path='view' element={<View />} />
+                    <ReactRoute
+                      path='create/book'
+                      element={<Create url='/create/book' title='Create Book' />}
+                    />
+                    <ReactRoute
+                      path='create/blog'
+                      element={<Create url='/create/blog' title='Create Blog' />}
+                    />
+                    <ReactRoute path='edit/book/:bookId' element={<EditBook />} />
+                    <ReactRoute path='edit/blog/:bookId' element={<EditBlog />} />
+                    <ReactRoute path='profile' element={<Profile />} />
+                  </Routes>
+                )}
+                {!auth && (
+                  <Routes>
+                    <ReactRoute path='/' element={<Home />} />
+                    <ReactRoute path='login' element={<Login />} />
+                    <ReactRoute path='signup' element={<Signup />} />
+                  </Routes>
+                )}
+              </>
+            );
+          }}
+        </AuthContext.Consumer>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

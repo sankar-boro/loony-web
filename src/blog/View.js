@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
-import { useNavigate } from '../Router';
+import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../query';
 import { extractImage, orderBlogNodes } from 'loony-utils';
 import { LuFileEdit } from 'react-icons/lu';

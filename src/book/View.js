@@ -5,7 +5,7 @@ import { LuFileWarning } from 'react-icons/lu';
 import { extractImage, orderBookNodes } from 'loony-utils';
 import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
 
-import { useNavigate } from '../Router';
+import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../query';
 
 const View = ({ book_id: bookId }) => {

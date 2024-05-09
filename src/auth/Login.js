@@ -1,13 +1,18 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { axiosInstance } from '../query';
+import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [request, setRequest] = useState(false);
   const [viewPassword, setViewPassword] = useState(false);
+  const navigate = useNavigate();
 
-  const login = (e) => {
+  const authContext = useContext(AuthContext);
+  const { login } = authContext;
+
+  const onLogin = (e) => {
     e.preventDefault();
     if (username && password) {
       const formData = {
@@ -18,6 +23,8 @@ const Login = () => {
         .post('/auth/login', formData)
         .then(({ data }) => {
           console.log(data);
+          login(data);
+          navigate('/', {});
         })
         .catch((err) => {});
     }
@@ -141,11 +148,10 @@ const Login = () => {
 
               <button
                 style={{ width: '100%', marginTop: 30 }}
-                onClick={login}
+                onClick={onLogin}
                 className='btn-md blue-bg'
-                disabled={request === true ? true : false}
               >
-                {request === true ? 'Signing in...' : 'Sign in'}
+                Log In
               </button>
               <div
                 style={{

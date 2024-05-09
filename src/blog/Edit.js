@@ -7,13 +7,14 @@ import { LuFileWarning } from 'react-icons/lu';
 import { MdAdd } from 'react-icons/md';
 import { FiEdit2 } from 'react-icons/fi';
 
-import { useHistory } from '../Router';
+import { useHistory, useParams } from '../Router';
 import { axiosInstance } from '../query';
 import AddNode from './AddNode';
 import EditNode from './EditNode';
 import ConfirmAction from './ConfirmAction';
 
-export default function Edit({ blog_id: blogId }) {
+export default function Edit() {
+  const { blogId } = useParams();
   const blog_id = parseInt(blogId);
   const { replaceState } = useHistory();
   const [rawNodes, setRawNodes] = useState([]);
