@@ -10,12 +10,15 @@ const useAuthSession = () => {
     user: null,
   });
   useEffect(() => {
-    axiosInstance.get('/auth/user/session').then(({ data }) => {
-      setAuth({
-        auth: true,
-        user: data,
-      });
-    });
+    axiosInstance
+      .get('/auth/user/session')
+      .then(({ data }) => {
+        setAuth({
+          auth: true,
+          user: data,
+        });
+      })
+      .catch(() => {});
   }, []);
   return [auth, setAuth];
 };
@@ -28,11 +31,19 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
+  const logout = (user) => {
+    setAuth({
+      user: null,
+      auth: false,
+    });
+  };
+
   return (
     <AuthContext.Provider
       value={{
         auth,
         login,
+        logout,
       }}
     >
       {children}

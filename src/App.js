@@ -10,11 +10,13 @@ import { Routes, Route as ReactRoute, useNavigate, BrowserRouter, Link } from 'r
 
 import { LiaUserSolid } from 'react-icons/lia';
 import { AuthContext, AuthProvider } from './context/AuthContext';
+import { axiosInstance } from './query';
 
-const Navigation = ({ auth }) => {
-  // const navigate = useNavigate();
-  const navHome = () => {
-    // navigate('/', {});
+const Navigation = ({ auth, logout }) => {
+  const logoutUser = () => {
+    axiosInstance.post('/auth/logout').then(() => {
+      logout();
+    });
   };
   return (
     <div className='top-navbar' style={{ backgroundColor: 'black' }}>
@@ -79,7 +81,9 @@ const Navigation = ({ auth }) => {
                   <ul>
                     {auth.auth ? (
                       <li>
-                        <Link to='logout'>Logout</Link>
+                        <Link to='logout' onClick={logoutUser}>
+                          Logout
+                        </Link>
                       </li>
                     ) : (
                       <li>
@@ -101,10 +105,10 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <AuthContext.Consumer>
-          {({ auth }) => {
+          {({ auth, logout }) => {
             return (
               <>
-                <Navigation auth={auth} />
+                <Navigation auth={auth} logout={logout} />
                 {auth.auth && (
                   <Routes>
                     <ReactRoute path='/' element={<Home />} />
