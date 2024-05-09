@@ -11,7 +11,7 @@ import { Routes, Route as ReactRoute, useNavigate, BrowserRouter, Link } from 'r
 import { LiaUserSolid } from 'react-icons/lia';
 import { AuthContext, AuthProvider } from './context/AuthContext';
 
-const Navigation = () => {
+const Navigation = ({ auth }) => {
   // const navigate = useNavigate();
   const navHome = () => {
     // navigate('/', {});
@@ -77,9 +77,15 @@ const Navigation = () => {
                 <LiaUserSolid size={32} />
                 <div className='profile-content list-items'>
                   <ul>
-                    <li>
-                      <Link to='login'>Login</Link>
-                    </li>
+                    {auth.auth ? (
+                      <li>
+                        <Link to='logout'>Logout</Link>
+                      </li>
+                    ) : (
+                      <li>
+                        <Link to='login'>Login</Link>
+                      </li>
+                    )}
                   </ul>
                 </div>
               </div>
@@ -94,12 +100,12 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Navigation />
         <AuthContext.Consumer>
           {({ auth }) => {
             return (
               <>
-                {auth && (
+                <Navigation auth={auth} />
+                {auth.auth && (
                   <Routes>
                     <ReactRoute path='/' element={<Home />} />
                     <ReactRoute path='view' element={<View />} />
@@ -114,9 +120,10 @@ function App() {
                     <ReactRoute path='edit/book/:bookId' element={<EditBook />} />
                     <ReactRoute path='edit/blog/:bookId' element={<EditBlog />} />
                     <ReactRoute path='profile' element={<Profile />} />
+                    <ReactRoute path='*' element={<div>Route error</div>} />
                   </Routes>
                 )}
-                {!auth && (
+                {!auth.auth && (
                   <Routes>
                     <ReactRoute path='/' element={<Home />} />
                     <ReactRoute path='login' element={<Login />} />

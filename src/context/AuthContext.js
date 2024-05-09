@@ -1,21 +1,37 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { axiosInstance } from '../query';
 
 export const AuthContext = React.createContext(null);
 export const useAuth = () => useContext(AuthContext);
 
+const useAuthSession = () => {
+  const [auth, setAuth] = useState({
+    auth: false,
+    user: null,
+  });
+  useEffect(() => {
+    axiosInstance.get('/auth/user/session').then(({ data }) => {
+      setAuth({
+        auth: true,
+        user: data,
+      });
+    });
+  }, []);
+  return [auth, setAuth];
+};
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState(false);
-  const [user, setUser] = useState(null);
+  const [auth, setAuth] = useAuthSession();
   const login = (user) => {
-    setAuth(true);
-    setUser(user);
+    setAuth({
+      user,
+      auth: true,
+    });
   };
-  console.log('called');
+
   return (
     <AuthContext.Provider
       value={{
         auth,
-        user,
         login,
       }}
     >
