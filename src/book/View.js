@@ -5,13 +5,12 @@ import { LuFileWarning } from 'react-icons/lu';
 import { extractImage, orderBookNodes } from 'loony-utils';
 import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { axiosInstance } from '../query';
 
 const View = () => {
   const { bookId } = useParams();
   const book_id = parseInt(bookId);
-  const navigate = useNavigate();
   const [books, setBooks] = useState(null);
   const [mainChapter, setMainchapter] = useState(null);
   const [page_id, setPageId] = useState('');
@@ -38,10 +37,6 @@ const View = () => {
       });
     }
   }, [book_id]);
-
-  const navigateEdit = () => {
-    navigate(`/edit/book/${book_id}`, mainNode);
-  };
 
   if (!books) return null;
   if (!page_id) return null;
@@ -141,8 +136,14 @@ const View = () => {
         </div>
         <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
           <ul className='list-item' style={{ paddingLeft: 0, listStyle: 'none' }}>
-            <li onClick={navigateEdit}>
-              <LuFileEdit color='#2d2d2d' size={16} /> Edit this page
+            <li>
+              <LuFileEdit color='#2d2d2d' size={16} />
+              <Link
+                to={`/edit/book/${book_id}`}
+                style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}
+              >
+                Edit this page
+              </Link>
             </li>
             <li>
               <LuFileWarning color='#2d2d2d' size={16} /> Report

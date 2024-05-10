@@ -7,17 +7,16 @@ import { MdAdd } from 'react-icons/md';
 import { LuFileWarning } from 'react-icons/lu';
 import { FiEdit2 } from 'react-icons/fi';
 import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
+import { useParams, Link } from 'react-router-dom';
 
 import AddNode from './AddNode';
 import { axiosInstance } from '../query';
-import { useHistory, useParams } from '../Router';
 import AddSection from './AddSection';
 import AddSubSection from './AddSubSection';
 import EditNode from './EditNode';
 import ConfirmAction from './ConfirmAction';
 
 export default function Edit() {
-  const { replaceState } = useHistory();
   const { bookId } = useParams();
   const book_id = parseInt(bookId);
   const [rawNodes, setRawNodes] = useState([]);
@@ -92,9 +91,7 @@ export default function Edit() {
   };
 
   const deleteBook = () => {
-    axiosInstance.post('/book/delete_book', { book_id: parseInt(book_id) }).then(() => {
-      replaceState({}, null, '/');
-    });
+    axiosInstance.post('/book/delete_book', { book_id: parseInt(book_id) }).then(() => {});
   };
 
   if (!bookNodes) return null;
@@ -316,12 +313,14 @@ export default function Edit() {
         </div>
         <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }} className='list-item'>
-            <li
-              onClick={() => {
-                replaceState({}, null, `/view?name=book&book_id=${book_id}`);
-              }}
-            >
-              <RxReader size={16} color='#2d2d2d' /> Read Book
+            <li>
+              <RxReader size={16} color='#2d2d2d' />
+              <Link
+                to={`/view/book/${book_id}`}
+                style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}
+              >
+                Read Book
+              </Link>
             </li>
             <li
               onClick={() => {

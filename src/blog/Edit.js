@@ -6,8 +6,8 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import { LuFileWarning } from 'react-icons/lu';
 import { MdAdd } from 'react-icons/md';
 import { FiEdit2 } from 'react-icons/fi';
+import { useParams, Link } from 'react-router-dom';
 
-import { useHistory, useParams } from '../Router';
 import { axiosInstance } from '../query';
 import AddNode from './AddNode';
 import EditNode from './EditNode';
@@ -16,7 +16,6 @@ import ConfirmAction from './ConfirmAction';
 export default function Edit() {
   const { blogId } = useParams();
   const blog_id = parseInt(blogId);
-  const { replaceState } = useHistory();
   const [rawNodes, setRawNodes] = useState([]);
   const [blogNodes, setBlogNodes] = useState(null);
   const [activity, setActivity] = useState({
@@ -91,9 +90,7 @@ export default function Edit() {
   };
 
   const deleteBlog = () => {
-    axiosInstance.post('/blog/delete_blog', { blog_id: parseInt(blog_id) }).then(() => {
-      replaceState({}, null, '/');
-    });
+    axiosInstance.post('/blog/delete_blog', { blog_id: parseInt(blog_id) }).then(() => {});
   };
 
   if (!blogNodes) return null;
@@ -231,13 +228,16 @@ export default function Edit() {
         </div>
         <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }} className='list-item'>
-            <li
-              onClick={() => {
-                replaceState({}, null, `/view?name=blog&blog_id=${blog_id}`);
-              }}
-            >
-              <RxReader size={16} color='#2d2d2d' /> Read Blog
+            <li onClick={() => {}}>
+              <RxReader size={16} color='#2d2d2d' />{' '}
+              <Link
+                to={`/view/book/${blog_id}`}
+                style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}
+              >
+                Read Blog
+              </Link>
             </li>
+
             <li
               onClick={() => {
                 setActivity({

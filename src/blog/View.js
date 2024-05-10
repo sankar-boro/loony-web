@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { axiosInstance } from '../query';
 import { extractImage, orderBlogNodes } from 'loony-utils';
 import { LuFileWarning } from 'react-icons/lu';
+import { LuFileEdit } from 'react-icons/lu';
 
 const View = () => {
   const { blogId } = useParams();
@@ -75,6 +76,8 @@ const View = () => {
         <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }} className='list-item'>
             <li>
+              <LuFileEdit color='#2d2d2d' size={16} />
+
               <Link
                 to={`/edit/blog/${blog_id}`}
                 style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}

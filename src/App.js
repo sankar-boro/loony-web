@@ -125,7 +125,7 @@ function App() {
                       element={<Create url={CREATE_BLOG} title='Create Blog' />}
                     />
                     <ReactRoute path='/edit/book/:bookId' element={<EditBook />} />
-                    <ReactRoute path='/edit/blog/:bookId' element={<EditBlog />} />
+                    <ReactRoute path='/edit/blog/:blogId' element={<EditBlog />} />
                     <ReactRoute path='/profile' element={<Profile />} />
                     <ReactRoute path='*' element={<div>Route error</div>} />
                   </Routes>
