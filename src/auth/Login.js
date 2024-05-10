@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { axiosInstance } from '../query';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -162,11 +162,9 @@ const Login = () => {
                 }}
               >
                 <span style={{ color: '#6d6d6d' }}>Dont have an account? </span>
-                <span onClick={() => {}} className='hover'>
-                  <a href='/signup' style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}>
-                    Create Account
-                  </a>
-                </span>
+                <Link to='/signup' style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}>
+                  Create Account
+                </Link>
               </div>
             </div>
           </div>

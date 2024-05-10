@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { axiosInstance } from '../query';
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
   const [fname, setFname] = useState('');
@@ -187,11 +188,9 @@ const Signup = () => {
                 }}
               >
                 <span style={{ color: '#6d6d6d' }}>Already have an account? </span>
-                <span className='hover'>
-                  <a href='/login' style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}>
-                    Login
-                  </a>
-                </span>
+                <Link to='/login' style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}>
+                  Login
+                </Link>
               </div>
             </div>
           </div>

@@ -6,7 +6,8 @@ import Create from './form';
 import Profile from './profile';
 import Login from './auth/Login';
 import Signup from './auth/Signup';
-import { Routes, Route as ReactRoute, useNavigate, BrowserRouter, Link } from 'react-router-dom';
+import { CREATE_BOOK, CREATE_BLOG } from './url';
+import { Routes, Route as ReactRoute, BrowserRouter, Link } from 'react-router-dom';
 
 import { LiaUserSolid } from 'react-icons/lia';
 import { AuthContext, AuthProvider } from './context/AuthContext';
@@ -53,12 +54,12 @@ const Navigation = ({ auth, logout }) => {
                 <div className='dropdown-content list-items'>
                   <ul>
                     <li>
-                      <Link to='create/book' state={{}}>
+                      <Link to='/create/book' state={{}}>
                         Create Book
                       </Link>
                     </li>
                     <li>
-                      <Link to='create/blog' state={{}}>
+                      <Link to='/create/blog' state={{}}>
                         Create Blog
                       </Link>
                     </li>
@@ -81,13 +82,13 @@ const Navigation = ({ auth, logout }) => {
                   <ul>
                     {auth.auth ? (
                       <li>
-                        <Link to='logout' onClick={logoutUser}>
+                        <Link to='#' onClick={logoutUser}>
                           Logout
                         </Link>
                       </li>
                     ) : (
                       <li>
-                        <Link to='login'>Login</Link>
+                        <Link to='/login'>Login</Link>
                       </li>
                     )}
                   </ul>
@@ -112,26 +113,26 @@ function App() {
                 {auth.auth && (
                   <Routes>
                     <ReactRoute path='/' element={<Home />} />
-                    <ReactRoute path='view' element={<View />} />
+                    <ReactRoute path='/view' element={<View />} />
                     <ReactRoute
-                      path='create/book'
-                      element={<Create url='/create/book' title='Create Book' />}
+                      path='/create/book'
+                      element={<Create url={CREATE_BOOK} title='Create Book' />}
                     />
                     <ReactRoute
-                      path='create/blog'
-                      element={<Create url='/create/blog' title='Create Blog' />}
+                      path='/create/blog'
+                      element={<Create url={CREATE_BLOG} title='Create Blog' />}
                     />
-                    <ReactRoute path='edit/book/:bookId' element={<EditBook />} />
-                    <ReactRoute path='edit/blog/:bookId' element={<EditBlog />} />
-                    <ReactRoute path='profile' element={<Profile />} />
+                    <ReactRoute path='/edit/book/:bookId' element={<EditBook />} />
+                    <ReactRoute path='/edit/blog/:bookId' element={<EditBlog />} />
+                    <ReactRoute path='/profile' element={<Profile />} />
                     <ReactRoute path='*' element={<div>Route error</div>} />
                   </Routes>
                 )}
                 {!auth.auth && (
                   <Routes>
                     <ReactRoute path='/' element={<Home />} />
-                    <ReactRoute path='login' element={<Login />} />
-                    <ReactRoute path='signup' element={<Signup />} />
+                    <ReactRoute path='/login' element={<Login />} />
+                    <ReactRoute path='/signup' element={<Signup />} />
                   </Routes>
                 )}
               </>
