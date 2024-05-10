@@ -1,5 +1,6 @@
 import Home from './Home';
-import View from './View';
+import BlogView from './blog/View';
+import BookView from './book/View';
 import EditBlog from './blog/Edit';
 import EditBook from './book/Edit';
 import Create from './form';
@@ -113,7 +114,8 @@ function App() {
                 {auth.auth && (
                   <Routes>
                     <ReactRoute path='/' element={<Home />} />
-                    <ReactRoute path='/view' element={<View />} />
+                    <ReactRoute path='/view/book/:bookId' element={<BookView />} />
+                    <ReactRoute path='/view/blog/:blogId' element={<BlogView />} />
                     <ReactRoute
                       path='/create/book'
                       element={<Create url={CREATE_BOOK} title='Create Book' />}

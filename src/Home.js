@@ -48,7 +48,7 @@ const Home = () => {
                   <div
                     className='card-title cursor'
                     onClick={() => {
-                      navigate(`/view?blog_id=${blog.blog_id}`, blog);
+                      navigate(`/view/blog/${blog.blog_id}`, blog);
                     }}
                   >
                     {blog.title}
@@ -85,7 +85,7 @@ const Home = () => {
                   <div
                     className='card-title cursor'
                     onClick={() => {
-                      navigate(`/view?book_id=${book.book_id}`, book);
+                      navigate(`/view/book/${book.book_id}`, book);
                     }}
                   >
                     {book.title}

@@ -178,7 +178,6 @@ export const orderTestNodes = (rawApi, removeIds = []) => {
   }
 
   const allGroups = groupWithIdentity(data);
-  console.log(allGroups, 'allGroups');
   const samples = {
     allSectionGroups: allGroups[102],
     allSubSectionGroups: allGroups[103],
@@ -188,7 +187,6 @@ export const orderTestNodes = (rawApi, removeIds = []) => {
     100: allGroups[100],
     101: allGroups[101],
   };
-  console.log(allFrontPages, 'allFrontPages');
   // allFrontPages[101] = groupChapters(allGroups[100][0].uid, allFrontPages[101]);
 
   // const chapters = [];
@@ -215,7 +213,6 @@ export const orderBookNodes = (rawApi, removeIds = []) => {
   }
 
   const allGroups = groupWithIdentity(data);
-  console.log(allGroups, 'allGroups');
   const samples = {
     allSectionGroups: allGroups[102],
     allSubSectionGroups: allGroups[103],

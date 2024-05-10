@@ -99,8 +99,6 @@ export default function Edit() {
   if (!blogNodes) return null;
   const image = extractImage(mainNode.images);
 
-  console.log('blogNodes', blogNodes);
-
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>

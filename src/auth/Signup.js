@@ -19,9 +19,7 @@ const Signup = () => {
       };
       axiosInstance
         .post('/auth/signup', formData)
-        .then(({ data }) => {
-          console.log(data);
-        })
+        .then(({ data }) => {})
         .catch((err) => {});
     }
   };

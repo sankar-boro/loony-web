@@ -22,7 +22,6 @@ const Login = () => {
       axiosInstance
         .post('/auth/login', formData)
         .then(({ data }) => {
-          console.log(data);
           login(data);
           navigate('/', {});
         })

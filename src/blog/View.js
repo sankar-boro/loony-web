@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import Markdown from 'react-markdown';
-import { useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { axiosInstance } from '../query';
 import { extractImage, orderBlogNodes } from 'loony-utils';
-import { LuFileEdit } from 'react-icons/lu';
 import { LuFileWarning } from 'react-icons/lu';
 
-const View = ({ blog_id }) => {
-  const navigate = useNavigate();
+const View = () => {
+  const { blogId } = useParams();
+  const blog_id = parseInt(blogId);
   const [blogs, setBlogs] = useState(null);
   const [page_id, setPageId] = useState('');
   const [mainNode, setMainNode] = useState(null);
@@ -28,10 +28,6 @@ const View = ({ blog_id }) => {
       });
     }
   }, [blog_id]);
-
-  const navigateEdit = () => {
-    navigate(`/edit?name=blog&blog_id=${blog_id}`, mainNode);
-  };
 
   if (!blogs) return null;
   if (!page_id) return null;
@@ -78,8 +74,13 @@ const View = ({ blog_id }) => {
         </div>
         <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }} className='list-item'>
-            <li onClick={navigateEdit}>
-              <LuFileEdit color='#2d2d2d' size={16} /> Edit this page
+            <li>
+              <Link
+                to={`/edit/blog/${blog_id}`}
+                style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}
+              >
+                Edit this page
+              </Link>
             </li>
             <li>
               <LuFileWarning color='#2d2d2d' size={16} /> Report

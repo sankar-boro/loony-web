@@ -5,10 +5,11 @@ import { LuFileWarning } from 'react-icons/lu';
 import { extractImage, orderBookNodes } from 'loony-utils';
 import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { axiosInstance } from '../query';
 
-const View = ({ book_id: bookId }) => {
+const View = () => {
+  const { bookId } = useParams();
   const book_id = parseInt(bookId);
   const navigate = useNavigate();
   const [books, setBooks] = useState(null);
@@ -39,7 +40,7 @@ const View = ({ book_id: bookId }) => {
   }, [book_id]);
 
   const navigateEdit = () => {
-    navigate(`/edit?name=book&book_id=${book_id}`, mainNode);
+    navigate(`/edit/book/${book_id}`, mainNode);
   };
 
   if (!books) return null;
