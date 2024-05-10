@@ -221,9 +221,13 @@ export default function Edit() {
         >
           <div>
             <div className='page-heading'>{mainNode.title}</div>
-            {image ? (
+            {image && image.name ? (
               <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
-                <img src={`http://localhost:5002/api/i/${image.name}`} alt='' width='100%' />
+                <img
+                  src={`${process.env.REACT_APP_BASE_URL}/api/i/${image.name}`}
+                  alt=''
+                  width='100%'
+                />
               </div>
             ) : null}
             <Markdown>{mainNode.body}</Markdown>

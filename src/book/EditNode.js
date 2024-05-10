@@ -114,7 +114,11 @@ const EditNode = ({
                     padding: '15px 0px',
                   }}
                 >
-                  <img src={`http://localhost:5002/api/u/${uploadedImage}`} alt='' width='50%' />;
+                  <img
+                    src={`${process.env.REACT_APP_BASE_URL}/api/u/${uploadedImage}`}
+                    alt=''
+                    width='50%'
+                  />
                   <div style={{ marginTop: 24 }}>
                     <label>Choose another file</label>
                     <br />

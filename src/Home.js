@@ -31,9 +31,10 @@ const Home = () => {
                 <div
                   className='card-image'
                   style={{
-                    backgroundImage: image
-                      ? `url("http://localhost:5002/api/i/${image.name}")`
-                      : null,
+                    backgroundImage:
+                      image && image.name
+                        ? `url("${process.env.REACT_APP_BASE_URL}/api/i/${image.name}")`
+                        : null,
                     overflow: 'hidden',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
@@ -68,9 +69,10 @@ const Home = () => {
                 <div
                   className='card-image'
                   style={{
-                    backgroundImage: image
-                      ? `url("http://localhost:5002/api/i/${image.name}")`
-                      : null,
+                    backgroundImage:
+                      image && image.name
+                        ? `url("${process.env.REACT_APP_BASE_URL}/api/i/${image.name}")`
+                        : null,
                     overflow: 'hidden',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
