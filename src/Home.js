@@ -42,7 +42,7 @@ const Home = () => {
                     borderTopRightRadius: 3,
                   }}
                   onClick={() => {
-                    navigate(`/view?blog_id=${blog.blog_id}`, blog);
+                    navigate(`/view/blog/${blog.blog_id}`, blog);
                   }}
                 />
                 <div className='card-body'>
@@ -80,7 +80,7 @@ const Home = () => {
                     borderTopRightRadius: 3,
                   }}
                   onClick={() => {
-                    navigate(`/view?blog_id=${book.book_id}`, book);
+                    navigate(`/view/book/${book.book_id}`, book);
                   }}
                 />
                 <div className='card-body'>
