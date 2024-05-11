@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import Markdown from 'react-markdown';
+// import Markdown from 'react-markdown';
 import { LuFileEdit } from 'react-icons/lu';
 import { LuFileWarning } from 'react-icons/lu';
 import { extractImage, orderBookNodes } from 'loony-utils';
 import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 
 import { useParams, Link } from 'react-router-dom';
 import { axiosInstance } from '../query';
@@ -116,24 +117,34 @@ const View = () => {
             background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
           }}
         >
-          <div>
+          <div
+            style={{
+              marginBottom: 24,
+            }}
+          >
             <div className='page-heading'>{mainNode.title}</div>
             {image && image.name ? (
-              <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
+              <div style={{ width: '100%', borderRadius: 5 }}>
                 <img
-                  src={`${process.env.REACT_APP_BASE_URL}/api/i/${image.name}`}
+                  src={`${process.env.REACT_APP_BASE_API_URL}/api/i/${image.name}`}
                   alt=''
                   width='100%'
                 />
               </div>
             ) : null}
-            <Markdown>{mainNode.body}</Markdown>
+            <MarkdownPreview
+              source={mainNode.body}
+              wrapperElement={{ 'data-color-mode': 'light' }}
+            />
           </div>
           {childNodes.map((book_node) => {
             return (
               <div className='page-section' key={book_node.uid}>
                 <div className='section-title'>{book_node.title}</div>
-                <Markdown>{book_node.body}</Markdown>
+                <MarkdownPreview
+                  source={book_node.body}
+                  wrapperElement={{ 'data-color-mode': 'light' }}
+                />
               </div>
             );
           })}

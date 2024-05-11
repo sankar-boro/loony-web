@@ -129,7 +129,7 @@ export default function Edit() {
             {image && image.name ? (
               <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
                 <img
-                  src={`${process.env.REACT_APP_BASE_URL}/api/i/${image.name}`}
+                  src={`${process.env.REACT_APP_BASE_API_URL}/api/i/${image.name}`}
                   alt=''
                   width='100%'
                 />

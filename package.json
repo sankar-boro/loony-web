@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@uiw/react-markdown-preview": "^5.1.1",
     "axios": "^1.6.7",
     "loony-utils": "1.0.0",
     "react": "^18.2.0",

@@ -90,7 +90,7 @@ export default function FormComponent({ editNode, url, title }) {
                 }}
               >
                 <img
-                  src={`${process.env.REACT_APP_BASE_URL}/api/u/${formImage}`}
+                  src={`${process.env.REACT_APP_BASE_API_URL}/api/u/${formImage}`}
                   alt=''
                   width='50%'
                 />

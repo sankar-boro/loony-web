@@ -232,10 +232,15 @@ select {
 .page-heading {
   font-weight: bold;
   font-size: 32px;
+  margin-bottom: 24px;
+}
+.page-section {
+  margin-bottom: 24px;
 }
 .section-title {
   font-weight: bold;
   font-size: 24px;
+  margin-bottom: 16px;
 }
 .chapter-nav-con {
   padding-top: 5px;

@@ -53,14 +53,15 @@ const View = () => {
             paddingLeft: '5%',
             paddingRight: '5%',
             background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+            marginBottom: 24,
           }}
         >
           <div>
             <div className='page-heading'>{mainNode.title}</div>
             {image && image.name ? (
-              <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
+              <div style={{ width: '100%', borderRadius: 5 }}>
                 <img
-                  src={`${process.env.REACT_APP_BASE_URL}/api/i/${image.name}`}
+                  src={`${process.env.REACT_APP_BASE_API_URL}/api/i/${image.name}`}
                   alt=''
                   width='100%'
                 />

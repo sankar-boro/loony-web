@@ -115,7 +115,7 @@ const EditNode = ({
                   }}
                 >
                   <img
-                    src={`${process.env.REACT_APP_BASE_URL}/api/u/${uploadedImage}`}
+                    src={`${process.env.REACT_APP_BASE_API_URL}/api/u/${uploadedImage}`}
                     alt=''
                     width='50%'
                   />

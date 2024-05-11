@@ -33,7 +33,7 @@ const Home = () => {
                   style={{
                     backgroundImage:
                       image && image.name
-                        ? `url("${process.env.REACT_APP_BASE_URL}/api/i/${image.name}")`
+                        ? `url("${process.env.REACT_APP_BASE_API_URL}/api/i/${image.name}")`
                         : null,
                     overflow: 'hidden',
                     backgroundSize: 'cover',
@@ -71,7 +71,7 @@ const Home = () => {
                   style={{
                     backgroundImage:
                       image && image.name
-                        ? `url("${process.env.REACT_APP_BASE_URL}/api/i/${image.name}")`
+                        ? `url("${process.env.REACT_APP_BASE_API_URL}/api/i/${image.name}")`
                         : null,
                     overflow: 'hidden',
                     backgroundSize: 'cover',
