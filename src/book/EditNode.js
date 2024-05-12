@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 import MarkdownPreview from '@uiw/react-markdown-preview';
-
 import { axiosInstance } from '../query';
 import { updateBookNode, orderBookNodes } from 'loony-utils';
 
@@ -168,7 +167,7 @@ const EditNode = ({
       </ModalBodyContainer>
       <ModalButtonContainer>
         <button onClick={addNode} className='black-bg'>
-          Create
+          Update
         </button>
       </ModalButtonContainer>
     </ModalMd>

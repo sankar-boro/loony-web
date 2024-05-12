@@ -172,22 +172,6 @@ select {
   display: block;
 }
 
-.list-items ul{
-  margin: 0px;
-  padding: 0px;
-}
-.list-items ul li {
-  padding: 10px 15px;
-  list-style: none;
-}
-.list-items ul li:hover {
-  background-color: #f4f4f4;
-}
-
-.list-items ul li a {
-  text-decoration: none;
-  color: black;
-}
 .dropdown-content, .profile-content{
   display: none;
   position: absolute;
@@ -198,6 +182,23 @@ select {
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   border: 1px solid #ccc;
+}
+.list-items ul{
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+.list-items ul li{
+  padding: 10px;
+  padding-left: 20px;
+}
+.list-items ul li:hover{
+  background-color: #f4f4f4;
+
+}
+.list-items ul li a {
+  text-decoration: none;
+  color: black;
 }
 .create-button:hover .dropdown-content {
   display: block;
@@ -218,8 +219,12 @@ select {
   padding-top: 2px;
   padding-bottom: 2px;
 }
-.list-item li:hover{
-  color: #754b9c;
+.list-item li a{
+  color: black;
+  text-decoration: none;
+}
+.list-item li a:hover, .list-item li:hover, .list-item li a:hover, .list-item svg:hover{
+  color: var(--blue);
   cursor: pointer;
 }
 

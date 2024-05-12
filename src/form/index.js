@@ -1,12 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../query';
 import {} from 'react-router-dom';
 import 'react-easy-crop/react-easy-crop.css';
 
 export default function FormComponent({ editNode, url, title }) {
-  // const { replaceState } = useHistory();
-
+  const navigate = useNavigate();
   const [formTitle, setFormTitle] = useState('');
   const [formBody, setFormBody] = useState('');
   const [formImage, setFormImage] = useState('');
@@ -25,8 +26,8 @@ export default function FormComponent({ editNode, url, title }) {
     if (!formTitle || !formBody) return;
     axiosInstance
       .post(url, { title: formTitle, body: formBody, images: [{ name: formImage }], author_id: 1 })
-      .then(({ data }) => {
-        // replaceState({}, null, '/');
+      .then(() => {
+        navigate('/', { replace: true });
       })
       .catch((err) => {});
   }, [formTitle, formBody, formImage]);

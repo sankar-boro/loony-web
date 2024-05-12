@@ -168,7 +168,7 @@ const AddNode = ({
       </ModalBodyContainer>
       <ModalButtonContainer>
         <button className='black-bg' onClick={onCreate}>
-          Create
+          Add
         </button>
       </ModalButtonContainer>
     </ModalMd>

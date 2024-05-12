@@ -168,7 +168,7 @@ const AddSubSection = ({
       </ModalBodyContainer>
       <ModalButtonContainer>
         <button onClick={addNode} className='black-bg'>
-          Create
+          Add
         </button>
       </ModalButtonContainer>
     </ModalMd>

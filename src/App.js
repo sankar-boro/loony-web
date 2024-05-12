@@ -79,7 +79,7 @@ const Navigation = ({ auth, logout }) => {
                 className='profile-button'
               >
                 <LiaUserSolid size={32} />
-                <div className='profile-content list-items'>
+                <div className='profile-content list-items' style={{ marginLeft: -15 }}>
                   <ul>
                     {auth.auth ? (
                       <li>

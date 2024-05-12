@@ -125,7 +125,7 @@ export default function Edit() {
               setPageId(mainChapter.uid);
               setModal('add_chapter');
             }}
-            style={{ marginRight: 16 }}
+            style={{ marginRight: 16, paddingTop: 7, paddingBottom: 7 }}
           >
             Add Chapter
           </div>
@@ -268,7 +268,11 @@ export default function Edit() {
             </div>
           ) : null}
 
-          <div style={{ marginTop: 16 }}>
+          <div
+            style={{
+              marginTop: 16,
+            }}
+          >
             {mainNode.identity !== 101 &&
               childNodes.map((node) => {
                 return (
@@ -326,10 +330,7 @@ export default function Edit() {
           <ul style={{ paddingLeft: 0, listStyle: 'none' }} className='list-item'>
             <li>
               <RxReader size={16} color='#2d2d2d' />
-              <Link
-                to={`/view/book/${book_id}`}
-                style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}
-              >
+              <Link to={`/view/book/${book_id}`} style={{ marginLeft: 5 }}>
                 Read Book
               </Link>
             </li>
