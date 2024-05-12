@@ -1,4 +1,5 @@
-import Markdown from 'react-markdown';
+import MarkdownPreview from '@uiw/react-markdown-preview';
+
 import { useState, useEffect } from 'react';
 import { orderBlogNodes, deleteBlogNode, extractImage } from 'loony-utils';
 import { RxReader } from 'react-icons/rx';
@@ -135,7 +136,10 @@ export default function Edit() {
                 />
               </div>
             ) : null}
-            <Markdown>{mainNode.body}</Markdown>
+            <MarkdownPreview
+              source={mainNode.body}
+              wrapperElement={{ 'data-color-mode': 'light' }}
+            />
           </div>
           <div className='flex-row'>
             <div
@@ -175,7 +179,10 @@ export default function Edit() {
                 return (
                   <div style={{ marginBottom: 50, marginTop: 50 }} key={node.uid}>
                     <div className='section-title'>{node.title}</div>
-                    <Markdown>{node.body}</Markdown>
+                    <MarkdownPreview
+                      source={node.body}
+                      wrapperElement={{ 'data-color-mode': 'light' }}
+                    />
                     <div className='flex-row'>
                       <div
                         className='button-none cursor'

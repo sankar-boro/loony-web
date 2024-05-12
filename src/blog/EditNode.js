@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
-import Markdown from 'react-markdown';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../query';
 import { updateBlogNode, orderBlogNodes } from 'loony-utils';
 
@@ -92,7 +92,7 @@ const EditNode = ({
             </div>
           </div>
           <div style={{ width: '50%' }}>
-            <Markdown>{body}</Markdown>
+            <MarkdownPreview source={body} wrapperElement={{ 'data-color-mode': 'light' }} />
           </div>
         </div>
       </ModalBodyContainer>

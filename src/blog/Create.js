@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import Markdown from 'react-markdown';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../query';
 import { useHistory } from '../Router';
 
@@ -137,7 +137,7 @@ export default function CreateBlog() {
           </div>
         </div>
         <div style={{ flex: 1, padding: 25 }}>
-          <Markdown>{body}</Markdown>
+          <MarkdownPreview source={body} wrapperElement={{ 'data-color-mode': 'light' }} />
         </div>
       </div>
     </div>

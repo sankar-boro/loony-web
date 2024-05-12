@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Markdown from 'react-markdown';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 import { Link, useParams } from 'react-router-dom';
 import { axiosInstance } from '../query';
 import { extractImage, orderBlogNodes } from 'loony-utils';
@@ -67,13 +67,19 @@ const View = () => {
                 />
               </div>
             ) : null}
-            <Markdown>{mainNode.body}</Markdown>
+            <MarkdownPreview
+              source={mainNode.body}
+              wrapperElement={{ 'data-color-mode': 'light' }}
+            />
           </div>
           {childNodes.map((blog_node) => {
             return (
               <div className='page-section' key={blog_node.uid}>
                 <div className='section-title'>{blog_node.title}</div>
-                <Markdown>{blog_node.body}</Markdown>
+                <MarkdownPreview
+                  source={blog_node.body}
+                  wrapperElement={{ 'data-color-mode': 'light' }}
+                />
               </div>
             );
           })}

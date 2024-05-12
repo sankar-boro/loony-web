@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import Markdown from 'react-markdown';
+import MarkdownPreview from '@uiw/react-markdown-preview';
+
 import { orderBookNodes, deleteBookNode, extractImage } from 'loony-utils';
 import { RxReader } from 'react-icons/rx';
 import { AiOutlineDelete } from 'react-icons/ai';
@@ -222,7 +223,7 @@ export default function Edit() {
           <div>
             <div className='page-heading'>{mainNode.title}</div>
             {image && image.name ? (
-              <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
+              <div style={{ width: '100%', borderRadius: 5 }}>
                 <img
                   src={`${process.env.REACT_APP_BASE_API_URL}/api/i/${image.name}`}
                   alt=''
@@ -230,7 +231,10 @@ export default function Edit() {
                 />
               </div>
             ) : null}
-            <Markdown>{mainNode.body}</Markdown>
+            <MarkdownPreview
+              source={mainNode.body}
+              wrapperElement={{ 'data-color-mode': 'light' }}
+            />
           </div>
           {mainNode.identity >= 101 ? (
             <div className='flex-row'>
@@ -270,7 +274,10 @@ export default function Edit() {
                 return (
                   <div style={{ marginBottom: 25, marginTop: 25 }} key={node.uid}>
                     <div className='section-title'>{node.title}</div>
-                    <Markdown>{node.body}</Markdown>
+                    <MarkdownPreview
+                      source={node.body}
+                      wrapperElement={{ 'data-color-mode': 'light' }}
+                    />
                     <div className='flex-row'>
                       <div
                         className='button-none cursor'

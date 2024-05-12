@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import Markdown from 'react-markdown';
+import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../query';
 import {} from 'react-router-dom';
 import 'react-easy-crop/react-easy-crop.css';
@@ -164,7 +164,7 @@ export default function FormComponent({ editNode, url, title }) {
           </div>
         </div>
         <div style={{ flex: 1, padding: 25 }}>
-          <Markdown>{formBody}</Markdown>
+          <MarkdownPreview source={formBody} wrapperElement={{ 'data-color-mode': 'light' }} />
         </div>
       </div>
     </div>
