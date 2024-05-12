@@ -116,7 +116,9 @@ const View = () => {
          * @ Left Navigation End
          */}
 
-        {/* Page */}
+        {/*
+         * @Page
+         */}
         <div
           style={{
             width: '60%',
@@ -159,7 +161,9 @@ const View = () => {
             );
           })}
         </div>
-        {/* Page End */}
+        {/*
+         * @Page End
+         */}
         <RightBookContainer node={mainNode} book_id={book_id} />
       </div>
     </div>
@@ -170,14 +174,15 @@ const RightBookContainer = ({ node, book_id }) => {
   return (
     <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
       <ul className='list-item' style={{ paddingLeft: 0, listStyle: 'none' }}>
-        <li>
+        <li style={{ display: 'flex', alignItems: 'center' }}>
           <LuFileEdit color='#2d2d2d' size={16} />
-          <Link to={`/edit/book/${book_id}`} style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}>
+          <Link to={`/edit/book/${book_id}`} style={{ marginLeft: 5 }}>
             Edit this page
           </Link>
         </li>
-        <li>
-          <LuFileWarning color='#2d2d2d' size={16} /> Report
+        <li style={{ display: 'flex', alignItems: 'center' }}>
+          <LuFileWarning color='#2d2d2d' size={16} />
+          <span style={{ marginLeft: 5 }}>Report</span>
         </li>
       </ul>
       <div style={{ borderTop: '1px solid #ccc', marginTop: 5, paddingTop: 5 }}>

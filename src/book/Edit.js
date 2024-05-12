@@ -101,6 +101,9 @@ export default function Edit() {
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+        {/*
+         * @ Left Navigation
+         */}
         <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
           <div className='chapter-nav cursor'>
             <div
@@ -211,6 +214,11 @@ export default function Edit() {
             );
           })}
         </div>
+        {/*
+         * @ Left Navigation End
+         */}
+
+        {/* Page */}
         <div
           style={{
             width: '60%',
@@ -218,6 +226,7 @@ export default function Edit() {
             paddingLeft: '5%',
             paddingRight: '5%',
             background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+            paddingBottom: 50,
           }}
         >
           <div>
@@ -326,9 +335,14 @@ export default function Edit() {
               })}
           </div>
         </div>
+
+        {/*
+         * @Page End
+         */}
+
         <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
           <ul style={{ paddingLeft: 0, listStyle: 'none' }} className='list-item'>
-            <li>
+            <li style={{ display: 'flex', alignItems: 'center' }}>
               <RxReader size={16} color='#2d2d2d' />
               <Link to={`/view/book/${book_id}`} style={{ marginLeft: 5 }}>
                 Read Book
@@ -338,11 +352,14 @@ export default function Edit() {
               onClick={() => {
                 setModal('delete_book');
               }}
+              style={{ display: 'flex', alignItems: 'center' }}
             >
-              <AiOutlineDelete size={16} color='#2d2d2d' /> Delete Book
+              <AiOutlineDelete size={16} color='#2d2d2d' />
+              <span style={{ marginLeft: 5 }}>Delete Book</span>
             </li>
-            <li>
-              <LuFileWarning size={16} color='#2d2d2d' /> Report
+            <li style={{ display: 'flex', alignItems: 'center' }}>
+              <LuFileWarning size={16} color='#2d2d2d' />
+              <span style={{ marginLeft: 5 }}>Report</span>
             </li>
           </ul>
           <div style={{ borderTop: '1px solid #ccc', marginTop: 5, paddingTop: 5 }}>
