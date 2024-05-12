@@ -121,9 +121,6 @@ select {
   border-radius: 4px;
   background-color: white;
   padding: 8px 2%;
-}
-input {
-  background-color: transparent;
   width: 96%;
 }
 select {
@@ -136,7 +133,7 @@ select {
   min-width: 16%;
   margin-bottom: 10px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  background-color: white;
   margin-right: 10px;
   height: 280px;
 }

@@ -81,29 +81,39 @@ export default function FormComponent({ editNode, url, title }) {
               <label>Image</label>
               <div
                 style={{
-                  display: 'flex',
                   border: '1px dashed #ccc',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  padding: '15px 0px',
+                  padding: 24,
                 }}
               >
-                <img
-                  src={`${process.env.REACT_APP_BASE_API_URL}/api/u/${formImage}`}
-                  alt=''
-                  width='50%'
-                />
-                <div style={{ marginTop: 24 }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <img
+                    src={`${process.env.REACT_APP_BASE_API_URL}/api/u/${formImage}`}
+                    alt=''
+                    width='50%'
+                  />
                   <label>Choose another file</label>
                   <br />
                   <input
                     type='file'
-                    title='Change file'
                     onChange={(e) => {
                       changeFile(e.target.files[0]);
                     }}
-                    style={{ marginTop: 20 }}
+                    style={{
+                      backgroundColor: 'white',
+                      border: 'none',
+                      padding: 0,
+                      margin: 0,
+                      marginTop: 20,
+                      borderRadius: 15,
+                      width: '50%',
+                    }}
                   />
                 </div>
               </div>
@@ -113,24 +123,37 @@ export default function FormComponent({ editNode, url, title }) {
               <label>Image</label>
               <div
                 style={{
-                  display: 'flex',
                   border: '1px dashed #ccc',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                  padding: '15px 0px',
+                  padding: 24,
                 }}
               >
-                <label>Drop file here</label>
-                <br />
-                <span>or</span>
-                <input
-                  type='file'
-                  onChange={(e) => {
-                    uploadFile(e.target.files[0]);
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    alignItems: 'center',
                   }}
-                  style={{ marginTop: 20 }}
-                />
+                >
+                  <label>Drop file here</label>
+                  <br />
+                  <span>or</span>
+                  <input
+                    type='file'
+                    onChange={(e) => {
+                      uploadFile(e.target.files[0]);
+                    }}
+                    style={{
+                      backgroundColor: 'white',
+                      border: 'none',
+                      padding: 0,
+                      margin: 0,
+                      marginTop: 20,
+                      borderRadius: 15,
+                      width: '50%',
+                    }}
+                  />
+                </div>
               </div>
             </div>
           )}

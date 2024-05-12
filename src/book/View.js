@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-// import Markdown from 'react-markdown';
 import { LuFileEdit } from 'react-icons/lu';
 import { LuFileWarning } from 'react-icons/lu';
 import { extractImage, orderBookNodes } from 'loony-utils';
@@ -46,6 +45,9 @@ const View = () => {
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+        {/*
+         * @ Left Navigation
+         */}
         <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
           <div className='chapter-nav-con'>
             <div
@@ -108,6 +110,11 @@ const View = () => {
             );
           })}
         </div>
+        {/*
+         * @ Left Navigation End
+         */}
+
+        {/* Page */}
         <div
           style={{
             width: '60%',
@@ -149,27 +156,31 @@ const View = () => {
             );
           })}
         </div>
-        <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
-          <ul className='list-item' style={{ paddingLeft: 0, listStyle: 'none' }}>
-            <li>
-              <LuFileEdit color='#2d2d2d' size={16} />
-              <Link
-                to={`/edit/book/${book_id}`}
-                style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}
-              >
-                Edit this page
-              </Link>
-            </li>
-            <li>
-              <LuFileWarning color='#2d2d2d' size={16} /> Report
-            </li>
-          </ul>
-          <div style={{ borderTop: '1px solid #ccc', marginTop: 5, paddingTop: 5 }}>
-            <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-              <li>{mainNode.title}</li>
-            </ul>
-          </div>
-        </div>
+        {/* Page End */}
+        <RightBookContainer node={mainNode} book_id={book_id} />
+      </div>
+    </div>
+  );
+};
+
+const RightBookContainer = ({ node, book_id }) => {
+  return (
+    <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
+      <ul className='list-item' style={{ paddingLeft: 0, listStyle: 'none' }}>
+        <li>
+          <LuFileEdit color='#2d2d2d' size={16} />
+          <Link to={`/edit/book/${book_id}`} style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}>
+            Edit this page
+          </Link>
+        </li>
+        <li>
+          <LuFileWarning color='#2d2d2d' size={16} /> Report
+        </li>
+      </ul>
+      <div style={{ borderTop: '1px solid #ccc', marginTop: 5, paddingTop: 5 }}>
+        <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
+          <li>{node.title}</li>
+        </ul>
       </div>
     </div>
   );

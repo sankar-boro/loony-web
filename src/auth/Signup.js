@@ -73,7 +73,6 @@ const Signup = () => {
               style={{
                 width: 380,
                 padding: 20,
-                boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.2)',
                 borderRadius: 10,
               }}
             >
