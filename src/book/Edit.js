@@ -108,10 +108,9 @@ export default function Edit() {
               onClick={(e) => {
                 e.stopPropagation();
                 setModal('');
-                setActiveNode(mainChapter);
+                e.stopPropagation();
                 setMainNode(mainChapter);
-                setNavId(mainChapter.uid);
-                setPageId(mainChapter.uid);
+                setChildNodes(mainChapter.child);
               }}
             >
               {mainChapter.title}
@@ -141,6 +140,7 @@ export default function Edit() {
                       setMainNode(chapter);
                       setNavId(chapter.uid);
                       setPageId(chapter.uid);
+                      setChildNodes(chapter.child);
                     }}
                   >
                     <div style={{ width: '90%' }}>{chapter.title}</div>

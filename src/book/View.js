@@ -55,6 +55,7 @@ const View = () => {
               onClick={(e) => {
                 e.stopPropagation();
                 setMainNode(mainChapter);
+                setChildNodes(mainChapter.child);
               }}
             >
               {mainChapter.title}
@@ -68,6 +69,7 @@ const View = () => {
                     className='chapter-nav'
                     onClick={(e) => {
                       e.stopPropagation();
+                      setChildNodes(book_node.child);
                       setMainNode(book_node);
                       setNavId(book_node.uid);
                       setNavOpen(true);
@@ -122,6 +124,7 @@ const View = () => {
             paddingLeft: '5%',
             paddingRight: '5%',
             background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+            paddingBottom: 50,
           }}
         >
           <div

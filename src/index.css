@@ -408,7 +408,6 @@ select {
   }
 }
 
-
 .close-button {
   background: none;
   border: none;
@@ -439,4 +438,7 @@ pre {
 /* Style for code element */
 code {
   font-family: "Courier New", Courier, monospace;
+}
+p, .wmde-markdown {
+  background: linear-gradient(to right, #ffffff, #F6F8FC);
 }
