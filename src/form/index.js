@@ -1,13 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../query';
 import {} from 'react-router-dom';
 import 'react-easy-crop/react-easy-crop.css';
+import { AuthContext } from '../context/AuthContext';
 
 export default function FormComponent({ editNode, url, title }) {
   const navigate = useNavigate();
+  const { setAuthContext } = useContext(AuthContext);
   const [formTitle, setFormTitle] = useState('');
   const [formBody, setFormBody] = useState('');
   const [formImage, setFormImage] = useState('');
@@ -30,6 +32,11 @@ export default function FormComponent({ editNode, url, title }) {
       .post(url, { title: formTitle, body: formBody, images: [{ name: formImage }], author_id: 1 })
       .then(() => {
         setSubmitting(false);
+        setAuthContext('alert', {
+          alertType: 'success',
+          title: 'Created',
+          body: 'Created successfully',
+        });
         navigate('/', { replace: true });
       })
       .catch(() => {
@@ -164,8 +171,8 @@ export default function FormComponent({ editNode, url, title }) {
             </div>
           )}
           <div>
-            <button className='black-bg' onClick={createDoc}>
-              {submitting ? 'Creating Book' : 'Create'}
+            <button className='black-bg' onClick={createDoc} disabled={submitting}>
+              {submitting ? 'Creating...' : 'Create'}
             </button>
           </div>
         </div>

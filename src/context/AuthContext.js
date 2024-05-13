@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { axiosInstance } from '../query';
 
 export const AuthContext = React.createContext(null);
-export const useAuth = () => useContext(AuthContext);
 
 const useAuthSession = () => {
   const [auth, setAuth] = useState({
     auth: false,
     user: null,
+    alert: null,
   });
   useEffect(() => {
     axiosInstance
@@ -24,6 +24,20 @@ const useAuthSession = () => {
 };
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useAuthSession();
+  const [context, setContext] = useState({
+    alert: null,
+  });
+  useEffect(() => {
+    if (context.alert) {
+      setTimeout(() => {
+        setContext({
+          ...context,
+          alert: null,
+        });
+      }, 3000);
+    }
+  }, [context, context.alert]);
+
   const login = (user) => {
     setAuth({
       user,
@@ -38,12 +52,21 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
+  const setAuthContext = (key, value) => {
+    setContext({
+      ...context,
+      [key]: value,
+    });
+  };
+
   return (
     <AuthContext.Provider
       value={{
         auth,
         login,
         logout,
+        context,
+        setAuthContext,
       }}
     >
       {children}

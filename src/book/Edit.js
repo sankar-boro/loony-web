@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
 import { orderBookNodes, deleteBookNode, extractImage } from 'loony-utils';
@@ -8,7 +8,7 @@ import { MdAdd } from 'react-icons/md';
 import { LuFileWarning } from 'react-icons/lu';
 import { FiEdit2 } from 'react-icons/fi';
 import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 import AddNode from './AddNode';
 import { axiosInstance } from '../query';
@@ -16,10 +16,14 @@ import AddSection from './AddSection';
 import AddSubSection from './AddSubSection';
 import EditNode from './EditNode';
 import ConfirmAction from './ConfirmAction';
+import { AuthContext } from '../context/AuthContext';
 
 export default function Edit() {
   const { bookId } = useParams();
   const book_id = parseInt(bookId);
+  const navigate = useNavigate();
+  const { setAuthContext } = useContext(AuthContext);
+
   const [rawNodes, setRawNodes] = useState([]);
   const [mainChapter, setMainchapter] = useState(null);
   const [bookNodes, setBookNodes] = useState(null);
@@ -92,7 +96,15 @@ export default function Edit() {
   };
 
   const deleteBook = () => {
-    axiosInstance.post('/book/delete_book', { book_id: parseInt(book_id) }).then(() => {});
+    axiosInstance.post('/book/delete_book', { book_id: parseInt(book_id) }).then(() => {
+      setModal('');
+      setAuthContext('alert', {
+        alertType: 'success',
+        title: 'Deleted Book',
+        body: 'Your book has been successfully deleted.',
+      });
+      navigate('/', { replace: true });
+    });
   };
 
   if (!bookNodes) return null;

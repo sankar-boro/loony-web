@@ -7,6 +7,7 @@ import Create from './form';
 import Profile from './profile';
 import Login from './auth/Login';
 import Signup from './auth/Signup';
+import Alert from './Alert';
 import { CREATE_BOOK, CREATE_BLOG } from './url';
 import { Routes, Route as ReactRoute, BrowserRouter, Link } from 'react-router-dom';
 
@@ -107,9 +108,10 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <AuthContext.Consumer>
-          {({ auth, logout }) => {
+          {({ auth, logout, context }) => {
             return (
               <>
+                {context.alert && <Alert alert={context.alert} onClose={() => {}} />}
                 <Navigation auth={auth} logout={logout} />
                 {auth.auth && (
                   <Routes>
