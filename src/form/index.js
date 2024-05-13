@@ -11,6 +11,7 @@ export default function FormComponent({ editNode, url, title }) {
   const [formTitle, setFormTitle] = useState('');
   const [formBody, setFormBody] = useState('');
   const [formImage, setFormImage] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (editNode) {
@@ -24,12 +25,16 @@ export default function FormComponent({ editNode, url, title }) {
 
   const createDoc = useCallback(() => {
     if (!formTitle || !formBody) return;
+    setSubmitting(true);
     axiosInstance
       .post(url, { title: formTitle, body: formBody, images: [{ name: formImage }], author_id: 1 })
       .then(() => {
+        setSubmitting(false);
         navigate('/', { replace: true });
       })
-      .catch((err) => {});
+      .catch(() => {
+        setSubmitting(false);
+      });
   }, [formTitle, formBody, formImage]);
 
   const uploadFile = (selectedFile) => {
@@ -160,7 +165,7 @@ export default function FormComponent({ editNode, url, title }) {
           )}
           <div>
             <button className='black-bg' onClick={createDoc}>
-              Create
+              {submitting ? 'Creating Book' : 'Create'}
             </button>
           </div>
         </div>

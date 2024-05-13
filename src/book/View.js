@@ -11,9 +11,9 @@ import { axiosInstance } from '../query';
 const View = () => {
   const { bookId } = useParams();
   const book_id = parseInt(bookId);
-  const [books, setBooks] = useState(null);
+  const [bookNodes, setBookNodes] = useState(null);
   const [mainChapter, setMainchapter] = useState(null);
-  const [page_id, setPageId] = useState('');
+  // const [page_id, setPageId] = useState('');
   const [mainNode, setMainNode] = useState(null);
   const [nav_id, setNavId] = useState(null);
   const [childNodes, setChildNodes] = useState([]);
@@ -27,19 +27,19 @@ const View = () => {
         const mainNode_ = books_ && books_[0];
         const childNodes_ = books_.slice(1);
         if (mainNode_) {
-          setMainchapter(mainNode_);
-          setBooks(books_);
           setMainNode(mainNode_);
-          setNavId(mainNode_.uid);
+          setMainchapter(mainNode_);
           setNavNodes(childNodes_);
-          setPageId(mainNode_.uid);
+          setBookNodes(books_);
+          setNavId(mainNode_.uid);
+          // setPageId(mainNode_.uid);
         }
       });
     }
   }, [book_id]);
 
-  if (!books) return null;
-  if (!page_id) return null;
+  if (!bookNodes) return null;
+  // if (!page_id) return null;
 
   const image = extractImage(mainNode.images);
   return (
@@ -61,23 +61,23 @@ const View = () => {
               {mainChapter.title}
             </div>
           </div>
-          {navNodes.map((book_node) => {
+          {navNodes.map((chapter) => {
             return (
-              <div key={book_node.uid}>
+              <div key={chapter.uid}>
                 <div className='chapter-nav-con'>
                   <div
                     className='chapter-nav'
                     onClick={(e) => {
                       e.stopPropagation();
-                      setChildNodes(book_node.child);
-                      setMainNode(book_node);
-                      setNavId(book_node.uid);
+                      setMainNode(chapter);
+                      setNavId(chapter.uid);
+                      setChildNodes([]);
                       setNavOpen(true);
                     }}
                   >
-                    <div style={{ width: '90%' }}>{book_node.title}</div>
+                    <div style={{ width: '90%' }}>{chapter.title}</div>
                     <div>
-                      {mainNode.uid === book_node.uid && navOpen ? (
+                      {mainNode.uid === chapter.uid && navOpen ? (
                         <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
                       ) : (
                         <MdOutlineKeyboardArrowRight
@@ -91,8 +91,8 @@ const View = () => {
                     </div>
                   </div>
                 </div>
-                {nav_id === book_node.uid &&
-                  book_node.child.map((section) => {
+                {nav_id === chapter.uid &&
+                  chapter.child.map((section) => {
                     return (
                       <div
                         key={section.uid}
