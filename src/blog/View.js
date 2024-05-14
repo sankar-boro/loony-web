@@ -6,7 +6,7 @@ import { extractImage, orderBlogNodes } from 'loony-utils';
 import { LuFileWarning } from 'react-icons/lu';
 import { LuFileEdit } from 'react-icons/lu';
 
-const View = () => {
+const View = ({ isMobile }) => {
   const { blogId } = useParams();
   const blog_id = parseInt(blogId);
   const [blogs, setBlogs] = useState(null);
@@ -37,18 +37,21 @@ const View = () => {
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
-        <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
-          {(blogs && blogs).map((blog_node) => {
-            return (
-              <div className='chapter-nav-con' key={blog_node.uid}>
-                <div className='chapter-nav'>{blog_node.title}</div>
-              </div>
-            );
-          })}
-        </div>
+        {!isMobile ? (
+          <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
+            {(blogs && blogs).map((blog_node) => {
+              return (
+                <div className='chapter-nav-con' key={blog_node.uid}>
+                  <div className='chapter-nav'>{blog_node.title}</div>
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
+
         <div
           style={{
-            width: '60%',
+            width: isMobile ? '100%' : '60%',
             paddingTop: 15,
             paddingLeft: '5%',
             paddingRight: '5%',
@@ -84,23 +87,25 @@ const View = () => {
             );
           })}
         </div>
-        <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
-          <ul style={{ paddingLeft: 0, listStyle: 'none' }} className='list-item'>
-            <li>
-              <LuFileEdit color='#2d2d2d' size={16} />
+        {!isMobile ? (
+          <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
+            <ul style={{ paddingLeft: 0, listStyle: 'none' }} className='list-item'>
+              <li>
+                <LuFileEdit color='#2d2d2d' size={16} />
 
-              <Link
-                to={`/edit/blog/${blog_id}`}
-                style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}
-              >
-                Edit this page
-              </Link>
-            </li>
-            <li>
-              <LuFileWarning color='#2d2d2d' size={16} /> Report
-            </li>
-          </ul>
-        </div>
+                <Link
+                  to={`/edit/blog/${blog_id}`}
+                  style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}
+                >
+                  Edit this page
+                </Link>
+              </li>
+              <li>
+                <LuFileWarning color='#2d2d2d' size={16} /> Report
+              </li>
+            </ul>
+          </div>
+        ) : null}
       </div>
     </div>
   );

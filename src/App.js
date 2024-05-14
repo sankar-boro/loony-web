@@ -15,11 +15,9 @@ import { AuthContext, AuthProvider } from './context/AuthContext';
 import { LuMenu } from 'react-icons/lu';
 import { LiaUserSolid } from 'react-icons/lia';
 import { Routes, Route as ReactRoute, BrowserRouter, Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const verifyWidth = 720;
-const Navigation = ({ auth, logout, setMobileNavOpen }) => {
-  const windowWidth = window.innerWidth;
+const Navigation = ({ auth, logout, setMobileNavOpen, isMobile }) => {
   const logoutUser = () => {
     axiosInstance.post('/auth/logout').then(() => {
       logout();
@@ -31,7 +29,7 @@ const Navigation = ({ auth, logout, setMobileNavOpen }) => {
         <div className='flex-row' style={{ height: 55 }}>
           <div style={{ flex: 2 }}>
             <div style={{ height: 55, display: 'flex', alignItems: 'center' }}>
-              {windowWidth <= verifyWidth ? (
+              {isMobile ? (
                 <LuMenu
                   color='white'
                   size={32}
@@ -70,7 +68,7 @@ const Navigation = ({ auth, logout, setMobileNavOpen }) => {
                 <div
                   className='dropdown-content list-items'
                   style={{
-                    right: windowWidth <= verifyWidth ? 10 : null,
+                    right: isMobile ? 10 : null,
                   }}
                 >
                   <ul>
@@ -103,7 +101,7 @@ const Navigation = ({ auth, logout, setMobileNavOpen }) => {
                   className='profile-content list-items'
                   style={{
                     marginLeft: -15,
-                    right: windowWidth <= verifyWidth ? 10 : null,
+                    right: isMobile ? 10 : null,
                   }}
                 >
                   <ul>
@@ -130,6 +128,12 @@ const Navigation = ({ auth, logout, setMobileNavOpen }) => {
 };
 function App() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (window.innerWidth <= 720) {
+      setIsMobile(true);
+    }
+  }, []);
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -138,27 +142,36 @@ function App() {
             return (
               <>
                 {context.alert && <Alert alert={context.alert} onClose={() => {}} />}
-                <Navigation auth={auth} logout={logout} setMobileNavOpen={setMobileNavOpen} />
+                <Navigation
+                  auth={auth}
+                  logout={logout}
+                  setMobileNavOpen={setMobileNavOpen}
+                  isMobile={isMobile}
+                />
                 {auth.auth && (
                   <Routes>
-                    <ReactRoute path='/' element={<Home />} />
+                    <ReactRoute path='/' element={<Home isMobile={isMobile} />} />
                     <ReactRoute
                       path='/view/book/:bookId'
                       element={
                         <BookView
                           setMobileNavOpen={setMobileNavOpen}
                           mobileNavOpen={mobileNavOpen}
+                          isMobile={isMobile}
                         />
                       }
                     />
-                    <ReactRoute path='/view/blog/:blogId' element={<BlogView />} />
+                    <ReactRoute
+                      path='/view/blog/:blogId'
+                      element={<BlogView isMobile={isMobile} />}
+                    />
                     <ReactRoute
                       path='/create/book'
-                      element={<Create url={CREATE_BOOK} title='Create Book' />}
+                      element={<Create url={CREATE_BOOK} title='Create Book' isMobile={isMobile} />}
                     />
                     <ReactRoute
                       path='/create/blog'
-                      element={<Create url={CREATE_BLOG} title='Create Blog' />}
+                      element={<Create url={CREATE_BLOG} title='Create Blog' isMobile={isMobile} />}
                     />
                     <ReactRoute
                       path='/edit/book/:bookId'
@@ -166,19 +179,23 @@ function App() {
                         <EditBook
                           setMobileNavOpen={setMobileNavOpen}
                           mobileNavOpen={mobileNavOpen}
+                          isMobile={isMobile}
                         />
                       }
                     />
-                    <ReactRoute path='/edit/blog/:blogId' element={<EditBlog />} />
-                    <ReactRoute path='/profile' element={<Profile />} />
+                    <ReactRoute
+                      path='/edit/blog/:blogId'
+                      element={<EditBlog isMobile={isMobile} />}
+                    />
+                    <ReactRoute path='/profile' element={<Profile isMobile={isMobile} />} />
                     <ReactRoute path='*' element={<div>Route error</div>} />
                   </Routes>
                 )}
                 {!auth.auth && (
                   <Routes>
-                    <ReactRoute path='/' element={<Home />} />
-                    <ReactRoute path='/login' element={<Login />} />
-                    <ReactRoute path='/signup' element={<Signup />} />
+                    <ReactRoute path='/' element={<Home isMobile={isMobile} />} />
+                    <ReactRoute path='/login' element={<Login isMobile={isMobile} />} />
+                    <ReactRoute path='/signup' element={<Signup isMobile={isMobile} />} />
                   </Routes>
                 )}
               </>

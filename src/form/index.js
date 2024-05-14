@@ -7,7 +7,7 @@ import {} from 'react-router-dom';
 import 'react-easy-crop/react-easy-crop.css';
 import { AuthContext } from '../context/AuthContext';
 
-export default function FormComponent({ editNode, url, title }) {
+export default function FormComponent({ editNode, url, title, isMobile }) {
   const navigate = useNavigate();
   const { setAuthContext } = useContext(AuthContext);
   const [formTitle, setFormTitle] = useState('');
@@ -62,7 +62,10 @@ export default function FormComponent({ editNode, url, title }) {
   const changeFile = uploadFile;
 
   return (
-    <div className='book-container'>
+    <div
+      className='book-container'
+      style={{ width: isMobile ? '90%' : '', paddingLeft: 'auto', paddingRight: 'auto' }}
+    >
       <h2>{title}</h2>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ flex: 1 }}>
@@ -176,9 +179,11 @@ export default function FormComponent({ editNode, url, title }) {
             </button>
           </div>
         </div>
-        <div style={{ flex: 1, padding: 25 }}>
-          <MarkdownPreview source={formBody} wrapperElement={{ 'data-color-mode': 'light' }} />
-        </div>
+        {!isMobile ? (
+          <div style={{ flex: 1, padding: 25 }}>
+            <MarkdownPreview source={formBody} wrapperElement={{ 'data-color-mode': 'light' }} />
+          </div>
+        ) : null}
       </div>
     </div>
   );

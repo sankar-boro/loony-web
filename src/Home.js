@@ -22,7 +22,7 @@ const Home = () => {
     <div className='book-container'>
       <div className='app-body'>
         <h3>Blogs</h3>
-        <div className='flex-row'>
+        <div className='flex-row' style={{ flexWrap: 'wrap' }}>
           {blogs.map((blog) => {
             const images = blog.images ? JSON.parse(blog.images) : [];
             const image = images.length > 0 ? images[0] : null;
@@ -61,7 +61,7 @@ const Home = () => {
           })}
         </div>
         <h3>Books</h3>
-        <div className='flex-row'>
+        <div className='flex-row' style={{ flexWrap: 'wrap' }}>
           {books.map((book) => {
             const image = JSON.parse(book.images)[0];
             return (
@@ -99,6 +99,7 @@ const Home = () => {
           })}
         </div>
       </div>
+      <div style={{ height: 50 }} />
     </div>
   );
 };

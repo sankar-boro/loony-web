@@ -406,10 +406,13 @@ select {
 
 @media (max-width: 480px) {
   .card {
-    width: calc(100% - 30px);
+    width: calc(100% - 10px);
+    flex-wrap: wrap;
   }
   .book-container {
-    width: 100%;
+    width: calc(100% - 20px);
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 

@@ -8,15 +8,11 @@ import MarkdownPreview from '@uiw/react-markdown-preview';
 import { useParams, Link } from 'react-router-dom';
 import { axiosInstance } from '../query';
 
-const verifyWidth = 720;
-
-const View = ({ mobileNavOpen, setMobileNavOpen }) => {
-  const windowWidth = window.innerWidth;
+const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   const { bookId } = useParams();
   const book_id = parseInt(bookId);
   const [bookNodes, setBookNodes] = useState(null);
   const [mainChapter, setMainchapter] = useState(null);
-  // const [page_id, setPageId] = useState('');
   const [mainNode, setMainNode] = useState(null);
   const [nav_id, setNavId] = useState(null);
   const [childNodes, setChildNodes] = useState([]);
@@ -51,7 +47,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen }) => {
         {/*
          * @ Left Navigation
          */}
-        {windowWidth <= verifyWidth && mobileNavOpen ? (
+        {isMobile && mobileNavOpen ? (
           <div
             style={{
               position: 'fixed',
@@ -141,7 +137,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen }) => {
             </div>
           </div>
         ) : null}
-        {windowWidth >= verifyWidth ? (
+        {!isMobile ? (
           <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
             <div className='chapter-nav-con'>
               <div
@@ -216,7 +212,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen }) => {
          */}
         <div
           style={{
-            width: windowWidth <= verifyWidth ? '90%' : '60%',
+            width: isMobile ? '90%' : '60%',
             paddingTop: 15,
             paddingLeft: '5%',
             paddingRight: '5%',
@@ -255,13 +251,12 @@ const View = ({ mobileNavOpen, setMobileNavOpen }) => {
               </div>
             );
           })}
+          <div style={{ height: 50 }} />
         </div>
         {/*
          * @Page End
          */}
-        {windowWidth >= verifyWidth ? (
-          <RightBookContainer node={mainNode} book_id={book_id} />
-        ) : null}
+        {!isMobile ? <RightBookContainer node={mainNode} book_id={book_id} /> : null}
       </div>
     </div>
   );
