@@ -8,7 +8,10 @@ import MarkdownPreview from '@uiw/react-markdown-preview';
 import { useParams, Link } from 'react-router-dom';
 import { axiosInstance } from '../query';
 
+const verifyWidth = 720;
+
 const View = () => {
+  const windowWidth = window.innerWidth;
   const { bookId } = useParams();
   const book_id = parseInt(bookId);
   const [bookNodes, setBookNodes] = useState(null);
@@ -48,70 +51,72 @@ const View = () => {
         {/*
          * @ Left Navigation
          */}
-        <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
-          <div className='chapter-nav-con'>
-            <div
-              className='chapter-nav'
-              onClick={(e) => {
-                e.stopPropagation();
-                setMainNode(mainChapter);
-                setChildNodes(mainChapter.child);
-              }}
-            >
-              {mainChapter.title}
+        {windowWidth >= verifyWidth ? (
+          <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
+            <div className='chapter-nav-con'>
+              <div
+                className='chapter-nav'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setMainNode(mainChapter);
+                  setChildNodes(mainChapter.child);
+                }}
+              >
+                {mainChapter.title}
+              </div>
             </div>
-          </div>
-          {navNodes.map((chapter) => {
-            return (
-              <div key={chapter.uid}>
-                <div className='chapter-nav-con'>
-                  <div
-                    className='chapter-nav'
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setMainNode(chapter);
-                      setNavId(chapter.uid);
-                      setChildNodes([]);
-                      setNavOpen(true);
-                    }}
-                  >
-                    <div style={{ width: '90%' }}>{chapter.title}</div>
-                    <div>
-                      {mainNode.uid === chapter.uid && navOpen ? (
-                        <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
-                      ) : (
-                        <MdOutlineKeyboardArrowRight
-                          size={16}
-                          color='#2d2d2d'
-                          onClick={() => {
-                            setNavOpen(false);
-                          }}
-                        />
-                      )}
+            {navNodes.map((chapter) => {
+              return (
+                <div key={chapter.uid}>
+                  <div className='chapter-nav-con'>
+                    <div
+                      className='chapter-nav'
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setMainNode(chapter);
+                        setNavId(chapter.uid);
+                        setChildNodes([]);
+                        setNavOpen(true);
+                      }}
+                    >
+                      <div style={{ width: '90%' }}>{chapter.title}</div>
+                      <div>
+                        {mainNode.uid === chapter.uid && navOpen ? (
+                          <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
+                        ) : (
+                          <MdOutlineKeyboardArrowRight
+                            size={16}
+                            color='#2d2d2d'
+                            onClick={() => {
+                              setNavOpen(false);
+                            }}
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
+                  {nav_id === chapter.uid &&
+                    chapter.child.map((section) => {
+                      return (
+                        <div
+                          key={section.uid}
+                          className='section-nav'
+                          style={{ paddingLeft: 20 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setMainNode(section);
+                            setChildNodes(section.child);
+                          }}
+                        >
+                          {section.title}
+                        </div>
+                      );
+                    })}
                 </div>
-                {nav_id === chapter.uid &&
-                  chapter.child.map((section) => {
-                    return (
-                      <div
-                        key={section.uid}
-                        className='section-nav'
-                        style={{ paddingLeft: 20 }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setMainNode(section);
-                          setChildNodes(section.child);
-                        }}
-                      >
-                        {section.title}
-                      </div>
-                    );
-                  })}
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        ) : null}
         {/*
          * @ Left Navigation End
          */}
@@ -121,7 +126,7 @@ const View = () => {
          */}
         <div
           style={{
-            width: '60%',
+            width: windowWidth <= verifyWidth ? '90%' : '60%',
             paddingTop: 15,
             paddingLeft: '5%',
             paddingRight: '5%',
@@ -164,7 +169,9 @@ const View = () => {
         {/*
          * @Page End
          */}
-        <RightBookContainer node={mainNode} book_id={book_id} />
+        {windowWidth >= verifyWidth ? (
+          <RightBookContainer node={mainNode} book_id={book_id} />
+        ) : null}
       </div>
     </div>
   );

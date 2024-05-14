@@ -8,14 +8,17 @@ import Profile from './profile';
 import Login from './auth/Login';
 import Signup from './auth/Signup';
 import Alert from './Alert';
+import { axiosInstance } from './query';
 import { CREATE_BOOK, CREATE_BLOG } from './url';
+import { AuthContext, AuthProvider } from './context/AuthContext';
+
+import { LuMenu } from 'react-icons/lu';
+import { LiaUserSolid } from 'react-icons/lia';
 import { Routes, Route as ReactRoute, BrowserRouter, Link } from 'react-router-dom';
 
-import { LiaUserSolid } from 'react-icons/lia';
-import { AuthContext, AuthProvider } from './context/AuthContext';
-import { axiosInstance } from './query';
-
+const verifyWidth = 720;
 const Navigation = ({ auth, logout }) => {
+  const windowWidth = window.innerWidth;
   const logoutUser = () => {
     axiosInstance.post('/auth/logout').then(() => {
       logout();
@@ -27,6 +30,9 @@ const Navigation = ({ auth, logout }) => {
         <div className='flex-row' style={{ height: 55 }}>
           <div style={{ flex: 2 }}>
             <div style={{ height: 55, display: 'flex', alignItems: 'center' }}>
+              {windowWidth <= verifyWidth ? (
+                <LuMenu color='white' size={32} style={{ paddingLeft: 10, paddingRight: 10 }} />
+              ) : null}
               <Link className='nav-item' to='/' style={{ color: 'white' }}>
                 LOONY
               </Link>
@@ -53,7 +59,12 @@ const Navigation = ({ auth, logout }) => {
                 className='create-button'
               >
                 <button style={{ fontWeight: 'bold' }}>Create</button>
-                <div className='dropdown-content list-items'>
+                <div
+                  className='dropdown-content list-items'
+                  style={{
+                    right: windowWidth <= verifyWidth ? 10 : null,
+                  }}
+                >
                   <ul>
                     <li>
                       <Link to='/create/book' state={{}}>
@@ -80,7 +91,13 @@ const Navigation = ({ auth, logout }) => {
                 className='profile-button'
               >
                 <LiaUserSolid size={32} />
-                <div className='profile-content list-items' style={{ marginLeft: -15 }}>
+                <div
+                  className='profile-content list-items'
+                  style={{
+                    marginLeft: -15,
+                    right: windowWidth <= verifyWidth ? 10 : null,
+                  }}
+                >
                   <ul>
                     {auth.auth ? (
                       <li>
