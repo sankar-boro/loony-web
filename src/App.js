@@ -15,9 +15,10 @@ import { AuthContext, AuthProvider } from './context/AuthContext';
 import { LuMenu } from 'react-icons/lu';
 import { LiaUserSolid } from 'react-icons/lia';
 import { Routes, Route as ReactRoute, BrowserRouter, Link } from 'react-router-dom';
+import { useState } from 'react';
 
 const verifyWidth = 720;
-const Navigation = ({ auth, logout }) => {
+const Navigation = ({ auth, logout, setMobileNavOpen }) => {
   const windowWidth = window.innerWidth;
   const logoutUser = () => {
     axiosInstance.post('/auth/logout').then(() => {
@@ -31,7 +32,14 @@ const Navigation = ({ auth, logout }) => {
           <div style={{ flex: 2 }}>
             <div style={{ height: 55, display: 'flex', alignItems: 'center' }}>
               {windowWidth <= verifyWidth ? (
-                <LuMenu color='white' size={32} style={{ paddingLeft: 10, paddingRight: 10 }} />
+                <LuMenu
+                  color='white'
+                  size={32}
+                  style={{ paddingLeft: 10, paddingRight: 10 }}
+                  onClick={() => {
+                    setMobileNavOpen((prevState) => !prevState);
+                  }}
+                />
               ) : null}
               <Link className='nav-item' to='/' style={{ color: 'white' }}>
                 LOONY
@@ -121,6 +129,7 @@ const Navigation = ({ auth, logout }) => {
   );
 };
 function App() {
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -129,11 +138,19 @@ function App() {
             return (
               <>
                 {context.alert && <Alert alert={context.alert} onClose={() => {}} />}
-                <Navigation auth={auth} logout={logout} />
+                <Navigation auth={auth} logout={logout} setMobileNavOpen={setMobileNavOpen} />
                 {auth.auth && (
                   <Routes>
                     <ReactRoute path='/' element={<Home />} />
-                    <ReactRoute path='/view/book/:bookId' element={<BookView />} />
+                    <ReactRoute
+                      path='/view/book/:bookId'
+                      element={
+                        <BookView
+                          setMobileNavOpen={setMobileNavOpen}
+                          mobileNavOpen={mobileNavOpen}
+                        />
+                      }
+                    />
                     <ReactRoute path='/view/blog/:blogId' element={<BlogView />} />
                     <ReactRoute
                       path='/create/book'
@@ -143,7 +160,15 @@ function App() {
                       path='/create/blog'
                       element={<Create url={CREATE_BLOG} title='Create Blog' />}
                     />
-                    <ReactRoute path='/edit/book/:bookId' element={<EditBook />} />
+                    <ReactRoute
+                      path='/edit/book/:bookId'
+                      element={
+                        <EditBook
+                          setMobileNavOpen={setMobileNavOpen}
+                          mobileNavOpen={mobileNavOpen}
+                        />
+                      }
+                    />
                     <ReactRoute path='/edit/blog/:blogId' element={<EditBlog />} />
                     <ReactRoute path='/profile' element={<Profile />} />
                     <ReactRoute path='*' element={<div>Route error</div>} />

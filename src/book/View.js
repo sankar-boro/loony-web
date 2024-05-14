@@ -10,7 +10,7 @@ import { axiosInstance } from '../query';
 
 const verifyWidth = 720;
 
-const View = () => {
+const View = ({ mobileNavOpen, setMobileNavOpen }) => {
   const windowWidth = window.innerWidth;
   const { bookId } = useParams();
   const book_id = parseInt(bookId);
@@ -51,6 +51,96 @@ const View = () => {
         {/*
          * @ Left Navigation
          */}
+        {windowWidth <= verifyWidth && mobileNavOpen ? (
+          <div
+            style={{
+              position: 'fixed',
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgb(0,0,0,0.5)',
+              zIndex: 10,
+            }}
+            onClick={() => {
+              setMobileNavOpen(false);
+            }}
+          >
+            <div
+              style={{
+                width: 320,
+                backgroundColor: 'white',
+                maxWidth: '100%',
+                height: '100%',
+                position: 'relative',
+                top: -5,
+              }}
+            >
+              <div style={{ width: '100%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
+                <div className='chapter-nav-con'>
+                  <div
+                    className='chapter-nav'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMainNode(mainChapter);
+                      setChildNodes(mainChapter.child);
+                    }}
+                  >
+                    {mainChapter.title}
+                  </div>
+                </div>
+                {navNodes.map((chapter) => {
+                  return (
+                    <div key={chapter.uid}>
+                      <div className='chapter-nav-con'>
+                        <div
+                          className='chapter-nav'
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setMainNode(chapter);
+                            setNavId(chapter.uid);
+                            setChildNodes([]);
+                            setNavOpen(true);
+                          }}
+                        >
+                          <div style={{ width: '90%' }}>{chapter.title}</div>
+                          <div>
+                            {mainNode.uid === chapter.uid && navOpen ? (
+                              <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
+                            ) : (
+                              <MdOutlineKeyboardArrowRight
+                                size={16}
+                                color='#2d2d2d'
+                                onClick={() => {
+                                  setNavOpen(false);
+                                }}
+                              />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      {nav_id === chapter.uid &&
+                        chapter.child.map((section) => {
+                          return (
+                            <div
+                              key={section.uid}
+                              className='section-nav'
+                              style={{ paddingLeft: 20 }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setMainNode(section);
+                                setChildNodes(section.child);
+                              }}
+                            >
+                              {section.title}
+                            </div>
+                          );
+                        })}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        ) : null}
         {windowWidth >= verifyWidth ? (
           <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
             <div className='chapter-nav-con'>
