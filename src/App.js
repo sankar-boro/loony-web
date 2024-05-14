@@ -51,40 +51,43 @@ const Navigation = ({ auth, logout, setMobileNavOpen, isMobile }) => {
                 height: 55,
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'flex-end',
               }}
             >
-              <div
-                style={{
-                  color: 'white',
-                  textDecoration: 'none',
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: 120,
-                }}
-                className='create-button'
-              >
-                <button style={{ fontWeight: 'bold' }}>Create</button>
+              {auth.auth ? (
                 <div
-                  className='dropdown-content list-items'
                   style={{
-                    right: isMobile ? 10 : null,
+                    color: 'white',
+                    textDecoration: 'none',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: 120,
                   }}
+                  className='create-button'
                 >
-                  <ul>
-                    <li>
-                      <Link to='/create/book' state={{}}>
-                        Create Book
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to='/create/blog' state={{}}>
-                        Create Blog
-                      </Link>
-                    </li>
-                  </ul>
+                  <button style={{ fontWeight: 'bold' }}>Create</button>
+                  <div
+                    className='dropdown-content list-items'
+                    style={{
+                      right: isMobile ? 10 : null,
+                    }}
+                  >
+                    <ul>
+                      <li>
+                        <Link to='/create/book' state={{}}>
+                          Create Book
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to='/create/blog' state={{}}>
+                          Create Blog
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              ) : null}
 
               <div
                 style={{
@@ -93,6 +96,7 @@ const Navigation = ({ auth, logout, setMobileNavOpen, isMobile }) => {
                   height: '100%',
                   display: 'flex',
                   alignItems: 'center',
+                  marginRight: 20,
                 }}
                 className='profile-button'
               >
@@ -196,6 +200,20 @@ function App() {
                     <ReactRoute path='/' element={<Home isMobile={isMobile} />} />
                     <ReactRoute path='/login' element={<Login isMobile={isMobile} />} />
                     <ReactRoute path='/signup' element={<Signup isMobile={isMobile} />} />
+                    <ReactRoute
+                      path='/view/book/:bookId'
+                      element={
+                        <BookView
+                          setMobileNavOpen={setMobileNavOpen}
+                          mobileNavOpen={mobileNavOpen}
+                          isMobile={isMobile}
+                        />
+                      }
+                    />
+                    <ReactRoute
+                      path='/view/blog/:blogId'
+                      element={<BlogView isMobile={isMobile} />}
+                    />
                   </Routes>
                 )}
               </>

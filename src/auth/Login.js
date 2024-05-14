@@ -3,7 +3,7 @@ import { axiosInstance } from '../query';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({ isMobile }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [viewPassword, setViewPassword] = useState(false);
@@ -41,33 +41,35 @@ const Login = () => {
             marginRight: 'auto',
           }}
         >
-          <div
-            style={{
-              width: '50%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
+          {!isMobile ? (
             <div
               style={{
+                width: '50%',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                width: '80%',
               }}
             >
-              {/* <img src={require('../../assets/images/login.png')} style={{ width: '100%' }} /> */}
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  width: '80%',
+                }}
+              >
+                {/* <img src={require('../../assets/images/login.png')} style={{ width: '100%' }} /> */}
+              </div>
+              <div style={{ marginBlock: 20 }}>
+                <div style={{ fontWeight: 'bold', fontSize: 32 }}>Loony</div>
+              </div>
             </div>
-            <div style={{ marginBlock: 20 }}>
-              <div style={{ fontWeight: 'bold', fontSize: 32 }}>Loony</div>
-            </div>
-          </div>
+          ) : null}
           <div
             style={{
-              width: '50%',
+              width: isMobile ? '94%' : '50%',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
