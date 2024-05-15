@@ -5,6 +5,7 @@ import { axiosInstance } from '../query';
 import { extractImage, orderBlogNodes } from 'loony-utils';
 import { LuFileWarning } from 'react-icons/lu';
 import { LuFileEdit } from 'react-icons/lu';
+import PageLoader from '../components/PageLoader';
 
 const View = ({ isMobile }) => {
   const { blogId } = useParams();
@@ -33,7 +34,25 @@ const View = ({ isMobile }) => {
   if (!blogs) return null;
   if (!page_id) return null;
   const image = extractImage(mainNode.images);
-
+  if (!mainNode)
+    return (
+      <div className='book-container'>
+        <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+          <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }} />
+          <div
+            style={{
+              width: '100%',
+              paddingTop: 15,
+              paddingLeft: '5%',
+              background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+              paddingBottom: 50,
+            }}
+          >
+            <PageLoader key_id={1} />
+          </div>
+        </div>
+      </div>
+    );
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>

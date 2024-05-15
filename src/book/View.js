@@ -7,6 +7,7 @@ import MarkdownPreview from '@uiw/react-markdown-preview';
 
 import { useParams, Link } from 'react-router-dom';
 import { axiosInstance } from '../query';
+import PageLoader from '../components/PageLoader';
 
 const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   const { bookId } = useParams();
@@ -31,16 +32,34 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
           setNavNodes(childNodes_);
           setBookNodes(books_);
           setNavId(mainNode_.uid);
-          // setPageId(mainNode_.uid);
         }
       });
     }
   }, [book_id]);
 
   if (!bookNodes) return null;
-  // if (!page_id) return null;
 
   const image = extractImage(mainNode.images);
+
+  if (!mainChapter)
+    return (
+      <div className='book-container'>
+        <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+          <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }} />
+          <div
+            style={{
+              width: '100%',
+              paddingTop: 15,
+              paddingLeft: '5%',
+              background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+              paddingBottom: 50,
+            }}
+          >
+            <PageLoader key_id={1} />
+          </div>
+        </div>
+      </div>
+    );
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>

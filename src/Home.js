@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { axiosInstance } from './query';
 import { useNavigate } from 'react-router-dom';
+import CardLoader from './components/CardLoader';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -12,7 +13,6 @@ const Home = () => {
     axiosInstance.get('/blog/get_all_blogs').then(({ data }) => {
       setBlogs(data.data);
     });
-
     axiosInstance.get('/book/get_all_books').then(({ data }) => {
       setBooks(data.data);
     });
@@ -23,6 +23,11 @@ const Home = () => {
       <div className='app-body'>
         <h3>Blogs</h3>
         <div className='flex-row' style={{ flexWrap: 'wrap' }}>
+          {blogs.length === 0
+            ? [1, 2, 3, 4].map((key_id) => {
+                return <CardLoader key_id={key_id} />;
+              })
+            : null}
           {blogs.map((blog) => {
             const images = blog.images ? JSON.parse(blog.images) : [];
             const image = images.length > 0 ? images[0] : null;
@@ -62,6 +67,11 @@ const Home = () => {
         </div>
         <h3>Books</h3>
         <div className='flex-row' style={{ flexWrap: 'wrap' }}>
+          {books.length === 0
+            ? [1, 2, 3, 4].map((key_id) => {
+                return <CardLoader key_id={key_id} />;
+              })
+            : null}
           {books.map((book) => {
             const image = JSON.parse(book.images)[0];
             return (
