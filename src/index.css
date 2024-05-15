@@ -397,7 +397,9 @@ select {
 
 @media (max-width: 768px) {
   .card {
-    width: calc(50% - 20px);
+    width: calc(100% - 20px);
+    padding-left: 10px;
+    padding-right: 10px;
   }
   .book-container {
     width: 100%;

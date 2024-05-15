@@ -8,16 +8,19 @@ import Profile from './profile';
 import Login from './auth/Login';
 import Signup from './auth/Signup';
 import Alert from './Alert';
+import NotFound from './error/NotFound';
+import AuthError from './error/AuthError';
 import { axiosInstance } from './query';
 import { CREATE_BOOK, CREATE_BLOG } from './url';
 import { AuthContext, AuthProvider } from './context/AuthContext';
 
 import { LuMenu } from 'react-icons/lu';
 import { LiaUserSolid } from 'react-icons/lia';
-import { Routes, Route as ReactRoute, BrowserRouter, Link } from 'react-router-dom';
+import { Routes, Route as ReactRoute, BrowserRouter, Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 const Navigation = ({ auth, logout, setMobileNavOpen, isMobile }) => {
+  const navigate = useNavigate();
   const logoutUser = () => {
     axiosInstance.post('/auth/logout').then(() => {
       logout();
@@ -89,40 +92,45 @@ const Navigation = ({ auth, logout, setMobileNavOpen, isMobile }) => {
                 </div>
               ) : null}
 
-              <div
-                style={{
-                  color: 'white',
-                  textDecoration: 'none',
-                  height: '100%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  marginRight: 20,
-                }}
-                className='profile-button'
-              >
-                <LiaUserSolid size={32} />
+              {auth.auth ? (
                 <div
-                  className='profile-content list-items'
                   style={{
-                    marginLeft: -15,
-                    right: isMobile ? 10 : null,
+                    color: 'white',
+                    textDecoration: 'none',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    marginRight: 20,
                   }}
+                  className='profile-button'
                 >
-                  <ul>
-                    {auth.auth ? (
+                  <LiaUserSolid size={32} />
+                  <div
+                    className='profile-content list-items'
+                    style={{
+                      marginLeft: -15,
+                      right: isMobile ? 10 : null,
+                    }}
+                  >
+                    <ul>
                       <li>
                         <Link to='#' onClick={logoutUser}>
                           Logout
                         </Link>
                       </li>
-                    ) : (
-                      <li>
-                        <Link to='/login'>Login</Link>
-                      </li>
-                    )}
-                  </ul>
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <button
+                  style={{ fontWeight: 'bold' }}
+                  onClick={() => {
+                    navigate('/login', { replace: true });
+                  }}
+                >
+                  Login
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -192,7 +200,7 @@ function App() {
                       element={<EditBlog isMobile={isMobile} />}
                     />
                     <ReactRoute path='/profile' element={<Profile isMobile={isMobile} />} />
-                    <ReactRoute path='*' element={<div>Route error</div>} />
+                    <ReactRoute path='*' element={<AuthError />} />
                   </Routes>
                 )}
                 {!auth.auth && (
@@ -214,6 +222,9 @@ function App() {
                       path='/view/blog/:blogId'
                       element={<BlogView isMobile={isMobile} />}
                     />
+                    <ReactRoute path='/edit/book/:bookId' element={<AuthError />} />
+                    <ReactRoute path='/edit/blog/:blogId' element={<AuthError />} />
+                    <ReactRoute path='*' element={<NotFound />} />
                   </Routes>
                 )}
               </>

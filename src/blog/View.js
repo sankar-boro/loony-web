@@ -59,7 +59,7 @@ const View = ({ isMobile }) => {
             marginBottom: 24,
           }}
         >
-          <div>
+          <div style={{ marginBottom: 24 }}>
             <div className='page-heading'>{mainNode.title}</div>
             {image && image.name ? (
               <div style={{ width: '100%', borderRadius: 5 }}>
@@ -86,6 +86,7 @@ const View = ({ isMobile }) => {
               </div>
             );
           })}
+          <div style={{ height: 50 }} />
         </div>
         {!isMobile ? (
           <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
@@ -93,10 +94,7 @@ const View = ({ isMobile }) => {
               <li>
                 <LuFileEdit color='#2d2d2d' size={16} />
 
-                <Link
-                  to={`/edit/blog/${blog_id}`}
-                  style={{ color: 'rgb(15, 107, 228)', marginLeft: 5 }}
-                >
+                <Link to={`/edit/blog/${blog_id}`} style={{ marginLeft: 5 }}>
                   Edit this page
                 </Link>
               </li>
