@@ -67,19 +67,18 @@ export default function Edit() {
         .post(`/book/delete_book_node`, submitData)
         .then(({ data }) => {
           const newNodes = deleteBookNode(rawNodes, data, submitData);
-          console.log(newNodes);
-          // setRawNodes(newNodes);
-          // const books_ = orderBookNodes(newNodes);
-          // const mainNode_ = books_ && books_[0];
-          // const childNodes_ = books_.slice(1);
+          setRawNodes(newNodes);
+          const books_ = orderBookNodes(newNodes);
+          const mainNode_ = books_ && books_[0];
+          const childNodes_ = books_.slice(1);
 
-          // if (mainNode_) {
-          //   setMainNode(mainNode_);
-          //   setNavNodes(childNodes_);
-          //   setBookNodes(books_);
-          //   setPageId(mainNode_.uid);
-          //   setModal('');
-          // }
+          if (mainNode_) {
+            setMainNode(mainNode_);
+            setNavNodes(childNodes_);
+            setBookNodes(books_);
+            setPageId(mainNode_.uid);
+            setModal('');
+          }
         })
         .catch((err) => {
           console.log(err);
