@@ -58,36 +58,28 @@ export default function Edit() {
   const deleteNode = () => {
     const delete_node = activeNode;
     if (childNodes) {
-      let updateNode = null;
-      rawNodes.forEach((r) => {
-        if (r.parent_id === delete_node.uid) {
-          updateNode = r;
-        }
-      });
-
       const submitData = {
-        page_id,
         identity: delete_node.identity,
         update_parent_id: delete_node.parent_id,
         delete_node_id: delete_node.uid,
-        update_node_id: updateNode ? updateNode.uid : null,
       };
       axiosInstance
         .post(`/book/delete_book_node`, submitData)
-        .then(() => {
-          const newNodes = deleteBookNode(rawNodes, delete_node, submitData);
-          setRawNodes(newNodes);
-          const books_ = orderBookNodes(newNodes);
-          const mainNode_ = books_ && books_[0];
-          const childNodes_ = books_.slice(1);
+        .then(({ data }) => {
+          const newNodes = deleteBookNode(rawNodes, data, submitData);
+          console.log(newNodes);
+          // setRawNodes(newNodes);
+          // const books_ = orderBookNodes(newNodes);
+          // const mainNode_ = books_ && books_[0];
+          // const childNodes_ = books_.slice(1);
 
-          if (mainNode_) {
-            setMainNode(mainNode_);
-            setNavNodes(childNodes_);
-            setBookNodes(books_);
-            setPageId(mainNode_.uid);
-            setModal('');
-          }
+          // if (mainNode_) {
+          //   setMainNode(mainNode_);
+          //   setNavNodes(childNodes_);
+          //   setBookNodes(books_);
+          //   setPageId(mainNode_.uid);
+          //   setModal('');
+          // }
         })
         .catch((err) => {
           console.log(err);

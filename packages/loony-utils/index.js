@@ -13,13 +13,15 @@ export const deleteBlogNode = (nodes, submitData, delete_node_index) => {
   return copyNodes;
 };
 
-export const deleteBookNode = (allNodes, delete_node, submitData) => {
-  const copyNodes = allNodes.filter((x) => x.uid !== delete_node.uid);
-  copyNodes.forEach((x, i) => {
-    if (x.uid === submitData.update_node_id) {
-      copyNodes[i].parent_id = submitData.update_parent_id;
-    }
-  });
+export const deleteBookNode = (allNodes, res, submitData) => {
+  const copyNodes = allNodes.filter((x) => !res.deleted_ids.includes(x.uid));
+  if (res.update_id) {
+    copyNodes.forEach((x, i) => {
+      if (x.uid === res.update_id) {
+        copyNodes[i].parent_id = submitData.update_parent_id;
+      }
+    });
+  }
   return copyNodes;
 };
 
@@ -203,7 +205,7 @@ export const orderTestNodes = (rawApi, removeIds = []) => {
 
 export const orderBookNodes = (rawApi, removeIds = []) => {
   let data = rawApi;
-  if (removeIds.length > 0) {
+  if (removeIds && removeIds.length > 0) {
     data = rawApi.filter((d) => {
       if (removeIds.includes(d.uid)) {
         return false;
