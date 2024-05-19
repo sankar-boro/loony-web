@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { LuFileEdit } from 'react-icons/lu';
 import { LuFileWarning } from 'react-icons/lu';
-import { extractImage, orderBookNodes } from 'loony-utils';
+import { extractImage, orderBookNodes, orderNodes } from 'loony-utils';
 import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
@@ -15,10 +15,13 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   const [bookNodes, setBookNodes] = useState(null);
   const [mainChapter, setMainchapter] = useState(null);
   const [mainNode, setMainNode] = useState(null);
-  const [nav_id, setNavId] = useState(null);
   const [childNodes, setChildNodes] = useState([]);
   const [navNodes, setNavNodes] = useState([]);
+  const [navChildNodes, setNavChildNodes] = useState([]);
   const [navOpen, setNavOpen] = useState(false);
+  const [page_id, setPageId] = useState(null);
+  const [section_id, setSectionId] = useState(null);
+  const [pages, setPages] = useState({});
 
   useEffect(() => {
     if (book_id) {
@@ -31,11 +34,33 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
           setMainchapter(mainNode_);
           setNavNodes(childNodes_);
           setBookNodes(books_);
-          setNavId(mainNode_.uid);
+          setPageId(mainNode_.uid);
         }
       });
     }
   }, [book_id]);
+
+  useEffect(() => {
+    if (page_id && mainNode.identity === 101) {
+      axiosInstance
+        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${page_id}`)
+        .then(({ data }) => {
+          const res = orderNodes(data.data, mainNode);
+          setNavChildNodes(res);
+        });
+    }
+  }, [book_id, page_id, mainNode]);
+
+  useEffect(() => {
+    if (section_id && mainNode.identity === 102) {
+      axiosInstance
+        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${section_id}`)
+        .then(({ data }) => {
+          const res = orderNodes(data.data, mainNode);
+          setChildNodes(res);
+        });
+    }
+  }, [book_id, section_id, mainNode]);
 
   if (!bookNodes) return null;
 
@@ -60,6 +85,9 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
         </div>
       </div>
     );
+
+  // console.log(section_id, mainNode);
+
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
@@ -111,7 +139,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                           onClick={(e) => {
                             e.stopPropagation();
                             setMainNode(chapter);
-                            setNavId(chapter.uid);
+                            setPageId(chapter.uid);
                             setChildNodes([]);
                             setNavOpen(true);
                           }}
@@ -132,7 +160,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                           </div>
                         </div>
                       </div>
-                      {nav_id === chapter.uid &&
+                      {page_id === chapter.uid &&
                         chapter.child.map((section) => {
                           return (
                             <div
@@ -142,6 +170,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setMainNode(section);
+                                setSectionId(section.uid);
                                 setChildNodes(section.child);
                               }}
                             >
@@ -165,6 +194,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                   e.stopPropagation();
                   setMainNode(mainChapter);
                   setChildNodes(mainChapter.child);
+                  setPageId(mainChapter.uid);
                 }}
               >
                 {mainChapter.title}
@@ -179,7 +209,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                       onClick={(e) => {
                         e.stopPropagation();
                         setMainNode(chapter);
-                        setNavId(chapter.uid);
+                        setPageId(chapter.uid);
                         setChildNodes([]);
                         setNavOpen(true);
                       }}
@@ -200,8 +230,8 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                       </div>
                     </div>
                   </div>
-                  {nav_id === chapter.uid &&
-                    chapter.child.map((section) => {
+                  {page_id === chapter.uid &&
+                    navChildNodes.map((section) => {
                       return (
                         <div
                           key={section.uid}
@@ -210,7 +240,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                           onClick={(e) => {
                             e.stopPropagation();
                             setMainNode(section);
-                            setChildNodes(section.child);
+                            setSectionId(section.uid);
                           }}
                         >
                           {section.title}

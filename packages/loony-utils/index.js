@@ -202,6 +202,25 @@ export const orderBookNodes = (rawApi, removeIds = []) => {
   return chapters;
 };
 
+export const orderNodes = (nodes, parentNode, removeIds) => {
+  let currentNode = parentNode;
+  let results = [];
+
+  while (results.length !== nodes.length) {
+    // eslint-disable-next-line no-loop-func
+    for (let i = 0; i < nodes.length; i++) {
+      const thisNode = nodes[i];
+      if (currentNode.uid === thisNode.parent_id) {
+        results.push(thisNode);
+        currentNode = thisNode;
+        break;
+      }
+    }
+  }
+
+  return results;
+};
+
 export const extractImage = (images) => {
   if (typeof images === 'object') {
     return images[0];
