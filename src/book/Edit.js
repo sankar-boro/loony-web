@@ -30,10 +30,10 @@ export default function Edit() {
   const [mainNode, setMainNode] = useState(null);
   const [childNodes, setChildNodes] = useState([]);
   const [navNodes, setNavNodes] = useState([]);
-  const [nav_id, setNavId] = useState(null);
   const [modal, setModal] = useState('');
-  const [page_id, setPageId] = useState(null);
   const [activeNode, setActiveNode] = useState(null);
+  const [page_id, setPageId] = useState(null);
+  const [section_id, setSectionId] = useState(null);
 
   useEffect(() => {
     if (book_id) {
@@ -48,8 +48,6 @@ export default function Edit() {
           setMainchapter(mainNode_);
           setNavNodes(childNodes_);
           setBookNodes(books_);
-          setNavId(mainNode_.uid);
-          setPageId(mainNode_.uid);
         }
       });
     }
@@ -69,16 +67,19 @@ export default function Edit() {
           const newNodes = deleteBookNode(rawNodes, data, submitData);
           setRawNodes(newNodes);
           const books_ = orderBookNodes(newNodes);
-          const mainNode_ = books_ && books_[0];
-          const childNodes_ = books_.slice(1);
-
-          if (mainNode_) {
-            setMainNode(mainNode_);
-            setNavNodes(childNodes_);
-            setBookNodes(books_);
-            setPageId(mainNode_.uid);
-            setModal('');
+          setBookNodes(books_);
+          let d = [];
+          if (delete_node.identity === 103) {
+            books_.forEach((b) => {
+              b.child.forEach((c) => {
+                if (c.uid === section_id) {
+                  d = c.child;
+                }
+              });
+            });
           }
+          setChildNodes(d);
+          setModal('');
         })
         .catch((err) => {
           console.log(err);
@@ -112,10 +113,11 @@ export default function Edit() {
             <div
               className='chapter-nav'
               onClick={(e) => {
-                e.stopPropagation();
-                setModal('');
                 setMainNode(mainChapter);
                 setChildNodes(mainChapter.child);
+                setPageId(mainChapter.uid);
+                setModal('');
+                e.stopPropagation();
               }}
             >
               {mainChapter.title}
@@ -123,12 +125,12 @@ export default function Edit() {
           </div>
           <div
             className='button-none'
-            onClick={() => {
+            onClick={(e) => {
               setActiveNode(mainChapter);
               setMainNode(mainChapter);
-              setNavId(mainChapter.uid);
               setPageId(mainChapter.uid);
               setModal('add_chapter');
+              e.stopPropagation();
             }}
             style={{ marginRight: 16, paddingTop: 7, paddingBottom: 7 }}
           >
@@ -141,11 +143,10 @@ export default function Edit() {
                   <div
                     className='chapter-nav'
                     onClick={(e) => {
-                      e.stopPropagation();
                       setMainNode(chapter);
-                      setNavId(chapter.uid);
                       setPageId(chapter.uid);
                       setChildNodes([]);
+                      e.stopPropagation();
                     }}
                   >
                     <div style={{ width: '90%' }}>{chapter.title}</div>
@@ -183,16 +184,16 @@ export default function Edit() {
                 </div>
                 {/* Sections */}
                 <div style={{ paddingLeft: 20 }}>
-                  {nav_id === chapter.uid &&
+                  {page_id === chapter.uid &&
                     chapter.child.map((section) => {
                       return (
                         <div key={section.uid} className='section-nav cursor'>
                           <div
                             onClick={(e) => {
-                              e.stopPropagation();
                               setMainNode(section);
                               setChildNodes(section.child);
-                              setPageId(chapter.uid);
+                              setSectionId(section.uid);
+                              e.stopPropagation();
                             }}
                           >
                             {section.title}
@@ -200,10 +201,11 @@ export default function Edit() {
                           <div
                             className='button-none'
                             style={{ paddingTop: 5, paddingBottom: 5 }}
-                            onClick={() => {
+                            onClick={(e) => {
                               setActiveNode(section);
-                              setPageId(chapter.uid);
+                              setSectionId(section.uid);
                               setModal('add_section');
+                              e.stopPropagation();
                             }}
                           >
                             Add Section
