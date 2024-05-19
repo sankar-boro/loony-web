@@ -11,9 +11,9 @@ const AddSubSection = ({
   setRawNodes,
   setBookNodes,
   page_id,
-  setMainNode,
-  setNavNodes,
+  setChildNodes,
   onClose,
+  section_id,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -34,18 +34,23 @@ const AddSubSection = ({
         book_id: parseInt(book_id, 10),
         parent_id: activeNode.uid,
         identity: 103,
-        page_id: page_id || null,
+        page_id: section_id || null,
         images: [{ name: uploadedImage }],
       })
       .then(({ data }) => {
         const newRawNodes = appendBookNode(rawNodes, activeNode, data);
         setRawNodes(newRawNodes);
-        const orderedNodes = orderBookNodes(newRawNodes);
-        const mainNode_ = orderedNodes && orderedNodes[0];
-        const childNodes_ = orderedNodes.slice(1);
-        setMainNode(mainNode_);
-        setNavNodes(childNodes_);
-        setBookNodes(orderedNodes);
+        const books_ = orderBookNodes(newRawNodes);
+        setBookNodes(books_);
+        let d = [];
+        books_.forEach((b) => {
+          b.child.forEach((c) => {
+            if (c.uid === section_id) {
+              d = c.child;
+            }
+          });
+        });
+        setChildNodes(d);
         onCloseModal();
       })
       .catch(() => {

@@ -254,10 +254,11 @@ export default function Edit() {
               {mainNode.identity === 102 ? (
                 <div
                   className='button-none cursor'
-                  onClick={() => {
+                  onClick={(e) => {
                     setActiveNode(mainNode);
-                    setPageId(mainNode.uid);
+                    setSectionId(mainNode.uid);
                     setModal('add_sub_section');
+                    e.stopPropagation();
                   }}
                   style={{ marginRight: 10 }}
                 >
@@ -269,9 +270,10 @@ export default function Edit() {
 
               <div
                 className='button-none cursor'
-                onClick={() => {
+                onClick={(e) => {
                   setActiveNode(mainNode);
                   setModal('delete_page');
+                  e.stopPropagation();
                 }}
               >
                 <div className='btn-action'>
@@ -298,10 +300,10 @@ export default function Edit() {
                     <div className='flex-row'>
                       <div
                         className='button-none cursor'
-                        onClick={() => {
+                        onClick={(e) => {
                           setActiveNode(node);
-                          setPageId(mainNode.uid);
                           setModal('add_sub_section');
+                          e.stopPropagation();
                         }}
                         style={{ marginRight: 16 }}
                       >
@@ -311,10 +313,10 @@ export default function Edit() {
                       </div>
                       <div
                         className='button-none cursor'
-                        onClick={() => {
+                        onClick={(e) => {
                           setActiveNode(node);
-                          setPageId(node.uid);
                           setModal('edit_node');
+                          e.stopPropagation();
                         }}
                         style={{ marginRight: 16 }}
                       >
@@ -324,9 +326,10 @@ export default function Edit() {
                       </div>
                       <div
                         className='delete-button-none cursor'
-                        onClick={() => {
+                        onClick={(e) => {
                           setActiveNode(node);
                           setModal('delete_node');
+                          e.stopPropagation();
                         }}
                       >
                         <div className='btn-action'>
@@ -427,6 +430,7 @@ export default function Edit() {
           rawNodes={rawNodes}
           bookNodes={bookNodes}
           page_id={page_id}
+          section_id={section_id}
           onClose={() => {
             setActiveNode(null);
           }}

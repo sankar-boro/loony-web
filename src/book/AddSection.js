@@ -41,10 +41,15 @@ const AddSection = ({
         const newRawNodes = appendBookNode(rawNodes, activeNode, data);
         setRawNodes(newRawNodes);
         const orderedNodes = orderBookNodes(newRawNodes);
-        const mainNode_ = orderedNodes && orderedNodes[0];
-        const childNodes_ = orderedNodes.slice(1);
-        setMainNode(mainNode_);
-        setNavNodes(childNodes_);
+        let d = null;
+        orderedNodes.forEach((b) => {
+          b.child.forEach((c) => {
+            if (c.uid === data.new_node.uid) {
+              d = c;
+            }
+          });
+        });
+        setMainNode(d);
         setBookNodes(orderedNodes);
         onCloseModal();
       })

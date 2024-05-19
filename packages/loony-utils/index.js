@@ -168,41 +168,6 @@ const groupChapters = (parent_id, chapters) => {
   return orders;
 };
 
-export const orderTestNodes = (rawApi, removeIds = []) => {
-  let data = rawApi;
-  if (removeIds.length > 0) {
-    data = rawApi.filter((d) => {
-      if (removeIds.includes(d.uid)) {
-        return false;
-      }
-      return true;
-    });
-  }
-
-  const allGroups = groupWithIdentity(data);
-  const samples = {
-    allSectionGroups: allGroups[102],
-    allSubSectionGroups: allGroups[103],
-  };
-
-  const allFrontPages = {
-    100: allGroups[100],
-    101: allGroups[101],
-  };
-  // allFrontPages[101] = groupChapters(allGroups[100][0].uid, allFrontPages[101]);
-
-  // const chapters = [];
-  // Object.values(allFrontPages).forEach((frontPageObjectValue) => {
-  //   frontPageObjectValue.forEach((frontPage) => {
-  //     const { newParent, newSiblings } = reOrderFrontPage(frontPage, samples);
-  //     samples.allSectionGroups = newSiblings;
-  //     chapters.push(newParent);
-  //   });
-  // });
-  // return chapters;
-  return [];
-};
-
 export const orderBookNodes = (rawApi, removeIds = []) => {
   let data = rawApi;
   if (removeIds && removeIds.length > 0) {
