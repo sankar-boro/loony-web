@@ -17,6 +17,7 @@ import AddSubSection from './AddSubSection';
 import EditNode from './EditNode';
 import ConfirmAction from './ConfirmAction';
 import { AuthContext } from '../context/AuthContext';
+import PageLoader from '../components/PageLoader';
 
 export default function Edit() {
   const { bookId } = useParams();
@@ -147,6 +148,26 @@ export default function Edit() {
   if (!activeNode) return null;
   if (!nodes101) return null;
   const image = extractImage(activeNode.images);
+
+  if (!frontPage)
+    return (
+      <div className='book-container'>
+        <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+          <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }} />
+          <div
+            style={{
+              width: '100%',
+              paddingTop: 15,
+              paddingLeft: '5%',
+              background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+              paddingBottom: 50,
+            }}
+          >
+            <PageLoader key_id={1} />
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <div className='book-container'>

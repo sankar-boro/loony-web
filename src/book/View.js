@@ -12,60 +12,92 @@ import PageLoader from '../components/PageLoader';
 const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   const { bookId } = useParams();
   const book_id = parseInt(bookId);
-  const [bookNodes, setBookNodes] = useState(null);
-  const [mainChapter, setMainchapter] = useState(null);
-  const [mainNode, setMainNode] = useState(null);
-  const [childNodes, setChildNodes] = useState([]);
-  const [navNodes, setNavNodes] = useState([]);
-  const [navChildNodes, setNavChildNodes] = useState([]);
-  const [navOpen, setNavOpen] = useState(false);
+
+  const [frontPage, setFrontPage] = useState(null);
+  const [nodes101, setNodes101] = useState([]);
+  const [activeNode, setActiveNode] = useState(null);
   const [page_id, setPageId] = useState(null);
   const [section_id, setSectionId] = useState(null);
+  const [activeSectionsByPageId, setActiveSectionsByPageId] = useState([]);
+  const [allSectionsByPageId, setAllSectionsByPageId] = useState({});
+  const [activeSubSectionsBySectionId, setActiveSubSectionsBySectionId] = useState([]);
+  const [allSubSectionsBySectionId, setAllSubSectionsBySectionId] = useState({});
 
   useEffect(() => {
     if (book_id) {
       axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
-        const books_ = orderBookNodes(data.data);
-        const mainNode_ = books_ && books_[0];
-        const childNodes_ = books_.slice(1);
-        if (mainNode_) {
-          setMainNode(mainNode_);
-          setMainchapter(mainNode_);
-          setNavNodes(childNodes_);
-          setBookNodes(books_);
-          setPageId(mainNode_.uid);
+        const bookTree = orderBookNodes(data.data);
+        const thisFrontPage = bookTree && bookTree[0];
+        const pages = bookTree.slice(1);
+
+        if (thisFrontPage) {
+          setFrontPage(thisFrontPage);
+          setActiveNode(thisFrontPage);
+          setNodes101(pages);
+          setPageId(thisFrontPage.uid);
         }
       });
     }
   }, [book_id]);
 
   useEffect(() => {
-    if (page_id && mainNode.identity === 101) {
+    if (book_id) {
+      axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
+        const bookTree = orderBookNodes(data.data);
+        const thisFrontPage = bookTree && bookTree[0];
+        const pages = bookTree.slice(1);
+
+        if (thisFrontPage) {
+          setFrontPage(thisFrontPage);
+          setActiveNode(thisFrontPage);
+          setNodes101(pages);
+          setPageId(thisFrontPage.uid);
+        }
+      });
+    }
+  }, [book_id]);
+
+  useEffect(() => {
+    if (page_id && activeNode.identity === 101 && !allSectionsByPageId[page_id]) {
       axiosInstance
         .get(`/book/get_book_sections?book_id=${book_id}&page_id=${page_id}`)
         .then(({ data }) => {
-          const res = orderNodes(data.data, mainNode);
-          setNavChildNodes(res);
+          const res = orderNodes(data.data, activeNode);
+          setActiveSectionsByPageId(res);
+          setAllSectionsByPageId({
+            ...allSectionsByPageId,
+            [page_id]: res,
+          });
         });
     }
-  }, [book_id, page_id, mainNode]);
+
+    if (allSectionsByPageId[page_id]) {
+      setActiveSectionsByPageId(allSectionsByPageId[page_id]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page_id]);
 
   useEffect(() => {
-    if (section_id && mainNode.identity === 102) {
+    if (section_id && activeNode.identity === 102) {
       axiosInstance
         .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${section_id}`)
         .then(({ data }) => {
-          const res = orderNodes(data.data, mainNode);
-          setChildNodes(res);
+          const res = orderNodes(data.data, activeNode);
+          setActiveSubSectionsBySectionId(res);
+          setAllSubSectionsBySectionId({
+            ...allSubSectionsBySectionId,
+            [page_id]: res,
+          });
         });
     }
-  }, [book_id, section_id, mainNode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [section_id]);
 
-  if (!bookNodes) return null;
+  if (!activeNode) return null;
+  if (!nodes101) return null;
+  const image = extractImage(activeNode.images);
 
-  const image = extractImage(mainNode.images);
-
-  if (!mainChapter)
+  if (!frontPage)
     return (
       <div className='book-container'>
         <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
@@ -114,71 +146,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                 top: -5,
               }}
             >
-              <div style={{ width: '100%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
-                <div className='chapter-nav-con'>
-                  <div
-                    className='chapter-nav'
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setMainNode(mainChapter);
-                      setChildNodes(mainChapter.child);
-                    }}
-                  >
-                    {mainChapter.title}
-                  </div>
-                </div>
-                {navNodes.map((chapter) => {
-                  return (
-                    <div key={chapter.uid}>
-                      <div className='chapter-nav-con'>
-                        <div
-                          className='chapter-nav'
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setMainNode(chapter);
-                            setPageId(chapter.uid);
-                            setChildNodes([]);
-                            setNavOpen(true);
-                          }}
-                        >
-                          <div style={{ width: '90%' }}>{chapter.title}</div>
-                          <div>
-                            {mainNode.uid === chapter.uid && navOpen ? (
-                              <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
-                            ) : (
-                              <MdOutlineKeyboardArrowRight
-                                size={16}
-                                color='#2d2d2d'
-                                onClick={() => {
-                                  setNavOpen(false);
-                                }}
-                              />
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      {page_id === chapter.uid &&
-                        chapter.child.map((section) => {
-                          return (
-                            <div
-                              key={section.uid}
-                              className='section-nav'
-                              style={{ paddingLeft: 20 }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setMainNode(section);
-                                setSectionId(section.uid);
-                                setChildNodes(section.child);
-                              }}
-                            >
-                              {section.title}
-                            </div>
-                          );
-                        })}
-                    </div>
-                  );
-                })}
-              </div>
+              {/* Todo */}
             </div>
           </div>
         ) : null}
@@ -188,16 +156,14 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
               <div
                 className='chapter-nav'
                 onClick={(e) => {
+                  setPageId(frontPage.uid);
                   e.stopPropagation();
-                  setMainNode(mainChapter);
-                  setChildNodes(mainChapter.child);
-                  setPageId(mainChapter.uid);
                 }}
               >
-                {mainChapter.title}
+                {frontPage.title}
               </div>
             </div>
-            {navNodes.map((chapter) => {
+            {nodes101.map((chapter) => {
               return (
                 <div key={chapter.uid}>
                   <div className='chapter-nav-con'>
@@ -205,39 +171,31 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                       className='chapter-nav'
                       onClick={(e) => {
                         e.stopPropagation();
-                        setMainNode(chapter);
+                        setActiveNode(chapter);
                         setPageId(chapter.uid);
-                        setChildNodes([]);
-                        setNavOpen(true);
                       }}
                     >
                       <div style={{ width: '90%' }}>{chapter.title}</div>
                       <div>
-                        {mainNode.uid === chapter.uid && navOpen ? (
+                        {activeNode.uid === chapter.uid ? (
                           <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
                         ) : (
-                          <MdOutlineKeyboardArrowRight
-                            size={16}
-                            color='#2d2d2d'
-                            onClick={() => {
-                              setNavOpen(false);
-                            }}
-                          />
+                          <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
                         )}
                       </div>
                     </div>
                   </div>
                   {page_id === chapter.uid &&
-                    navChildNodes.map((section) => {
+                    activeSectionsByPageId.map((section) => {
                       return (
                         <div
                           key={section.uid}
                           className='section-nav'
                           style={{ paddingLeft: 20 }}
                           onClick={(e) => {
-                            e.stopPropagation();
-                            setMainNode(section);
+                            setActiveNode(section);
                             setSectionId(section.uid);
+                            e.stopPropagation();
                           }}
                         >
                           {section.title}
@@ -271,7 +229,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
               marginBottom: 24,
             }}
           >
-            <div className='page-heading'>{mainNode.title}</div>
+            <div className='page-heading'>{activeNode.title}</div>
             {image && image.name ? (
               <div style={{ width: '100%', borderRadius: 5 }}>
                 <img
@@ -282,11 +240,11 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
               </div>
             ) : null}
             <MarkdownPreview
-              source={mainNode.body}
+              source={activeNode.body}
               wrapperElement={{ 'data-color-mode': 'light' }}
             />
           </div>
-          {childNodes.map((book_node) => {
+          {activeSubSectionsBySectionId.map((book_node) => {
             return (
               <div className='page-section' key={book_node.uid}>
                 <div className='section-title'>{book_node.title}</div>
@@ -302,7 +260,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
         {/*
          * @Page End
          */}
-        {!isMobile ? <RightBookContainer node={mainNode} book_id={book_id} /> : null}
+        {!isMobile ? <RightBookContainer node={activeNode} book_id={book_id} /> : null}
       </div>
     </div>
   );
