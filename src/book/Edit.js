@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
-import { orderBookNodes, deleteBookNode, extractImage } from 'loony-utils';
+import { orderBookNodes, deleteBookNode, extractImage, orderNodes } from 'loony-utils';
 import { RxReader } from 'react-icons/rx';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { MdAdd } from 'react-icons/md';
@@ -34,6 +34,7 @@ export default function Edit() {
   const [activeNode, setActiveNode] = useState(null);
   const [page_id, setPageId] = useState(null);
   const [section_id, setSectionId] = useState(null);
+  const [navChildNodes, setNavChildNodes] = useState([]);
 
   useEffect(() => {
     if (book_id) {
@@ -48,10 +49,33 @@ export default function Edit() {
           setMainchapter(mainNode_);
           setNavNodes(childNodes_);
           setBookNodes(books_);
+          setPageId(mainNode_.uid);
         }
       });
     }
   }, [book_id]);
+
+  useEffect(() => {
+    if (page_id && mainNode.identity === 101) {
+      axiosInstance
+        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${page_id}`)
+        .then(({ data }) => {
+          const res = orderNodes(data.data, mainNode);
+          setNavChildNodes(res);
+        });
+    }
+  }, [book_id, page_id, mainNode]);
+
+  useEffect(() => {
+    if (section_id && mainNode.identity === 102) {
+      axiosInstance
+        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${section_id}`)
+        .then(({ data }) => {
+          const res = orderNodes(data.data, mainNode);
+          setChildNodes(res);
+        });
+    }
+  }, [book_id, section_id, mainNode]);
 
   const deleteNode = () => {
     const delete_node = activeNode;
@@ -185,13 +209,12 @@ export default function Edit() {
                 {/* Sections */}
                 <div style={{ paddingLeft: 20 }}>
                   {page_id === chapter.uid &&
-                    chapter.child.map((section) => {
+                    navChildNodes.map((section) => {
                       return (
                         <div key={section.uid} className='section-nav cursor'>
                           <div
                             onClick={(e) => {
                               setMainNode(section);
-                              setChildNodes(section.child);
                               setSectionId(section.uid);
                               e.stopPropagation();
                             }}

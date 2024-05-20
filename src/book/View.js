@@ -86,8 +86,6 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
       </div>
     );
 
-  // console.log(section_id, mainNode);
-
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
