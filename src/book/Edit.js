@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
-import { orderBookNodes, deleteBookNode, extractImage, orderNodes } from 'loony-utils';
+import { orderBookNodes, deleteOne, extractImage, orderNodes } from 'loony-utils';
 import { RxReader } from 'react-icons/rx';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { MdAdd } from 'react-icons/md';
@@ -96,7 +96,37 @@ export default function Edit() {
     };
     axiosInstance
       .post(`/book/delete_book_node`, submitData)
-      .then(({ data }) => {})
+      .then(({ data }) => {
+        if (activeNode.identity === 101) {
+          const newNodes = deleteOne(nodes101, data, submitData);
+          setNodes101(newNodes);
+          setActiveNode(frontPage);
+        }
+        if (activeNode.identity === 102) {
+          const newNodes = deleteOne(activeSectionsByPageId, data, submitData);
+          setActiveSectionsByPageId(newNodes);
+          setAllSectionsByPageId({
+            ...allSectionsByPageId,
+            [page_id]: newNodes,
+          });
+          let newActiveNode = null;
+          nodes101.forEach((x) => {
+            if (x.uid === page_id) {
+              newActiveNode = x;
+            }
+          });
+          setActiveNode(newActiveNode);
+        }
+        if (activeNode.identity === 103) {
+          const newNodes = deleteOne(activeSubSectionsBySectionId, data, submitData);
+          setActiveSubSectionsBySectionId(newNodes);
+          setAllSubSectionsBySectionId({
+            ...allSubSectionsBySectionId,
+            [section_id]: newNodes,
+          });
+        }
+        setModal('');
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -401,30 +431,24 @@ export default function Edit() {
           activeNode={activeNode}
           setActiveNode={setActiveNode}
           book_id={book_id}
-          setNavNodes={setNodes101}
+          setNodes101={setNodes101}
           nodes101={nodes101}
           page_id={page_id}
-          onClose={() => {
-            setActiveNode(null);
-          }}
+          setModal={setModal}
         />
       ) : null}
 
       {modal === 'add_section' ? (
         <AddSection
           activeNode={activeNode}
-          setActiveNode={setActiveNode}
           book_id={book_id}
-          allSectionsByPageId={allSectionsByPageId}
+          page_id={page_id}
           activeSectionsByPageId={activeSectionsByPageId}
+          setActiveNode={setActiveNode}
           setActiveSectionsByPageId={setActiveSectionsByPageId}
           setAllSectionsByPageId={setAllSectionsByPageId}
-          nodes101={nodes101}
-          setNodes101={setNodes101}
-          page_id={page_id}
-          onClose={() => {
-            setActiveNode(null);
-          }}
+          setSectionId={setSectionId}
+          setModal={setModal}
         />
       ) : null}
 
@@ -432,16 +456,11 @@ export default function Edit() {
         <AddSubSection
           activeNode={activeNode}
           book_id={book_id}
-          setActiveSubSectionsBySectionId={setActiveSubSectionsBySectionId}
-          allSubSectionsBySectionId={allSubSectionsBySectionId}
-          setAllSubSectionsBySectionId={setAllSubSectionsBySectionId}
-          nodes101={nodes101}
-          setNodes101={setNodes101}
-          page_id={page_id}
+          activeSubSectionsBySectionId={activeSubSectionsBySectionId}
           section_id={section_id}
-          onClose={() => {
-            setActiveNode(null);
-          }}
+          page_id={page_id}
+          setActiveSubSectionsBySectionId={setActiveSubSectionsBySectionId}
+          setAllSubSectionsBySectionId={setAllSubSectionsBySectionId}
         />
       ) : null}
 

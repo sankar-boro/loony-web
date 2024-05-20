@@ -7,14 +7,10 @@ import { appendSubSections } from 'loony-utils';
 const AddSubSection = ({
   activeNode,
   book_id,
-  rawNodes,
-  onClose,
+  activeSubSectionsBySectionId,
   section_id,
   page_id,
-  setActiveNode,
-  activeSubSectionsBySectionId,
   setActiveSubSectionsBySectionId,
-  allSubSectionsBySectionId,
   setAllSubSectionsBySectionId,
 }) => {
   const [title, setTitle] = useState('');
@@ -40,19 +36,12 @@ const AddSubSection = ({
         images: [{ name: uploadedImage }],
       })
       .then(({ data }) => {
-        const newRawNodes = appendSubSections(rawNodes, activeNode, data);
+        const newRawNodes = appendSubSections(activeSubSectionsBySectionId, activeNode, data);
         setActiveSubSectionsBySectionId(newRawNodes);
         setAllSubSectionsBySectionId((prevState) => ({
           ...prevState,
           [page_id]: newRawNodes,
         }));
-        let d = null;
-        newRawNodes.forEach((b) => {
-          if (b.uid === data.new_node.uid) {
-            d = b;
-          }
-        });
-        setActiveNode(d);
         onCloseModal();
       })
       .catch(() => {
@@ -63,7 +52,6 @@ const AddSubSection = ({
     setTitle('');
     setBody('');
     setVisible(false);
-    onClose();
   };
   const uploadFile = (selectedFile) => {
     const formData = new FormData();
@@ -82,7 +70,7 @@ const AddSubSection = ({
   const changeFile = uploadFile;
 
   return (
-    <ModalMd visible={visible} onClose={onCloseModal} title='Add Node'>
+    <ModalMd visible={visible} onClose={onCloseModal} title='Add Sub Section'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div style={{ width: '45%' }}>

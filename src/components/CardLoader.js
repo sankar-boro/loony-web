@@ -1,4 +1,5 @@
 const CardLoader = ({ key_id }) => {
+  console.log(key_id);
   return (
     <div className='card' key={key_id}>
       <div

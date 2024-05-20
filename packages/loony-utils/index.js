@@ -13,6 +13,18 @@ export const deleteBlogNode = (nodes, submitData, delete_node_index) => {
   return copyNodes;
 };
 
+export const deleteOne = (nodes, res, submitData) => {
+  const newNodes = nodes.filter((x) => !res.deleted_ids.includes(x.uid));
+  if (res.update_id) {
+    newNodes.forEach((x, i) => {
+      if (x.uid === res.update_id) {
+        newNodes[i].parent_id = submitData.update_parent_id;
+      }
+    });
+  }
+  return newNodes;
+};
+
 export const deleteBookNode = (allNodes, res, submitData) => {
   const copyNodes = allNodes.filter((x) => !res.deleted_ids.includes(x.uid));
   if (res.update_id) {
@@ -64,56 +76,31 @@ export const updateBlogNode = (nodes, updatedNode) => {
   return newNodes;
 };
 
-export const appendBookNode = (nodes, topData, resData) => {
+export const addNewNode = (nodes, topData, res) => {
+  const { new_node, update_node } = res;
   let newNodes = [];
   for (let index = 0; index < nodes.length; index++) {
     const element = nodes[index];
     if (topData.uid === element.uid) {
       newNodes.push(element);
-      newNodes.push(resData.new_node);
+      newNodes.push(new_node);
     } else {
       newNodes.push(element);
     }
-    if (nodes[index].uid === resData.update_node.update_row_id) {
-      nodes[index].parent_id = resData.update_node.update_row_parent_id;
+    if (nodes[index].uid === update_node.update_row_id) {
+      nodes[index].parent_id = update_node.update_row_parent_id;
     }
+  }
+  if (newNodes.length === 0) {
+    return [new_node];
   }
   return newNodes;
 };
 
-export const appendSections = (nodes, activeNode, resData) => {
-  let newNodes = [];
-  for (let index = 0; index < nodes.length; index++) {
-    const element = nodes[index];
-    if (activeNode.uid === element.uid) {
-      newNodes.push(element);
-      newNodes.push(resData.new_node);
-    } else {
-      newNodes.push(element);
-    }
-    if (nodes[index].uid === resData.update_node.update_row_id) {
-      nodes[index].parent_id = resData.update_node.update_row_parent_id;
-    }
-  }
-  return newNodes;
-};
-
-export const appendSubSections = (nodes, activeNode, resData) => {
-  let newNodes = [];
-  for (let index = 0; index < nodes.length; index++) {
-    const element = nodes[index];
-    if (activeNode.uid === element.uid) {
-      newNodes.push(element);
-      newNodes.push(resData.new_node);
-    } else {
-      newNodes.push(element);
-    }
-    if (nodes[index].uid === resData.update_node.update_row_id) {
-      nodes[index].parent_id = resData.update_node.update_row_parent_id;
-    }
-  }
-  return newNodes;
-};
+export const appendBookNode = addNewNode;
+export const appendChapters = addNewNode;
+export const appendSections = addNewNode;
+export const appendSubSections = addNewNode;
 
 const groupSiblingsForParent = (parent, child) => {
   let pId = parent.uid;

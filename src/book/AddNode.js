@@ -2,18 +2,16 @@ import { useEffect, useState } from 'react';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../query';
-import { appendBookNode, orderBookNodes } from 'loony-utils';
+import { appendChapters } from 'loony-utils';
 
 const AddNode = ({
   activeNode,
   book_id,
-  setBookNodes,
   page_id,
-  setNavNodes,
-  onClose,
   nodes101,
   setNodes101,
   setActiveNode,
+  setModal,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -38,14 +36,9 @@ const AddNode = ({
         images: [{ name: uploadedImage }],
       })
       .then(({ data }) => {
-        const newRawNodes = appendBookNode(nodes101, activeNode, data);
-        setNodes101(newRawNodes);
-        const orderedNodes = orderBookNodes(newRawNodes);
-        const mainNode_ = orderedNodes && orderedNodes[0];
-        const childNodes_ = orderedNodes.slice(1);
-        setBookNodes(orderedNodes);
-        setActiveNode(mainNode_);
-        setNavNodes(childNodes_);
+        const newNodes = appendChapters(nodes101, activeNode, data);
+        setNodes101(newNodes);
+        setActiveNode(data.new_node);
         onCloseModal();
       })
       .catch(() => {
@@ -56,7 +49,7 @@ const AddNode = ({
     setTitle('');
     setBody('');
     setVisible(false);
-    onClose();
+    setModal('');
   };
   const uploadFile = (selectedFile) => {
     const formData = new FormData();

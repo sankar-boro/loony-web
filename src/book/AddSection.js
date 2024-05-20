@@ -8,11 +8,12 @@ const AddSection = ({
   activeNode,
   book_id,
   page_id,
-  onClose,
   activeSectionsByPageId,
   setActiveNode,
   setActiveSectionsByPageId,
   setAllSectionsByPageId,
+  setSectionId,
+  setModal,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -43,24 +44,25 @@ const AddSection = ({
           ...prevState,
           [page_id]: newRawNodes,
         }));
-        let d = null;
+        let newActiveNode = null;
         newRawNodes.forEach((b) => {
           if (b.uid === data.new_node.uid) {
-            d = b;
+            newActiveNode = b;
           }
         });
-        setActiveNode(d);
-        onCloseModal();
+        setSectionId(newActiveNode.uid);
+        setActiveNode(newActiveNode);
+        clearForms();
       })
       .catch(() => {
-        onCloseModal();
+        clearForms();
       });
   };
-  const onCloseModal = () => {
+  const clearForms = () => {
     setTitle('');
     setBody('');
     setVisible(false);
-    onClose();
+    setModal('');
   };
   const uploadFile = (selectedFile) => {
     const formData = new FormData();
@@ -79,7 +81,7 @@ const AddSection = ({
   const changeFile = uploadFile;
 
   return (
-    <ModalMd visible={visible} onClose={onCloseModal} title='Add Section'>
+    <ModalMd visible={visible} onClose={clearForms} title='Add Section'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div style={{ width: '45%' }}>
