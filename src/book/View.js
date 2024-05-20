@@ -21,7 +21,6 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   const [navOpen, setNavOpen] = useState(false);
   const [page_id, setPageId] = useState(null);
   const [section_id, setSectionId] = useState(null);
-  const [pages, setPages] = useState({});
 
   useEffect(() => {
     if (book_id) {

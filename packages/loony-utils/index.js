@@ -81,6 +81,40 @@ export const appendBookNode = (nodes, topData, resData) => {
   return newNodes;
 };
 
+export const appendSections = (nodes, activeNode, resData) => {
+  let newNodes = [];
+  for (let index = 0; index < nodes.length; index++) {
+    const element = nodes[index];
+    if (activeNode.uid === element.uid) {
+      newNodes.push(element);
+      newNodes.push(resData.new_node);
+    } else {
+      newNodes.push(element);
+    }
+    if (nodes[index].uid === resData.update_node.update_row_id) {
+      nodes[index].parent_id = resData.update_node.update_row_parent_id;
+    }
+  }
+  return newNodes;
+};
+
+export const appendSubSections = (nodes, activeNode, resData) => {
+  let newNodes = [];
+  for (let index = 0; index < nodes.length; index++) {
+    const element = nodes[index];
+    if (activeNode.uid === element.uid) {
+      newNodes.push(element);
+      newNodes.push(resData.new_node);
+    } else {
+      newNodes.push(element);
+    }
+    if (nodes[index].uid === resData.update_node.update_row_id) {
+      nodes[index].parent_id = resData.update_node.update_row_parent_id;
+    }
+  }
+  return newNodes;
+};
+
 const groupSiblingsForParent = (parent, child) => {
   let pId = parent.uid;
   const siblings = [];

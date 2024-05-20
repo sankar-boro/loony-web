@@ -2,18 +2,17 @@ import { useEffect, useState } from 'react';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../query';
-import { appendBookNode, orderBookNodes } from 'loony-utils';
+import { appendSections } from 'loony-utils';
 
 const AddSection = ({
   activeNode,
   book_id,
-  rawNodes,
-  setRawNodes,
-  setBookNodes,
   page_id,
-  setMainNode,
-  setNavNodes,
   onClose,
+  activeSectionsByPageId,
+  setActiveNode,
+  setActiveSectionsByPageId,
+  setAllSectionsByPageId,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -38,19 +37,19 @@ const AddSection = ({
         images: [{ name: uploadedImage }],
       })
       .then(({ data }) => {
-        const newRawNodes = appendBookNode(rawNodes, activeNode, data);
-        setRawNodes(newRawNodes);
-        const orderedNodes = orderBookNodes(newRawNodes);
+        const newRawNodes = appendSections(activeSectionsByPageId, activeNode, data);
+        setActiveSectionsByPageId(newRawNodes);
+        setAllSectionsByPageId((prevState) => ({
+          ...prevState,
+          [page_id]: newRawNodes,
+        }));
         let d = null;
-        orderedNodes.forEach((b) => {
-          b.child.forEach((c) => {
-            if (c.uid === data.new_node.uid) {
-              d = c;
-            }
-          });
+        newRawNodes.forEach((b) => {
+          if (b.uid === data.new_node.uid) {
+            d = b;
+          }
         });
-        setMainNode(d);
-        setBookNodes(orderedNodes);
+        setActiveNode(d);
         onCloseModal();
       })
       .catch(() => {

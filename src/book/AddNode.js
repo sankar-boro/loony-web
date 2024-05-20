@@ -7,13 +7,13 @@ import { appendBookNode, orderBookNodes } from 'loony-utils';
 const AddNode = ({
   activeNode,
   book_id,
-  rawNodes,
-  setRawNodes,
   setBookNodes,
   page_id,
-  setMainNode,
   setNavNodes,
   onClose,
+  nodes101,
+  setNodes101,
+  setActiveNode,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -38,13 +38,13 @@ const AddNode = ({
         images: [{ name: uploadedImage }],
       })
       .then(({ data }) => {
-        const newRawNodes = appendBookNode(rawNodes, activeNode, data);
-        setRawNodes(newRawNodes);
+        const newRawNodes = appendBookNode(nodes101, activeNode, data);
+        setNodes101(newRawNodes);
         const orderedNodes = orderBookNodes(newRawNodes);
         const mainNode_ = orderedNodes && orderedNodes[0];
         const childNodes_ = orderedNodes.slice(1);
         setBookNodes(orderedNodes);
-        setMainNode(mainNode_);
+        setActiveNode(mainNode_);
         setNavNodes(childNodes_);
         onCloseModal();
       })
