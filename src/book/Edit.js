@@ -41,58 +41,62 @@ export default function Edit() {
   const [activeSubSectionsBySectionId, setActiveSubSectionsBySectionId] = useState([]);
   const [allSubSectionsBySectionId, setAllSubSectionsBySectionId] = useState({});
 
-  useEffect(() => {
-    if (book_id) {
-      axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
-        const bookTree = orderBookNodes(data.data);
-        const thisFrontPage = bookTree && bookTree[0];
-        const pages = bookTree.slice(1);
+  const getChapters = () => {
+    axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
+      const bookTree = orderBookNodes(data.data);
+      const thisFrontPage = bookTree && bookTree[0];
+      const pages = bookTree.slice(1);
 
-        if (thisFrontPage) {
-          setFrontPage(thisFrontPage);
-          setActiveNode(thisFrontPage);
-          setNodes101(pages);
-          setPageId(thisFrontPage.uid);
-        }
-      });
-    }
-  }, [book_id]);
+      if (thisFrontPage) {
+        setFrontPage(thisFrontPage);
+        setActiveNode(thisFrontPage);
+        setNodes101(pages);
+        setPageId(thisFrontPage.uid);
+      }
+    });
+  };
 
-  useEffect(() => {
-    if (page_id && activeNode.identity === 101 && !allSectionsByPageId[page_id]) {
+  const getSections = (node) => {
+    const { uid } = node;
+    if (allSectionsByPageId[uid]) {
+      setActiveSectionsByPageId(allSectionsByPageId[uid]);
+    } else {
       axiosInstance
-        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${page_id}`)
+        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${uid}`)
         .then(({ data }) => {
-          const res = orderNodes(data.data, activeNode);
+          const res = orderNodes(data.data, node);
           setActiveSectionsByPageId(res);
           setAllSectionsByPageId({
             ...allSectionsByPageId,
-            [page_id]: res,
+            [uid]: res,
           });
         });
     }
+  };
 
-    if (allSectionsByPageId[page_id]) {
-      setActiveSectionsByPageId(allSectionsByPageId[page_id]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page_id]);
-
-  useEffect(() => {
-    if (section_id && activeNode.identity === 102) {
+  const getSubSections = (node) => {
+    const { uid } = node;
+    if (allSubSectionsBySectionId[uid]) {
+      setActiveSubSectionsBySectionId(allSubSectionsBySectionId[uid]);
+    } else {
       axiosInstance
-        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${section_id}`)
+        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${uid}`)
         .then(({ data }) => {
-          const res = orderNodes(data.data, activeNode);
+          const res = orderNodes(data.data, node);
           setActiveSubSectionsBySectionId(res);
           setAllSubSectionsBySectionId({
             ...allSubSectionsBySectionId,
-            [page_id]: res,
+            [uid]: res,
           });
         });
     }
+  };
+  useEffect(() => {
+    if (book_id) {
+      getChapters();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [section_id]);
+  }, [book_id]);
 
   const deleteNode = () => {
     const submitData = {
@@ -212,6 +216,12 @@ export default function Edit() {
     setModal('');
   };
 
+  const reset = (e) => {
+    setActiveSubSectionsBySectionId([]);
+    setModal('');
+    e.stopPropagation();
+  };
+
   if (!activeNode) return null;
   if (!nodes101) return null;
   const image = extractImage(activeNode.images);
@@ -249,8 +259,7 @@ export default function Edit() {
               onClick={(e) => {
                 setPageId(frontPage.uid);
                 setActiveNode(frontPage);
-                setModal('');
-                e.stopPropagation();
+                reset(e);
               }}
             >
               {frontPage.title}
@@ -259,10 +268,10 @@ export default function Edit() {
           <div
             className='button-none'
             onClick={(e) => {
+              reset(e);
               setActiveNode(frontPage);
               setPageId(frontPage.uid);
               setModal('add_chapter');
-              e.stopPropagation();
             }}
             style={{ marginRight: 16, paddingTop: 7, paddingBottom: 7 }}
           >
@@ -275,9 +284,10 @@ export default function Edit() {
                   <div
                     className='chapter-nav'
                     onClick={(e) => {
+                      reset(e);
                       setActiveNode(chapter);
                       setPageId(chapter.uid);
-                      e.stopPropagation();
+                      getSections(chapter);
                     }}
                   >
                     <div style={{ width: '90%' }}>{chapter.title}</div>
@@ -301,48 +311,52 @@ export default function Edit() {
                       Add Chapter
                     </div>
                   </div>
-                  <div
-                    className='button-none'
-                    style={{ paddingLeft: 20 }}
-                    onClick={() => {
-                      setActiveNode(chapter);
-                      setPageId(chapter.uid);
-                      setModal('add_section');
-                    }}
-                  >
-                    Add Section
-                  </div>
                 </div>
                 {/* Sections */}
                 <div style={{ paddingLeft: 20 }}>
-                  {page_id === chapter.uid &&
-                    activeSectionsByPageId.map((section) => {
-                      return (
-                        <div key={section.uid} className='section-nav cursor'>
-                          <div
-                            onClick={(e) => {
-                              setActiveNode(section);
-                              setSectionId(section.uid);
-                              e.stopPropagation();
-                            }}
-                          >
-                            {section.title}
+                  {page_id === chapter.uid && (
+                    <>
+                      <div
+                        className='button-none'
+                        onClick={() => {
+                          setActiveNode(chapter);
+                          setPageId(chapter.uid);
+                          setModal('add_section');
+                        }}
+                        style={{ paddingBottom: 5 }}
+                      >
+                        Add Section
+                      </div>
+                      {activeSectionsByPageId.map((section) => {
+                        return (
+                          <div key={section.uid} className='section-nav cursor'>
+                            <div
+                              onClick={(e) => {
+                                reset(e);
+                                setActiveNode(section);
+                                setSectionId(section.uid);
+                                getSubSections(section);
+                              }}
+                            >
+                              {section.title}
+                            </div>
+                            <div
+                              className='button-none'
+                              style={{ paddingTop: 5, paddingBottom: 5 }}
+                              onClick={(e) => {
+                                setActiveNode(section);
+                                setSectionId(section.uid);
+                                setModal('add_section');
+                                e.stopPropagation();
+                              }}
+                            >
+                              Add Section
+                            </div>
                           </div>
-                          <div
-                            className='button-none'
-                            style={{ paddingTop: 5, paddingBottom: 5 }}
-                            onClick={(e) => {
-                              setActiveNode(section);
-                              setSectionId(section.uid);
-                              setModal('add_section');
-                              e.stopPropagation();
-                            }}
-                          >
-                            Add Section
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </>
+                  )}
                 </div>
               </div>
             );
@@ -432,58 +446,57 @@ export default function Edit() {
               marginTop: 16,
             }}
           >
-            {activeNode.identity !== 101 &&
-              activeSubSectionsBySectionId.map((node) => {
-                return (
-                  <div style={{ marginBottom: 25, marginTop: 25 }} key={node.uid}>
-                    <div className='section-title'>{node.title}</div>
-                    <MarkdownPreview
-                      source={node.body}
-                      wrapperElement={{ 'data-color-mode': 'light' }}
-                    />
-                    <div className='flex-row'>
-                      <div
-                        className='button-none cursor'
-                        onClick={(e) => {
-                          setActiveNode(node);
-                          setModal('add_sub_section');
-                          e.stopPropagation();
-                        }}
-                        style={{ marginRight: 16 }}
-                      >
-                        <div className='btn-action'>
-                          <MdAdd size={16} color='#9c9c9c' />
-                        </div>
+            {activeSubSectionsBySectionId.map((node) => {
+              return (
+                <div style={{ marginBottom: 25, marginTop: 25 }} key={node.uid}>
+                  <div className='section-title'>{node.title}</div>
+                  <MarkdownPreview
+                    source={node.body}
+                    wrapperElement={{ 'data-color-mode': 'light' }}
+                  />
+                  <div className='flex-row' style={{ marginTop: 20 }}>
+                    <div
+                      className='button-none cursor'
+                      onClick={(e) => {
+                        setActiveNode(node);
+                        setModal('add_sub_section');
+                        e.stopPropagation();
+                      }}
+                      style={{ marginRight: 16 }}
+                    >
+                      <div className='btn-action'>
+                        <MdAdd size={16} color='#9c9c9c' />
                       </div>
-                      <div
-                        className='button-none cursor'
-                        onClick={(e) => {
-                          setActiveNode(node);
-                          setModal('edit_node');
-                          e.stopPropagation();
-                        }}
-                        style={{ marginRight: 16 }}
-                      >
-                        <div className='btn-action'>
-                          <FiEdit2 size={16} color='#9c9c9c' />
-                        </div>
+                    </div>
+                    <div
+                      className='button-none cursor'
+                      onClick={(e) => {
+                        setActiveNode(node);
+                        setModal('edit_node');
+                        e.stopPropagation();
+                      }}
+                      style={{ marginRight: 16 }}
+                    >
+                      <div className='btn-action'>
+                        <FiEdit2 size={16} color='#9c9c9c' />
                       </div>
-                      <div
-                        className='delete-button-none cursor'
-                        onClick={(e) => {
-                          setActiveNode(node);
-                          setModal('delete_node');
-                          e.stopPropagation();
-                        }}
-                      >
-                        <div className='btn-action'>
-                          <AiOutlineDelete size={16} color='#9c9c9c' />
-                        </div>
+                    </div>
+                    <div
+                      className='delete-button-none cursor'
+                      onClick={(e) => {
+                        setActiveNode(node);
+                        setModal('delete_node');
+                        e.stopPropagation();
+                      }}
+                    >
+                      <div className='btn-action'>
+                        <AiOutlineDelete size={16} color='#9c9c9c' />
                       </div>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              );
+            })}
           </div>
         </div>
 
