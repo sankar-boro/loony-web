@@ -7,7 +7,11 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import { MdAdd } from 'react-icons/md';
 import { LuFileWarning } from 'react-icons/lu';
 import { FiEdit2 } from 'react-icons/fi';
-import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
+import {
+  MdOutlineKeyboardArrowRight,
+  MdOutlineKeyboardArrowDown,
+  MdOutlineEdit,
+} from 'react-icons/md';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
 import AddNode from './AddNode';
@@ -29,6 +33,7 @@ export default function Edit() {
   const [nodes101, setNodes101] = useState([]);
   const [modal, setModal] = useState('');
   const [activeNode, setActiveNode] = useState(null);
+
   const [page_id, setPageId] = useState(null);
   const [section_id, setSectionId] = useState(null);
   const [activeSectionsByPageId, setActiveSectionsByPageId] = useState([]);
@@ -145,6 +150,68 @@ export default function Edit() {
     });
   };
 
+  const editPage = (data) => {
+    let a = null;
+    const r = nodes101.map((n) => {
+      if (n.uid === activeNode.uid) {
+        const t = {
+          ...n,
+          ...data,
+        };
+        a = t;
+        return t;
+      }
+      return n;
+    });
+    setNodes101(r);
+    setActiveNode(a);
+    setModal('');
+  };
+  const editSection = (data) => {
+    let a = null;
+    const r = activeSectionsByPageId.map((n) => {
+      if (n.uid === activeNode.uid) {
+        const t = {
+          ...n,
+          ...data,
+        };
+        a = t;
+        return t;
+      }
+      return n;
+    });
+    console.log(r, page_id);
+    setActiveSectionsByPageId(r);
+    setAllSectionsByPageId({
+      ...allSectionsByPageId,
+      [page_id]: r,
+    });
+    setActiveNode(a);
+    setModal('');
+  };
+  const editSubSection = (data) => {
+    let a = null;
+    const r = activeSubSectionsBySectionId.map((n) => {
+      if (n.uid === activeNode.uid) {
+        const t = {
+          ...n,
+          ...data,
+        };
+        a = t;
+        return t;
+      }
+      return n;
+    });
+    console.log('r', r);
+    setActiveSubSectionsBySectionId(r);
+    setAllSubSectionsBySectionId({
+      ...allSubSectionsBySectionId,
+      [section_id]: r,
+    });
+    setActiveNode(a);
+    setModal('');
+  };
+
   if (!activeNode) return null;
   if (!nodes101) return null;
   const image = extractImage(activeNode.images);
@@ -181,6 +248,7 @@ export default function Edit() {
               className='chapter-nav'
               onClick={(e) => {
                 setPageId(frontPage.uid);
+                setActiveNode(frontPage);
                 setModal('');
                 e.stopPropagation();
               }}
@@ -312,7 +380,7 @@ export default function Edit() {
             />
           </div>
           {activeNode.identity >= 101 ? (
-            <div className='flex-row'>
+            <div className='flex-row' style={{ marginTop: 24 }}>
               {activeNode.identity === 102 ? (
                 <div
                   className='button-none cursor'
@@ -337,9 +405,23 @@ export default function Edit() {
                   setModal('delete_page');
                   e.stopPropagation();
                 }}
+                style={{ marginRight: 10 }}
               >
                 <div className='btn-action'>
                   <AiOutlineDelete size={16} color='#9c9c9c' />
+                </div>
+              </div>
+
+              <div
+                className='button-none cursor'
+                onClick={(e) => {
+                  setActiveNode(activeNode);
+                  setModal('edit_node');
+                  e.stopPropagation();
+                }}
+              >
+                <div className='btn-action'>
+                  <MdOutlineEdit size={16} color='#9c9c9c' />
                 </div>
               </div>
             </div>
@@ -431,19 +513,6 @@ export default function Edit() {
               <span style={{ marginLeft: 5 }}>Report</span>
             </li>
           </ul>
-          <div style={{ borderTop: '1px solid #ccc', marginTop: 5, paddingTop: 5 }}>
-            <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-              <li
-                onClick={() => {
-                  setActiveNode(activeNode);
-                  setPageId(activeNode.uid);
-                  setModal('edit_node');
-                }}
-              >
-                {activeNode.title}
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
 
@@ -493,9 +562,9 @@ export default function Edit() {
           setNavNodes={setNodes101}
           nodes101={nodes101}
           page_id={page_id}
-          onClose={() => {
-            setActiveNode(null);
-          }}
+          editPage={editPage}
+          editSection={editSection}
+          editSubSection={editSubSection}
         />
       ) : null}
 

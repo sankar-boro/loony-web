@@ -2,18 +2,8 @@ import { useEffect, useState } from 'react';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../query';
-import { updateBookNode, orderBookNodes } from 'loony-utils';
 
-const EditNode = ({
-  activeNode,
-  rawNodes,
-  setRawNodes,
-  setBookNodes,
-  setMainNode,
-  setChildNodes,
-  onClose,
-  book_id,
-}) => {
+const EditNode = ({ book_id, activeNode, editPage, editSection, editSubSection }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [visible, setVisible] = useState(false);
@@ -37,16 +27,10 @@ const EditNode = ({
     };
     axiosInstance
       .post('/book/edit_book_node', submitData)
-      .then(() => {
-        const newRawNodes = updateBookNode(rawNodes, submitData);
-        setRawNodes(newRawNodes);
-        const orderedNodes = orderBookNodes(newRawNodes);
-        const mainNode_ = orderedNodes && orderedNodes[0];
-        const childNodes_ = mainNode_.child;
-        setMainNode(mainNode_);
-        setChildNodes(childNodes_);
-        setBookNodes(orderedNodes);
-        onCloseModal();
+      .then(({ data }) => {
+        if (activeNode.identity === 101) editPage(data.data);
+        if (activeNode.identity === 102) editSection(data.data);
+        if (activeNode.identity === 103) editSubSection(data.data);
       })
       .catch(() => {
         onCloseModal();
@@ -56,7 +40,6 @@ const EditNode = ({
     setTitle('');
     setBody('');
     setVisible(false);
-    onClose();
   };
   const uploadFile = (selectedFile) => {
     const formData = new FormData();

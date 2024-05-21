@@ -34,7 +34,7 @@ const AddNode = ({
         body,
         blog_id: parseInt(blog_id, 10),
         parent_id: activeNode.uid,
-        images: { name: uploadedImage },
+        images: [{ name: uploadedImage }],
       })
       .then(({ data }) => {
         const newNodes = appendBlogNode(rawNodes, activeNode, data);
