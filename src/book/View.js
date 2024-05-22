@@ -17,81 +17,72 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   const [nodes101, setNodes101] = useState([]);
   const [activeNode, setActiveNode] = useState(null);
   const [page_id, setPageId] = useState(null);
-  const [section_id, setSectionId] = useState(null);
   const [activeSectionsByPageId, setActiveSectionsByPageId] = useState([]);
   const [allSectionsByPageId, setAllSectionsByPageId] = useState({});
   const [activeSubSectionsBySectionId, setActiveSubSectionsBySectionId] = useState([]);
   const [allSubSectionsBySectionId, setAllSubSectionsBySectionId] = useState({});
 
-  useEffect(() => {
-    if (book_id) {
-      axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
-        const bookTree = orderBookNodes(data.data);
-        const thisFrontPage = bookTree && bookTree[0];
-        const pages = bookTree.slice(1);
+  const getChapters = () => {
+    axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
+      const bookTree = orderBookNodes(data.data);
+      const thisFrontPage = bookTree && bookTree[0];
+      const pages = bookTree.slice(1);
 
-        if (thisFrontPage) {
-          setFrontPage(thisFrontPage);
-          setActiveNode(thisFrontPage);
-          setNodes101(pages);
-          setPageId(thisFrontPage.uid);
-        }
-      });
-    }
-  }, [book_id]);
+      if (thisFrontPage) {
+        setFrontPage(thisFrontPage);
+        setActiveNode(thisFrontPage);
+        setNodes101(pages);
+        setPageId(thisFrontPage.uid);
+      }
+    });
+  };
 
-  useEffect(() => {
-    if (book_id) {
-      axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
-        const bookTree = orderBookNodes(data.data);
-        const thisFrontPage = bookTree && bookTree[0];
-        const pages = bookTree.slice(1);
-
-        if (thisFrontPage) {
-          setFrontPage(thisFrontPage);
-          setActiveNode(thisFrontPage);
-          setNodes101(pages);
-          setPageId(thisFrontPage.uid);
-        }
-      });
-    }
-  }, [book_id]);
-
-  useEffect(() => {
-    if (page_id && activeNode.identity === 101 && !allSectionsByPageId[page_id]) {
+  const getSections = (node) => {
+    const { uid } = node;
+    if (allSectionsByPageId[uid]) {
+      setActiveSectionsByPageId(allSectionsByPageId[uid]);
+    } else {
       axiosInstance
-        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${page_id}`)
+        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${uid}`)
         .then(({ data }) => {
-          const res = orderNodes(data.data, activeNode);
+          const res = orderNodes(data.data, node);
           setActiveSectionsByPageId(res);
           setAllSectionsByPageId({
             ...allSectionsByPageId,
-            [page_id]: res,
+            [uid]: res,
           });
         });
     }
+  };
 
-    if (allSectionsByPageId[page_id]) {
-      setActiveSectionsByPageId(allSectionsByPageId[page_id]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page_id]);
-
-  useEffect(() => {
-    if (section_id && activeNode.identity === 102) {
+  const getSubSections = (node) => {
+    const { uid } = node;
+    if (allSubSectionsBySectionId[uid]) {
+      setActiveSubSectionsBySectionId(allSubSectionsBySectionId[uid]);
+    } else {
       axiosInstance
-        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${section_id}`)
+        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${uid}`)
         .then(({ data }) => {
-          const res = orderNodes(data.data, activeNode);
+          const res = orderNodes(data.data, node);
           setActiveSubSectionsBySectionId(res);
           setAllSubSectionsBySectionId({
             ...allSubSectionsBySectionId,
-            [page_id]: res,
+            [uid]: res,
           });
         });
     }
+  };
+  useEffect(() => {
+    if (book_id) {
+      getChapters();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [section_id]);
+  }, [book_id]);
+
+  const reset = (e) => {
+    setActiveSubSectionsBySectionId([]);
+    e.stopPropagation();
+  };
 
   if (!activeNode) return null;
   if (!nodes101) return null;
@@ -157,7 +148,8 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                 className='chapter-nav'
                 onClick={(e) => {
                   setPageId(frontPage.uid);
-                  e.stopPropagation();
+                  setActiveNode(frontPage);
+                  reset(e);
                 }}
               >
                 {frontPage.title}
@@ -170,9 +162,10 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                     <div
                       className='chapter-nav'
                       onClick={(e) => {
-                        e.stopPropagation();
+                        reset(e);
                         setActiveNode(chapter);
                         setPageId(chapter.uid);
+                        getSections(chapter);
                       }}
                     >
                       <div style={{ width: '90%' }}>{chapter.title}</div>
@@ -193,9 +186,9 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                           className='section-nav'
                           style={{ paddingLeft: 20 }}
                           onClick={(e) => {
+                            reset(e);
                             setActiveNode(section);
-                            setSectionId(section.uid);
-                            e.stopPropagation();
+                            getSubSections(section);
                           }}
                         >
                           {section.title}
