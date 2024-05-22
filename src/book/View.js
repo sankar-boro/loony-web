@@ -108,6 +108,67 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
       </div>
     );
 
+  const Navigation = () => {
+    return (
+      <>
+        <div className='chapter-nav-con'>
+          <div
+            className='chapter-nav'
+            onClick={(e) => {
+              setPageId(frontPage.uid);
+              setActiveNode(frontPage);
+              reset(e);
+            }}
+          >
+            {frontPage.title}
+          </div>
+        </div>
+        {nodes101.map((chapter) => {
+          return (
+            <div key={chapter.uid}>
+              <div className='chapter-nav-con'>
+                <div
+                  className='chapter-nav'
+                  onClick={(e) => {
+                    reset(e);
+                    setActiveNode(chapter);
+                    setPageId(chapter.uid);
+                    getSections(chapter);
+                  }}
+                >
+                  <div style={{ width: '90%' }}>{chapter.title}</div>
+                  <div>
+                    {activeNode.uid === chapter.uid ? (
+                      <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
+                    ) : (
+                      <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
+                    )}
+                  </div>
+                </div>
+              </div>
+              {page_id === chapter.uid &&
+                activeSectionsByPageId.map((section) => {
+                  return (
+                    <div
+                      key={section.uid}
+                      className='section-nav'
+                      style={{ paddingLeft: 20 }}
+                      onClick={(e) => {
+                        reset(e);
+                        setActiveNode(section);
+                        getSubSections(section);
+                      }}
+                    >
+                      {section.title}
+                    </div>
+                  );
+                })}
+            </div>
+          );
+        })}
+      </>
+    );
+  };
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
@@ -135,69 +196,16 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                 height: '100%',
                 position: 'relative',
                 top: -5,
+                padding: 12,
               }}
             >
-              {/* Todo */}
+              <Navigation />
             </div>
           </div>
         ) : null}
         {!isMobile ? (
           <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
-            <div className='chapter-nav-con'>
-              <div
-                className='chapter-nav'
-                onClick={(e) => {
-                  setPageId(frontPage.uid);
-                  setActiveNode(frontPage);
-                  reset(e);
-                }}
-              >
-                {frontPage.title}
-              </div>
-            </div>
-            {nodes101.map((chapter) => {
-              return (
-                <div key={chapter.uid}>
-                  <div className='chapter-nav-con'>
-                    <div
-                      className='chapter-nav'
-                      onClick={(e) => {
-                        reset(e);
-                        setActiveNode(chapter);
-                        setPageId(chapter.uid);
-                        getSections(chapter);
-                      }}
-                    >
-                      <div style={{ width: '90%' }}>{chapter.title}</div>
-                      <div>
-                        {activeNode.uid === chapter.uid ? (
-                          <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
-                        ) : (
-                          <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  {page_id === chapter.uid &&
-                    activeSectionsByPageId.map((section) => {
-                      return (
-                        <div
-                          key={section.uid}
-                          className='section-nav'
-                          style={{ paddingLeft: 20 }}
-                          onClick={(e) => {
-                            reset(e);
-                            setActiveNode(section);
-                            getSubSections(section);
-                          }}
-                        >
-                          {section.title}
-                        </div>
-                      );
-                    })}
-                </div>
-              );
-            })}
+            <Navigation />
           </div>
         ) : null}
         {/*
