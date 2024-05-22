@@ -24,8 +24,8 @@ const Home = () => {
         <h3>Blogs</h3>
         <div className='flex-row' style={{ flexWrap: 'wrap' }}>
           {!blogs
-            ? [1, 2, 3, 4].map((key_id) => {
-                return <CardLoader key_id={key_id} />;
+            ? [1, 2, 3, 4].map((key) => {
+                return <CardLoader key={key} />;
               })
             : null}
           {blogs &&
@@ -69,8 +69,8 @@ const Home = () => {
         <h3>Books</h3>
         <div className='flex-row' style={{ flexWrap: 'wrap' }}>
           {!books
-            ? [5, 6, 7, 8].map((key_id) => {
-                return <CardLoader key_id={key_id} />;
+            ? [5, 6, 7, 8].map((key) => {
+                return <CardLoader key={key} />;
               })
             : null}
           {books &&

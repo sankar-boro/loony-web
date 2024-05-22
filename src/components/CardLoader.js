@@ -1,6 +1,6 @@
-const CardLoader = ({ key_id }) => {
+const CardLoader = () => {
   return (
-    <div className='card' key={key_id}>
+    <div className='card'>
       <div
         className='card-image'
         style={{
