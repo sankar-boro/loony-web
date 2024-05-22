@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { axiosInstance } from '../query';
+import { axiosInstance } from '../utils/query';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 

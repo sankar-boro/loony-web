@@ -2,7 +2,7 @@
 import { useState, useCallback, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import { axiosInstance } from '../query';
+import { axiosInstance } from '../utils/query';
 import {} from 'react-router-dom';
 import 'react-easy-crop/react-easy-crop.css';
 import { AuthContext } from '../context/AuthContext';

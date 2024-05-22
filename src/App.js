@@ -1,4 +1,4 @@
-import Home from './Home';
+import Home from './home';
 import BlogView from './blog/View';
 import BookView from './book/View';
 import EditBlog from './blog/Edit';
@@ -7,11 +7,11 @@ import Create from './form';
 import Profile from './profile';
 import Login from './auth/Login';
 import Signup from './auth/Signup';
-import Alert from './Alert';
+import Alert from './components/Alert';
 import NotFound from './error/NotFound';
 import AuthError from './error/AuthError';
-import { axiosInstance } from './query';
-import { CREATE_BOOK, CREATE_BLOG } from './url';
+import { axiosInstance } from './utils/query';
+import { CREATE_BOOK, CREATE_BLOG } from './utils/url';
 import { AuthContext, AuthProvider } from './context/AuthContext';
 
 import { LuMenu } from 'react-icons/lu';

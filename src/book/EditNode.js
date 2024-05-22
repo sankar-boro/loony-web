@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import { axiosInstance } from '../query';
+import { axiosInstance } from '../utils/query';
 
 const EditNode = ({ book_id, activeNode, editPage, editSection, editSubSection }) => {
   const [title, setTitle] = useState('');

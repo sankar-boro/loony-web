@@ -1,6 +1,6 @@
 import { MdClose } from 'react-icons/md';
 import { FaCircleCheck, FaCircleXmark } from 'react-icons/fa6';
-import CustomSpinner from './components/Spinner';
+import CustomSpinner from './Spinner';
 
 const alertTypes = {
   success: {

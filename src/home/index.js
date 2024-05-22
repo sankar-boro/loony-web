@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { axiosInstance } from './query';
+import { axiosInstance } from '../utils/query';
 import { useNavigate } from 'react-router-dom';
-import CardLoader from './components/CardLoader';
+import CardLoader from '../components/CardLoader';
 
 const Home = () => {
   const navigate = useNavigate();

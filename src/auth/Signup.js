@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { axiosInstance } from '../query';
+import { axiosInstance } from '../utils/query';
 import { Link } from 'react-router-dom';
 
 const Signup = ({ isMobile }) => {

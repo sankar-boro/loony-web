@@ -15,7 +15,7 @@ import {
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
 import AddNode from './AddNode';
-import { axiosInstance } from '../query';
+import { axiosInstance } from '../utils/query';
 import AddSection from './AddSection';
 import AddSubSection from './AddSubSection';
 import EditNode from './EditNode';
@@ -184,7 +184,6 @@ export default function Edit() {
       }
       return n;
     });
-    console.log(r, page_id);
     setActiveSectionsByPageId(r);
     setAllSectionsByPageId({
       ...allSectionsByPageId,
@@ -206,7 +205,6 @@ export default function Edit() {
       }
       return n;
     });
-    console.log('r', r);
     setActiveSubSectionsBySectionId(r);
     setAllSubSectionsBySectionId({
       ...allSubSectionsBySectionId,

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import { axiosInstance } from '../query';
+import { axiosInstance } from '../utils/query';
 import { updateBlogNode, orderBlogNodes } from 'loony-utils';
 
 const EditNode = ({

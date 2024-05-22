@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { axiosInstance } from '../query';
+import { axiosInstance } from '../utils/query';
 
 export const AuthContext = React.createContext(null);
 

@@ -9,7 +9,7 @@ import { MdAdd } from 'react-icons/md';
 import { FiEdit2 } from 'react-icons/fi';
 import { useParams, Link } from 'react-router-dom';
 
-import { axiosInstance } from '../query';
+import { axiosInstance } from '../utils/query';
 import AddNode from './AddNode';
 import EditNode from './EditNode';
 import ConfirmAction from './ConfirmAction';

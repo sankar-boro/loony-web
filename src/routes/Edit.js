@@ -1,5 +1,5 @@
-import EditBook from './book/Edit';
-import EditBlog from './blog/Edit';
+import EditBook from '../book/Edit';
+import EditBlog from '../blog/Edit';
 
 export default function Edit() {
   const searchParams = new URLSearchParams(window.location.search);
