@@ -6,8 +6,8 @@
     "@uiw/react-markdown-preview": "^5.1.1",
     "axios": "^1.6.7",
     "loony-utils": "1.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-easy-crop": "^5.0.6",
     "react-icons": "^5.0.1",
     "react-router-dom": "^6.23.0"
@@ -23,8 +23,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "rm -rf ./build && react-scripts build",
+    "prod:start": "react-scripts start",
+    "dev:start": "GENERATE_SOURCEMAP=false react-scripts start",
+    "build": "rm -rf ./build && GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

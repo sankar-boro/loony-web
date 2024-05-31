@@ -180,7 +180,6 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
             style={{
               position: 'fixed',
               width: '100%',
-              height: '100%',
               backgroundColor: 'rgb(0,0,0,0.5)',
               zIndex: 10,
             }}
