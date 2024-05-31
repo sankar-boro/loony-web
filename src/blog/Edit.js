@@ -144,7 +144,8 @@ export default function Edit() {
               wrapperElement={{ 'data-color-mode': 'light' }}
             />
           </div>
-          <div className='flex-row'>
+          {/* Main node settings */}
+          <div className='flex-row' style={{ marginTop: 24 }}>
             <div
               className='button-none cursor'
               onClick={() => {
@@ -166,6 +167,22 @@ export default function Edit() {
                 setActivity({
                   ...activity,
                   activeNode: mainNode,
+                  page_id: mainNode.uid,
+                  modal: 'edit_node',
+                });
+              }}
+              style={{ marginRight: 16 }}
+            >
+              <div className='btn-action'>
+                <FiEdit2 size={16} color='#9c9c9c' />
+              </div>
+            </div>
+            <div
+              className='button-none cursor'
+              onClick={() => {
+                setActivity({
+                  ...activity,
+                  activeNode: mainNode,
                   modal: 'delete_blog',
                 });
               }}
@@ -175,6 +192,7 @@ export default function Edit() {
               </div>
             </div>
           </div>
+          {/* End main node settings */}
 
           <div style={{ marginTop: 16 }}>
             {mainNode.identity !== 101 &&
@@ -186,7 +204,9 @@ export default function Edit() {
                       source={node.body}
                       wrapperElement={{ 'data-color-mode': 'light' }}
                     />
-                    <div className='flex-row'>
+
+                    {/* Node settings */}
+                    <div className='flex-row' style={{ marginTop: 24 }}>
                       <div
                         className='button-none cursor'
                         onClick={() => {
@@ -235,6 +255,8 @@ export default function Edit() {
                         </div>
                       </div>
                     </div>
+
+                    {/* Node settings end */}
                   </div>
                 );
               })}
@@ -266,22 +288,6 @@ export default function Edit() {
               <LuFileWarning size={16} color='#2d2d2d' /> Report
             </li>
           </ul>
-          <div style={{ borderTop: '1px solid #ccc', marginTop: 5, paddingTop: 5 }}>
-            <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-              <li
-                onClick={() => {
-                  setActivity({
-                    ...activity,
-                    activeNode: mainNode,
-                    page_id: mainNode.uid,
-                    modal: 'edit_node',
-                  });
-                }}
-              >
-                {mainNode.title}
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
 

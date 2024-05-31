@@ -1,14 +1,13 @@
 import { useState, useCallback } from 'react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../query';
-import { useHistory } from '../Router';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateBlog() {
-  const { replaceState } = useHistory();
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
-  // const [images, setImages] = useState([]);
   const [uploadedImage, setUploadedImage] = useState('');
+  const navigate = useNavigate();
 
   const createDoc = useCallback(() => {
     if (!title || !body) return null;
@@ -16,18 +15,12 @@ export default function CreateBlog() {
     axiosInstance
       .post(url, { title, body, images: [{ name: uploadedImage }], author_id: 1 })
       .then(({ data }) => {
-        replaceState({}, null, '/');
+        navigate('/', { replace: true });
       })
       .catch((err) => {});
   }, [title, body, uploadedImage]);
 
   const uploadFile = (selectedFile) => {
-    // setCropImage(selectedFile);
-    // const reader = new FileReader();
-    // reader.readAsDataURL(selectedFile);
-    // reader.addEventListener('load', () => {
-    //   setCropImage(reader.result);
-    // });
     const formData = new FormData();
     formData.append('file', selectedFile);
     axiosInstance

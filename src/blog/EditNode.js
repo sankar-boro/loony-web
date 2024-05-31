@@ -98,7 +98,7 @@ const EditNode = ({
       </ModalBodyContainer>
       <ModalButtonContainer>
         <button onClick={addNode} className='black-bg'>
-          Create
+          Update
         </button>
       </ModalButtonContainer>
     </ModalMd>
