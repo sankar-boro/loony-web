@@ -18,7 +18,7 @@ export default function CreateBlog() {
         navigate('/', { replace: true });
       })
       .catch((err) => {});
-  }, [title, body, uploadedImage]);
+  }, [title, body, uploadedImage, navigate]);
 
   const uploadFile = (selectedFile) => {
     const formData = new FormData();

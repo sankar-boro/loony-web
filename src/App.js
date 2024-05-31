@@ -114,6 +114,9 @@ const Navigation = ({ auth, logout, setMobileNavOpen, isMobile }) => {
                   >
                     <ul>
                       <li>
+                        <Link to='/profile'>Profile</Link>
+                      </li>
+                      <li>
                         <Link to='#' onClick={logoutUser}>
                           Logout
                         </Link>
