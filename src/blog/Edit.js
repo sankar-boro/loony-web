@@ -7,7 +7,7 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import { LuFileWarning } from 'react-icons/lu';
 import { MdAdd } from 'react-icons/md';
 import { FiEdit2 } from 'react-icons/fi';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 import { axiosInstance } from '../utils/query';
 import AddNode from './AddNode';
@@ -16,6 +16,7 @@ import ConfirmAction from './ConfirmAction';
 
 export default function Edit() {
   const { blogId } = useParams();
+  const navigate = useNavigate();
   const blog_id = parseInt(blogId);
   const [rawNodes, setRawNodes] = useState([]);
   const [blogNodes, setBlogNodes] = useState(null);
@@ -91,7 +92,9 @@ export default function Edit() {
   };
 
   const deleteBlog = () => {
-    axiosInstance.post('/blog/delete_blog', { blog_id: parseInt(blog_id) }).then(() => {});
+    axiosInstance.post('/blog/delete_blog', { blog_id: parseInt(blog_id) }).then(() => {
+      navigate('/', { replace: true });
+    });
   };
 
   if (!blogNodes) return null;
