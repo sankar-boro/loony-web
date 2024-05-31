@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { axiosInstance } from '../utils/query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = ({ isMobile }) => {
   const [fname, setFname] = useState('');
@@ -8,20 +8,36 @@ const Signup = ({ isMobile }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [viewPassword, setViewPassword] = useState(false);
+  const [signupError, setSignupError] = useState('');
+  const navigate = useNavigate();
 
   const signup = () => {
-    if (fname && lname && username && password) {
-      const formData = {
-        fname,
-        lname,
-        username,
-        password,
-      };
-      axiosInstance
-        .post('/auth/signup', formData)
-        .then(({ data }) => {})
-        .catch((err) => {});
+    if (!fname) {
+      setSignupError('Please enter your first name.');
+      return;
     }
+    if (!username) {
+      setSignupError('Phone number is required.');
+      return;
+    }
+    if (!password) {
+      setSignupError('Please enter password.');
+      return;
+    }
+    const formData = {
+      fname,
+      lname,
+      username,
+      password,
+    };
+    axiosInstance
+      .post('/auth/signup', formData)
+      .then(({ data }) => {
+        navigate('/login', {});
+      })
+      .catch((err) => {
+        setSignupError(err.response.data);
+      });
   };
 
   return (
@@ -88,6 +104,11 @@ const Signup = ({ isMobile }) => {
               >
                 <h2 style={{ fontSize: 26, color: '#4da6ff' }}>Sign Up</h2>
               </div>
+              {signupError ? (
+                <div className='input-container'>
+                  <div style={{ color: 'red' }}>{signupError}</div>
+                </div>
+              ) : null}
               <div className='input-container'>
                 <label htmlFor='fname'>First Name</label>
                 <input

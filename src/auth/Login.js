@@ -7,6 +7,7 @@ const Login = ({ isMobile }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [viewPassword, setViewPassword] = useState(false);
+  const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
 
   const authContext = useContext(AuthContext);
@@ -14,19 +15,27 @@ const Login = ({ isMobile }) => {
 
   const onLogin = (e) => {
     e.preventDefault();
-    if (username && password) {
-      const formData = {
-        username,
-        password,
-      };
-      axiosInstance
-        .post('/auth/login', formData)
-        .then(({ data }) => {
-          login(data);
-          navigate('/', {});
-        })
-        .catch((err) => {});
+    if (!username) {
+      setLoginError('Username is required.');
+      return;
     }
+    if (!password) {
+      setLoginError('Password is required.');
+      return;
+    }
+    const formData = {
+      username,
+      password,
+    };
+    axiosInstance
+      .post('/auth/login', formData)
+      .then(({ data }) => {
+        login(data);
+        navigate('/', {});
+      })
+      .catch((err) => {
+        setLoginError(err.response.data);
+      });
   };
   return (
     <div className='book-container'>
@@ -93,6 +102,13 @@ const Login = ({ isMobile }) => {
               >
                 <h2 style={{ fontSize: 26, color: '#4da6ff' }}>Log in</h2>
               </div>
+
+              {loginError ? (
+                <div className='input-container'>
+                  <div style={{ color: 'red' }}>{loginError}</div>
+                </div>
+              ) : null}
+
               <div className='input-container'>
                 <label htmlFor='phone'>Phone Number</label>
                 <input
