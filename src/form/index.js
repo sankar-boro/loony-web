@@ -174,8 +174,22 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
             </div>
           )}
           <div>
-            <button className='black-bg' onClick={createDoc} disabled={submitting}>
+            <button
+              className='black-bg'
+              onClick={createDoc}
+              disabled={submitting}
+              style={{ marginRight: 10 }}
+            >
               {submitting ? 'Creating...' : 'Create'}
+            </button>
+            <button
+              className='grey-bg'
+              onClick={() => {
+                navigate('/', { replace: true });
+              }}
+              disabled={submitting}
+            >
+              Cancel
             </button>
           </div>
         </div>

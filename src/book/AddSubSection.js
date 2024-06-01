@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../utils/query';
 import { appendSubSections } from 'loony-utils';
 
 const AddSubSection = ({
+  visible,
+  setModal,
   activeNode,
   book_id,
   activeSubSectionsBySectionId,
@@ -15,14 +17,8 @@ const AddSubSection = ({
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [visible, setVisible] = useState(false);
   const [uploadedImage, setUploadedImage] = useState('');
 
-  useEffect(() => {
-    if (activeNode) {
-      setVisible(true);
-    }
-  }, [activeNode]);
   const addNode = () => {
     if (!title || !body) return;
     axiosInstance
@@ -51,7 +47,7 @@ const AddSubSection = ({
   const onCloseModal = () => {
     setTitle('');
     setBody('');
-    setVisible(false);
+    setModal('');
   };
   const uploadFile = (selectedFile) => {
     const formData = new FormData();

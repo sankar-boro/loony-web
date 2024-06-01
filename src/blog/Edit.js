@@ -12,7 +12,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../utils/query';
 import AddNode from './AddNode';
 import EditNode from './EditNode';
-import ConfirmAction from './ConfirmAction';
+import ConfirmAction from '../components/ConfirmAction';
 
 export default function Edit() {
   const { blogId } = useParams();
@@ -21,12 +21,12 @@ export default function Edit() {
   const [rawNodes, setRawNodes] = useState([]);
   const [blogNodes, setBlogNodes] = useState(null);
   const [activity, setActivity] = useState({
-    modal: '',
     page_id: null,
     mainNode: null,
     activeNode: null,
     node_index: null,
   });
+  const [modal, setModal] = useState('');
   const [mainNode, setMainNode] = useState(null);
   const [childNodes, setChildNodes] = useState([]);
 
@@ -177,20 +177,6 @@ export default function Edit() {
                 <FiEdit2 size={16} color='#9c9c9c' />
               </div>
             </div>
-            <div
-              className='button-none cursor'
-              onClick={() => {
-                setActivity({
-                  ...activity,
-                  activeNode: mainNode,
-                  modal: 'delete_blog',
-                });
-              }}
-            >
-              <div className='btn-action'>
-                <AiOutlineDelete size={16} color='#9c9c9c' />
-              </div>
-            </div>
           </div>
           {/* End main node settings */}
 
@@ -303,16 +289,16 @@ export default function Edit() {
           rawNodes={rawNodes}
           blogNodes={blogNodes}
           page_id={activity.page_id}
+          visible={modal === 'add_node'}
+          setModal={setModal}
         />
       ) : null}
       {activity.modal === 'delete_node' ? (
         <ConfirmAction
           confirmTitle='Are you sure you want to delete Node?'
           confirmAction={deleteNode}
-          title='Delete Book'
-          onClose={() => {
-            setActivity({ ...activity, modal: '' });
-          }}
+          title='Delete Node'
+          setModal={setModal}
         />
       ) : null}
 
@@ -328,6 +314,8 @@ export default function Edit() {
           rawNodes={rawNodes}
           blogNodes={blogNodes}
           page_id={activity.page_id}
+          visible={activity.modal === 'edit_node'}
+          setModal={setModal}
         />
       ) : null}
 
@@ -336,9 +324,7 @@ export default function Edit() {
           confirmTitle='Are you sure you want to delete Blog?'
           confirmAction={deleteBlog}
           title='Delete Blog'
-          onClose={() => {
-            setActivity({ ...activity, modal: '' });
-          }}
+          setModal={setModal}
         />
       ) : null}
     </div>

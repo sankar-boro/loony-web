@@ -19,7 +19,7 @@ import { axiosInstance } from '../utils/query';
 import AddSection from './AddSection';
 import AddSubSection from './AddSubSection';
 import EditNode from './EditNode';
-import ConfirmAction from './ConfirmAction';
+import ConfirmAction from '../components/ConfirmAction';
 import { AuthContext } from '../context/AuthContext';
 import PageLoader from '../components/PageLoader';
 
@@ -536,6 +536,7 @@ export default function Edit() {
           nodes101={nodes101}
           page_id={page_id}
           setModal={setModal}
+          visible={modal === 'add_chapter'}
         />
       ) : null}
 
@@ -550,6 +551,7 @@ export default function Edit() {
           setAllSectionsByPageId={setAllSectionsByPageId}
           setSectionId={setSectionId}
           setModal={setModal}
+          visible={modal === 'add_section'}
         />
       ) : null}
 
@@ -562,6 +564,8 @@ export default function Edit() {
           page_id={page_id}
           setActiveSubSectionsBySectionId={setActiveSubSectionsBySectionId}
           setAllSubSectionsBySectionId={setAllSubSectionsBySectionId}
+          setModal={setModal}
+          visible={modal === 'edit_node'}
         />
       ) : null}
 
@@ -576,6 +580,8 @@ export default function Edit() {
           editPage={editPage}
           editSection={editSection}
           editSubSection={editSubSection}
+          setModal={setModal}
+          visible={modal === 'edit_node'}
         />
       ) : null}
 
@@ -584,9 +590,8 @@ export default function Edit() {
           confirmTitle='Are you sure you want to delete Book?'
           confirmAction={deleteBook}
           title='Delete Book'
-          onClose={() => {
-            setModal('');
-          }}
+          setModal={setModal}
+          visible={modal === 'delete_book'}
         />
       ) : null}
 
@@ -594,10 +599,8 @@ export default function Edit() {
         <ConfirmAction
           confirmTitle='Are you sure you want to delete Page?'
           confirmAction={deleteNode}
-          title='Delete Book'
-          onClose={() => {
-            setModal('');
-          }}
+          title='Delete Page'
+          setModal={setModal}
         />
       ) : null}
 
@@ -605,10 +608,8 @@ export default function Edit() {
         <ConfirmAction
           confirmTitle='Are you sure you want to delete Node?'
           confirmAction={deleteNode}
-          title='Delete Book'
-          onClose={() => {
-            setModal('');
-          }}
+          title='Delete Node'
+          setModal={setModal}
         />
       ) : null}
     </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../utils/query';
@@ -12,17 +12,12 @@ const AddNode = ({
   setNodes101,
   setActiveNode,
   setModal,
+  visible,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [visible, setVisible] = useState(false);
   const [uploadedImage, setUploadedImage] = useState('');
 
-  useEffect(() => {
-    if (activeNode) {
-      setVisible(true);
-    }
-  }, [activeNode]);
   const onCreate = () => {
     if (!title || !body) return;
     axiosInstance
@@ -48,7 +43,6 @@ const AddNode = ({
   const onCloseModal = () => {
     setTitle('');
     setBody('');
-    setVisible(false);
     setModal('');
   };
   const uploadFile = (selectedFile) => {

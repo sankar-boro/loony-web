@@ -13,15 +13,15 @@ const EditNode = ({
   setActivity,
   setMainNode,
   blog_id,
+  visible,
+  setModal,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [visible, setVisible] = useState(false);
   useEffect(() => {
     if (activeNode) {
       setTitle(activeNode.title);
       setBody(activeNode.body);
-      setVisible(true);
     }
   }, [activeNode]);
   const addNode = () => {
@@ -55,12 +55,11 @@ const EditNode = ({
   const onCloseModal = () => {
     setTitle('');
     setBody('');
-    setVisible(false);
     setActivity((prevState) => ({
       ...prevState,
       activeNode: null,
-      modal: '',
     }));
+    setModal('');
   };
   return (
     <ModalMd visible={visible} onClose={onCloseModal} title='Update Node'>
@@ -97,6 +96,9 @@ const EditNode = ({
         </div>
       </ModalBodyContainer>
       <ModalButtonContainer>
+        <button onClick={onCloseModal} className='black-bg'>
+          Cancel
+        </button>
         <button onClick={addNode} className='black-bg'>
           Update
         </button>

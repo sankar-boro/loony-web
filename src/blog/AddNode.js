@@ -13,6 +13,7 @@ const AddNode = ({
   setMainNode,
   setChildNodes,
   setActivity,
+  setModal,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -62,8 +63,8 @@ const AddNode = ({
       ...prevState,
       activeNode: null,
       page_id: null,
-      modal: '',
     }));
+    setModal('');
   };
   const uploadFile = (selectedFile) => {
     const formData = new FormData();

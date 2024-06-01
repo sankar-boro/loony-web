@@ -3,17 +3,23 @@ import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../utils/query';
 
-const EditNode = ({ book_id, activeNode, editPage, editSection, editSubSection }) => {
+const EditNode = ({
+  setModal,
+  visible,
+  book_id,
+  activeNode,
+  editPage,
+  editSection,
+  editSubSection,
+}) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [visible, setVisible] = useState(false);
   const [uploadedImage, setUploadedImage] = useState('');
 
   useEffect(() => {
     if (activeNode) {
       setTitle(activeNode.title);
       setBody(activeNode.body);
-      setVisible(true);
     }
   }, [activeNode]);
   const addNode = () => {
@@ -39,7 +45,7 @@ const EditNode = ({ book_id, activeNode, editPage, editSection, editSubSection }
   const onCloseModal = () => {
     setTitle('');
     setBody('');
-    setVisible(false);
+    setModal('');
   };
   const uploadFile = (selectedFile) => {
     const formData = new FormData();
@@ -149,6 +155,9 @@ const EditNode = ({ book_id, activeNode, editPage, editSection, editSubSection }
         </div>
       </ModalBodyContainer>
       <ModalButtonContainer>
+        <button onClick={onCloseModal} className='grey-bg'>
+          Cancel
+        </button>
         <button onClick={addNode} className='black-bg'>
           Update
         </button>

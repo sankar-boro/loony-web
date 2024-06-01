@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../utils/query';
@@ -14,17 +14,12 @@ const AddSection = ({
   setAllSectionsByPageId,
   setSectionId,
   setModal,
+  visible,
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [visible, setVisible] = useState(false);
   const [uploadedImage, setUploadedImage] = useState('');
 
-  useEffect(() => {
-    if (activeNode) {
-      setVisible(true);
-    }
-  }, [activeNode]);
   const addNode = () => {
     if (!title || !body) return;
     axiosInstance
@@ -61,7 +56,6 @@ const AddSection = ({
   const clearForms = () => {
     setTitle('');
     setBody('');
-    setVisible(false);
     setModal('');
   };
   const uploadFile = (selectedFile) => {
