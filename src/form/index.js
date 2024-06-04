@@ -3,7 +3,6 @@ import { useState, useCallback, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../utils/query';
-import {} from 'react-router-dom';
 import 'react-easy-crop/react-easy-crop.css';
 import { AuthContext } from '../context/AuthContext';
 import Cropper from 'react-easy-crop';
@@ -13,22 +12,22 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
   const { setAuthContext } = useContext(AuthContext);
   const [formTitle, setFormTitle] = useState('');
   const [formBody, setFormBody] = useState('');
-  const [formImage, setFormImage] = useState({
+  const [formImageTags, setFormImageTags] = useState('');
+  const [afterImageSelect, setAfterImageSelect] = useState({
     image: null,
     width: null,
     height: null,
     hasImage: false,
   });
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [afterTmpImageUpload, setAfterTmpImageUpload] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [cropImage, setCropImage] = useState(null);
+
+  const [imageEdit, setImageEdit] = useState(null);
   const [cropImageMetadata, setCropImageMetadata] = useState({
-    width: 1820,
-    height: 1365,
-    x: 114,
-    y: 0,
+    width: null,
+    height: null,
+    x: null,
+    y: null,
   });
 
   useEffect(() => {
@@ -36,8 +35,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
       setFormTitle(editNode.title);
       setFormBody(editNode.title);
       const images = editNode.images ? JSON.parse(editNode.images) : [];
-      const image = images.length > 0 ? images[0].name : '';
-      setFormImage(image);
+      setAfterTmpImageUpload(images);
     }
   }, []);
 
@@ -48,7 +46,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
       .post(url, {
         title: formTitle,
         body: formBody,
-        images: [{ name: uploadedImage }],
+        images: [{ name: afterTmpImageUpload, tags: [formImageTags] }],
         author_id: 1,
       })
       .then(() => {
@@ -63,7 +61,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
       .catch(() => {
         setSubmitting(false);
       });
-  }, [formTitle, formBody, formImage]);
+  }, [formTitle, formBody]);
 
   const onSelectImage = (event) => {
     const selectedFile = event.target.files[0];
@@ -73,14 +71,13 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
       img.onload = function () {
         const width = img.naturalWidth;
         const height = img.naturalHeight;
-        console.log(width, height);
-        setFormImage({
+        setAfterImageSelect({
           hasImage: true,
           image: selectedFile,
           width,
           height,
         });
-        setCropImage(URL.createObjectURL(selectedFile));
+        setImageEdit(URL.createObjectURL(selectedFile));
       };
       img.src = e.target.result;
     };
@@ -89,20 +86,16 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
 
   const changeFile = onSelectImage;
 
-  const onCropComplete = (croppedArea, croppedAreaPixels) => {
-    setCropImageMetadata(croppedAreaPixels);
-  };
-
   const uploadImage = () => {
     const formData = new FormData();
     formData.append(
       'metadata',
       JSON.stringify({
-        oriImgMd: formImage,
+        oriImgMd: afterImageSelect,
         cropImgMd: cropImageMetadata,
       }),
     );
-    formData.append('file', formImage.image);
+    formData.append('file', afterImageSelect.image);
 
     axiosInstance
       .post('/upload_file', formData, {
@@ -111,7 +104,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
         },
       })
       .then(({ data }) => {
-        setUploadedImage(data.data.uploaded_filename);
+        setAfterTmpImageUpload(data.data.name);
       })
       .catch((err) => {});
   };
@@ -146,92 +139,28 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
               value={formBody}
             />
           </div>
-          {cropImage ? (
-            <div className='form-section'>
-              <label>Image</label>
-              <div
-                style={{
-                  border: '1px dashed #ccc',
-                  padding: 24,
-                }}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                  }}
-                >
-                  <div style={{ position: 'relative', width: '100%', minHeight: 350 }}>
-                    <Cropper
-                      image={cropImage}
-                      crop={crop}
-                      zoom={zoom}
-                      aspect={4 / 3}
-                      onCropChange={setCrop}
-                      onCropComplete={onCropComplete}
-                      onZoomChange={setZoom}
-                    />
-                  </div>
-                  <label>Choose another file</label>
-                  <br />
-                  <input
-                    type='file'
-                    onChange={(e) => {
-                      changeFile(e.target.files[0]);
-                    }}
-                    style={{
-                      backgroundColor: 'white',
-                      border: 'none',
-                      padding: 0,
-                      margin: 0,
-                      marginTop: 20,
-                      borderRadius: 15,
-                      width: '50%',
-                    }}
-                  />
-                  <button onClick={uploadImage}>Upload</button>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className='form-section'>
-              <label>Image</label>
-              <div
-                style={{
-                  border: '1px dashed #ccc',
-                  padding: 24,
-                }}
-              >
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                  }}
-                >
-                  <label>Drop file here</label>
-                  <br />
-                  <span>or</span>
-                  <input
-                    type='file'
-                    onChange={onSelectImage}
-                    style={{
-                      backgroundColor: 'white',
-                      border: 'none',
-                      padding: 0,
-                      margin: 0,
-                      marginTop: 20,
-                      borderRadius: 15,
-                      width: '50%',
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
+          {!afterTmpImageUpload && imageEdit ? (
+            <EditImageComponent
+              uploadImage={uploadImage}
+              changeFile={changeFile}
+              imageEdit={imageEdit}
+              setCropImageMetadata={setCropImageMetadata}
+            />
+          ) : null}
+          {!afterTmpImageUpload && !imageEdit ? (
+            <SelectImage onSelectImage={onSelectImage} />
+          ) : null}
+          <div className='form-section'>
+            <label>Image Tags</label>
+            <br />
+            <input
+              type='text'
+              value={formImageTags}
+              onChange={(e) => {
+                setFormImageTags(e.target.value);
+              }}
+            />
+          </div>
           <div>
             <button
               className='black-bg'
@@ -261,3 +190,101 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
     </div>
   );
 }
+
+const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMetadata }) => {
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+
+  const onCropComplete = (croppedArea, croppedAreaPixels) => {
+    setCropImageMetadata(croppedAreaPixels);
+  };
+
+  return (
+    <div className='form-section'>
+      <label>Image</label>
+      <div
+        style={{
+          border: '1px dashed #ccc',
+          padding: 24,
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <div style={{ position: 'relative', width: '100%', minHeight: 350 }}>
+            <Cropper
+              image={imageEdit}
+              crop={crop}
+              zoom={zoom}
+              aspect={4 / 3}
+              onCropChange={setCrop}
+              onCropComplete={onCropComplete}
+              onZoomChange={setZoom}
+            />
+          </div>
+          <label>Choose another file</label>
+          <br />
+          <input
+            type='file'
+            onChange={changeFile}
+            style={{
+              backgroundColor: 'white',
+              border: 'none',
+              padding: 0,
+              margin: 0,
+              marginTop: 20,
+              borderRadius: 15,
+              width: '50%',
+            }}
+          />
+          <button onClick={uploadImage}>Upload</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const SelectImage = ({ onSelectImage }) => {
+  return (
+    <div className='form-section'>
+      <label>Image</label>
+      <div
+        style={{
+          border: '1px dashed #ccc',
+          padding: 24,
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <label>Drop file here</label>
+          <br />
+          <span>or</span>
+          <input
+            type='file'
+            onChange={onSelectImage}
+            style={{
+              backgroundColor: 'white',
+              border: 'none',
+              padding: 0,
+              margin: 0,
+              marginTop: 20,
+              borderRadius: 15,
+              width: '50%',
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};

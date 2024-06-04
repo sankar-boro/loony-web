@@ -39,7 +39,7 @@ const Home = () => {
                     style={{
                       backgroundImage:
                         image && image.name
-                          ? `url("${process.env.REACT_APP_BASE_API_URL}/api/i/${image.name}")`
+                          ? `url("${process.env.REACT_APP_BASE_API_URL}/api/i/sm/${image.name}")`
                           : null,
                       overflow: 'hidden',
                       backgroundSize: 'cover',
