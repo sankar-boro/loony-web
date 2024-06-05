@@ -17,7 +17,7 @@ const Home = () => {
       setBooks(data.data);
     });
   }, []);
-
+  console.log(books, 'books');
   return (
     <div className='book-container'>
       <div className='app-body'>
@@ -83,7 +83,7 @@ const Home = () => {
                     style={{
                       backgroundImage:
                         image && image.name
-                          ? `url("${process.env.REACT_APP_BASE_API_URL}/api/i/${image.name}")`
+                          ? `url("${process.env.REACT_APP_BASE_API_URL}/api/i/${book.book_id}/md/${image.name}")`
                           : null,
                       overflow: 'hidden',
                       backgroundSize: 'cover',

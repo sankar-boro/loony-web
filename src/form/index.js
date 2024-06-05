@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MarkdownPreview from '@uiw/react-markdown-preview';
@@ -61,7 +60,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
       .catch(() => {
         setSubmitting(false);
       });
-  }, [formTitle, formBody]);
+  }, [formTitle, formBody, afterTmpImageUpload]);
 
   const onSelectImage = (event) => {
     const selectedFile = event.target.files[0];
@@ -104,10 +103,11 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
         },
       })
       .then(({ data }) => {
-        setAfterTmpImageUpload(data.data.name);
+        setAfterTmpImageUpload(data.name);
       })
       .catch((err) => {});
   };
+
   return (
     <div
       className='book-container'
