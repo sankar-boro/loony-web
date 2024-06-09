@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MarkdownPreview from '@uiw/react-markdown-preview';
@@ -8,7 +9,8 @@ import Cropper from 'react-easy-crop';
 
 export default function FormComponent({ editNode, url, title, isMobile }) {
   const navigate = useNavigate();
-  const { setAuthContext } = useContext(AuthContext);
+  const { setAuthContext, auth } = useContext(AuthContext);
+  const { user_id } = auth.user;
   const [formTitle, setFormTitle] = useState('');
   const [formBody, setFormBody] = useState('');
   const [formImageTags, setFormImageTags] = useState('');
@@ -104,6 +106,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
       })
       .then(({ data }) => {
         setAfterTmpImageUpload(data.name);
+        setImageEdit('');
       })
       .catch((err) => {});
   };
@@ -149,6 +152,12 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
           ) : null}
           {!afterTmpImageUpload && !imageEdit ? (
             <SelectImage onSelectImage={onSelectImage} />
+          ) : null}
+          {afterTmpImageUpload && !imageEdit ? (
+            <img
+              src={`${process.env.REACT_APP_BASE_API_URL}/api/t/${user_id}/340/${afterTmpImageUpload}`}
+              alt='tmp file upload'
+            />
           ) : null}
           <div className='form-section'>
             <label>Image Tags</label>

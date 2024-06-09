@@ -233,7 +233,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
             {image && image.name ? (
               <div style={{ width: '100%', borderRadius: 5 }}>
                 <img
-                  src={`${process.env.REACT_APP_BASE_API_URL}/api/i/${book_id}/md/${image.name}`}
+                  src={`${process.env.REACT_APP_BASE_API_URL}/api/g/${book_id}/720/${image.name}`}
                   alt=''
                   width='100%'
                 />
