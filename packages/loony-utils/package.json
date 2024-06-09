@@ -1,6 +1,13 @@
 {
   "name": "loony-utils",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "index.js",
+  "description": "Utilities for Loony. Order blog and book nodes.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sankar-boro/loony-web.git"
+  },
+  "author": "Sankar Boro <sankar.boro@yahoo.com>",
+  "homepage": "https://github.com/sankar-boro/loony-web/blob/main/packages/loony-utils#readme",
   "license": "MIT"
 }
