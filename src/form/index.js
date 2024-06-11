@@ -13,7 +13,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
   const { user_id } = auth.user;
   const [formTitle, setFormTitle] = useState('');
   const [formBody, setFormBody] = useState('');
-  const [formImageTags, setFormImageTags] = useState('');
+  const [tags, setTags] = useState('');
   const [afterImageSelect, setAfterImageSelect] = useState({
     image: null,
     width: null,
@@ -47,8 +47,8 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
       .post(url, {
         title: formTitle,
         body: formBody,
-        images: [{ name: afterTmpImageUpload, tags: [formImageTags] }],
-        author_id: 1,
+        images: [{ name: afterTmpImageUpload }],
+        tags,
       })
       .then(() => {
         setSubmitting(false);
@@ -72,6 +72,12 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
       img.onload = function () {
         const width = img.naturalWidth;
         const height = img.naturalHeight;
+        if (width > height && width <= 1420) {
+          return;
+        }
+        if (height > width && height <= 1420) {
+          return;
+        }
         setAfterImageSelect({
           hasImage: true,
           image: selectedFile,
@@ -160,13 +166,13 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
             />
           ) : null}
           <div className='form-section'>
-            <label>Image Tags</label>
+            <label>Tags</label>
             <br />
             <input
               type='text'
-              value={formImageTags}
+              value={tags}
               onChange={(e) => {
-                setFormImageTags(e.target.value);
+                setTags(e.target.value);
               }}
             />
           </div>
@@ -203,6 +209,10 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
 const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMetadata }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
+  const [aspectRatio, setAspectRatio] = useState({
+    width: 4,
+    height: 3,
+  });
 
   const onCropComplete = (croppedArea, croppedAreaPixels) => {
     setCropImageMetadata(croppedAreaPixels);
@@ -230,7 +240,7 @@ const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMe
               image={imageEdit}
               crop={crop}
               zoom={zoom}
-              aspect={4 / 3}
+              aspect={aspectRatio.width / aspectRatio.height}
               onCropChange={setCrop}
               onCropComplete={onCropComplete}
               onZoomChange={setZoom}
@@ -238,6 +248,22 @@ const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMe
           </div>
           <label>Choose another file</label>
           <br />
+          <div className='flex-row'>
+            <button
+              onClick={() => {
+                setAspectRatio({ width: 4, height: 3 });
+              }}
+            >
+              4/3
+            </button>
+            <button
+              onClick={() => {
+                setAspectRatio({ width: 9, height: 16 });
+              }}
+            >
+              9/16
+            </button>
+          </div>
           <input
             type='file'
             onChange={changeFile}

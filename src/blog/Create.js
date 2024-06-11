@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback } from 'react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../query';
@@ -7,13 +8,14 @@ export default function CreateBlog() {
   const [body, setBody] = useState('');
   const [title, setTitle] = useState('');
   const [uploadedImage, setUploadedImage] = useState('');
+  const [tags, setTags] = useState('');
   const navigate = useNavigate();
 
   const createDoc = useCallback(() => {
     if (!title || !body) return null;
     const url = '/blog/create';
     axiosInstance
-      .post(url, { title, body, images: [{ name: uploadedImage }], author_id: 1 })
+      .post(url, { title, body, images: [{ name: uploadedImage }], tags })
       .then(({ data }) => {
         navigate('/', { replace: true });
       })
@@ -123,6 +125,17 @@ export default function CreateBlog() {
               </div>
             </div>
           )}
+          <div className='form-section'>
+            <label>Tags</label>
+            <br />
+            <input
+              type='text'
+              value={tags}
+              onChange={(e) => {
+                setTags(e.target.value);
+              }}
+            />
+          </div>
           <div>
             <button onClick={createDoc} className='black-bg'>
               Create
