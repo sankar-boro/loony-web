@@ -27,7 +27,7 @@ export default function Edit() {
   const { bookId } = useParams();
   const book_id = parseInt(bookId);
   const navigate = useNavigate();
-  const { setAuthContext } = useContext(AuthContext);
+  const { setContext } = useContext(AuthContext);
 
   const [frontPage, setFrontPage] = useState(null);
   const [nodes101, setNodes101] = useState([]);
@@ -145,10 +145,12 @@ export default function Edit() {
   const deleteBook = () => {
     axiosInstance.post('/book/delete_book', { book_id: parseInt(book_id) }).then(() => {
       setModal('');
-      setAuthContext('alert', {
-        alertType: 'success',
-        title: 'Deleted Book',
-        body: 'Your book has been successfully deleted.',
+      setContext({
+        alert: {
+          alertType: 'success',
+          title: 'Deleted Book',
+          body: 'Your book has been successfully deleted.',
+        },
       });
       navigate('/', { replace: true });
     });

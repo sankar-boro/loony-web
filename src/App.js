@@ -13,17 +13,23 @@ import AuthError from './error/AuthError';
 import { axiosInstance } from './utils/query';
 import { CREATE_BOOK, CREATE_BLOG } from './utils/url';
 import { AuthContext, AuthProvider } from './context/AuthContext';
+import { AUTHORIZED, UNAUTHORIZED } from './utils/types';
 
 import { LuMenu } from 'react-icons/lu';
 import { LiaUserSolid } from 'react-icons/lia';
 import { Routes, Route as ReactRoute, BrowserRouter, Link, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
-const Navigation = ({ auth, logout, setMobileNavOpen, isMobile }) => {
+const Navigation = ({ auth, setMobileNavOpen, isMobile }) => {
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
+
   const logoutUser = () => {
     axiosInstance.post('/auth/logout').then(() => {
-      logout();
+      authContext.setAuthContext({
+        status: UNAUTHORIZED,
+        user: null,
+      });
     });
   };
   return (
@@ -57,7 +63,7 @@ const Navigation = ({ auth, logout, setMobileNavOpen, isMobile }) => {
                 justifyContent: 'flex-end',
               }}
             >
-              {auth.auth ? (
+              {auth.status === AUTHORIZED ? (
                 <div
                   style={{
                     color: 'white',
@@ -92,7 +98,7 @@ const Navigation = ({ auth, logout, setMobileNavOpen, isMobile }) => {
                 </div>
               ) : null}
 
-              {auth.auth ? (
+              {auth.status === AUTHORIZED ? (
                 <div
                   style={{
                     color: 'white',
@@ -153,17 +159,12 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <AuthContext.Consumer>
-          {({ auth, logout, context }) => {
+          {({ auth, context }) => {
             return (
               <>
                 {context.alert && <Alert alert={context.alert} onClose={() => {}} />}
-                <Navigation
-                  auth={auth}
-                  logout={logout}
-                  setMobileNavOpen={setMobileNavOpen}
-                  isMobile={isMobile}
-                />
-                {auth.auth && (
+                <Navigation auth={auth} setMobileNavOpen={setMobileNavOpen} isMobile={isMobile} />
+                {auth.status === AUTHORIZED && (
                   <Routes>
                     <ReactRoute path='/' element={<Home isMobile={isMobile} />} />
                     <ReactRoute
@@ -206,7 +207,7 @@ function App() {
                     <ReactRoute path='*' element={<AuthError />} />
                   </Routes>
                 )}
-                {!auth.auth && (
+                {auth.status === UNAUTHORIZED && (
                   <Routes>
                     <ReactRoute path='/' element={<Home isMobile={isMobile} />} />
                     <ReactRoute path='/login' element={<Login isMobile={isMobile} />} />

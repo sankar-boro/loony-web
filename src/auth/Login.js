@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { axiosInstance } from '../utils/query';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { AUTHORIZED } from '../utils/types';
 
 const Login = ({ isMobile }) => {
   const [username, setUsername] = useState('');
@@ -11,7 +12,6 @@ const Login = ({ isMobile }) => {
   const navigate = useNavigate();
 
   const authContext = useContext(AuthContext);
-  const { login } = authContext;
 
   const onLogin = (e) => {
     e.preventDefault();
@@ -30,7 +30,10 @@ const Login = ({ isMobile }) => {
     axiosInstance
       .post('/auth/login', formData)
       .then(({ data }) => {
-        login(data);
+        authContext.setAuthContext({
+          status: AUTHORIZED,
+          user: data,
+        });
         navigate('/', {});
       })
       .catch((err) => {
@@ -121,7 +124,7 @@ const Login = ({ isMobile }) => {
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      login(e);
+                      onLogin(e);
                     }
                   }}
                   required
@@ -140,7 +143,7 @@ const Login = ({ isMobile }) => {
                   }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      login(e);
+                      onLogin(e);
                     }
                   }}
                   required

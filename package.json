@@ -7,7 +7,6 @@
     "url": "https://github.com/sankar-boro/loony-web.git"
   },
   "author": "Sankar Boro <sankar.boro@yahoo.com>",
-  "homepage": "https://github.com/sankar-boro/loony-web#readme",
   "dependencies": {
     "@uiw/react-markdown-preview": "^5.1.1",
     "axios": "^1.6.7",

@@ -9,7 +9,7 @@ import Cropper from 'react-easy-crop';
 
 export default function FormComponent({ editNode, url, title, isMobile }) {
   const navigate = useNavigate();
-  const { setAuthContext, auth } = useContext(AuthContext);
+  const { setContext, auth } = useContext(AuthContext);
   const { user_id } = auth.user;
   const [formTitle, setFormTitle] = useState('');
   const [formBody, setFormBody] = useState('');
@@ -40,22 +40,28 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
     }
   }, []);
 
-  const createDoc = useCallback(() => {
+  const createDoc = useCallback(async () => {
+    let imageData = null;
+    if (afterImageSelect.image) {
+      imageData = await uploadImage();
+    }
     if (!formTitle || !formBody) return;
     setSubmitting(true);
     axiosInstance
       .post(url, {
         title: formTitle,
         body: formBody,
-        images: [{ name: afterTmpImageUpload }],
+        images: [{ name: imageData ? imageData.name : afterTmpImageUpload }],
         tags,
       })
       .then(() => {
         setSubmitting(false);
-        setAuthContext('alert', {
-          alertType: 'success',
-          title: 'Created',
-          body: 'Created successfully',
+        setContext({
+          alert: {
+            alertType: 'success',
+            title: 'Created',
+            body: 'Created successfully',
+          },
         });
         navigate('/', { replace: true });
       })
@@ -93,7 +99,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
 
   const changeFile = onSelectImage;
 
-  const uploadImage = () => {
+  const uploadImage = async () => {
     const formData = new FormData();
     formData.append(
       'metadata',
@@ -104,17 +110,16 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
     );
     formData.append('file', afterImageSelect.image);
 
-    axiosInstance
-      .post('/upload_file', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then(({ data }) => {
-        setAfterTmpImageUpload(data.name);
-        setImageEdit('');
-      })
-      .catch((err) => {});
+    const { data } = await axiosInstance.post('/upload_file', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    setAfterTmpImageUpload(data.name);
+    setImageEdit('');
+    console.log('data', data);
+    return data;
   };
 
   return (
