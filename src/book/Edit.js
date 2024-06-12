@@ -18,7 +18,7 @@ import AddNode from './AddNode';
 import { axiosInstance } from '../utils/query';
 import AddSection from './AddSection';
 import AddSubSection from './AddSubSection';
-import EditNode from './EditNode';
+import EditDocument from '../form/editDocument';
 import ConfirmAction from '../components/ConfirmAction';
 import { AuthContext } from '../context/AuthContext';
 import PageLoader from '../components/PageLoader';
@@ -216,10 +216,35 @@ export default function Edit() {
     setModal('');
   };
 
+  const updateFrontPage = (data) => {
+    const x = {
+      ...frontPage,
+      ...data,
+    };
+    setActiveNode(x);
+    setPageId(x.uid);
+    setFrontPage(x);
+  };
+
   const reset = (e) => {
     setActiveSubSectionsBySectionId([]);
     setModal('');
     e.stopPropagation();
+  };
+
+  const editFnCallback = (data) => {
+    if (activeNode.identity === 100) {
+      updateFrontPage(data);
+    }
+    if (activeNode.identity === 101) {
+      editPage(data);
+    }
+    if (activeNode.identity === 102) {
+      editSection(data);
+    }
+    if (activeNode.identity === 103) {
+      editSubSection(data);
+    }
   };
 
   if (!activeNode) return null;
@@ -382,7 +407,7 @@ export default function Edit() {
             {image && image.name ? (
               <div style={{ width: '100%', borderRadius: 5 }}>
                 <img
-                  src={`${process.env.REACT_APP_BASE_API_URL}/api/i/${image.name}`}
+                  src={`${process.env.REACT_APP_BASE_API_URL}/api/g/${book_id}/720/${image.name}`}
                   alt=''
                   width='100%'
                 />
@@ -393,7 +418,7 @@ export default function Edit() {
               wrapperElement={{ 'data-color-mode': 'light' }}
             />
           </div>
-          {activeNode.identity >= 101 ? (
+          {activeNode.identity >= 100 ? (
             <div className='flex-row' style={{ marginTop: 24 }}>
               {activeNode.identity === 102 ? (
                 <div
@@ -572,18 +597,12 @@ export default function Edit() {
       ) : null}
 
       {modal === 'edit_node' ? (
-        <EditNode
-          book_id={book_id}
+        <EditDocument
+          docIdName='book_id'
+          doc_id={book_id}
           activeNode={activeNode}
-          setActiveNode={setActiveNode}
-          setNavNodes={setNodes101}
-          nodes101={nodes101}
-          page_id={page_id}
-          editPage={editPage}
-          editSection={editSection}
-          editSubSection={editSubSection}
           setModal={setModal}
-          visible={modal === 'edit_node'}
+          FnCallback={editFnCallback}
         />
       ) : null}
 

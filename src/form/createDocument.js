@@ -14,6 +14,8 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
   const [formTitle, setFormTitle] = useState('');
   const [formBody, setFormBody] = useState('');
   const [tags, setTags] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
   const [afterImageSelect, setAfterImageSelect] = useState({
     image: null,
     width: null,
@@ -21,8 +23,6 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
     hasImage: false,
   });
   const [afterTmpImageUpload, setAfterTmpImageUpload] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-
   const [imageEdit, setImageEdit] = useState(null);
   const [cropImageMetadata, setCropImageMetadata] = useState({
     width: null,

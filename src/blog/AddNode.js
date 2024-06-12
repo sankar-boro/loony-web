@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../utils/query';
@@ -17,14 +17,8 @@ const AddNode = ({
 }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [visible, setVisible] = useState(false);
   const [uploadedImage, setUploadedImage] = useState('');
 
-  useEffect(() => {
-    if (activeNode) {
-      setVisible(true);
-    }
-  }, [activeNode]);
   const addNode = () => {
     if (!title || !body) {
       return;
@@ -58,7 +52,6 @@ const AddNode = ({
   const onCloseModal = () => {
     setTitle('');
     setBody('');
-    setVisible(false);
     setActivity((prevState) => ({
       ...prevState,
       activeNode: null,
@@ -84,7 +77,7 @@ const AddNode = ({
   const changeFile = uploadFile;
 
   return (
-    <ModalMd visible={visible} onClose={onCloseModal} title='Add Blog Node'>
+    <ModalMd visible={true} onClose={onCloseModal} title='Add Blog Node'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div style={{ width: '45%' }}>
