@@ -131,9 +131,9 @@ export default function Edit() {
           <div>
             <div className='page-heading'>{mainNode.title}</div>
             {image && image.name ? (
-              <div style={{ width: '50%', border: '1px solid #ccc', borderRadius: 5 }}>
+              <div style={{ width: '100%', borderRadius: 5 }}>
                 <img
-                  src={`${process.env.REACT_APP_BASE_API_URL}/api/i/${image.name}`}
+                  src={`${process.env.REACT_APP_BASE_API_URL}/api/g/${blog_id}/720/${image.name}`}
                   alt=''
                   width='100%'
                 />

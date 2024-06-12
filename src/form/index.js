@@ -118,7 +118,6 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
 
     setAfterTmpImageUpload(data.name);
     setImageEdit('');
-    console.log('data', data);
     return data;
   };
 
