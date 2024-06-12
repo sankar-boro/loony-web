@@ -1,7 +1,7 @@
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
 import { useState, useEffect } from 'react';
-import { orderBlogNodes, deleteBlogNode, extractImage } from 'loony-utils';
+import { orderBlogNodes, deleteBlogNode, extractImage, updateBlogNode } from 'loony-utils';
 import { RxReader } from 'react-icons/rx';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { LuFileWarning } from 'react-icons/lu';
@@ -11,7 +11,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 
 import { axiosInstance } from '../utils/query';
 import AddNode from './AddNode';
-import EditNode from './EditNode';
+import EditNode from '../form/editDocument';
 import ConfirmAction from '../components/ConfirmAction';
 
 export default function Edit() {
@@ -97,6 +97,20 @@ export default function Edit() {
     });
   };
 
+  const editFnCallback = (data) => {
+    const newRawNodes = updateBlogNode(rawNodes, data);
+    setRawNodes(newRawNodes);
+    const blogs_ = orderBlogNodes(newRawNodes);
+    const mainNode_ = blogs_ && blogs_[0];
+    const childNodes_ = blogs_.slice(1);
+
+    if (mainNode_) {
+      setMainNode(mainNode_);
+      setChildNodes(childNodes_);
+      setBlogNodes(blogs_);
+    }
+  };
+
   if (!blogNodes) return null;
   const image = extractImage(mainNode.images);
 
@@ -133,7 +147,7 @@ export default function Edit() {
             {image && image.name ? (
               <div style={{ width: '100%', borderRadius: 5 }}>
                 <img
-                  src={`${process.env.REACT_APP_BASE_API_URL}/api/g/${blog_id}/720/${image.name}`}
+                  src={`${process.env.REACT_APP_BASE_API_URL}/api/blog/${blog_id}/720/${image.name}`}
                   alt=''
                   width='100%'
                 />
@@ -304,18 +318,11 @@ export default function Edit() {
 
       {activity.modal === 'edit_node' ? (
         <EditNode
-          activeNode={activity.activeNode}
-          setActivity={setActivity}
-          blog_id={blog_id}
-          setBlogNodes={setBlogNodes}
-          setRawNodes={setRawNodes}
-          setMainNode={setMainNode}
-          setChildNodes={setChildNodes}
-          rawNodes={rawNodes}
-          blogNodes={blogNodes}
-          page_id={activity.page_id}
-          visible={activity.modal === 'edit_node'}
           setModal={setModal}
+          docIdName='blog_id'
+          doc_id={blog_id}
+          activeNode={activity.activeNode}
+          FnCallback={editFnCallback}
         />
       ) : null}
 

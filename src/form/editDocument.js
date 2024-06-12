@@ -121,6 +121,8 @@ const EditNode = ({ setModal, docIdName, doc_id, activeNode, FnCallback }) => {
     return data;
   };
 
+  const imageName = docIdName === 'book_id' ? 'book' : 'blog';
+
   return (
     <ModalMd visible={true} onClose={onCloseModal} title='Update Node'>
       <ModalBodyContainer>
@@ -128,7 +130,7 @@ const EditNode = ({ setModal, docIdName, doc_id, activeNode, FnCallback }) => {
           <div style={{ width: '45%' }}>
             {image ? (
               <img
-                src={`${process.env.REACT_APP_BASE_API_URL}/api/g/${user_id}/340/${image}`}
+                src={`${process.env.REACT_APP_BASE_API_URL}/api/${imageName}/${user_id}/340/${image}`}
                 alt='tmp file upload'
               />
             ) : null}
@@ -168,7 +170,7 @@ const EditNode = ({ setModal, docIdName, doc_id, activeNode, FnCallback }) => {
             ) : null}
             {afterTmpImageUpload && !imageEdit ? (
               <img
-                src={`${process.env.REACT_APP_BASE_API_URL}/api/t/${user_id}/340/${afterTmpImageUpload}`}
+                src={`${process.env.REACT_APP_BASE_API_URL}/api/tmp/${user_id}/340/${afterTmpImageUpload}`}
                 alt='tmp file upload'
               />
             ) : null}

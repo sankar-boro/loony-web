@@ -165,7 +165,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
           ) : null}
           {afterTmpImageUpload && !imageEdit ? (
             <img
-              src={`${process.env.REACT_APP_BASE_API_URL}/api/t/${user_id}/340/${afterTmpImageUpload}`}
+              src={`${process.env.REACT_APP_BASE_API_URL}/api/tmp/${user_id}/340/${afterTmpImageUpload}`}
               alt='tmp file upload'
             />
           ) : null}

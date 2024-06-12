@@ -39,7 +39,7 @@ const Home = () => {
                     style={{
                       backgroundImage:
                         image && image.name
-                          ? `url("${process.env.REACT_APP_BASE_API_URL}/api/g/${blog.blog_id}/340/${image.name}")`
+                          ? `url("${process.env.REACT_APP_BASE_API_URL}/api/blog/${blog.blog_id}/340/${image.name}")`
                           : null,
                       overflow: 'hidden',
                       backgroundSize: 'cover',
@@ -83,7 +83,7 @@ const Home = () => {
                     style={{
                       backgroundImage:
                         image && image.name
-                          ? `url("${process.env.REACT_APP_BASE_API_URL}/api/g/${book.book_id}/340/${image.name}")`
+                          ? `url("${process.env.REACT_APP_BASE_API_URL}/api/book/${book.book_id}/340/${image.name}")`
                           : null,
                       overflow: 'hidden',
                       backgroundSize: 'cover',
