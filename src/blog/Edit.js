@@ -339,6 +339,7 @@ const ActivityComponent = ({ state, setState, blogId }) => {
           docIdName='blog_id'
           docId={blogId}
           parent_id={activeNode.uid}
+          identity={101}
         />
       ) : null}
       {modal === 'delete_node' ? (

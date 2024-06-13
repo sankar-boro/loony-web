@@ -17,6 +17,8 @@ export default function FormComponent({
   FnCallback,
   setState,
   parent_id,
+  identity,
+  page_id,
 }) {
   const { auth } = useContext(AuthContext);
   const { user_id } = auth.user;
@@ -55,6 +57,8 @@ export default function FormComponent({
         tags,
         [docIdName]: parseInt(docId),
         parent_id,
+        identity,
+        page_id,
       })
       .then((data) => {
         setSubmitting(false);
@@ -127,7 +131,7 @@ export default function FormComponent({
   };
 
   return (
-    <ModalMd visible={true} onClose={onCloseModal} title='New Section'>
+    <ModalMd visible={true} onClose={onCloseModal} title='Add Node'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div style={{ width: '45%' }}>

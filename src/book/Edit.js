@@ -14,14 +14,13 @@ import {
 } from 'react-icons/md';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
-import AddNode from './AddNode';
 import { axiosInstance } from '../utils/query';
-import AddSection from './AddSection';
-import AddSubSection from './AddSubSection';
+import AddNode from '../form/addNode';
 import EditDocument from '../form/editDocument';
 import ConfirmAction from '../components/ConfirmAction';
 import { AuthContext } from '../context/AuthContext';
 import PageLoader from '../components/PageLoader';
+import { appendChapters, appendSections, appendSubSections } from 'loony-utils';
 
 export default function Edit() {
   const { bookId } = useParams();
@@ -29,6 +28,7 @@ export default function Edit() {
   const navigate = useNavigate();
   const { setContext } = useContext(AuthContext);
 
+  const [state, setState] = useState({});
   const [frontPage, setFrontPage] = useState(null);
   const [nodes101, setNodes101] = useState([]);
   const [modal, setModal] = useState('');
@@ -247,6 +247,40 @@ export default function Edit() {
     }
   };
 
+  const addChapterFnCb = (data) => {
+    const newNodes = appendChapters(nodes101, activeNode, data);
+    setNodes101(newNodes);
+    setActiveNode(data.new_node);
+    setModal('');
+  };
+
+  const addSectionFnCb = (data) => {
+    const newRawNodes = appendSections(activeSectionsByPageId, activeNode, data);
+    setActiveSectionsByPageId(newRawNodes);
+    setAllSectionsByPageId((prevState) => ({
+      ...prevState,
+      [page_id]: newRawNodes,
+    }));
+    let newActiveNode = null;
+    newRawNodes.forEach((b) => {
+      if (b.uid === data.new_node.uid) {
+        newActiveNode = b;
+      }
+    });
+    setSectionId(newActiveNode.uid);
+    setActiveNode(newActiveNode);
+    setModal('');
+  };
+
+  const addSubSectionFnCb = (data) => {
+    const newRawNodes = appendSubSections(activeSubSectionsBySectionId, activeNode, data);
+    setActiveSubSectionsBySectionId(newRawNodes);
+    setAllSubSectionsBySectionId((prevState) => ({
+      ...prevState,
+      [page_id]: newRawNodes,
+    }));
+    setModal('');
+  };
   if (!activeNode) return null;
   if (!nodes101) return null;
   const image = extractImage(activeNode.images);
@@ -556,43 +590,46 @@ export default function Edit() {
 
       {modal === 'add_chapter' ? (
         <AddNode
-          activeNode={activeNode}
-          setActiveNode={setActiveNode}
-          book_id={book_id}
-          setNodes101={setNodes101}
-          nodes101={nodes101}
+          state={state}
+          setState={setState}
+          FnCallback={addChapterFnCb}
+          url='/book/append_book_node'
+          isMobile={false}
+          docIdName='book_id'
+          docId={bookId}
+          parent_id={activeNode.uid}
+          identity={101}
           page_id={page_id}
-          setModal={setModal}
-          visible={modal === 'add_chapter'}
         />
       ) : null}
 
       {modal === 'add_section' ? (
-        <AddSection
-          activeNode={activeNode}
-          book_id={book_id}
+        <AddNode
+          state={state}
+          setState={setState}
+          FnCallback={addSectionFnCb}
+          url='/book/append_book_node'
+          isMobile={false}
+          docIdName='book_id'
+          docId={bookId}
+          parent_id={activeNode.uid}
+          identity={102}
           page_id={page_id}
-          activeSectionsByPageId={activeSectionsByPageId}
-          setActiveNode={setActiveNode}
-          setActiveSectionsByPageId={setActiveSectionsByPageId}
-          setAllSectionsByPageId={setAllSectionsByPageId}
-          setSectionId={setSectionId}
-          setModal={setModal}
-          visible={modal === 'add_section'}
         />
       ) : null}
 
       {modal === 'add_sub_section' ? (
-        <AddSubSection
-          activeNode={activeNode}
-          book_id={book_id}
-          activeSubSectionsBySectionId={activeSubSectionsBySectionId}
-          section_id={section_id}
+        <AddNode
+          state={state}
+          setState={setState}
+          FnCallback={addSubSectionFnCb}
+          url='/book/append_book_node'
+          isMobile={false}
+          docIdName='book_id'
+          docId={bookId}
+          parent_id={activeNode.uid}
+          identity={103}
           page_id={page_id}
-          setActiveSubSectionsBySectionId={setActiveSubSectionsBySectionId}
-          setAllSubSectionsBySectionId={setAllSubSectionsBySectionId}
-          setModal={setModal}
-          visible={modal === 'edit_node'}
         />
       ) : null}
 
