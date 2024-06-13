@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useContext } from 'react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
