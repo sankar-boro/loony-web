@@ -1,31 +1,35 @@
-import { useEffect, useState, useContext } from 'react';
-import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useCallback, useContext } from 'react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from '../utils/query';
-import Cropper from 'react-easy-crop';
+import 'react-easy-crop/react-easy-crop.css';
 import { AuthContext } from '../context/AuthContext';
+import Cropper from 'react-easy-crop';
+import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 
-const getUrl = (activeNode) => {
-  if (activeNode.identity === 100) {
-    return '/book/edit_book';
-  }
-  return '/book/edit_book_node';
-};
-const EditNode = ({ state, docIdName, doc_id, FnCallback, setState }) => {
-  const { activeNode } = state;
-  const url = getUrl(activeNode);
+export default function FormComponent({
+  url,
+  title,
+  docIdName,
+  docId,
+  isMobile,
+  FnCallback,
+  setState,
+  parent_id,
+}) {
   const { auth } = useContext(AuthContext);
   const { user_id } = auth.user;
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
-  const [image, setImage] = useState('');
+  const [formTitle, setFormTitle] = useState('');
+  const [formBody, setFormBody] = useState('');
+  const [tags, setTags] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
   const [afterImageSelect, setAfterImageSelect] = useState({
     image: null,
     width: null,
     height: null,
     hasImage: false,
   });
-
   const [afterTmpImageUpload, setAfterTmpImageUpload] = useState('');
   const [imageEdit, setImageEdit] = useState(null);
   const [cropImageMetadata, setCropImageMetadata] = useState({
@@ -35,45 +39,31 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, setState }) => {
     y: null,
   });
 
-  useEffect(() => {
-    if (activeNode) {
-      setTitle(activeNode.title);
-      setBody(activeNode.body);
-      setBody(activeNode.body);
-      let __image = JSON.parse(activeNode.images);
-      if (__image.length > 0) {
-        setImage(__image[0].name);
-      }
+  const onCreateAction = useCallback(async () => {
+    let imageData = null;
+    if (afterImageSelect.image) {
+      imageData = await uploadImage();
     }
-  }, [activeNode]);
-
-  const addNode = () => {
-    const submitData = {
-      title,
-      body,
-      uid: activeNode.uid,
-      [docIdName]: doc_id,
-      identity: activeNode.identity,
-      images: [{ name: afterTmpImageUpload ? afterTmpImageUpload : image }],
-    };
+    if (!formTitle || !formBody) return;
+    setSubmitting(true);
     axiosInstance
-      .post(url, submitData)
-      .then(({ data }) => {
-        FnCallback(data);
-        onCloseModal();
+      .post(url, {
+        title: formTitle,
+        body: formBody,
+        images: [{ name: imageData ? imageData.name : afterTmpImageUpload }],
+        tags,
+        [docIdName]: parseInt(docId),
+        parent_id,
+      })
+      .then((data) => {
+        setSubmitting(false);
+        FnCallback(data.data);
       })
       .catch(() => {
-        onCloseModal();
+        setSubmitting(false);
       });
-  };
-  const onCloseModal = () => {
-    setTitle('');
-    setBody('');
-    setState((prevState) => ({
-      ...prevState,
-      modal: '',
-    }));
-  };
+  }, [formTitle, formBody, afterTmpImageUpload]);
+
   const onSelectImage = (event) => {
     const selectedFile = event.target.files[0];
     const reader = new FileReader();
@@ -124,20 +114,22 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, setState }) => {
     setImageEdit('');
     return data;
   };
-
-  const imageName = docIdName === 'book_id' ? 'book' : 'blog';
+  const onCloseModal = () => {
+    setFormTitle('');
+    setFormBody('');
+    setState((prevState) => ({
+      ...prevState,
+      activeNode: null,
+      page_id: null,
+      modal: '',
+    }));
+  };
 
   return (
-    <ModalMd visible={true} onClose={onCloseModal} title='Update Node'>
+    <ModalMd visible={true} onClose={onCloseModal} title='New Section'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div style={{ width: '45%' }}>
-            {image ? (
-              <img
-                src={`${process.env.REACT_APP_BASE_API_URL}/api/${imageName}/${user_id}/340/${image}`}
-                alt='tmp file upload'
-              />
-            ) : null}
             <div className='form-section'>
               <label>Title</label>
               <br />
@@ -145,7 +137,7 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, setState }) => {
                 type='text'
                 value={title}
                 onChange={(e) => {
-                  setTitle(e.target.value);
+                  setFormTitle(e.target.value);
                 }}
               />
             </div>
@@ -154,11 +146,11 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, setState }) => {
               <br />
               <textarea
                 onChange={(e) => {
-                  setBody(e.target.value);
+                  setFormBody(e.target.value);
                 }}
                 rows={24}
                 cols={100}
-                value={body}
+                value={formBody}
               />
             </div>
             {!afterTmpImageUpload && imageEdit ? (
@@ -180,7 +172,7 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, setState }) => {
             ) : null}
           </div>
           <div style={{ width: '50%' }}>
-            <MarkdownPreview source={body} wrapperElement={{ 'data-color-mode': 'light' }} />
+            <MarkdownPreview source={formBody} wrapperElement={{ 'data-color-mode': 'light' }} />
           </div>
         </div>
       </ModalBodyContainer>
@@ -188,15 +180,13 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, setState }) => {
         <button onClick={onCloseModal} className='grey-bg'>
           Cancel
         </button>
-        <button onClick={addNode} className='black-bg'>
-          Update
+        <button onClick={onCreateAction} className='black-bg'>
+          Submit
         </button>
       </ModalButtonContainer>
     </ModalMd>
   );
-};
-
-export default EditNode;
+}
 
 const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMetadata }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });

@@ -1,8 +1,11 @@
 import { Modal, ModalBodyContainer, ModalButtonContainer } from '../components';
 
-const ConfirmAction = ({ title, confirmTitle, confirmAction, setModal }) => {
+const ConfirmAction = ({ title, confirmTitle, confirmAction, setState }) => {
   const onClose = () => {
-    setModal('');
+    setState((prevState) => ({
+      ...prevState,
+      modal: '',
+    }));
   };
   return (
     <Modal visible={true} onClose={onClose} title={title}>

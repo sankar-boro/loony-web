@@ -95,9 +95,22 @@ const View = ({ isMobile }) => {
             />
           </div>
           {childNodes.map((blog_node) => {
+            console.log(blog_node);
+            const parseImage = JSON.parse(blog_node.images);
+            const nodeImage = parseImage.length > 0 ? parseImage[0].name : null;
+            console.log(nodeImage);
             return (
               <div className='page-section' key={blog_node.uid}>
                 <div className='section-title'>{blog_node.title}</div>
+                {nodeImage ? (
+                  <div style={{ width: '100%', borderRadius: 5 }}>
+                    <img
+                      src={`${process.env.REACT_APP_BASE_API_URL}/api/blog/${blog_id}/720/${nodeImage}`}
+                      alt=''
+                      width='100%'
+                    />
+                  </div>
+                ) : null}
                 <MarkdownPreview
                   source={blog_node.body}
                   wrapperElement={{ 'data-color-mode': 'light' }}
