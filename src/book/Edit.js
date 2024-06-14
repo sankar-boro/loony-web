@@ -28,31 +28,33 @@ export default function Edit() {
   const navigate = useNavigate();
   const { setContext } = useContext(AuthContext);
 
-  const [state, setState] = useState({});
+  const [state, setState] = useState({
+    modal: '',
+    activeNode: '',
+    page_id: null,
+    section_id: null,
+  });
+
   const [frontPage, setFrontPage] = useState(null);
   const [nodes101, setNodes101] = useState([]);
-  const [modal, setModal] = useState('');
-  const [activeNode, setActiveNode] = useState(null);
-
-  const [page_id, setPageId] = useState(null);
-  const [section_id, setSectionId] = useState(null);
   const [activeSectionsByPageId, setActiveSectionsByPageId] = useState([]);
   const [allSectionsByPageId, setAllSectionsByPageId] = useState({});
   const [activeSubSectionsBySectionId, setActiveSubSectionsBySectionId] = useState([]);
   const [allSubSectionsBySectionId, setAllSubSectionsBySectionId] = useState({});
-
+  const { modal, activeNode, page_id, section_id } = state;
   const getChapters = () => {
     axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
       const bookTree = orderBookNodes(data.data);
       const thisFrontPage = bookTree && bookTree[0];
       const pages = bookTree.slice(1);
 
-      if (thisFrontPage) {
-        setFrontPage(thisFrontPage);
-        setActiveNode(thisFrontPage);
-        setNodes101(pages);
-        setPageId(thisFrontPage.uid);
-      }
+      setFrontPage(thisFrontPage);
+      setNodes101(pages);
+      setState({
+        ...state,
+        activeNode: thisFrontPage,
+        page_id: thisFrontPage.uid,
+      });
     });
   };
 
@@ -107,10 +109,11 @@ export default function Edit() {
     axiosInstance
       .post(`/book/delete_book_node`, submitData)
       .then(({ data }) => {
+        let __activeNode = null;
         if (activeNode.identity === 101) {
           const newNodes = deleteOne(nodes101, data, submitData);
           setNodes101(newNodes);
-          setActiveNode(frontPage);
+          __activeNode = frontPage;
         }
         if (activeNode.identity === 102) {
           const newNodes = deleteOne(activeSectionsByPageId, data, submitData);
@@ -125,7 +128,7 @@ export default function Edit() {
               newActiveNode = x;
             }
           });
-          setActiveNode(newActiveNode);
+          __activeNode = newActiveNode;
         }
         if (activeNode.identity === 103) {
           const newNodes = deleteOne(activeSubSectionsBySectionId, data, submitData);
@@ -135,7 +138,10 @@ export default function Edit() {
             [section_id]: newNodes,
           });
         }
-        setModal('');
+        setState({
+          ...state,
+          activeNode: __activeNode,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -144,7 +150,6 @@ export default function Edit() {
 
   const deleteBook = () => {
     axiosInstance.post('/book/delete_book', { book_id: parseInt(book_id) }).then(() => {
-      setModal('');
       setContext({
         alert: {
           alertType: 'success',
@@ -157,31 +162,34 @@ export default function Edit() {
   };
 
   const editPage = (data) => {
-    let a = null;
+    let __activeNode = null;
     const r = nodes101.map((n) => {
       if (n.uid === activeNode.uid) {
         const t = {
           ...n,
           ...data,
         };
-        a = t;
+        __activeNode = t;
         return t;
       }
       return n;
     });
     setNodes101(r);
-    setActiveNode(a);
-    setModal('');
+    setState({
+      ...state,
+      activeNode: __activeNode,
+      modal: '',
+    });
   };
   const editSection = (data) => {
-    let a = null;
+    let __activeNode = null;
     const r = activeSectionsByPageId.map((n) => {
       if (n.uid === activeNode.uid) {
         const t = {
           ...n,
           ...data,
         };
-        a = t;
+        __activeNode = t;
         return t;
       }
       return n;
@@ -191,18 +199,21 @@ export default function Edit() {
       ...allSectionsByPageId,
       [page_id]: r,
     });
-    setActiveNode(a);
-    setModal('');
+    setState({
+      ...state,
+      activeNode: __activeNode,
+      modal: '',
+    });
   };
   const editSubSection = (data) => {
-    let a = null;
+    let __activeNode = null;
     const r = activeSubSectionsBySectionId.map((n) => {
       if (n.uid === activeNode.uid) {
         const t = {
           ...n,
           ...data,
         };
-        a = t;
+        __activeNode = t;
         return t;
       }
       return n;
@@ -212,24 +223,32 @@ export default function Edit() {
       ...allSubSectionsBySectionId,
       [section_id]: r,
     });
-    setActiveNode(a);
-    setModal('');
+    setState({
+      ...state,
+      activeNode: __activeNode,
+      modal: '',
+    });
   };
 
   const updateFrontPage = (data) => {
-    const x = {
+    const __activeNode = {
       ...frontPage,
       ...data,
     };
-    setActiveNode(x);
-    setPageId(x.uid);
-    setFrontPage(x);
+    setState({
+      ...state,
+      activeNode: __activeNode,
+      page_id: __activeNode.uid,
+    });
   };
 
   const reset = (e) => {
     setActiveSubSectionsBySectionId([]);
-    setModal('');
     e.stopPropagation();
+    setState({
+      ...state,
+      modal: '',
+    });
   };
 
   const editFnCallback = (data) => {
@@ -250,8 +269,11 @@ export default function Edit() {
   const addChapterFnCb = (data, err) => {
     const newNodes = appendChapters(nodes101, activeNode, data);
     setNodes101(newNodes);
-    setActiveNode(data.new_node);
-    setModal('');
+    setState({
+      ...state,
+      activeNode: data.new_node,
+      modal: '',
+    });
   };
 
   const addSectionFnCb = (data, err) => {
@@ -267,9 +289,12 @@ export default function Edit() {
         newActiveNode = b;
       }
     });
-    setSectionId(newActiveNode.uid);
-    setActiveNode(newActiveNode);
-    setModal('');
+    setState({
+      ...state,
+      section_id: newActiveNode.uid,
+      activeNode: newActiveNode,
+      modal: '',
+    });
   };
 
   const addSubSectionFnCb = (data, err) => {
@@ -279,12 +304,26 @@ export default function Edit() {
       ...prevState,
       [page_id]: newRawNodes,
     }));
-    setModal('');
+    setState({
+      ...state,
+      modal: '',
+    });
   };
 
   const closeComponent = () => {
-    setModal('');
+    setState({
+      ...state,
+      modal: '',
+    });
   };
+
+  const onCancel = () => {
+    setState({
+      ...state,
+      modal: '',
+    });
+  };
+
   if (!activeNode) return null;
   if (!nodes101) return null;
   const image = extractImage(activeNode.images);
@@ -320,8 +359,11 @@ export default function Edit() {
             <div
               className='chapter-nav'
               onClick={(e) => {
-                setPageId(frontPage.uid);
-                setActiveNode(frontPage);
+                setState({
+                  ...state,
+                  page_id: frontPage.uid,
+                  activeNode: frontPage,
+                });
                 reset(e);
               }}
             >
@@ -332,9 +374,12 @@ export default function Edit() {
             className='button-none'
             onClick={(e) => {
               reset(e);
-              setActiveNode(frontPage);
-              setPageId(frontPage.uid);
-              setModal('add_chapter');
+              setState({
+                ...state,
+                page_id: frontPage.uid,
+                activeNode: frontPage,
+                modal: 'add_chapter',
+              });
             }}
             style={{ marginRight: 16, paddingTop: 7, paddingBottom: 7 }}
           >
@@ -348,9 +393,12 @@ export default function Edit() {
                     className='chapter-nav'
                     onClick={(e) => {
                       reset(e);
-                      setActiveNode(chapter);
-                      setPageId(chapter.uid);
                       getSections(chapter);
+                      setState({
+                        ...state,
+                        page_id: chapter.uid,
+                        activeNode: chapter,
+                      });
                     }}
                   >
                     <div style={{ width: '90%' }}>{chapter.title}</div>
@@ -366,8 +414,11 @@ export default function Edit() {
                     <div
                       className='button-none'
                       onClick={() => {
-                        setActiveNode(chapter);
-                        setModal('add_chapter');
+                        setState({
+                          ...state,
+                          activeNode: chapter,
+                          modal: 'add_chapter',
+                        });
                       }}
                       style={{ marginRight: 16 }}
                     >
@@ -382,9 +433,12 @@ export default function Edit() {
                       <div
                         className='button-none'
                         onClick={() => {
-                          setActiveNode(chapter);
-                          setPageId(chapter.uid);
-                          setModal('add_section');
+                          setState({
+                            ...state,
+                            activeNode: chapter,
+                            page_id: chapter.uid,
+                            modal: 'add_section',
+                          });
                         }}
                         style={{ paddingBottom: 5 }}
                       >
@@ -396,9 +450,12 @@ export default function Edit() {
                             <div
                               onClick={(e) => {
                                 reset(e);
-                                setActiveNode(section);
-                                setSectionId(section.uid);
                                 getSubSections(section);
+                                setState({
+                                  ...state,
+                                  activeNode: section,
+                                  page_id: section.uid,
+                                });
                               }}
                             >
                               {section.title}
@@ -407,9 +464,12 @@ export default function Edit() {
                               className='button-none'
                               style={{ paddingTop: 5, paddingBottom: 5 }}
                               onClick={(e) => {
-                                setActiveNode(section);
-                                setSectionId(section.uid);
-                                setModal('add_section');
+                                setState({
+                                  ...state,
+                                  activeNode: section,
+                                  page_id: section.uid,
+                                  modal: 'add_section',
+                                });
                                 e.stopPropagation();
                               }}
                             >
@@ -462,9 +522,12 @@ export default function Edit() {
                 <div
                   className='button-none cursor'
                   onClick={(e) => {
-                    setActiveNode(activeNode);
-                    setSectionId(activeNode.uid);
-                    setModal('add_sub_section');
+                    setState({
+                      ...state,
+                      activeNode: activeNode,
+                      page_id: activeNode.uid,
+                      modal: 'add_sub_section',
+                    });
                     e.stopPropagation();
                   }}
                   style={{ marginRight: 10 }}
@@ -478,8 +541,11 @@ export default function Edit() {
               <div
                 className='button-none cursor'
                 onClick={(e) => {
-                  setActiveNode(activeNode);
-                  setModal('delete_page');
+                  setState({
+                    ...state,
+                    activeNode: activeNode,
+                    modal: 'delete_page',
+                  });
                   e.stopPropagation();
                 }}
                 style={{ marginRight: 10 }}
@@ -492,8 +558,11 @@ export default function Edit() {
               <div
                 className='button-none cursor'
                 onClick={(e) => {
-                  setActiveNode(activeNode);
-                  setModal('edit_node');
+                  setState({
+                    ...state,
+                    activeNode: activeNode,
+                    modal: 'edit_node',
+                  });
                   e.stopPropagation();
                 }}
               >
@@ -509,31 +578,34 @@ export default function Edit() {
               marginTop: 16,
             }}
           >
-            {activeSubSectionsBySectionId.map((node) => {
-              const nodeImage = extractImage(node.images);
+            {activeSubSectionsBySectionId.map((subSectionNode) => {
+              const subSectionNodeImage = extractImage(subSectionNode.images);
 
               return (
-                <div style={{ marginBottom: 25, marginTop: 25 }} key={node.uid}>
-                  <div className='section-title'>{node.title}</div>
-                  {nodeImage && nodeImage.name ? (
+                <div style={{ marginBottom: 25, marginTop: 25 }} key={subSectionNode.uid}>
+                  <div className='section-title'>{subSectionNode.title}</div>
+                  {subSectionNodeImage && subSectionNodeImage.name ? (
                     <div style={{ width: '100%', borderRadius: 5 }}>
                       <img
-                        src={`${process.env.REACT_APP_BASE_API_URL}/api/book/${book_id}/720/${nodeImage.name}`}
+                        src={`${process.env.REACT_APP_BASE_API_URL}/api/book/${book_id}/720/${subSectionNodeImage.name}`}
                         alt=''
                         width='100%'
                       />
                     </div>
                   ) : null}
                   <MarkdownPreview
-                    source={node.body}
+                    source={subSectionNode.body}
                     wrapperElement={{ 'data-color-mode': 'light' }}
                   />
                   <div className='flex-row' style={{ marginTop: 20 }}>
                     <div
                       className='button-none cursor'
                       onClick={(e) => {
-                        setActiveNode(node);
-                        setModal('add_sub_section');
+                        setState({
+                          ...state,
+                          activeNode: subSectionNode,
+                          modal: 'add_sub_section',
+                        });
                         e.stopPropagation();
                       }}
                       style={{ marginRight: 16 }}
@@ -545,8 +617,11 @@ export default function Edit() {
                     <div
                       className='button-none cursor'
                       onClick={(e) => {
-                        setActiveNode(node);
-                        setModal('edit_node');
+                        setState({
+                          ...state,
+                          activeNode: subSectionNode,
+                          modal: 'edit_node',
+                        });
                         e.stopPropagation();
                       }}
                       style={{ marginRight: 16 }}
@@ -558,8 +633,11 @@ export default function Edit() {
                     <div
                       className='delete-button-none cursor'
                       onClick={(e) => {
-                        setActiveNode(node);
-                        setModal('delete_node');
+                        setState({
+                          ...state,
+                          activeNode: subSectionNode,
+                          modal: 'delete_node',
+                        });
                         e.stopPropagation();
                       }}
                     >
@@ -588,7 +666,10 @@ export default function Edit() {
             </li>
             <li
               onClick={() => {
-                setModal('delete_book');
+                setState({
+                  ...state,
+                  modal: 'delete_book',
+                });
               }}
               style={{ display: 'flex', alignItems: 'center' }}
             >
@@ -615,7 +696,7 @@ export default function Edit() {
           parent_id={activeNode.uid}
           identity={101}
           page_id={page_id}
-          closeComponent={closeComponent}
+          onCancel={onCancel}
         />
       ) : null}
 
@@ -631,7 +712,7 @@ export default function Edit() {
           parent_id={activeNode.uid}
           identity={102}
           page_id={page_id}
-          closeComponent={closeComponent}
+          onCancel={onCancel}
         />
       ) : null}
 
@@ -647,7 +728,7 @@ export default function Edit() {
           parent_id={activeNode.uid}
           identity={103}
           page_id={section_id}
-          closeComponent={closeComponent}
+          onCancel={onCancel}
         />
       ) : null}
 
@@ -655,9 +736,10 @@ export default function Edit() {
         <EditDocument
           docIdName='book_id'
           doc_id={book_id}
-          activeNode={activeNode}
-          setModal={setModal}
+          state={state}
+          setState={setState}
           FnCallback={editFnCallback}
+          onCancel={onCancel}
         />
       ) : null}
 
@@ -666,8 +748,7 @@ export default function Edit() {
           confirmTitle='Are you sure you want to delete Book?'
           confirmAction={deleteBook}
           title='Delete Book'
-          setModal={setModal}
-          visible={modal === 'delete_book'}
+          onCancel={onCancel}
         />
       ) : null}
 
@@ -676,7 +757,7 @@ export default function Edit() {
           confirmTitle='Are you sure you want to delete Page?'
           confirmAction={deleteNode}
           title='Delete Page'
-          setModal={setModal}
+          onCancel={onCancel}
         />
       ) : null}
 
@@ -685,7 +766,7 @@ export default function Edit() {
           confirmTitle='Are you sure you want to delete Node?'
           confirmAction={deleteNode}
           title='Delete Node'
-          setModal={setModal}
+          onCancel={onCancel}
         />
       ) : null}
     </div>

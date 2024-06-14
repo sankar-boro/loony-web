@@ -327,6 +327,13 @@ const ActivityComponent = ({ state, setState, blogId }) => {
     });
   };
 
+  const onCancel = () => {
+    setState({
+      ...state,
+      modal: '',
+    });
+  };
+
   return (
     <>
       {modal === 'add_node' ? (
@@ -340,6 +347,7 @@ const ActivityComponent = ({ state, setState, blogId }) => {
           docId={blogId}
           parent_id={activeNode.uid}
           identity={101}
+          onCancel={onCancel}
         />
       ) : null}
       {modal === 'delete_node' ? (
@@ -347,7 +355,7 @@ const ActivityComponent = ({ state, setState, blogId }) => {
           confirmTitle='Are you sure you want to delete Node?'
           confirmAction={deleteNode}
           title='Delete Node'
-          setState={setState}
+          onCancel={onCancel}
         />
       ) : null}
 
@@ -358,6 +366,7 @@ const ActivityComponent = ({ state, setState, blogId }) => {
           docIdName='blog_id'
           doc_id={blogId}
           FnCallback={editFnCallback}
+          onCancel={onCancel}
         />
       ) : null}
 
@@ -366,7 +375,7 @@ const ActivityComponent = ({ state, setState, blogId }) => {
           confirmTitle='Are you sure you want to delete Blog?'
           confirmAction={deleteBlog}
           title='Delete Blog'
-          setState={setState}
+          onCancel={onCancel}
         />
       ) : null}
     </>

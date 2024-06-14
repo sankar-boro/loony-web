@@ -11,7 +11,7 @@ const getUrl = (activeNode) => {
   }
   return '/book/edit_book_node';
 };
-const EditNode = ({ state, docIdName, doc_id, FnCallback, setState }) => {
+const EditNode = ({ state, docIdName, doc_id, FnCallback, onCancel }) => {
   const { activeNode } = state;
   const url = getUrl(activeNode);
   const { auth } = useContext(AuthContext);
@@ -69,10 +69,7 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, setState }) => {
   const onCloseModal = () => {
     setTitle('');
     setBody('');
-    setState((prevState) => ({
-      ...prevState,
-      modal: '',
-    }));
+    onCancel();
   };
   const onSelectImage = (event) => {
     const selectedFile = event.target.files[0];

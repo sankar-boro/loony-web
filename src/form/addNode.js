@@ -17,7 +17,7 @@ export default function FormComponent({
   parent_id,
   identity,
   page_id,
-  closeComponent,
+  onCancel,
 }) {
   const { auth } = useContext(AuthContext);
   const { user_id } = auth.user;
@@ -120,7 +120,7 @@ export default function FormComponent({
   };
 
   return (
-    <ModalMd visible={true} onClose={closeComponent} title='Add Node'>
+    <ModalMd visible={true} onClose={onCancel} title='Add Node'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div style={{ width: '45%' }}>
@@ -171,7 +171,7 @@ export default function FormComponent({
         </div>
       </ModalBodyContainer>
       <ModalButtonContainer>
-        <button onClick={closeComponent} className='grey-bg'>
+        <button onClick={onCancel} className='grey-bg'>
           Cancel
         </button>
         <button onClick={onCreateAction} className='black-bg'>
