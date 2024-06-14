@@ -245,9 +245,19 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
             />
           </div>
           {activeSubSectionsBySectionId.map((book_node) => {
+            const nodeImage = extractImage(book_node.images);
             return (
               <div className='page-section' key={book_node.uid}>
                 <div className='section-title'>{book_node.title}</div>
+                {nodeImage && nodeImage.name ? (
+                  <div style={{ width: '100%', borderRadius: 5 }}>
+                    <img
+                      src={`${process.env.REACT_APP_BASE_API_URL}/api/book/${book_id}/720/${nodeImage.name}`}
+                      alt=''
+                      width='100%'
+                    />
+                  </div>
+                ) : null}
                 <MarkdownPreview
                   source={book_node.body}
                   wrapperElement={{ 'data-color-mode': 'light' }}

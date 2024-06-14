@@ -13,12 +13,11 @@ export default function FormComponent({
   title,
   docIdName,
   docId,
-  isMobile,
   FnCallback,
-  setState,
   parent_id,
   identity,
   page_id,
+  closeComponent,
 }) {
   const { auth } = useContext(AuthContext);
   const { user_id } = auth.user;
@@ -119,19 +118,9 @@ export default function FormComponent({
     setImageEdit('');
     return data;
   };
-  const onCloseModal = () => {
-    setFormTitle('');
-    setFormBody('');
-    setState((prevState) => ({
-      ...prevState,
-      activeNode: null,
-      page_id: null,
-      modal: '',
-    }));
-  };
 
   return (
-    <ModalMd visible={true} onClose={onCloseModal} title='Add Node'>
+    <ModalMd visible={true} onClose={closeComponent} title='Add Node'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div style={{ width: '45%' }}>
@@ -182,7 +171,7 @@ export default function FormComponent({
         </div>
       </ModalBodyContainer>
       <ModalButtonContainer>
-        <button onClick={onCloseModal} className='grey-bg'>
+        <button onClick={closeComponent} className='grey-bg'>
           Cancel
         </button>
         <button onClick={onCreateAction} className='black-bg'>

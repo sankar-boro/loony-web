@@ -247,14 +247,14 @@ export default function Edit() {
     }
   };
 
-  const addChapterFnCb = (data) => {
+  const addChapterFnCb = (data, err) => {
     const newNodes = appendChapters(nodes101, activeNode, data);
     setNodes101(newNodes);
     setActiveNode(data.new_node);
     setModal('');
   };
 
-  const addSectionFnCb = (data) => {
+  const addSectionFnCb = (data, err) => {
     const newRawNodes = appendSections(activeSectionsByPageId, activeNode, data);
     setActiveSectionsByPageId(newRawNodes);
     setAllSectionsByPageId((prevState) => ({
@@ -272,13 +272,17 @@ export default function Edit() {
     setModal('');
   };
 
-  const addSubSectionFnCb = (data) => {
+  const addSubSectionFnCb = (data, err) => {
     const newRawNodes = appendSubSections(activeSubSectionsBySectionId, activeNode, data);
     setActiveSubSectionsBySectionId(newRawNodes);
     setAllSubSectionsBySectionId((prevState) => ({
       ...prevState,
       [page_id]: newRawNodes,
     }));
+    setModal('');
+  };
+
+  const closeComponent = () => {
     setModal('');
   };
   if (!activeNode) return null;
@@ -506,9 +510,20 @@ export default function Edit() {
             }}
           >
             {activeSubSectionsBySectionId.map((node) => {
+              const nodeImage = extractImage(node.images);
+
               return (
                 <div style={{ marginBottom: 25, marginTop: 25 }} key={node.uid}>
                   <div className='section-title'>{node.title}</div>
+                  {nodeImage && nodeImage.name ? (
+                    <div style={{ width: '100%', borderRadius: 5 }}>
+                      <img
+                        src={`${process.env.REACT_APP_BASE_API_URL}/api/book/${book_id}/720/${nodeImage.name}`}
+                        alt=''
+                        width='100%'
+                      />
+                    </div>
+                  ) : null}
                   <MarkdownPreview
                     source={node.body}
                     wrapperElement={{ 'data-color-mode': 'light' }}
@@ -600,6 +615,7 @@ export default function Edit() {
           parent_id={activeNode.uid}
           identity={101}
           page_id={page_id}
+          closeComponent={closeComponent}
         />
       ) : null}
 
@@ -615,6 +631,7 @@ export default function Edit() {
           parent_id={activeNode.uid}
           identity={102}
           page_id={page_id}
+          closeComponent={closeComponent}
         />
       ) : null}
 
@@ -629,7 +646,8 @@ export default function Edit() {
           docId={bookId}
           parent_id={activeNode.uid}
           identity={103}
-          page_id={page_id}
+          page_id={section_id}
+          closeComponent={closeComponent}
         />
       ) : null}
 
