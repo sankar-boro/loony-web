@@ -69,7 +69,7 @@ export function Link({ to, children }) {
 }
 
 export function Route({ path, component: Component }) {
-  const { location } = useContext(RouterContext);
+  //   const { location } = useContext(RouterContext);
   const match = window.location.pathname === path;
   return match ? Component : null;
 }

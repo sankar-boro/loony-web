@@ -13,7 +13,7 @@ import Create from './form/createDocument';
 import { axiosInstance } from './utils/query';
 import { CREATE_BOOK, CREATE_BLOG } from './utils/url';
 import { AuthContext, AuthProvider } from './context/AuthContext';
-import { AUTHORIZED, UNAUTHORIZED } from './utils/types';
+import { AUTHORIZED, UNAUTHORIZED } from 'loony-types';
 
 import { LuMenu } from 'react-icons/lu';
 import { LiaUserSolid } from 'react-icons/lia';

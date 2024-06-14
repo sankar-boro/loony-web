@@ -1,0 +1,13 @@
+{
+  "name": "loony-types",
+  "version": "0.1.0",
+  "main": "index.js",
+  "description": "Types in Loony web.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sankar-boro/loony-web.git"
+  },
+  "author": "Sankar Boro <sankar.boro@yahoo.com>",
+  "homepage": "https://github.com/sankar-boro/loony-web/tree/main/packages/loony-types#readme",
+  "license": "MIT"
+}

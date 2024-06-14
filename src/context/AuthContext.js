@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { axiosInstance } from '../utils/query';
-import { INIT, UNAUTHORIZED, AUTHORIZED } from '../utils/types';
+import { INIT, UNAUTHORIZED, AUTHORIZED } from 'loony-types';
 import PageLoader from '../components/PageLoader';
 
 export const AuthContext = React.createContext(null);
