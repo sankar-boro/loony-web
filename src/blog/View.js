@@ -76,6 +76,7 @@ const View = ({ isMobile }) => {
             paddingRight: '5%',
             background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
             marginBottom: 24,
+            height: '110vh',
           }}
         >
           <div style={{ marginBottom: 24 }}>

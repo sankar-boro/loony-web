@@ -310,13 +310,6 @@ export default function Edit() {
     });
   };
 
-  const closeComponent = () => {
-    setState({
-      ...state,
-      modal: '',
-    });
-  };
-
   const onCancel = () => {
     setState({
       ...state,

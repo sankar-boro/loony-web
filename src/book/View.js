@@ -13,76 +13,40 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   const { bookId } = useParams();
   const book_id = parseInt(bookId);
 
-  const [frontPage, setFrontPage] = useState(null);
-  const [nodes101, setNodes101] = useState([]);
-  const [activeNode, setActiveNode] = useState(null);
-  const [page_id, setPageId] = useState(null);
-  const [activeSectionsByPageId, setActiveSectionsByPageId] = useState([]);
-  const [allSectionsByPageId, setAllSectionsByPageId] = useState({});
-  const [activeSubSectionsBySectionId, setActiveSubSectionsBySectionId] = useState([]);
-  const [allSubSectionsBySectionId, setAllSubSectionsBySectionId] = useState({});
+  const [state, setState] = useState({
+    activeNode: null,
+    page_id: null,
+    section_id: null,
+    activeSectionsByPageId: [],
+    allSectionsByPageId: {},
+    activeSubSectionsBySectionId: [],
+    allSubSectionsBySectionId: {},
+    nodes101: [],
+    frontPage: null,
+  });
+  const { activeNode, nodes101, frontPage, activeSubSectionsBySectionId } = state;
 
   const getChapters = () => {
     axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
       const bookTree = orderBookNodes(data.data);
-      const thisFrontPage = bookTree && bookTree[0];
-      const pages = bookTree.slice(1);
-
-      if (thisFrontPage) {
-        setFrontPage(thisFrontPage);
-        setActiveNode(thisFrontPage);
-        setNodes101(pages);
-        setPageId(thisFrontPage.uid);
-      }
+      const __frontPage = bookTree && bookTree[0];
+      const __nodes101 = bookTree.slice(1);
+      setState({
+        ...state,
+        frontPage: __frontPage,
+        activeNode: __frontPage,
+        nodes101: __nodes101,
+        page_id: __frontPage.uid,
+      });
     });
   };
 
-  const getSections = (node) => {
-    const { uid } = node;
-    if (allSectionsByPageId[uid]) {
-      setActiveSectionsByPageId(allSectionsByPageId[uid]);
-    } else {
-      axiosInstance
-        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${uid}`)
-        .then(({ data }) => {
-          const res = orderNodes(data.data, node);
-          setActiveSectionsByPageId(res);
-          setAllSectionsByPageId({
-            ...allSectionsByPageId,
-            [uid]: res,
-          });
-        });
-    }
-  };
-
-  const getSubSections = (node) => {
-    const { uid } = node;
-    if (allSubSectionsBySectionId[uid]) {
-      setActiveSubSectionsBySectionId(allSubSectionsBySectionId[uid]);
-    } else {
-      axiosInstance
-        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${uid}`)
-        .then(({ data }) => {
-          const res = orderNodes(data.data, node);
-          setActiveSubSectionsBySectionId(res);
-          setAllSubSectionsBySectionId({
-            ...allSubSectionsBySectionId,
-            [uid]: res,
-          });
-        });
-    }
-  };
   useEffect(() => {
     if (book_id) {
       getChapters();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [book_id]);
-
-  const reset = (e) => {
-    setActiveSubSectionsBySectionId([]);
-    e.stopPropagation();
-  };
 
   if (!activeNode) return null;
   if (!nodes101) return null;
@@ -108,67 +72,6 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
       </div>
     );
 
-  const Navigation = () => {
-    return (
-      <>
-        <div className='chapter-nav-con'>
-          <div
-            className='chapter-nav'
-            onClick={(e) => {
-              setPageId(frontPage.uid);
-              setActiveNode(frontPage);
-              reset(e);
-            }}
-          >
-            {frontPage.title}
-          </div>
-        </div>
-        {nodes101.map((chapter) => {
-          return (
-            <div key={chapter.uid}>
-              <div className='chapter-nav-con'>
-                <div
-                  className='chapter-nav'
-                  onClick={(e) => {
-                    reset(e);
-                    setActiveNode(chapter);
-                    setPageId(chapter.uid);
-                    getSections(chapter);
-                  }}
-                >
-                  <div style={{ width: '90%' }}>{chapter.title}</div>
-                  <div>
-                    {activeNode.uid === chapter.uid ? (
-                      <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
-                    ) : (
-                      <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
-                    )}
-                  </div>
-                </div>
-              </div>
-              {page_id === chapter.uid &&
-                activeSectionsByPageId.map((section) => {
-                  return (
-                    <div
-                      key={section.uid}
-                      className='section-nav'
-                      style={{ paddingLeft: 20 }}
-                      onClick={(e) => {
-                        reset(e);
-                        setActiveNode(section);
-                        getSubSections(section);
-                      }}
-                    >
-                      {section.title}
-                    </div>
-                  );
-                })}
-            </div>
-          );
-        })}
-      </>
-    );
-  };
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
@@ -178,10 +81,10 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
         {isMobile && mobileNavOpen ? (
           <div
             style={{
-              position: 'fixed',
               width: '100%',
               backgroundColor: 'rgb(0,0,0,0.5)',
               zIndex: 10,
+              height: '105vh',
             }}
             onClick={() => {
               setMobileNavOpen(false);
@@ -194,17 +97,17 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                 maxWidth: '100%',
                 height: '100%',
                 position: 'relative',
-                top: -5,
                 padding: 12,
               }}
             >
-              <Navigation />
+              <Navigation setState={setState} nodes101={nodes101} state={state} book_id={book_id} />
             </div>
+            {isMobile ? <EditContainerMobile node={activeNode} book_id={book_id} /> : null}
           </div>
         ) : null}
         {!isMobile ? (
           <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
-            <Navigation />
+            <Navigation setState={setState} nodes101={nodes101} state={state} book_id={book_id} />
           </div>
         ) : null}
         {/*
@@ -222,6 +125,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
             paddingRight: '5%',
             background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
             paddingBottom: 50,
+            height: '100%',
           }}
         >
           <div
@@ -276,6 +180,135 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   );
 };
 
+const Navigation = ({ setState, nodes101, state, book_id }) => {
+  const {
+    activeNode,
+    page_id,
+    activeSectionsByPageId,
+    frontPage,
+    allSectionsByPageId,
+    allSubSectionsBySectionId,
+  } = state;
+
+  const getSections = (__node) => {
+    const { uid } = __node;
+    if (allSectionsByPageId[uid]) {
+      setState({
+        ...state,
+        activeSectionsByPageId: allSectionsByPageId[uid],
+        page_id: __node.uid,
+        activeNode: __node,
+        activeSubSectionsBySectionId: [],
+      });
+    } else {
+      axiosInstance
+        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${uid}`)
+        .then(({ data }) => {
+          const res = orderNodes(data.data, __node);
+          setState({
+            ...state,
+            activeSectionsByPageId: res,
+            allSectionsByPageId: {
+              ...allSectionsByPageId,
+              [uid]: res,
+            },
+            page_id: __node.uid,
+            activeNode: __node,
+            activeSubSectionsBySectionId: [],
+          });
+        });
+    }
+  };
+
+  const getSubSections = (__node) => {
+    const { uid } = __node;
+    if (allSubSectionsBySectionId[uid]) {
+      setState({
+        ...state,
+        activeSubSectionsBySectionId: allSubSectionsBySectionId[uid],
+        section_id: __node.uid,
+        activeNode: __node,
+      });
+    } else {
+      axiosInstance
+        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${uid}`)
+        .then(({ data }) => {
+          const res = orderNodes(data.data, __node);
+          setState({
+            ...state,
+            activeSubSectionsBySectionId: res,
+            allSubSectionsBySectionId: {
+              ...allSubSectionsBySectionId,
+              [uid]: res,
+            },
+            section_id: __node.uid,
+            activeNode: __node,
+          });
+        });
+    }
+  };
+  return (
+    <>
+      <div className='chapter-nav-con'>
+        <div
+          className='chapter-nav'
+          onClick={(e) => {
+            e.stopPropagation();
+            setState((prevState) => ({
+              ...prevState,
+              page_id: frontPage.uid,
+              activeNode: frontPage,
+              activeSubSectionsBySectionId: [],
+            }));
+          }}
+        >
+          {frontPage.title}
+        </div>
+      </div>
+      {nodes101.map((chapter) => {
+        return (
+          <div key={chapter.uid}>
+            <div className='chapter-nav-con'>
+              <div
+                className='chapter-nav'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  getSections(chapter);
+                }}
+              >
+                <div style={{ width: '90%' }}>{chapter.title}</div>
+                <div>
+                  {activeNode.uid === chapter.uid ? (
+                    <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
+                  ) : (
+                    <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
+                  )}
+                </div>
+              </div>
+            </div>
+            {page_id === chapter.uid &&
+              activeSectionsByPageId.map((section) => {
+                return (
+                  <div
+                    key={section.uid}
+                    className='section-nav'
+                    style={{ paddingLeft: 20 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      getSubSections(section);
+                    }}
+                  >
+                    {section.title}
+                  </div>
+                );
+              })}
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
 const RightBookContainer = ({ node, book_id }) => {
   return (
     <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
@@ -300,4 +333,29 @@ const RightBookContainer = ({ node, book_id }) => {
   );
 };
 
+const EditContainerMobile = ({ node, book_id }) => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        paddingLeft: 15,
+        paddingTop: 15,
+      }}
+    >
+      <ul className='list-item' style={{ paddingLeft: 0, listStyle: 'none' }}>
+        <li style={{ display: 'flex', alignItems: 'center' }}>
+          <LuFileEdit color='#2d2d2d' size={16} />
+          <Link to={`/edit/book/${book_id}`} style={{ marginLeft: 5 }}>
+            Edit this page
+          </Link>
+        </li>
+        <li style={{ display: 'flex', alignItems: 'center' }}>
+          <LuFileWarning color='#2d2d2d' size={16} />
+          <span style={{ marginLeft: 5 }}>Report</span>
+        </li>
+      </ul>
+    </div>
+  );
+};
 export default View;

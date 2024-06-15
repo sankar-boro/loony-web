@@ -80,10 +80,10 @@ export default function Edit() {
         <div
           style={{
             width: '60%',
-            paddingTop: 15,
             paddingLeft: '5%',
             paddingRight: '5%',
             background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+            height: '110vh',
           }}
         >
           <div>
@@ -138,7 +138,11 @@ export default function Edit() {
           </div>
           {/* End main node settings */}
 
-          <div style={{ marginTop: 16 }}>
+          <div
+            style={{
+              marginTop: 16,
+            }}
+          >
             {mainNode.identity !== 101 &&
               childNodes.map((node, nodeIndex) => {
                 const parseImage = JSON.parse(node.images);
