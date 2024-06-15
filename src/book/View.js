@@ -182,7 +182,6 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
 
 const Navigation = ({ setState, nodes101, state, book_id }) => {
   const {
-    activeNode,
     page_id,
     activeSectionsByPageId,
     frontPage,
@@ -278,7 +277,7 @@ const Navigation = ({ setState, nodes101, state, book_id }) => {
               >
                 <div style={{ width: '90%' }}>{chapter.title}</div>
                 <div>
-                  {activeNode.uid === chapter.uid ? (
+                  {page_id === chapter.uid ? (
                     <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
                   ) : (
                     <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />

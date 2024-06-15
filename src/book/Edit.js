@@ -30,69 +30,46 @@ export default function Edit() {
 
   const [state, setState] = useState({
     modal: '',
-    activeNode: '',
+    activeNode: null,
     page_id: null,
     section_id: null,
+    activeSectionsByPageId: [],
+    allSectionsByPageId: {},
+    activeSubSectionsBySectionId: [],
+    allSubSectionsBySectionId: {},
+    nodes101: [],
+    frontPage: null,
   });
 
-  const [frontPage, setFrontPage] = useState(null);
-  const [nodes101, setNodes101] = useState([]);
-  const [activeSectionsByPageId, setActiveSectionsByPageId] = useState([]);
-  const [allSectionsByPageId, setAllSectionsByPageId] = useState({});
-  const [activeSubSectionsBySectionId, setActiveSubSectionsBySectionId] = useState([]);
-  const [allSubSectionsBySectionId, setAllSubSectionsBySectionId] = useState({});
-  const { modal, activeNode, page_id, section_id } = state;
+  const {
+    activeNode,
+    nodes101,
+    frontPage,
+    modal,
+    page_id,
+    section_id,
+    activeSectionsByPageId,
+    activeSubSectionsBySectionId,
+    allSectionsByPageId,
+    allSubSectionsBySectionId,
+  } = state;
+
   const getChapters = () => {
     axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
       const bookTree = orderBookNodes(data.data);
-      const thisFrontPage = bookTree && bookTree[0];
-      const pages = bookTree.slice(1);
+      const __frontPage = bookTree && bookTree[0];
+      const __nodes101 = bookTree.slice(1);
 
-      setFrontPage(thisFrontPage);
-      setNodes101(pages);
       setState({
         ...state,
-        activeNode: thisFrontPage,
-        page_id: thisFrontPage.uid,
+        frontPage: __frontPage,
+        activeNode: __frontPage,
+        nodes101: __nodes101,
+        page_id: __frontPage.uid,
       });
     });
   };
 
-  const getSections = (node) => {
-    const { uid } = node;
-    if (allSectionsByPageId[uid]) {
-      setActiveSectionsByPageId(allSectionsByPageId[uid]);
-    } else {
-      axiosInstance
-        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${uid}`)
-        .then(({ data }) => {
-          const res = orderNodes(data.data, node);
-          setActiveSectionsByPageId(res);
-          setAllSectionsByPageId({
-            ...allSectionsByPageId,
-            [uid]: res,
-          });
-        });
-    }
-  };
-
-  const getSubSections = (node) => {
-    const { uid } = node;
-    if (allSubSectionsBySectionId[uid]) {
-      setActiveSubSectionsBySectionId(allSubSectionsBySectionId[uid]);
-    } else {
-      axiosInstance
-        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${uid}`)
-        .then(({ data }) => {
-          const res = orderNodes(data.data, node);
-          setActiveSubSectionsBySectionId(res);
-          setAllSubSectionsBySectionId({
-            ...allSubSectionsBySectionId,
-            [uid]: res,
-          });
-        });
-    }
-  };
   useEffect(() => {
     if (book_id) {
       getChapters();
@@ -111,37 +88,47 @@ export default function Edit() {
       .then(({ data }) => {
         let __activeNode = null;
         if (activeNode.identity === 101) {
-          const newNodes = deleteOne(nodes101, data, submitData);
-          setNodes101(newNodes);
-          __activeNode = frontPage;
+          const __nodes101 = deleteOne(nodes101, data, submitData);
+          setState({
+            ...state,
+            activeNode: frontPage,
+            nodes101: __nodes101,
+          });
         }
         if (activeNode.identity === 102) {
-          const newNodes = deleteOne(activeSectionsByPageId, data, submitData);
-          setActiveSectionsByPageId(newNodes);
-          setAllSectionsByPageId({
-            ...allSectionsByPageId,
-            [page_id]: newNodes,
-          });
-          let newActiveNode = null;
+          const __activeSectionsByPageId = deleteOne(activeSectionsByPageId, data, submitData);
+          let __activeNode = null;
           nodes101.forEach((x) => {
             if (x.uid === page_id) {
-              newActiveNode = x;
+              __activeNode = x;
             }
           });
-          __activeNode = newActiveNode;
-        }
-        if (activeNode.identity === 103) {
-          const newNodes = deleteOne(activeSubSectionsBySectionId, data, submitData);
-          setActiveSubSectionsBySectionId(newNodes);
-          setAllSubSectionsBySectionId({
-            ...allSubSectionsBySectionId,
-            [section_id]: newNodes,
+          setState({
+            ...state,
+            activeNode: __activeNode,
+            activeSectionsByPageId: __activeSectionsByPageId,
+            allSectionsByPageId: {
+              ...allSectionsByPageId,
+              [page_id]: __activeSectionsByPageId,
+            },
           });
         }
-        setState({
-          ...state,
-          activeNode: __activeNode,
-        });
+        if (activeNode.identity === 103) {
+          const __activeSubSectionsBySectionId = deleteOne(
+            activeSubSectionsBySectionId,
+            data,
+            submitData,
+          );
+          setState({
+            ...state,
+            activeNode: __activeNode,
+            activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
+            allSubSectionsBySectionId: {
+              ...allSubSectionsBySectionId,
+              [section_id]: __activeSubSectionsBySectionId,
+            },
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -163,7 +150,7 @@ export default function Edit() {
 
   const editPage = (data) => {
     let __activeNode = null;
-    const r = nodes101.map((n) => {
+    const __nodes101 = nodes101.map((n) => {
       if (n.uid === activeNode.uid) {
         const t = {
           ...n,
@@ -174,10 +161,10 @@ export default function Edit() {
       }
       return n;
     });
-    setNodes101(r);
     setState({
       ...state,
       activeNode: __activeNode,
+      nodes101: __nodes101,
       modal: '',
     });
   };
@@ -194,20 +181,20 @@ export default function Edit() {
       }
       return n;
     });
-    setActiveSectionsByPageId(r);
-    setAllSectionsByPageId({
-      ...allSectionsByPageId,
-      [page_id]: r,
-    });
     setState({
       ...state,
       activeNode: __activeNode,
+      activeSectionsByPageId: r,
+      allSectionsByPageId: {
+        ...allSectionsByPageId,
+        [page_id]: r,
+      },
       modal: '',
     });
   };
   const editSubSection = (data) => {
     let __activeNode = null;
-    const r = activeSubSectionsBySectionId.map((n) => {
+    const __activeSubSectionsBySectionId = activeSubSectionsBySectionId.map((n) => {
       if (n.uid === activeNode.uid) {
         const t = {
           ...n,
@@ -218,14 +205,14 @@ export default function Edit() {
       }
       return n;
     });
-    setActiveSubSectionsBySectionId(r);
-    setAllSubSectionsBySectionId({
-      ...allSubSectionsBySectionId,
-      [section_id]: r,
-    });
     setState({
       ...state,
       activeNode: __activeNode,
+      activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
+      allSubSectionsBySectionId: {
+        ...allSubSectionsBySectionId,
+        [section_id]: __activeSubSectionsBySectionId,
+      },
       modal: '',
     });
   };
@@ -239,15 +226,6 @@ export default function Edit() {
       ...state,
       activeNode: __activeNode,
       page_id: __activeNode.uid,
-    });
-  };
-
-  const reset = (e) => {
-    setActiveSubSectionsBySectionId([]);
-    e.stopPropagation();
-    setState({
-      ...state,
-      modal: '',
     });
   };
 
@@ -267,24 +245,19 @@ export default function Edit() {
   };
 
   const addChapterFnCb = (data, err) => {
-    const newNodes = appendChapters(nodes101, activeNode, data);
-    setNodes101(newNodes);
+    const __nodes101 = appendChapters(nodes101, activeNode, data);
     setState({
       ...state,
       activeNode: data.new_node,
+      nodes101: __nodes101,
       modal: '',
     });
   };
 
   const addSectionFnCb = (data, err) => {
-    const newRawNodes = appendSections(activeSectionsByPageId, activeNode, data);
-    setActiveSectionsByPageId(newRawNodes);
-    setAllSectionsByPageId((prevState) => ({
-      ...prevState,
-      [page_id]: newRawNodes,
-    }));
+    const __activeSectionsByPageId = appendSections(activeSectionsByPageId, activeNode, data);
     let newActiveNode = null;
-    newRawNodes.forEach((b) => {
+    __activeSectionsByPageId.forEach((b) => {
       if (b.uid === data.new_node.uid) {
         newActiveNode = b;
       }
@@ -293,20 +266,29 @@ export default function Edit() {
       ...state,
       section_id: newActiveNode.uid,
       activeNode: newActiveNode,
+      activeSectionsByPageId: __activeSectionsByPageId,
+      allSectionsByPageId: {
+        ...allSectionsByPageId,
+        [page_id]: __activeSectionsByPageId,
+      },
       modal: '',
     });
   };
 
   const addSubSectionFnCb = (data, err) => {
-    const newRawNodes = appendSubSections(activeSubSectionsBySectionId, activeNode, data);
-    setActiveSubSectionsBySectionId(newRawNodes);
-    setAllSubSectionsBySectionId((prevState) => ({
-      ...prevState,
-      [page_id]: newRawNodes,
-    }));
+    const __activeSubSectionsBySectionId = appendSubSections(
+      activeSubSectionsBySectionId,
+      activeNode,
+      data,
+    );
+
     setState({
       ...state,
-      modal: '',
+      allSubSectionsBySectionId: {
+        ...allSubSectionsBySectionId,
+        [page_id]: __activeSubSectionsBySectionId,
+      },
+      activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
     });
   };
 
@@ -344,143 +326,7 @@ export default function Edit() {
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
-        {/*
-         * @ Left Navigation
-         */}
-        <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
-          <div className='chapter-nav cursor'>
-            <div
-              className='chapter-nav'
-              onClick={(e) => {
-                setState({
-                  ...state,
-                  page_id: frontPage.uid,
-                  activeNode: frontPage,
-                });
-                reset(e);
-              }}
-            >
-              {frontPage.title}
-            </div>
-          </div>
-          <div
-            className='button-none'
-            onClick={(e) => {
-              reset(e);
-              setState({
-                ...state,
-                page_id: frontPage.uid,
-                activeNode: frontPage,
-                modal: 'add_chapter',
-              });
-            }}
-            style={{ marginRight: 16, paddingTop: 7, paddingBottom: 7 }}
-          >
-            Add Chapter
-          </div>
-          {nodes101.map((chapter) => {
-            return (
-              <div key={chapter.uid}>
-                <div className='chapter-nav-con cursor' key={chapter.uid}>
-                  <div
-                    className='chapter-nav'
-                    onClick={(e) => {
-                      reset(e);
-                      getSections(chapter);
-                      setState({
-                        ...state,
-                        page_id: chapter.uid,
-                        activeNode: chapter,
-                      });
-                    }}
-                  >
-                    <div style={{ width: '90%' }}>{chapter.title}</div>
-                    <div>
-                      {activeNode.uid === chapter.uid ? (
-                        <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
-                      ) : (
-                        <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
-                      )}
-                    </div>
-                  </div>
-                  <div className='flex-row' style={{ paddingTop: 5, paddingBottom: 5 }}>
-                    <div
-                      className='button-none'
-                      onClick={() => {
-                        setState({
-                          ...state,
-                          activeNode: chapter,
-                          modal: 'add_chapter',
-                        });
-                      }}
-                      style={{ marginRight: 16 }}
-                    >
-                      Add Chapter
-                    </div>
-                  </div>
-                </div>
-                {/* Sections */}
-                <div style={{ paddingLeft: 20 }}>
-                  {page_id === chapter.uid && (
-                    <>
-                      <div
-                        className='button-none'
-                        onClick={() => {
-                          setState({
-                            ...state,
-                            activeNode: chapter,
-                            page_id: chapter.uid,
-                            modal: 'add_section',
-                          });
-                        }}
-                        style={{ paddingBottom: 5 }}
-                      >
-                        Add Section
-                      </div>
-                      {activeSectionsByPageId.map((section) => {
-                        return (
-                          <div key={section.uid} className='section-nav cursor'>
-                            <div
-                              onClick={(e) => {
-                                reset(e);
-                                getSubSections(section);
-                                setState({
-                                  ...state,
-                                  activeNode: section,
-                                  page_id: section.uid,
-                                });
-                              }}
-                            >
-                              {section.title}
-                            </div>
-                            <div
-                              className='button-none'
-                              style={{ paddingTop: 5, paddingBottom: 5 }}
-                              onClick={(e) => {
-                                setState({
-                                  ...state,
-                                  activeNode: section,
-                                  page_id: section.uid,
-                                  modal: 'add_section',
-                                });
-                                e.stopPropagation();
-                              }}
-                            >
-                              Add Section
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        {/*
-         * @ Left Navigation End
-         */}
+        <Navigation setState={setState} nodes101={nodes101} state={state} book_id={book_id} />
 
         {/* Page */}
         <div
@@ -765,3 +611,213 @@ export default function Edit() {
     </div>
   );
 }
+
+const Navigation = ({ setState, nodes101, state, book_id }) => {
+  const {
+    page_id,
+    activeSectionsByPageId,
+    frontPage,
+    allSectionsByPageId,
+    allSubSectionsBySectionId,
+  } = state;
+
+  const getSections = (__node) => {
+    const { uid } = __node;
+    if (allSectionsByPageId[uid]) {
+      setState({
+        ...state,
+        activeSectionsByPageId: allSectionsByPageId[uid],
+        page_id: __node.uid,
+        activeNode: __node,
+        activeSubSectionsBySectionId: [],
+      });
+    } else {
+      axiosInstance
+        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${uid}`)
+        .then(({ data }) => {
+          const res = orderNodes(data.data, __node);
+          setState({
+            ...state,
+            activeSectionsByPageId: res,
+            allSectionsByPageId: {
+              ...allSectionsByPageId,
+              [uid]: res,
+            },
+            page_id: __node.uid,
+            activeNode: __node,
+            activeSubSectionsBySectionId: [],
+          });
+        });
+    }
+  };
+
+  const getSubSections = (__node) => {
+    const { uid } = __node;
+    if (allSubSectionsBySectionId[uid]) {
+      setState({
+        ...state,
+        activeSubSectionsBySectionId: allSubSectionsBySectionId[uid],
+        section_id: __node.uid,
+        activeNode: __node,
+      });
+    } else {
+      axiosInstance
+        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${uid}`)
+        .then(({ data }) => {
+          const res = orderNodes(data.data, __node);
+          setState({
+            ...state,
+            activeSubSectionsBySectionId: res,
+            allSubSectionsBySectionId: {
+              ...allSubSectionsBySectionId,
+              [uid]: res,
+            },
+            section_id: __node.uid,
+            activeNode: __node,
+          });
+        });
+    }
+  };
+
+  return (
+    <>
+      {/*
+       * @ Left Navigation
+       */}
+      <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
+        <div className='chapter-nav cursor'>
+          <div
+            className='chapter-nav'
+            onClick={(e) => {
+              e.stopPropagation();
+              setState({
+                ...state,
+                page_id: frontPage.uid,
+                activeNode: frontPage,
+              });
+            }}
+          >
+            {frontPage.title}
+          </div>
+        </div>
+        <div
+          className='button-none'
+          onClick={(e) => {
+            e.stopPropagation();
+            setState({
+              ...state,
+              page_id: frontPage.uid,
+              activeNode: frontPage,
+              modal: 'add_chapter',
+            });
+          }}
+          style={{ marginRight: 16, paddingTop: 7, paddingBottom: 7 }}
+        >
+          Add Chapter
+        </div>
+        {nodes101.map((chapter) => {
+          return (
+            <div key={chapter.uid}>
+              <div className='chapter-nav-con cursor' key={chapter.uid}>
+                <div
+                  className='chapter-nav'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    getSections(chapter);
+                    setState({
+                      ...state,
+                      page_id: chapter.uid,
+                      activeNode: chapter,
+                    });
+                  }}
+                >
+                  <div style={{ width: '90%' }}>{chapter.title}</div>
+                  <div>
+                    {page_id === chapter.uid ? (
+                      <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
+                    ) : (
+                      <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
+                    )}
+                  </div>
+                </div>
+                <div className='flex-row' style={{ paddingTop: 5, paddingBottom: 5 }}>
+                  <div
+                    className='button-none'
+                    onClick={() => {
+                      setState({
+                        ...state,
+                        activeNode: chapter,
+                        modal: 'add_chapter',
+                      });
+                    }}
+                    style={{ marginRight: 16 }}
+                  >
+                    Add Chapter
+                  </div>
+                </div>
+              </div>
+              {/* Sections */}
+              <div style={{ paddingLeft: 20 }}>
+                {page_id === chapter.uid && (
+                  <>
+                    <div
+                      className='button-none'
+                      onClick={() => {
+                        setState({
+                          ...state,
+                          activeNode: chapter,
+                          page_id: chapter.uid,
+                          modal: 'add_section',
+                        });
+                      }}
+                      style={{ paddingBottom: 5 }}
+                    >
+                      Add Section
+                    </div>
+                    {activeSectionsByPageId.map((section) => {
+                      return (
+                        <div key={section.uid} className='section-nav cursor'>
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              getSubSections(section);
+                              setState({
+                                ...state,
+                                activeNode: section,
+                                page_id: section.uid,
+                              });
+                            }}
+                          >
+                            {section.title}
+                          </div>
+                          <div
+                            className='button-none'
+                            style={{ paddingTop: 5, paddingBottom: 5 }}
+                            onClick={(e) => {
+                              setState({
+                                ...state,
+                                activeNode: section,
+                                page_id: section.uid,
+                                modal: 'add_section',
+                              });
+                              e.stopPropagation();
+                            }}
+                          >
+                            Add Section
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {/*
+       * @ Left Navigation End
+       */}
+    </>
+  );
+};
