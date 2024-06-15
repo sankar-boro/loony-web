@@ -336,7 +336,7 @@ export default function Edit() {
             paddingLeft: '5%',
             paddingRight: '5%',
             background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
-            paddingBottom: 50,
+            height: '110vh',
           }}
         >
           <div>
@@ -724,11 +724,6 @@ const Navigation = ({ setState, nodes101, state, book_id }) => {
                   onClick={(e) => {
                     e.stopPropagation();
                     getSections(chapter);
-                    setState({
-                      ...state,
-                      page_id: chapter.uid,
-                      activeNode: chapter,
-                    });
                   }}
                 >
                   <div style={{ width: '90%' }}>{chapter.title}</div>
@@ -781,11 +776,6 @@ const Navigation = ({ setState, nodes101, state, book_id }) => {
                             onClick={(e) => {
                               e.stopPropagation();
                               getSubSections(section);
-                              setState({
-                                ...state,
-                                activeNode: section,
-                                page_id: section.uid,
-                              });
                             }}
                           >
                             {section.title}

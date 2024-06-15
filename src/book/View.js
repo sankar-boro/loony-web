@@ -124,8 +124,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
             paddingLeft: '5%',
             paddingRight: '5%',
             background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
-            paddingBottom: 50,
-            height: '100%',
+            height: '110vh',
           }}
         >
           <div
