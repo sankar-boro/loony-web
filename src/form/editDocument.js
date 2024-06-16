@@ -5,15 +5,15 @@ import { axiosInstance } from '../utils/query';
 import Cropper from 'react-easy-crop';
 import { AuthContext } from '../context/AuthContext';
 
-const getUrl = (activeNode) => {
-  if (activeNode.identity === 100) {
+const getUrl = (editNode) => {
+  if (editNode.identity === 100) {
     return '/book/edit_book';
   }
   return '/book/edit_book_node';
 };
 const EditNode = ({ state, docIdName, doc_id, FnCallback, onCancel }) => {
-  const { activeNode } = state;
-  const url = getUrl(activeNode);
+  const { editNode } = state;
+  const url = getUrl(editNode);
   const { auth } = useContext(AuthContext);
   const { user_id } = auth.user;
   const [title, setTitle] = useState('');
@@ -36,31 +36,31 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, onCancel }) => {
   });
 
   useEffect(() => {
-    if (activeNode) {
-      setTitle(activeNode.title);
-      setBody(activeNode.body);
-      setBody(activeNode.body);
-      let __image = JSON.parse(activeNode.images);
+    if (editNode) {
+      setTitle(editNode.title);
+      setBody(editNode.body);
+      setBody(editNode.body);
+      let __image = JSON.parse(editNode.images);
       if (__image.length > 0) {
         setImage(__image[0].name);
       }
     }
-  }, [activeNode]);
+  }, [editNode]);
 
-  const addNode = () => {
+  const addNode = (e) => {
+    e.preventDefault();
     const submitData = {
       title,
       body,
-      uid: activeNode.uid,
+      uid: editNode.uid,
       [docIdName]: doc_id,
-      identity: activeNode.identity,
+      identity: editNode.identity,
       images: [{ name: afterTmpImageUpload ? afterTmpImageUpload : image }],
     };
     axiosInstance
       .post(url, submitData)
-      .then(({ data }) => {
-        FnCallback(data);
-        onCloseModal();
+      .then((res) => {
+        FnCallback(res.data);
       })
       .catch(() => {
         onCloseModal();

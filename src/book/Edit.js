@@ -30,6 +30,8 @@ export default function Edit() {
 
   const [state, setState] = useState({
     modal: '',
+    deleteNode: null,
+    editNode: null,
     activeNode: null,
     page_id: null,
     section_id: null,
@@ -43,6 +45,8 @@ export default function Edit() {
 
   const {
     activeNode,
+    deleteNode,
+    editNode,
     nodes101,
     frontPage,
     modal,
@@ -77,25 +81,26 @@ export default function Edit() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [book_id]);
 
-  const deleteNode = () => {
+  const onDeleteNode = () => {
     const submitData = {
-      identity: activeNode.identity,
-      update_parent_id: activeNode.parent_id,
-      delete_node_id: activeNode.uid,
+      identity: deleteNode.identity,
+      update_parent_id: deleteNode.parent_id,
+      delete_node_id: deleteNode.uid,
     };
     axiosInstance
       .post(`/book/delete_book_node`, submitData)
       .then(({ data }) => {
-        let __activeNode = null;
-        if (activeNode.identity === 101) {
+        if (deleteNode.identity === 101) {
           const __nodes101 = deleteOne(nodes101, data, submitData);
           setState({
             ...state,
             activeNode: frontPage,
             nodes101: __nodes101,
+            deleteNode: null,
+            modal: '',
           });
         }
-        if (activeNode.identity === 102) {
+        if (deleteNode.identity === 102) {
           const __activeSectionsByPageId = deleteOne(activeSectionsByPageId, data, submitData);
           let __activeNode = null;
           nodes101.forEach((x) => {
@@ -111,9 +116,11 @@ export default function Edit() {
               ...allSectionsByPageId,
               [page_id]: __activeSectionsByPageId,
             },
+            deleteNode: null,
+            modal: '',
           });
         }
-        if (activeNode.identity === 103) {
+        if (deleteNode.identity === 103) {
           const __activeSubSectionsBySectionId = deleteOne(
             activeSubSectionsBySectionId,
             data,
@@ -121,12 +128,13 @@ export default function Edit() {
           );
           setState({
             ...state,
-            activeNode: __activeNode,
             activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
             allSubSectionsBySectionId: {
               ...allSubSectionsBySectionId,
               [section_id]: __activeSubSectionsBySectionId,
             },
+            modal: '',
+            deleteNode: null,
           });
         }
       })
@@ -151,7 +159,7 @@ export default function Edit() {
   const editPage = (data) => {
     let __activeNode = null;
     const __nodes101 = nodes101.map((n) => {
-      if (n.uid === activeNode.uid) {
+      if (n.uid === editNode.uid) {
         const t = {
           ...n,
           ...data,
@@ -169,45 +177,40 @@ export default function Edit() {
     });
   };
   const editSection = (data) => {
-    let __activeNode = null;
-    const r = activeSectionsByPageId.map((n) => {
-      if (n.uid === activeNode.uid) {
-        const t = {
-          ...n,
-          ...data,
+    let __activeSection = null;
+    const __activeSectionsByPageId = activeSectionsByPageId.map((innerNode) => {
+      if (innerNode.uid === editNode.uid) {
+        __activeSection = {
+          ...innerNode,
+          ...data.data,
         };
-        __activeNode = t;
-        return t;
       }
-      return n;
+      return innerNode;
     });
     setState({
       ...state,
-      activeNode: __activeNode,
-      activeSectionsByPageId: r,
+      activeSectionsByPageId: __activeSectionsByPageId,
       allSectionsByPageId: {
         ...allSectionsByPageId,
-        [page_id]: r,
+        [page_id]: __activeSectionsByPageId,
       },
+      activeNode: __activeSection,
       modal: '',
+      editNode: null,
     });
   };
   const editSubSection = (data) => {
-    let __activeNode = null;
-    const __activeSubSectionsBySectionId = activeSubSectionsBySectionId.map((n) => {
-      if (n.uid === activeNode.uid) {
-        const t = {
-          ...n,
+    const __activeSubSectionsBySectionId = activeSubSectionsBySectionId.map((innerNode) => {
+      if (innerNode.uid === editNode.uid) {
+        return {
+          ...innerNode,
           ...data,
         };
-        __activeNode = t;
-        return t;
       }
-      return n;
+      return innerNode;
     });
     setState({
       ...state,
-      activeNode: __activeNode,
       activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
       allSubSectionsBySectionId: {
         ...allSubSectionsBySectionId,
@@ -289,6 +292,7 @@ export default function Edit() {
         [page_id]: __activeSubSectionsBySectionId,
       },
       activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
+      modal: '',
     });
   };
 
@@ -399,7 +403,7 @@ export default function Edit() {
                 onClick={(e) => {
                   setState({
                     ...state,
-                    activeNode: activeNode,
+                    editNode: activeNode,
                     modal: 'edit_node',
                   });
                   e.stopPropagation();
@@ -458,7 +462,7 @@ export default function Edit() {
                       onClick={(e) => {
                         setState({
                           ...state,
-                          activeNode: subSectionNode,
+                          editNode: subSectionNode,
                           modal: 'edit_node',
                         });
                         e.stopPropagation();
@@ -474,7 +478,7 @@ export default function Edit() {
                       onClick={(e) => {
                         setState({
                           ...state,
-                          activeNode: subSectionNode,
+                          deleteNode: subSectionNode,
                           modal: 'delete_node',
                         });
                         e.stopPropagation();
@@ -594,7 +598,7 @@ export default function Edit() {
       {modal === 'delete_page' ? (
         <ConfirmAction
           confirmTitle='Are you sure you want to delete Page?'
-          confirmAction={deleteNode}
+          confirmAction={onDeleteNode}
           title='Delete Page'
           onCancel={onCancel}
         />
@@ -603,7 +607,7 @@ export default function Edit() {
       {modal === 'delete_node' ? (
         <ConfirmAction
           confirmTitle='Are you sure you want to delete Node?'
-          confirmAction={deleteNode}
+          confirmAction={onDeleteNode}
           title='Delete Node'
           onCancel={onCancel}
         />
@@ -787,7 +791,7 @@ const Navigation = ({ setState, nodes101, state, book_id }) => {
                               setState({
                                 ...state,
                                 activeNode: section,
-                                page_id: section.uid,
+                                section_id: section.uid,
                                 modal: 'add_section',
                               });
                               e.stopPropagation();
