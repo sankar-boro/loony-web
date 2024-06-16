@@ -33,6 +33,7 @@ export default function Edit() {
     deleteNode: null,
     editNode: null,
     activeNode: null,
+    topNode: null,
     page_id: null,
     section_id: null,
     activeSectionsByPageId: [],
@@ -56,6 +57,7 @@ export default function Edit() {
     activeSubSectionsBySectionId,
     allSectionsByPageId,
     allSubSectionsBySectionId,
+    topNode,
   } = state;
 
   const getChapters = () => {
@@ -258,13 +260,8 @@ export default function Edit() {
   };
 
   const addSectionFnCb = (data, err) => {
-    const __activeSectionsByPageId = appendSections(activeSectionsByPageId, activeNode, data);
-    let newActiveNode = null;
-    __activeSectionsByPageId.forEach((b) => {
-      if (b.uid === data.new_node.uid) {
-        newActiveNode = b;
-      }
-    });
+    const __activeSectionsByPageId = appendSections(activeSectionsByPageId, topNode, data);
+    let newActiveNode = data.new_node;
     setState({
       ...state,
       section_id: newActiveNode.uid,
@@ -281,7 +278,7 @@ export default function Edit() {
   const addSubSectionFnCb = (data, err) => {
     const __activeSubSectionsBySectionId = appendSubSections(
       activeSubSectionsBySectionId,
-      activeNode,
+      topNode,
       data,
     );
 
@@ -367,8 +364,7 @@ export default function Edit() {
                   onClick={(e) => {
                     setState({
                       ...state,
-                      activeNode: activeNode,
-                      page_id: activeNode.uid,
+                      topNode: activeNode,
                       modal: 'add_sub_section',
                     });
                     e.stopPropagation();
@@ -446,7 +442,7 @@ export default function Edit() {
                       onClick={(e) => {
                         setState({
                           ...state,
-                          activeNode: subSectionNode,
+                          topNode: subSectionNode,
                           modal: 'add_sub_section',
                         });
                         e.stopPropagation();
@@ -552,7 +548,7 @@ export default function Edit() {
           isMobile={false}
           docIdName='book_id'
           docId={bookId}
-          parent_id={activeNode.uid}
+          parent_id={topNode.uid}
           identity={102}
           page_id={page_id}
           onCancel={onCancel}
@@ -568,7 +564,7 @@ export default function Edit() {
           isMobile={false}
           docIdName='book_id'
           docId={bookId}
-          parent_id={activeNode.uid}
+          parent_id={topNode.uid}
           identity={103}
           page_id={section_id}
           onCancel={onCancel}
@@ -764,8 +760,7 @@ const Navigation = ({ setState, nodes101, state, book_id }) => {
                       onClick={() => {
                         setState({
                           ...state,
-                          activeNode: chapter,
-                          page_id: chapter.uid,
+                          topNode: chapter,
                           modal: 'add_section',
                         });
                       }}
@@ -790,8 +785,7 @@ const Navigation = ({ setState, nodes101, state, book_id }) => {
                             onClick={(e) => {
                               setState({
                                 ...state,
-                                activeNode: section,
-                                section_id: section.uid,
+                                topNode: section,
                                 modal: 'add_section',
                               });
                               e.stopPropagation();

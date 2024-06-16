@@ -77,18 +77,34 @@ export const updateBlogNode = (nodes, updatedNode) => {
 export const addNewNode = (nodes, topData, res) => {
   const { new_node, update_node } = res;
   let newNodes = [];
-  for (let index = 0; index < nodes.length; index++) {
-    const element = nodes[index];
-    if (topData.uid === element.uid) {
-      newNodes.push(element);
-      newNodes.push(new_node);
-    } else {
-      newNodes.push(element);
+
+  if (update_node) {
+    for (let index = 0; index < nodes.length; index++) {
+      const element = nodes[index];
+      if (topData.uid === element.parent_id) {
+        newNodes.push(new_node);
+        newNodes.push(element);
+      } else {
+        newNodes.push(element);
+      }
     }
-    if (nodes[index].uid === update_node.update_row_id) {
-      nodes[index].parent_id = update_node.update_row_parent_id;
+    for (let index = 0; index < nodes.length; index++) {
+      if (nodes[index].uid === update_node.uid) {
+        nodes[index].parent_id = update_node.parent_id;
+      }
+    }
+  } else {
+    for (let index = 0; index < nodes.length; index++) {
+      const element = nodes[index];
+      if (topData.uid === element.uid) {
+        newNodes.push(element);
+        newNodes.push(new_node);
+      } else {
+        newNodes.push(element);
+      }
     }
   }
+
   if (newNodes.length === 0) {
     return [new_node];
   }
