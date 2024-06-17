@@ -11,28 +11,16 @@ export const deleteBlogNode = (nodes, submitData, delete_node_index) => {
   return copyNodes;
 };
 
-export const deleteOne = (nodes, res, submitData) => {
-  const newNodes = nodes.filter((x) => !res.deleted_ids.includes(x.uid));
-  if (res.update_id) {
+export const deleteOne = (nodes, { deleted_ids, parent_id, updated_id, num_deleted_rows }) => {
+  const newNodes = nodes.filter((x) => !deleted_ids.includes(x.uid));
+  if (updated_id) {
     newNodes.forEach((x, i) => {
-      if (x.uid === res.update_id) {
-        newNodes[i].parent_id = submitData.update_parent_id;
+      if (x.uid === updated_id) {
+        newNodes[i].parent_id = parent_id;
       }
     });
   }
   return newNodes;
-};
-
-export const deleteBookNode = (allNodes, res, submitData) => {
-  const copyNodes = allNodes.filter((x) => !res.deleted_ids.includes(x.uid));
-  if (res.update_id) {
-    copyNodes.forEach((x, i) => {
-      if (x.uid === res.update_id) {
-        copyNodes[i].parent_id = submitData.update_parent_id;
-      }
-    });
-  }
-  return copyNodes;
 };
 
 export const appendBlogNode = (nodes, topData, resData) => {

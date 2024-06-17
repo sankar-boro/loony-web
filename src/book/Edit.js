@@ -84,16 +84,17 @@ export default function Edit() {
   }, [book_id]);
 
   const onDeleteNode = () => {
+    // [parent_id, delete_node, update_node]
     const submitData = {
       identity: deleteNode.identity,
-      update_parent_id: deleteNode.parent_id,
-      delete_node_id: deleteNode.uid,
+      parent_id: deleteNode.parent_id,
+      delete_id: deleteNode.uid,
     };
     axiosInstance
       .post(`/book/delete_book_node`, submitData)
-      .then(({ data }) => {
+      .then((res) => {
         if (deleteNode.identity === 101) {
-          const __nodes101 = deleteOne(nodes101, data, submitData);
+          const __nodes101 = deleteOne(nodes101, res.data, submitData);
           setState({
             ...state,
             activeNode: frontPage,
@@ -103,7 +104,7 @@ export default function Edit() {
           });
         }
         if (deleteNode.identity === 102) {
-          const __activeSectionsByPageId = deleteOne(activeSectionsByPageId, data, submitData);
+          const __activeSectionsByPageId = deleteOne(activeSectionsByPageId, res.data, submitData);
           let __activeNode = null;
           nodes101.forEach((x) => {
             if (x.uid === page_id) {
@@ -125,7 +126,7 @@ export default function Edit() {
         if (deleteNode.identity === 103) {
           const __activeSubSectionsBySectionId = deleteOne(
             activeSubSectionsBySectionId,
-            data,
+            res.data,
             submitData,
           );
           setState({
@@ -250,7 +251,7 @@ export default function Edit() {
   };
 
   const addChapterFnCb = (data, err) => {
-    const __nodes101 = appendChapters(nodes101, activeNode, data);
+    const __nodes101 = appendChapters(nodes101, topNode, data);
     setState({
       ...state,
       activeNode: data.new_node,
@@ -382,7 +383,7 @@ export default function Edit() {
                 onClick={(e) => {
                   setState({
                     ...state,
-                    activeNode: activeNode,
+                    deleteNode: activeNode,
                     modal: 'delete_page',
                   });
                   e.stopPropagation();
@@ -532,7 +533,7 @@ export default function Edit() {
           isMobile={false}
           docIdName='book_id'
           docId={bookId}
-          parent_id={activeNode.uid}
+          parent_id={topNode.uid}
           identity={101}
           page_id={page_id}
           onCancel={onCancel}
@@ -706,8 +707,7 @@ const Navigation = ({ setState, nodes101, state, book_id }) => {
             e.stopPropagation();
             setState({
               ...state,
-              page_id: frontPage.uid,
-              activeNode: frontPage,
+              topNode: frontPage,
               modal: 'add_chapter',
             });
           }}
@@ -741,7 +741,7 @@ const Navigation = ({ setState, nodes101, state, book_id }) => {
                     onClick={() => {
                       setState({
                         ...state,
-                        activeNode: chapter,
+                        topNode: chapter,
                         modal: 'add_chapter',
                       });
                     }}
