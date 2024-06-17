@@ -202,7 +202,7 @@ export default function Edit() {
       editNode: null,
     });
   };
-  const editSubSection = (data) => {
+  const editSubSection = ({ data }) => {
     const __activeSubSectionsBySectionId = activeSubSectionsBySectionId.map((innerNode) => {
       if (innerNode.uid === editNode.uid) {
         return {
@@ -236,16 +236,16 @@ export default function Edit() {
   };
 
   const editFnCallback = (data) => {
-    if (activeNode.identity === 100) {
+    if (editNode.identity === 100) {
       updateFrontPage(data);
     }
-    if (activeNode.identity === 101) {
+    if (editNode.identity === 101) {
       editPage(data);
     }
-    if (activeNode.identity === 102) {
+    if (editNode.identity === 102) {
       editSection(data);
     }
-    if (activeNode.identity === 103) {
+    if (editNode.identity === 103) {
       editSubSection(data);
     }
   };
