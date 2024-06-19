@@ -287,7 +287,7 @@ export default function Edit() {
       ...state,
       allSubSectionsBySectionId: {
         ...allSubSectionsBySectionId,
-        [page_id]: __activeSubSectionsBySectionId,
+        [section_id]: __activeSubSectionsBySectionId,
       },
       activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
       modal: '',
