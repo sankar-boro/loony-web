@@ -277,13 +277,14 @@ const ActivityComponent = ({ state, setState, blogId }) => {
       axiosInstance
         .post(`/blog/delete_blog_node`, submitData)
         .then(() => {
-          const newNodes = deleteBlogNode(rawNodes, submitData, nodeIndex);
-          const __blogNodes = orderBlogNodes(newNodes);
+          const __rawNodes = deleteBlogNode(rawNodes, submitData, nodeIndex);
+          const __blogNodes = orderBlogNodes(__rawNodes);
           const __mainNode = __blogNodes && __blogNodes[0];
           const __childNodes = __blogNodes.slice(1);
 
           setState({
             ...state,
+            rawNodes: __rawNodes,
             mainNode: __mainNode,
             pageId: __mainNode.uid,
             childNodes: __childNodes,
@@ -313,6 +314,7 @@ const ActivityComponent = ({ state, setState, blogId }) => {
       childNodes: __childNodes,
       blogNodes: __blogNodes,
       rawNodes: __rawNodes,
+      modal: '',
     });
   };
 
@@ -328,6 +330,7 @@ const ActivityComponent = ({ state, setState, blogId }) => {
       blogNodes: __blogNodes,
       mainNode: __mainNode,
       childNodes: __childNodes,
+      modal: '',
     });
   };
 
