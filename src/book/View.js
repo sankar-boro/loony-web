@@ -74,7 +74,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
 
   return (
     <div className='book-container'>
-      <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
         {/*
          * @ Left Navigation
          */}
@@ -124,7 +124,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
             paddingLeft: '5%',
             paddingRight: '5%',
             background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
-            height: '110vh',
+            minHeight: '100vh',
           }}
         >
           <div

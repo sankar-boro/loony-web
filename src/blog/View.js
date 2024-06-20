@@ -55,7 +55,7 @@ const View = ({ isMobile }) => {
     );
   return (
     <div className='book-container'>
-      <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
         {!isMobile ? (
           <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
             {(blogs && blogs).map((blog_node) => {
@@ -76,7 +76,7 @@ const View = ({ isMobile }) => {
             paddingRight: '5%',
             background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
             marginBottom: 24,
-            height: '110vh',
+            minHeight: '110vh',
           }}
         >
           <div style={{ marginBottom: 24 }}>

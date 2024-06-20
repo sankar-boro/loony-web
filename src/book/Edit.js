@@ -327,7 +327,7 @@ export default function Edit() {
 
   return (
     <div className='book-container'>
-      <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
         <Navigation setState={setState} nodes101={nodes101} state={state} book_id={book_id} />
 
         {/* Page */}
@@ -338,7 +338,7 @@ export default function Edit() {
             paddingLeft: '5%',
             paddingRight: '5%',
             background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
-            height: '110vh',
+            minHeight: '100vh',
           }}
         >
           <div>
