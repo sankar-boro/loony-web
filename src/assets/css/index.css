@@ -32,6 +32,13 @@ p {
   margin-right: auto;
   height: 100%;
 }
+.form-container {
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 50%;
+  background-color: white;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -181,9 +188,6 @@ select {
   border-radius: 40px;
   background-color: #e0e0e0;
   animation: shimmer 1s infinite linear;
-}
-.card-body {
-
 }
 @keyframes shimmer {
   0% {
@@ -414,7 +418,8 @@ select {
   .card {
     width: calc(25.33% - 20px);
   }
-  .book-container {
+  .book-container, 
+  .form-container {
     width: 60%;
   }
   .blog-container {
@@ -426,7 +431,8 @@ select {
   .card {
     width: calc(18.33% - 20px);
   }
-  .book-container {
+  .book-container, 
+  .form-container {
     width: 75%;
   }
 }

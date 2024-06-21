@@ -122,12 +122,9 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
   };
 
   return (
-    <div
-      className='book-container'
-      style={{ width: isMobile ? '90%' : '', paddingLeft: 'auto', paddingRight: 'auto' }}
-    >
-      <h2>{title}</h2>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
+    <div className='form-container'>
+      <div style={{ fontSize: 24, fontWeight: 'bold', padding: 45 }}>{title}</div>
+      <div className='flex-row' style={{ padding: '0px 45px 15px 45px' }}>
         <div style={{ flex: 1 }}>
           <div className='form-section'>
             <label>Title</label>
@@ -180,31 +177,31 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
               }}
             />
           </div>
-          <div>
-            <button
-              className='black-bg'
-              onClick={createDoc}
-              disabled={submitting}
-              style={{ marginRight: 10 }}
-            >
-              {submitting ? 'Creating...' : 'Create'}
-            </button>
-            <button
-              className='grey-bg'
-              onClick={() => {
-                navigate('/', { replace: true });
-              }}
-              disabled={submitting}
-            >
-              Cancel
-            </button>
-          </div>
         </div>
         {!isMobile ? (
           <div style={{ flex: 1, padding: 25 }}>
             <MarkdownPreview source={formBody} wrapperElement={{ 'data-color-mode': 'light' }} />
           </div>
         ) : null}
+      </div>
+      <div style={{ backgroundColor: '#f4f4f4', padding: '32px 45px' }}>
+        <button
+          className='black-bg'
+          onClick={createDoc}
+          disabled={submitting}
+          style={{ marginRight: 10 }}
+        >
+          {submitting ? 'Creating...' : 'Create'}
+        </button>
+        <button
+          className='grey-bg'
+          onClick={() => {
+            navigate('/', { replace: true });
+          }}
+          disabled={submitting}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );
