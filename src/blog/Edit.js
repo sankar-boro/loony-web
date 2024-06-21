@@ -11,8 +11,7 @@ import {
 import { RxReader } from 'react-icons/rx';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { LuFileWarning } from 'react-icons/lu';
-import { MdAdd } from 'react-icons/md';
-import { FiEdit2 } from 'react-icons/fi';
+import { MdAdd, MdOutlineEdit, MdContentCopy } from 'react-icons/md';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
 import { axiosInstance } from '../utils/query';
@@ -132,7 +131,19 @@ export default function Edit() {
               style={{ marginRight: 16 }}
             >
               <div className='btn-action'>
-                <FiEdit2 size={16} color='#9c9c9c' />
+                <MdOutlineEdit size={16} color='#9c9c9c' />
+              </div>
+            </div>
+            <div
+              className='button-none cursor'
+              onClick={(e) => {
+                navigator.clipboard.writeText(mainNode.body);
+                e.stopPropagation();
+              }}
+              style={{ marginRight: 16 }}
+            >
+              <div className='btn-action'>
+                <MdContentCopy size={16} color='#9c9c9c' />
               </div>
             </div>
           </div>
@@ -195,7 +206,7 @@ export default function Edit() {
                         style={{ marginRight: 16 }}
                       >
                         <div className='btn-action'>
-                          <FiEdit2 size={16} color='#9c9c9c' />
+                          <MdOutlineEdit size={16} color='#9c9c9c' />
                         </div>
                       </div>
                       <div
@@ -208,9 +219,22 @@ export default function Edit() {
                             modal: 'delete_node',
                           });
                         }}
+                        style={{ marginRight: 16 }}
                       >
                         <div className='btn-action'>
                           <AiOutlineDelete size={16} color='#9c9c9c' />
+                        </div>
+                      </div>
+                      <div
+                        className='button-none cursor'
+                        onClick={(e) => {
+                          navigator.clipboard.writeText(node.body);
+                          e.stopPropagation();
+                        }}
+                        style={{ marginRight: 16 }}
+                      >
+                        <div className='btn-action'>
+                          <MdContentCopy size={16} color='#9c9c9c' />
                         </div>
                       </div>
                     </div>

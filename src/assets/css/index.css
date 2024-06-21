@@ -307,6 +307,9 @@ select {
   font-weight: 600;
   font-size: 16px;
 }
+.chapter-nav:hover, .section-nav:hover {
+  color: #505050;
+}
 /*
 * @Modal
 */
