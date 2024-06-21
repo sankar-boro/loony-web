@@ -220,17 +220,17 @@ select {
 .view-dropdown-menu {
   display: block;
 }
-
-.dropdown-content, .profile-content{
+.dropdown-content, .profile-content {
   display: none;
+  position: relative;
+}
+.dropdown-content-items, .profile-content-items {
   position: absolute;
-  z-index: 1;
   background-color: white;
-  width: 350px;
-  top: 55px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  border: 1px solid #ccc;
+  right: 0px;
+  width: 250px;
+  top: 28px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .list-items ul{
   list-style: none;
@@ -441,7 +441,7 @@ select {
   .card {
     width: calc(33.33% - 20px);
   }
-  .book-container {
+  .book-container, .form-container  {
     width: 85%;
   }
 }
@@ -452,7 +452,7 @@ select {
     padding-left: 10px;
     padding-right: 10px;
   }
-  .book-container {
+  .book-container, .form-container  {
     width: 100%;
   }
 }
@@ -462,7 +462,7 @@ select {
     width: calc(100% - 10px);
     flex-wrap: wrap;
   }
-  .book-container {
+  .book-container, .form-container  {
     width: calc(100% - 20px);
     padding-left: 10px;
     padding-right: 10px;

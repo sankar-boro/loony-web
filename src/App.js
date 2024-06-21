@@ -76,24 +76,23 @@ const Navigation = ({ auth, setMobileNavOpen, isMobile }) => {
                   className='create-button'
                 >
                   <button style={{ fontWeight: 'bold' }}>Create</button>
-                  <div
-                    className='dropdown-content list-items'
-                    style={{
-                      right: isMobile ? 10 : null,
-                    }}
-                  >
-                    <ul>
-                      <li>
-                        <Link to='/create/book' state={{}}>
-                          Create Book
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to='/create/blog' state={{}}>
-                          Create Blog
-                        </Link>
-                      </li>
-                    </ul>
+                  <div className='dropdown-content'>
+                    <div className='dropdown-content-items'>
+                      <div className='list-items'>
+                        <ul>
+                          <li>
+                            <Link to='/create/book' state={{}}>
+                              Create Book
+                            </Link>
+                          </li>
+                          <li>
+                            <Link to='/create/blog' state={{}}>
+                              Create Blog
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ) : null}
@@ -111,23 +110,21 @@ const Navigation = ({ auth, setMobileNavOpen, isMobile }) => {
                   className='profile-button'
                 >
                   <LiaUserSolid size={32} />
-                  <div
-                    className='profile-content list-items'
-                    style={{
-                      marginLeft: -15,
-                      right: isMobile ? 10 : null,
-                    }}
-                  >
-                    <ul>
-                      <li>
-                        <Link to='/profile'>Profile</Link>
-                      </li>
-                      <li>
-                        <Link to='#' onClick={logoutUser}>
-                          Logout
-                        </Link>
-                      </li>
-                    </ul>
+                  <div className='profile-content'>
+                    <div className='profile-content-items'>
+                      <div className='list-items'>
+                        <ul>
+                          <li>
+                            <Link to='/profile'>Profile</Link>
+                          </li>
+                          <li>
+                            <Link to='#' onClick={logoutUser}>
+                              Logout
+                            </Link>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ) : (

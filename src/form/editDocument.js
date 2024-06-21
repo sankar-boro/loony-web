@@ -185,7 +185,7 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, onCancel }) => {
         <button onClick={onCloseModal} className='grey-bg'>
           Cancel
         </button>
-        <button onClick={addNode} className='black-bg'>
+        <button onClick={addNode} className='black-bg' style={{ marginLeft: 15 }}>
           Update
         </button>
       </ModalButtonContainer>
