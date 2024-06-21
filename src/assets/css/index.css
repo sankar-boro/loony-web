@@ -1,5 +1,6 @@
 :root {
   --blue: #1885F2;
+  --hover-blue: #0053a7;
 }
 
 html, body, ul, li {
@@ -105,6 +106,10 @@ button:hover {
   border: none;
   background-color: transparent;
   color: var(--blue);
+}
+.button-none:hover {
+  color: var(--hover-blue);
+  cursor: pointer;
 }
 .delete-button-none {
   border: none;

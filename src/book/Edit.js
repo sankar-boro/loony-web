@@ -798,8 +798,9 @@ const Navigation = ({ setState, nodes101, state, book_id }) => {
                     </div>
                     {activeSectionsByPageId.map((section) => {
                       return (
-                        <div key={section.uid} className='section-nav cursor'>
+                        <div key={section.uid}>
                           <div
+                            className='section-nav cursor'
                             onClick={(e) => {
                               e.stopPropagation();
                               getSubSections(section);
