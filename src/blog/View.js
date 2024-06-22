@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { Link, useParams } from 'react-router-dom';
-import { axiosInstance } from '../utils/query';
+import { axiosInstance } from 'loony-query';
 import { extractImage, orderBlogNodes } from 'loony-utils';
 import { LuFileWarning } from 'react-icons/lu';
 import { LuFileEdit } from 'react-icons/lu';

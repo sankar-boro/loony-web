@@ -6,7 +6,7 @@ import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-i
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
 import { useParams, Link } from 'react-router-dom';
-import { axiosInstance } from '../utils/query';
+import { axiosInstance } from 'loony-query';
 import PageLoader from '../components/PageLoader';
 
 const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {

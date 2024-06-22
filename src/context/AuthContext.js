@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { axiosInstance } from '../utils/query';
+import { axiosInstance } from 'loony-query';
 import { INIT, UNAUTHORIZED, AUTHORIZED } from 'loony-types';
 import PageLoader from '../components/PageLoader';
 

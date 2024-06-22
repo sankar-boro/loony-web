@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { axiosInstance } from '../utils/query';
+import { axiosInstance } from 'loony-query';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { AUTHORIZED } from 'loony-types';

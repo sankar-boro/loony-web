@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useContext } from 'react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import { axiosInstance } from '../utils/query';
+import { axiosInstance } from 'loony-query';
 import 'react-easy-crop/react-easy-crop.css';
 import { AuthContext } from '../context/AuthContext';
 import Cropper from 'react-easy-crop';

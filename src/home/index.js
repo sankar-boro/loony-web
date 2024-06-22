@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { axiosInstance } from '../utils/query';
+import { axiosInstance } from 'loony-query';
 import { useNavigate } from 'react-router-dom';
 import CardLoader from '../components/CardLoader';
 

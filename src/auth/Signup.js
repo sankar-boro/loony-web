@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { axiosInstance } from '../utils/query';
+import { axiosInstance } from 'loony-query';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = ({ isMobile }) => {

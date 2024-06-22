@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import { axiosInstance } from '../utils/query';
+import { axiosInstance } from 'loony-query';
 import Cropper from 'react-easy-crop';
 import { AuthContext } from '../context/AuthContext';
 

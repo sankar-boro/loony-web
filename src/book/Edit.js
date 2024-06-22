@@ -15,7 +15,7 @@ import {
 } from 'react-icons/md';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
-import { axiosInstance } from '../utils/query';
+import { axiosInstance } from 'loony-query';
 import AddNode from '../form/addNode';
 import EditDocument from '../form/editDocument';
 import ConfirmAction from '../components/ConfirmAction';
