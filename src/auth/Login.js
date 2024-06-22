@@ -4,11 +4,30 @@ import { AuthContext } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { AUTHORIZED } from 'loony-types';
 
+const handleLoginError = (data) => {
+  let errs = [];
+  if (typeof data === 'string') {
+    return [data];
+  }
+
+  if (typeof data === 'object') {
+    for (let key in data) {
+      let x = data[key][0];
+      if (x.code && x.code === 'length') {
+        errs.push(`${key} length cannot be less then ${x.params.min}.`);
+      } else {
+        errs.push(x.code);
+      }
+    }
+  }
+  return errs;
+};
+
 const Login = ({ isMobile }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [viewPassword, setViewPassword] = useState(false);
-  const [loginError, setLoginError] = useState('');
+  const [loginError, setLoginError] = useState([]);
   const navigate = useNavigate();
 
   const authContext = useContext(AuthContext);
@@ -16,11 +35,11 @@ const Login = ({ isMobile }) => {
   const onLogin = (e) => {
     e.preventDefault();
     if (!username) {
-      setLoginError('Username is required.');
+      setLoginError(['Username is required.']);
       return;
     }
     if (!password) {
-      setLoginError('Password is required.');
+      setLoginError(['Password is required.']);
       return;
     }
     const formData = {
@@ -37,7 +56,7 @@ const Login = ({ isMobile }) => {
         navigate('/', {});
       })
       .catch((err) => {
-        setLoginError(err.response.data);
+        setLoginError(handleLoginError(err.response.data));
       });
   };
   return (
@@ -106,17 +125,22 @@ const Login = ({ isMobile }) => {
                 <h2 style={{ fontSize: 26, color: '#4da6ff' }}>Log in</h2>
               </div>
 
-              {loginError ? (
-                <div className='input-container'>
-                  <div style={{ color: 'red' }}>{loginError}</div>
+              {loginError.length > 0 ? (
+                <div style={{ marginBottom: 24 }}>
+                  {loginError.map((e, i) => {
+                    return (
+                      <div key={i} style={{ color: 'red' }}>
+                        * {e}
+                      </div>
+                    );
+                  })}
                 </div>
               ) : null}
 
               <div className='input-container'>
-                <label htmlFor='phone'>Phone Number</label>
+                <label htmlFor='phone'>Email or Phone Number</label>
                 <input
-                  type='number'
-                  min='0'
+                  type='text'
                   id='phone'
                   value={username}
                   onChange={(e) => {

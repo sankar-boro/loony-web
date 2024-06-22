@@ -55,10 +55,7 @@ const Signup = ({ isMobile }) => {
         navigate('/login', {});
       })
       .catch((err) => {
-        console.log(err);
-        let x = handleSignUpError(err.response.data);
-        console.log(x);
-        setSignupError(x);
+        setSignupError(handleSignUpError(err.response.data));
       });
   };
 
