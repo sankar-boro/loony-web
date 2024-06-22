@@ -2,26 +2,45 @@ import { useState } from 'react';
 import { axiosInstance } from 'loony-query';
 import { Link, useNavigate } from 'react-router-dom';
 
+const handleSignUpError = (data) => {
+  let errs = [];
+  if (typeof data === 'string') {
+    return [data];
+  }
+
+  if (typeof data === 'object') {
+    for (let key in data) {
+      let x = data[key][0];
+      if (x.code && x.code === 'length') {
+        errs.push(`${key} length cannot be less then ${x.params.min}.`);
+      } else {
+        errs.push(x.code);
+      }
+    }
+  }
+  return errs;
+};
+
 const Signup = ({ isMobile }) => {
   const [fname, setFname] = useState('');
   const [lname, setLname] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [viewPassword, setViewPassword] = useState(false);
-  const [signupError, setSignupError] = useState('');
+  const [signupError, setSignupError] = useState([]);
   const navigate = useNavigate();
 
   const signup = () => {
     if (!fname) {
-      setSignupError('Please enter your first name.');
+      setSignupError(['Please enter your first name.']);
       return;
     }
     if (!username) {
-      setSignupError('Phone number is required.');
+      setSignupError(['Phone number is required.']);
       return;
     }
     if (!password) {
-      setSignupError('Please enter password.');
+      setSignupError(['Please enter password.']);
       return;
     }
     const formData = {
@@ -36,7 +55,10 @@ const Signup = ({ isMobile }) => {
         navigate('/login', {});
       })
       .catch((err) => {
-        setSignupError(err.response.data);
+        console.log(err);
+        let x = handleSignUpError(err.response.data);
+        console.log(x);
+        setSignupError(x);
       });
   };
 
@@ -104,9 +126,15 @@ const Signup = ({ isMobile }) => {
               >
                 <h2 style={{ fontSize: 26, color: '#4da6ff' }}>Sign Up</h2>
               </div>
-              {signupError ? (
-                <div className='input-container'>
-                  <div style={{ color: 'red' }}>{signupError}</div>
+              {signupError.length > 0 ? (
+                <div style={{ marginBottom: 24 }}>
+                  {signupError.map((e, i) => {
+                    return (
+                      <div key={i} style={{ color: 'red' }}>
+                        * {e}
+                      </div>
+                    );
+                  })}
                 </div>
               ) : null}
               <div className='input-container'>
@@ -144,11 +172,10 @@ const Signup = ({ isMobile }) => {
               </div>
 
               <div className='input-container'>
-                <label htmlFor='phone'>Phone Number</label>
+                <label htmlFor='phone'>Email or Phone Number</label>
                 <input
                   id='phone'
-                  type='number'
-                  min='0'
+                  type='text'
                   required
                   value={username}
                   onChange={(e) => {
