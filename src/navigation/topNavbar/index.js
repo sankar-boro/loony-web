@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { LuMenu } from 'react-icons/lu';
 import { LiaUserSolid } from 'react-icons/lia';
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext, useMemo } from 'react';
+import { useCallback, useContext } from 'react';
 import { AUTHORIZED, UNAUTHORIZED } from 'loony-types';
 import { AuthContext } from '../../context/AuthContext';
 import { axiosInstance } from 'loony-query';
@@ -10,14 +11,14 @@ const Navigation = ({ auth, setMobileNavOpen, isMobile }) => {
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
 
-  const logoutUser = useMemo(() => {
+  const logoutUser = useCallback(() => {
     axiosInstance.post('/auth/logout').then(() => {
       authContext.setAuthContext({
         status: UNAUTHORIZED,
         user: null,
       });
     });
-  }, [authContext]);
+  }, []);
 
   return (
     <div className='top-navbar' style={{ backgroundColor: 'black' }}>
@@ -65,17 +66,13 @@ const Navigation = ({ auth, setMobileNavOpen, isMobile }) => {
                   <button style={{ fontWeight: 'bold' }}>Create</button>
                   <div className='dropdown-content'>
                     <div className='dropdown-content-items'>
-                      <div className='list-items'>
+                      <div className='nav-list-items'>
                         <ul>
                           <li>
-                            <Link to='/create/book' state={{}}>
-                              Create Book
-                            </Link>
+                            <Link to='/create/book'>Create Book</Link>
                           </li>
                           <li>
-                            <Link to='/create/blog' state={{}}>
-                              Create Blog
-                            </Link>
+                            <Link to='/create/blog'>Create Blog</Link>
                           </li>
                         </ul>
                       </div>
@@ -99,7 +96,7 @@ const Navigation = ({ auth, setMobileNavOpen, isMobile }) => {
                   <LiaUserSolid size={32} />
                   <div className='profile-content'>
                     <div className='profile-content-items'>
-                      <div className='list-items'>
+                      <div className='nav-list-items'>
                         <ul>
                           <li>
                             <Link to='/profile'>Profile</Link>
