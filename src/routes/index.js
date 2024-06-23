@@ -2,7 +2,7 @@ import Home from '../home';
 import BlogView from '../blog/View';
 import BookView from '../book/View';
 import EditBlog from '../blog/Edit';
-import EditBook from '../book/Edit';
+import EditBook from '../book/edit';
 import Profile from '../profile';
 import Login from '../auth/Login';
 import Signup from '../auth/Signup';
