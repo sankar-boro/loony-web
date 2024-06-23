@@ -6,114 +6,119 @@ import CardLoader from '../components/CardLoader';
 const Home = () => {
   const navigate = useNavigate();
 
-  const [blogs, setBlogs] = useState(null);
-  const [books, setBooks] = useState(null);
-
-  useEffect(() => {
-    axiosInstance.get('/blog/get_all_blogs').then(({ data }) => {
-      setBlogs(data.data);
-    });
-    axiosInstance.get('/book/get_all_books').then(({ data }) => {
-      setBooks(data.data);
-    });
-  }, []);
-
   return (
     <div className='book-container'>
       <div className='app-body'>
-        <h3>Blogs</h3>
-        <div className='flex-row' style={{ flexWrap: 'wrap' }}>
-          {!blogs
-            ? [1, 2, 3, 4].map((key) => {
-                return <CardLoader key={key} />;
-              })
-            : null}
-          {blogs &&
-            blogs.map((blog) => {
-              const images = blog.images ? JSON.parse(blog.images) : [];
-              const image = images.length > 0 ? images[0] : null;
-              return (
-                <div className='card' key={blog.blog_id}>
-                  <div
-                    className='card-image'
-                    style={{
-                      backgroundImage:
-                        image && image.name
-                          ? `url("${process.env.REACT_APP_BASE_API_URL}/api/blog/${blog.blog_id}/340/${image.name}")`
-                          : null,
-                      overflow: 'hidden',
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      borderTopLeftRadius: 3,
-                      borderTopRightRadius: 3,
-                    }}
-                    onClick={() => {
-                      navigate(`/view/blog/${blog.blog_id}`, blog);
-                    }}
-                  />
-                  <div className='card-body'>
-                    <div
-                      className='card-title cursor'
-                      onClick={() => {
-                        navigate(`/view/blog/${blog.blog_id}`, blog);
-                      }}
-                    >
-                      {blog.title}
-                    </div>
-                    <div className='card-body' />
-                  </div>
-                </div>
-              );
-            })}
-        </div>
-        <h3>Books</h3>
-        <div className='flex-row' style={{ flexWrap: 'wrap' }}>
-          {!books
-            ? [5, 6, 7, 8].map((key) => {
-                return <CardLoader key={key} />;
-              })
-            : null}
-          {books &&
-            books.map((book) => {
-              const image = JSON.parse(book.images)[0];
-              return (
-                <div className='card' key={book.book_id}>
-                  <div
-                    className='card-image'
-                    style={{
-                      backgroundImage:
-                        image && image.name
-                          ? `url("${process.env.REACT_APP_BASE_API_URL}/api/book/${book.book_id}/340/${image.name}")`
-                          : null,
-                      overflow: 'hidden',
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                      borderTopLeftRadius: 3,
-                      borderTopRightRadius: 3,
-                    }}
-                    onClick={() => {
-                      navigate(`/view/book/${book.book_id}`, book);
-                    }}
-                  />
-                  <div className='card-body'>
-                    <div
-                      className='card-title cursor'
-                      onClick={() => {
-                        navigate(`/view/book/${book.book_id}`, book);
-                      }}
-                    >
-                      {book.title}
-                    </div>
-                    <div className='card-body' />
-                  </div>
-                </div>
-              );
-            })}
-        </div>
+        <Blogs navigate={navigate} />
+        <Books navigate={navigate} />
       </div>
       <div style={{ height: 50 }} />
     </div>
   );
 };
 
+const Blogs = ({ navigate }) => {
+  const [blogs, setBlogs] = useState(null);
+
+  useEffect(() => {
+    axiosInstance.get('/blog/get_all_blogs').then(({ data }) => {
+      setBlogs(data.data);
+    });
+  }, []);
+  return (
+    <>
+      <h3>Blogs</h3>
+      <div className='flex-row' style={{ flexWrap: 'wrap' }}>
+        {!blogs
+          ? [1, 2, 3, 4].map((key) => {
+              return <CardLoader key={key} />;
+            })
+          : null}
+        {blogs &&
+          blogs.map((node) => {
+            return (
+              <Card
+                key={node.blog_id}
+                node={node}
+                navigate={navigate}
+                nodeType='blog'
+                nodeIdType='blog_id'
+              />
+            );
+          })}
+      </div>
+    </>
+  );
+};
+
+const Books = ({ navigate }) => {
+  const [books, setBooks] = useState(null);
+  useEffect(() => {
+    axiosInstance.get('/book/get_all_books').then(({ data }) => {
+      setBooks(data.data);
+    });
+  }, []);
+
+  return (
+    <>
+      <h3>Books</h3>
+      <div className='flex-row' style={{ flexWrap: 'wrap' }}>
+        {!books
+          ? [5, 6, 7, 8].map((key) => {
+              return <CardLoader key={key} />;
+            })
+          : null}
+        {books &&
+          books.map((node) => {
+            return (
+              <Card
+                key={node.book_id}
+                node={node}
+                navigate={navigate}
+                nodeType='book'
+                nodeIdType='book_id'
+              />
+            );
+          })}
+      </div>
+    </>
+  );
+};
+
+const Card = ({ node, navigate, nodeType, nodeIdType }) => {
+  const image = JSON.parse(node.images)[0];
+
+  return (
+    <div className='card' key={node[nodeIdType]}>
+      <div
+        className='card-image'
+        style={{
+          backgroundImage:
+            image && image.name
+              ? `url("${process.env.REACT_APP_BASE_API_URL}/api/${nodeType}/${node[nodeIdType]}/340/${image.name}")`
+              : null,
+          overflow: 'hidden',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          borderTopLeftRadius: 3,
+          borderTopRightRadius: 3,
+        }}
+        onClick={() => {
+          navigate(`/view/${nodeType}/${node[nodeIdType]}`, node);
+        }}
+      />
+      <div className='card-body'>
+        <div
+          className='card-title cursor'
+          onClick={() => {
+            navigate(`/view/${nodeType}/${node[nodeIdType]}`, node);
+          }}
+        >
+          {node.title}
+        </div>
+        <div className='card-body' />
+      </div>
+    </div>
+  );
+};
 export default Home;
