@@ -2,6 +2,22 @@ import { orderNodes } from 'loony-utils';
 import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { axiosInstance } from 'loony-query';
 
+const Button = ({ onClick, title }) => {
+  return (
+    <div className='button-none' onClick={onClick}>
+      {title}
+    </div>
+  );
+};
+
+const SectionsNavContainer = ({ children }) => {
+  return <div style={{ paddingLeft: 20 }}>{children}</div>;
+};
+
+const PagesNavContainer = ({ children }) => {
+  return <div>{children}</div>;
+};
+
 export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
   const {
     page_id,
@@ -75,39 +91,33 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
        * @ Left Navigation
        */}
       <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
-        <div className='chapter-nav cursor'>
-          <div
-            className='chapter-nav'
-            onClick={(e) => {
-              e.stopPropagation();
-              setState({
-                ...state,
-                page_id: frontPage.uid,
-                activeNode: frontPage,
-              });
-            }}
-          >
-            {frontPage.title}
-          </div>
-        </div>
         <div
-          className='button-none'
-          onClick={(e) => {
-            e.stopPropagation();
+          className='chapter-nav'
+          onClick={() => {
+            setState({
+              ...state,
+              page_id: frontPage.uid,
+              activeNode: frontPage,
+            });
+          }}
+        >
+          {frontPage.title}
+        </div>
+        <Button
+          onClick={() => {
             setState({
               ...state,
               topNode: frontPage,
               modal: 'add_chapter',
             });
           }}
-          style={{ marginRight: 16, paddingTop: 7, paddingBottom: 7 }}
-        >
-          Add Chapter
-        </div>
+          title='Add Chapter'
+        />
+
         {nodes101.map((chapter) => {
           return (
             <div key={chapter.uid}>
-              <div className='chapter-nav-con cursor' key={chapter.uid}>
+              <PagesNavContainer>
                 <div
                   className='chapter-nav'
                   onClick={(e) => {
@@ -124,28 +134,23 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                     )}
                   </div>
                 </div>
-                <div className='flex-row' style={{ paddingTop: 5, paddingBottom: 5 }}>
-                  <div
-                    className='button-none'
-                    onClick={() => {
-                      setState({
-                        ...state,
-                        topNode: chapter,
-                        modal: 'add_chapter',
-                      });
-                    }}
-                    style={{ marginRight: 16 }}
-                  >
-                    Add Chapter
-                  </div>
-                </div>
-              </div>
+                <Button
+                  onClick={() => {
+                    setState({
+                      ...state,
+                      topNode: chapter,
+                      modal: 'add_chapter',
+                    });
+                  }}
+                  title='Add Chapter'
+                />
+              </PagesNavContainer>
               {/* Sections */}
-              <div style={{ paddingLeft: 20 }}>
+              <SectionsNavContainer>
                 {page_id === chapter.uid && (
                   <>
-                    <div
-                      className='button-none'
+                    <Button
+                      title='Add Section'
                       onClick={() => {
                         setState({
                           ...state,
@@ -153,10 +158,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                           modal: 'add_section',
                         });
                       }}
-                      style={{ paddingBottom: 5 }}
-                    >
-                      Add Section
-                    </div>
+                    />
                     {activeSectionsByPageId.map((section) => {
                       return (
                         <div key={section.uid}>
@@ -169,9 +171,8 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                           >
                             {section.title}
                           </div>
-                          <div
-                            className='button-none'
-                            style={{ paddingTop: 5, paddingBottom: 5 }}
+                          <Button
+                            title='Add Section'
                             onClick={(e) => {
                               setState({
                                 ...state,
@@ -180,22 +181,17 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                               });
                               e.stopPropagation();
                             }}
-                          >
-                            Add Section
-                          </div>
+                          />
                         </div>
                       );
                     })}
                   </>
                 )}
-              </div>
+              </SectionsNavContainer>
             </div>
           );
         })}
       </div>
-      {/*
-       * @ Left Navigation End
-       */}
     </>
   );
 };

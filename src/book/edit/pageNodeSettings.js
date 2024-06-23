@@ -1,13 +1,21 @@
 import { MdOutlineEdit, MdContentCopy, MdAdd } from 'react-icons/md';
 import { AiOutlineDelete } from 'react-icons/ai';
 
+const Button = ({ onClick, icon }) => {
+  return (
+    <div className='button-none cursor' onClick={onClick} style={{ marginRight: 10 }}>
+      <div className='btn-action'>{icon}</div>
+    </div>
+  );
+};
+
 export const PageNodeSettings = ({ node, setState, state }) => {
   return (
     <>
       {node.identity >= 100 ? (
         <div className='flex-row' style={{ marginTop: 24 }}>
-          <div
-            className='button-none cursor'
+          <Button
+            icon={<MdAdd size={16} color='#9c9c9c' />}
             onClick={(e) => {
               setState({
                 ...state,
@@ -16,15 +24,9 @@ export const PageNodeSettings = ({ node, setState, state }) => {
               });
               e.stopPropagation();
             }}
-            style={{ marginRight: 10 }}
-          >
-            <div className='btn-action'>
-              <MdAdd size={16} color='#9c9c9c' />
-            </div>
-          </div>
-
-          <div
-            className='button-none cursor'
+          />
+          <Button
+            icon={<AiOutlineDelete size={16} color='#9c9c9c' />}
             onClick={(e) => {
               setState({
                 ...state,
@@ -33,15 +35,10 @@ export const PageNodeSettings = ({ node, setState, state }) => {
               });
               e.stopPropagation();
             }}
-            style={{ marginRight: 10 }}
-          >
-            <div className='btn-action'>
-              <AiOutlineDelete size={16} color='#9c9c9c' />
-            </div>
-          </div>
+          />
 
-          <div
-            className='button-none cursor'
+          <Button
+            icon={<MdOutlineEdit size={16} color='#9c9c9c' />}
             onClick={(e) => {
               setState({
                 ...state,
@@ -50,24 +47,15 @@ export const PageNodeSettings = ({ node, setState, state }) => {
               });
               e.stopPropagation();
             }}
-            style={{ marginRight: 10 }}
-          >
-            <div className='btn-action'>
-              <MdOutlineEdit size={16} color='#9c9c9c' />
-            </div>
-          </div>
+          />
 
-          <div
-            className='delete-button-none cursor'
+          <Button
+            icon={<MdContentCopy size={16} color='#9c9c9c' />}
             onClick={(e) => {
               navigator.clipboard.writeText(node.body);
               e.stopPropagation();
             }}
-          >
-            <div className='btn-action'>
-              <MdContentCopy size={16} color='#9c9c9c' />
-            </div>
-          </div>
+          />
         </div>
       ) : null}
     </>
