@@ -1,6 +1,12 @@
 import { orderNodes } from 'loony-utils';
 import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { axiosInstance } from 'loony-query';
+import {
+  ChapterNavContainer,
+  PageNavContainer,
+  SectionNavContainer,
+  SectionsNavContainer,
+} from '../../components/Containers';
 
 const Button = ({ onClick, title }) => {
   return (
@@ -8,14 +14,6 @@ const Button = ({ onClick, title }) => {
       {title}
     </div>
   );
-};
-
-const SectionsNavContainer = ({ children }) => {
-  return <div style={{ paddingLeft: 20 }}>{children}</div>;
-};
-
-const PagesNavContainer = ({ children }) => {
-  return <div>{children}</div>;
 };
 
 export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
@@ -117,51 +115,48 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
         {nodes101.map((chapter) => {
           return (
             <div key={chapter.uid}>
-              <PagesNavContainer>
-                <div
-                  className='chapter-nav'
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    getSections(chapter);
-                  }}
-                >
-                  <div style={{ width: '90%' }}>{chapter.title}</div>
-                  <div>
-                    {page_id === chapter.uid ? (
-                      <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
-                    ) : (
-                      <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
-                    )}
-                  </div>
+              <PageNavContainer
+                onClick={(e) => {
+                  e.stopPropagation();
+                  getSections(chapter);
+                }}
+              >
+                <div style={{ width: '90%' }}>{chapter.title}</div>
+                <div>
+                  {page_id === chapter.uid ? (
+                    <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
+                  ) : (
+                    <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
+                  )}
                 </div>
-                <Button
-                  onClick={() => {
-                    setState({
-                      ...state,
-                      topNode: chapter,
-                      modal: 'add_chapter',
-                    });
-                  }}
-                  title='Add Chapter'
-                />
-              </PagesNavContainer>
+              </PageNavContainer>
+              <Button
+                onClick={() => {
+                  setState({
+                    ...state,
+                    topNode: chapter,
+                    modal: 'add_chapter',
+                  });
+                }}
+                title='Add Chapter'
+              />
               {/* Sections */}
-              <SectionsNavContainer>
-                {page_id === chapter.uid && (
-                  <>
-                    <Button
-                      title='Add Section'
-                      onClick={() => {
-                        setState({
-                          ...state,
-                          topNode: chapter,
-                          modal: 'add_section',
-                        });
-                      }}
-                    />
-                    {activeSectionsByPageId.map((section) => {
-                      return (
-                        <div key={section.uid}>
+              {page_id === chapter.uid && (
+                <SectionsNavContainer>
+                  <Button
+                    title='Add Section'
+                    onClick={() => {
+                      setState({
+                        ...state,
+                        topNode: chapter,
+                        modal: 'add_section',
+                      });
+                    }}
+                  />
+                  {activeSectionsByPageId.map((section) => {
+                    return (
+                      <>
+                        <SectionNavContainer key={section.uid}>
                           <div
                             className='section-nav cursor'
                             onClick={(e) => {
@@ -171,23 +166,23 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                           >
                             {section.title}
                           </div>
-                          <Button
-                            title='Add Section'
-                            onClick={(e) => {
-                              setState({
-                                ...state,
-                                topNode: section,
-                                modal: 'add_section',
-                              });
-                              e.stopPropagation();
-                            }}
-                          />
-                        </div>
-                      );
-                    })}
-                  </>
-                )}
-              </SectionsNavContainer>
+                        </SectionNavContainer>
+                        <Button
+                          title='Add Section'
+                          onClick={(e) => {
+                            setState({
+                              ...state,
+                              topNode: section,
+                              modal: 'add_section',
+                            });
+                            e.stopPropagation();
+                          }}
+                        />
+                      </>
+                    );
+                  })}
+                </SectionsNavContainer>
+              )}
             </div>
           );
         })}

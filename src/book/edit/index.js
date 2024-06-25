@@ -129,7 +129,7 @@ export default function Edit() {
               const subSectionNodeImage = extractImage(subSectionNode.images);
 
               return (
-                <div style={{ marginBottom: 25, marginTop: 25 }} key={subSectionNode.uid}>
+                <div className='page-section' key={subSectionNode.uid}>
                   <div className='section-title'>{subSectionNode.title}</div>
                   {subSectionNodeImage && subSectionNodeImage.name ? (
                     <div style={{ width: '100%', borderRadius: 5 }}>

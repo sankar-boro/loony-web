@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { LuFileEdit } from 'react-icons/lu';
 import { LuFileWarning } from 'react-icons/lu';
-import { extractImage, orderBookNodes, orderNodes } from 'loony-utils';
-import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
+import { extractImage, orderBookNodes } from 'loony-utils';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
 import { useParams, Link } from 'react-router-dom';
 import { axiosInstance } from 'loony-query';
-import PageLoader from '../components/PageLoader';
+import PageLoader from '../../components/PageLoader';
+import { PageNavigation } from './pageNavigation';
 
 const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   const { bookId } = useParams();
@@ -100,14 +100,24 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                 padding: 12,
               }}
             >
-              <Navigation setState={setState} nodes101={nodes101} state={state} book_id={book_id} />
+              <PageNavigation
+                setState={setState}
+                nodes101={nodes101}
+                state={state}
+                book_id={book_id}
+              />
             </div>
             {isMobile ? <EditContainerMobile node={activeNode} book_id={book_id} /> : null}
           </div>
         ) : null}
         {!isMobile ? (
           <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
-            <Navigation setState={setState} nodes101={nodes101} state={state} book_id={book_id} />
+            <PageNavigation
+              setState={setState}
+              nodes101={nodes101}
+              state={state}
+              book_id={book_id}
+            />
           </div>
         ) : null}
         {/*
@@ -147,11 +157,11 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
               wrapperElement={{ 'data-color-mode': 'light' }}
             />
           </div>
-          {activeSubSectionsBySectionId.map((book_node) => {
-            const nodeImage = extractImage(book_node.images);
+          {activeSubSectionsBySectionId.map((subSectionNode) => {
+            const nodeImage = extractImage(subSectionNode.images);
             return (
-              <div className='page-section' key={book_node.uid}>
-                <div className='section-title'>{book_node.title}</div>
+              <div className='page-section' key={subSectionNode.uid}>
+                <div className='section-title'>{subSectionNode.title}</div>
                 {nodeImage && nodeImage.name ? (
                   <div style={{ width: '100%', borderRadius: 5 }}>
                     <img
@@ -162,7 +172,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                   </div>
                 ) : null}
                 <MarkdownPreview
-                  source={book_node.body}
+                  source={subSectionNode.body}
                   wrapperElement={{ 'data-color-mode': 'light' }}
                 />
               </div>
@@ -176,134 +186,6 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
         {!isMobile ? <RightBookContainer node={activeNode} book_id={book_id} /> : null}
       </div>
     </div>
-  );
-};
-
-const Navigation = ({ setState, nodes101, state, book_id }) => {
-  const {
-    page_id,
-    activeSectionsByPageId,
-    frontPage,
-    allSectionsByPageId,
-    allSubSectionsBySectionId,
-  } = state;
-
-  const getSections = (__node) => {
-    const { uid } = __node;
-    if (allSectionsByPageId[uid]) {
-      setState({
-        ...state,
-        activeSectionsByPageId: allSectionsByPageId[uid],
-        page_id: __node.uid,
-        activeNode: __node,
-        activeSubSectionsBySectionId: [],
-      });
-    } else {
-      axiosInstance
-        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${uid}`)
-        .then(({ data }) => {
-          const res = orderNodes(data.data, __node);
-          setState({
-            ...state,
-            activeSectionsByPageId: res,
-            allSectionsByPageId: {
-              ...allSectionsByPageId,
-              [uid]: res,
-            },
-            page_id: __node.uid,
-            activeNode: __node,
-            activeSubSectionsBySectionId: [],
-          });
-        });
-    }
-  };
-
-  const getSubSections = (__node) => {
-    const { uid } = __node;
-    if (allSubSectionsBySectionId[uid]) {
-      setState({
-        ...state,
-        activeSubSectionsBySectionId: allSubSectionsBySectionId[uid],
-        section_id: __node.uid,
-        activeNode: __node,
-      });
-    } else {
-      axiosInstance
-        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${uid}`)
-        .then(({ data }) => {
-          const res = orderNodes(data.data, __node);
-          setState({
-            ...state,
-            activeSubSectionsBySectionId: res,
-            allSubSectionsBySectionId: {
-              ...allSubSectionsBySectionId,
-              [uid]: res,
-            },
-            section_id: __node.uid,
-            activeNode: __node,
-          });
-        });
-    }
-  };
-  return (
-    <>
-      <div className='chapter-nav-con'>
-        <div
-          className='chapter-nav'
-          onClick={(e) => {
-            e.stopPropagation();
-            setState((prevState) => ({
-              ...prevState,
-              page_id: frontPage.uid,
-              activeNode: frontPage,
-              activeSubSectionsBySectionId: [],
-            }));
-          }}
-        >
-          {frontPage.title}
-        </div>
-      </div>
-      {nodes101.map((chapter) => {
-        return (
-          <div key={chapter.uid}>
-            <div className='chapter-nav-con'>
-              <div
-                className='chapter-nav'
-                onClick={(e) => {
-                  e.stopPropagation();
-                  getSections(chapter);
-                }}
-              >
-                <div style={{ width: '90%' }}>{chapter.title}</div>
-                <div>
-                  {page_id === chapter.uid ? (
-                    <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
-                  ) : (
-                    <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
-                  )}
-                </div>
-              </div>
-            </div>
-            {page_id === chapter.uid &&
-              activeSectionsByPageId.map((section) => {
-                return (
-                  <div
-                    key={section.uid}
-                    className='section-nav'
-                    style={{ paddingLeft: 20 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      getSubSections(section);
-                    }}
-                  >
-                    {section.title}
-                  </div>
-                );
-              })}
-          </div>
-        );
-      })}
-    </>
   );
 };
 
@@ -356,4 +238,5 @@ const EditContainerMobile = ({ node, book_id }) => {
     </div>
   );
 };
+
 export default View;
