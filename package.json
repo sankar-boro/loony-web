@@ -31,8 +31,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "prod:start": "react-scripts start",
-    "dev:start": "GENERATE_SOURCEMAP=false react-scripts start",
+    "prod": "react-scripts start",
+    "dev": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "rm -rf ./build && GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

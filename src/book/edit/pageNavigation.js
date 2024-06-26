@@ -10,7 +10,7 @@ import {
 
 const Button = ({ onClick, title }) => {
   return (
-    <div className='button-none' onClick={onClick}>
+    <div className='button-none' onClick={onClick} style={{ padding: '3px 0px' }}>
       {title}
     </div>
   );
@@ -89,8 +89,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
        * @ Left Navigation
        */}
       <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
-        <div
-          className='chapter-nav'
+        <ChapterNavContainer
           onClick={() => {
             setState({
               ...state,
@@ -100,7 +99,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
           }}
         >
           {frontPage.title}
-        </div>
+        </ChapterNavContainer>
         <Button
           onClick={() => {
             setState({
@@ -155,17 +154,14 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                   />
                   {activeSectionsByPageId.map((section) => {
                     return (
-                      <>
-                        <SectionNavContainer key={section.uid}>
-                          <div
-                            className='section-nav cursor'
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              getSubSections(section);
-                            }}
-                          >
-                            {section.title}
-                          </div>
+                      <div key={section.uid}>
+                        <SectionNavContainer
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            getSubSections(section);
+                          }}
+                        >
+                          {section.title}
                         </SectionNavContainer>
                         <Button
                           title='Add Section'
@@ -178,7 +174,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                             e.stopPropagation();
                           }}
                         />
-                      </>
+                      </div>
                     );
                   })}
                 </SectionsNavContainer>

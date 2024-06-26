@@ -300,17 +300,18 @@ select {
   margin-bottom: 16px;
 }
 .section-nav {
-  padding-top: 3px;
-  padding-bottom: 3px;
+  padding: 3px 0px;
 }
 .chapter-nav {
   display: flex;
   flex-direction: row;
   font-weight: 600;
   font-size: 16px;
+  padding: 5px 0px;
 }
 .chapter-nav:hover, .section-nav:hover {
-  color: #505050;
+  background-color: #e7e7e7;
+  cursor: pointer;
 }
 /*
 * @Modal
