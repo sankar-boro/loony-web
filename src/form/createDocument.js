@@ -3,9 +3,10 @@ import { useState, useCallback, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from 'loony-query';
-import 'react-easy-crop/react-easy-crop.css';
 import { AuthContext } from '../context/AuthContext';
 import Cropper from 'react-easy-crop';
+import { TextArea } from './components/TextArea';
+import 'react-easy-crop/react-easy-crop.css';
 
 export default function FormComponent({ editNode, url, title, isMobile }) {
   const navigate = useNavigate();
@@ -125,7 +126,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
     <div className='form-container'>
       <div style={{ fontSize: 24, fontWeight: 'bold', padding: 45 }}>{title}</div>
       <div className='flex-row' style={{ padding: '0px 45px 15px 45px' }}>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, padding: '0px 10px' }}>
           <div className='form-section'>
             <label>Title</label>
             <br />
@@ -137,9 +138,10 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
               }}
             />
           </div>
-          <div className='form-section'>
+          {/* <div className='form-section'>
             <label>Body</label>
             <br />
+            <RadioInput />
             <textarea
               onChange={(e) => {
                 setFormBody(e.target.value);
@@ -147,8 +149,13 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
               rows={24}
               cols={100}
               value={formBody}
+              style={{
+                borderTop: 'none',
+                borderRadius: 0,
+              }}
             />
-          </div>
+          </div> */}
+          <TextArea formBody={formBody} setFormBody={setFormBody} />
           {!afterTmpImageUpload && imageEdit ? (
             <EditImageComponent
               uploadImage={uploadImage}
