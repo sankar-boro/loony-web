@@ -1,7 +1,4 @@
-import { useState } from 'react';
-
-export const TextArea = ({ formBody, setFormBody }) => {
-  const [theme, setTheme] = useState(11);
+export const TextArea = ({ formBody, setFormBody, theme, setTheme }) => {
   return (
     <div
       style={{

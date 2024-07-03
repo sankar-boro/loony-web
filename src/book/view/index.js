@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { LuFileEdit } from 'react-icons/lu';
 import { LuFileWarning } from 'react-icons/lu';
 import { extractImage, orderBookNodes } from 'loony-utils';
@@ -8,6 +8,7 @@ import { useParams, Link } from 'react-router-dom';
 import { axiosInstance } from 'loony-query';
 import PageLoader from '../../components/PageLoader';
 import { PageNavigation } from './pageNavigation';
+const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown'));
 
 const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   const { bookId } = useParams();
@@ -152,10 +153,18 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                 />
               </div>
             ) : null}
-            <MarkdownPreview
-              source={activeNode.body}
-              wrapperElement={{ 'data-color-mode': 'light' }}
-            />
+            {activeNode.theme === 11 ? (
+              activeNode.body
+            ) : activeNode.theme === 13 ? (
+              <MarkdownPreview
+                source={activeNode.body}
+                wrapperElement={{ 'data-color-mode': 'light' }}
+              />
+            ) : activeNode.theme === 41 ? (
+              <Suspense fallback={<div>Loading component...</div>}>
+                <MathsMarkdown source={activeNode.body} />
+              </Suspense>
+            ) : null}
           </div>
           {activeSubSectionsBySectionId.map((subSectionNode) => {
             const nodeImage = extractImage(subSectionNode.images);
@@ -171,10 +180,18 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                     />
                   </div>
                 ) : null}
-                <MarkdownPreview
-                  source={subSectionNode.body}
-                  wrapperElement={{ 'data-color-mode': 'light' }}
-                />
+                {subSectionNode.theme === 11 ? (
+                  subSectionNode.body
+                ) : subSectionNode.theme === 13 ? (
+                  <MarkdownPreview
+                    source={subSectionNode.body}
+                    wrapperElement={{ 'data-color-mode': 'light' }}
+                  />
+                ) : subSectionNode.theme === 41 ? (
+                  <Suspense fallback={<div>Loading component...</div>}>
+                    <MathsMarkdown source={subSectionNode.body} />
+                  </Suspense>
+                ) : null}
               </div>
             );
           })}

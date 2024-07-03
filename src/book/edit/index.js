@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, Suspense, lazy } from 'react';
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
 import { orderBookNodes, extractImage } from 'loony-utils';
@@ -13,6 +13,7 @@ import PageLoader from '../../components/PageLoader';
 import { ModalComponent } from './modal';
 import { PageNavigation } from './pageNavigation';
 import { PageNodeSettings } from './pageNodeSettings';
+const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown'));
 
 export default function Edit() {
   const { bookId } = useParams();
@@ -113,10 +114,22 @@ export default function Edit() {
                 />
               </div>
             ) : null}
-            <MarkdownPreview
+            {/* <MarkdownPreview
               source={activeNode.body}
               wrapperElement={{ 'data-color-mode': 'light' }}
-            />
+            /> */}
+            {activeNode.theme === 11 ? (
+              activeNode.body
+            ) : activeNode.theme === 13 ? (
+              <MarkdownPreview
+                source={activeNode.body}
+                wrapperElement={{ 'data-color-mode': 'light' }}
+              />
+            ) : activeNode.theme === 41 ? (
+              <Suspense fallback={<div>Loading component...</div>}>
+                <MathsMarkdown source={activeNode.body} />
+              </Suspense>
+            ) : null}
           </div>
           <PageNodeSettings node={activeNode} setState={setState} state={state} />
 
@@ -140,10 +153,22 @@ export default function Edit() {
                       />
                     </div>
                   ) : null}
-                  <MarkdownPreview
+                  {/* <MarkdownPreview
                     source={subSectionNode.body}
                     wrapperElement={{ 'data-color-mode': 'light' }}
-                  />
+                  /> */}
+                  {activeNode.theme === 11 ? (
+                    activeNode.body
+                  ) : activeNode.theme === 13 ? (
+                    <MarkdownPreview
+                      source={activeNode.body}
+                      wrapperElement={{ 'data-color-mode': 'light' }}
+                    />
+                  ) : activeNode.theme === 41 ? (
+                    <Suspense fallback={<div>Loading component...</div>}>
+                      <MathsMarkdown source={activeNode.body} />
+                    </Suspense>
+                  ) : null}
                   <PageNodeSettings node={subSectionNode} setState={setState} state={state} />
                 </div>
               );

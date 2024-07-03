@@ -6,6 +6,7 @@ import { axiosInstance } from 'loony-query';
 import { AuthContext } from '../context/AuthContext';
 import Cropper from 'react-easy-crop';
 import { TextArea } from './components/TextArea';
+import MathsMarkdown from '../components/MathsMarkdown';
 import 'react-easy-crop/react-easy-crop.css';
 
 export default function FormComponent({ editNode, url, title, isMobile }) {
@@ -16,6 +17,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
   const [formBody, setFormBody] = useState('');
   const [tags, setTags] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [theme, setTheme] = useState(11);
 
   const [afterImageSelect, setAfterImageSelect] = useState({
     image: null,
@@ -54,6 +56,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
         body: formBody,
         images: [{ name: imageData ? imageData.name : afterTmpImageUpload }],
         tags,
+        theme,
       })
       .then(() => {
         setSubmitting(false);
@@ -69,7 +72,7 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
       .catch(() => {
         setSubmitting(false);
       });
-  }, [formTitle, formBody, afterTmpImageUpload]);
+  }, [formTitle, formBody, afterTmpImageUpload, theme]);
 
   const onSelectImage = (event) => {
     const selectedFile = event.target.files[0];
@@ -138,24 +141,12 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
               }}
             />
           </div>
-          {/* <div className='form-section'>
-            <label>Body</label>
-            <br />
-            <RadioInput />
-            <textarea
-              onChange={(e) => {
-                setFormBody(e.target.value);
-              }}
-              rows={24}
-              cols={100}
-              value={formBody}
-              style={{
-                borderTop: 'none',
-                borderRadius: 0,
-              }}
-            />
-          </div> */}
-          <TextArea formBody={formBody} setFormBody={setFormBody} />
+          <TextArea
+            formBody={formBody}
+            setFormBody={setFormBody}
+            theme={theme}
+            setTheme={setTheme}
+          />
           {!afterTmpImageUpload && imageEdit ? (
             <EditImageComponent
               uploadImage={uploadImage}
@@ -187,7 +178,13 @@ export default function FormComponent({ editNode, url, title, isMobile }) {
         </div>
         {!isMobile ? (
           <div style={{ flex: 1, padding: 25 }}>
-            <MarkdownPreview source={formBody} wrapperElement={{ 'data-color-mode': 'light' }} />
+            {theme === 11 ? (
+              formBody
+            ) : theme === 13 ? (
+              <MarkdownPreview source={formBody} wrapperElement={{ 'data-color-mode': 'light' }} />
+            ) : theme === 41 ? (
+              <MathsMarkdown source={formBody} />
+            ) : null}
           </div>
         ) : null}
       </div>

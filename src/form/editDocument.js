@@ -4,6 +4,8 @@ import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from 'loony-query';
 import Cropper from 'react-easy-crop';
 import { AuthContext } from '../context/AuthContext';
+import { TextArea } from './components/TextArea';
+import MathsMarkdown from '../components/MathsMarkdown';
 
 const getUrl = (editNode) => {
   if (editNode.identity === 100) {
@@ -19,6 +21,7 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, onCancel }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [image, setImage] = useState('');
+  const [theme, setTheme] = useState(11);
   const [afterImageSelect, setAfterImageSelect] = useState({
     image: null,
     width: null,
@@ -43,6 +46,9 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, onCancel }) => {
       let __image = JSON.parse(editNode.images);
       if (__image.length > 0) {
         setImage(__image[0].name);
+      }
+      if (editNode.theme) {
+        setTheme(editNode.theme);
       }
     }
   }, [editNode]);
@@ -146,18 +152,7 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, onCancel }) => {
                 }}
               />
             </div>
-            <div className='form-section'>
-              <label>Body</label>
-              <br />
-              <textarea
-                onChange={(e) => {
-                  setBody(e.target.value);
-                }}
-                rows={24}
-                cols={100}
-                value={body}
-              />
-            </div>
+            <TextArea formBody={body} setFormBody={setBody} theme={theme} setTheme={setTheme} />
             {!afterTmpImageUpload && imageEdit ? (
               <EditImageComponent
                 uploadImage={uploadImage}
@@ -177,7 +172,13 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, onCancel }) => {
             ) : null}
           </div>
           <div style={{ width: '50%' }}>
-            <MarkdownPreview source={body} wrapperElement={{ 'data-color-mode': 'light' }} />
+            {theme === 11 ? (
+              body
+            ) : theme === 13 ? (
+              <MarkdownPreview source={body} wrapperElement={{ 'data-color-mode': 'light' }} />
+            ) : theme === 41 ? (
+              <MathsMarkdown source={body} />
+            ) : null}
           </div>
         </div>
       </ModalBodyContainer>
