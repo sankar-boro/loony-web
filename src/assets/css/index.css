@@ -55,7 +55,7 @@ label {
   font-size: 14px;
   color: #303030;
 }
-input[type=text], textarea {
+input[type=text], input[type=password], textarea {
   width: 100%;
   border: 1px solid #ccc;
   border-radius: 5px;

@@ -138,6 +138,7 @@ const Signup = ({ isMobile }) => {
                 <label htmlFor='fname'>First Name</label>
                 <input
                   id='fname'
+                  type='text'
                   required
                   value={fname}
                   onChange={(e) => {
@@ -155,6 +156,7 @@ const Signup = ({ isMobile }) => {
                 <label htmlFor='lname'>Last Name</label>
                 <input
                   id='lname'
+                  type='text'
                   required
                   value={lname}
                   onChange={(e) => {

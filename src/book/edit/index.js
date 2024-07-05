@@ -114,10 +114,6 @@ export default function Edit() {
                 />
               </div>
             ) : null}
-            {/* <MarkdownPreview
-              source={activeNode.body}
-              wrapperElement={{ 'data-color-mode': 'light' }}
-            /> */}
             {activeNode.theme === 11 ? (
               activeNode.body
             ) : activeNode.theme === 13 ? (
@@ -153,20 +149,16 @@ export default function Edit() {
                       />
                     </div>
                   ) : null}
-                  {/* <MarkdownPreview
-                    source={subSectionNode.body}
-                    wrapperElement={{ 'data-color-mode': 'light' }}
-                  /> */}
-                  {activeNode.theme === 11 ? (
-                    activeNode.body
-                  ) : activeNode.theme === 13 ? (
+                  {subSectionNode.theme === 11 ? (
+                    subSectionNode.body
+                  ) : subSectionNode.theme === 13 ? (
                     <MarkdownPreview
-                      source={activeNode.body}
+                      source={subSectionNode.body}
                       wrapperElement={{ 'data-color-mode': 'light' }}
                     />
-                  ) : activeNode.theme === 41 ? (
+                  ) : subSectionNode.theme === 41 ? (
                     <Suspense fallback={<div>Loading component...</div>}>
-                      <MathsMarkdown source={activeNode.body} />
+                      <MathsMarkdown source={subSectionNode.body} />
                     </Suspense>
                   ) : null}
                   <PageNodeSettings node={subSectionNode} setState={setState} state={state} />

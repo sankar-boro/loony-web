@@ -3,8 +3,6 @@ import { getCodeString } from 'rehype-rewrite';
 import katex from 'katex';
 import 'katex/dist/katex.css';
 
-// const source = '```KaTeX \n c = \\pm\\sqrt{a^2 + b^2} \n```';
-
 const MathsMarkdown = ({ source: __source }) => (
   <MarkdownPreview
     source={__source}

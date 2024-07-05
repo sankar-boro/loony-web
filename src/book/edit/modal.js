@@ -1,7 +1,7 @@
 import { deleteOne } from 'loony-utils';
 import { axiosInstance } from 'loony-query';
 import AddNode from '../../form/addNode';
-import EditDocument from '../../form/editDocument';
+import EditDocument from '../../form/editNode';
 import ConfirmAction from '../../components/ConfirmAction';
 import { appendChapters, appendSections, appendSubSections } from 'loony-utils';
 
@@ -251,6 +251,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
           docId={book_id}
           parent_id={topNode.uid}
           identity={101}
+          parent_identity={topNode.identity}
           page_id={page_id}
           onCancel={onCancel}
         />
@@ -266,6 +267,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
           docIdName='book_id'
           docId={book_id}
           parent_id={topNode.uid}
+          parent_identity={topNode.identity}
           identity={102}
           page_id={page_id}
           onCancel={onCancel}
@@ -282,6 +284,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
           docIdName='book_id'
           docId={book_id}
           parent_id={topNode.uid}
+          parent_identity={topNode.identity}
           identity={103}
           page_id={section_id}
           onCancel={onCancel}

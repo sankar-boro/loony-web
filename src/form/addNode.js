@@ -7,8 +7,10 @@ import 'react-easy-crop/react-easy-crop.css';
 import { AuthContext } from '../context/AuthContext';
 import Cropper from 'react-easy-crop';
 import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
+import { TextArea } from './components/TextArea';
+import MathsMarkdown from '../components/MathsMarkdown';
 
-export default function FormComponent({
+export default function AddNodeComponent({
   url,
   title,
   docIdName,
@@ -18,6 +20,7 @@ export default function FormComponent({
   identity,
   page_id,
   onCancel,
+  parent_identity,
 }) {
   const { auth } = useContext(AuthContext);
   const { user_id } = auth.user;
@@ -25,6 +28,7 @@ export default function FormComponent({
   const [formBody, setFormBody] = useState('');
   const [tags, setTags] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [theme, setTheme] = useState(11);
 
   const [afterImageSelect, setAfterImageSelect] = useState({
     image: null,
@@ -58,6 +62,8 @@ export default function FormComponent({
         parent_id,
         identity,
         page_id,
+        theme,
+        parent_identity,
       })
       .then((data) => {
         setSubmitting(false);
@@ -135,18 +141,13 @@ export default function FormComponent({
                 }}
               />
             </div>
-            <div className='form-section'>
-              <label>Body</label>
-              <br />
-              <textarea
-                onChange={(e) => {
-                  setFormBody(e.target.value);
-                }}
-                rows={24}
-                cols={100}
-                value={formBody}
-              />
-            </div>
+            <TextArea
+              formBody={formBody}
+              setFormBody={setFormBody}
+              theme={theme}
+              setTheme={setTheme}
+            />
+
             {!afterTmpImageUpload && imageEdit ? (
               <EditImageComponent
                 uploadImage={uploadImage}
@@ -166,7 +167,13 @@ export default function FormComponent({
             ) : null}
           </div>
           <div style={{ width: '50%' }}>
-            <MarkdownPreview source={formBody} wrapperElement={{ 'data-color-mode': 'light' }} />
+            {theme === 11 ? (
+              formBody
+            ) : theme === 13 ? (
+              <MarkdownPreview source={formBody} wrapperElement={{ 'data-color-mode': 'light' }} />
+            ) : theme === 41 ? (
+              <MathsMarkdown source={formBody} />
+            ) : null}
           </div>
         </div>
       </ModalBodyContainer>

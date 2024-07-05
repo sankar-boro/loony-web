@@ -13,7 +13,8 @@ const getUrl = (editNode) => {
   }
   return '/book/edit_book_node';
 };
-const EditNode = ({ state, docIdName, doc_id, FnCallback, onCancel }) => {
+
+export default function EditNodeComponent({ state, docIdName, doc_id, FnCallback, onCancel }) {
   const { editNode } = state;
   const url = getUrl(editNode);
   const { auth } = useContext(AuthContext);
@@ -62,6 +63,7 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, onCancel }) => {
       [docIdName]: doc_id,
       identity: editNode.identity,
       images: [{ name: afterTmpImageUpload ? afterTmpImageUpload : image }],
+      theme,
     };
     axiosInstance
       .post(url, submitData)
@@ -192,9 +194,7 @@ const EditNode = ({ state, docIdName, doc_id, FnCallback, onCancel }) => {
       </ModalButtonContainer>
     </ModalMd>
   );
-};
-
-export default EditNode;
+}
 
 const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMetadata }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });

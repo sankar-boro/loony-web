@@ -9,7 +9,7 @@ import { TextArea } from './components/TextArea';
 import MathsMarkdown from '../components/MathsMarkdown';
 import 'react-easy-crop/react-easy-crop.css';
 
-export default function FormComponent({ editNode, url, title, isMobile }) {
+export default function CreateNewDocument({ editNode, url, title, isMobile }) {
   const navigate = useNavigate();
   const { setContext, auth } = useContext(AuthContext);
   const { user_id } = auth.user;

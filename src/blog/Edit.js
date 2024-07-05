@@ -16,7 +16,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 
 import { axiosInstance } from 'loony-query';
 import AddNode from '../form/addNode';
-import EditNode from '../form/editDocument';
+import EditNode from '../form/editNode';
 import ConfirmAction from '../components/ConfirmAction';
 
 export default function Edit() {
