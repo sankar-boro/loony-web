@@ -1,12 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from 'loony-query';
 import { AuthContext } from '../context/AuthContext';
 import Cropper from 'react-easy-crop';
 import { TextArea } from './components/TextArea';
-import MathsMarkdown from '../components/MathsMarkdown';
+import { MenuNavContainer } from '../components/Containers';
+import { GoHome } from 'react-icons/go';
+import { PiBookLight, PiNoteThin } from 'react-icons/pi';
+
 import 'react-easy-crop/react-easy-crop.css';
 
 export default function CreateNewDocument({ editNode, url, title, isMobile }) {
@@ -126,86 +128,91 @@ export default function CreateNewDocument({ editNode, url, title, isMobile }) {
   };
 
   return (
-    <div className='form-container'>
-      <div style={{ fontSize: 24, fontWeight: 'bold', padding: 45 }}>{title}</div>
-      <div className='flex-row' style={{ padding: '0px 45px 15px 45px' }}>
-        <div style={{ flex: 1, padding: '0px 10px' }}>
-          <div className='form-section'>
-            <label>Title</label>
-            <br />
-            <input
-              type='text'
-              value={formTitle}
-              onChange={(e) => {
-                setFormTitle(e.target.value);
-              }}
+    <div className='form-container flex-row'>
+      <div style={{ width: '20%', borderRight: '1px solid #ccc', paddingBottom: 100 }}>
+        <MenuNavContainer activeMenu={'active-menu'}>
+          <GoHome /> <span style={{ marginLeft: 10 }}>Create</span>
+        </MenuNavContainer>
+        <MenuNavContainer>
+          <GoHome /> <span style={{ marginLeft: 10 }}>Home</span>
+        </MenuNavContainer>
+        <MenuNavContainer>
+          <PiBookLight /> <span style={{ marginLeft: 10 }}>Books</span>
+        </MenuNavContainer>
+        <MenuNavContainer>
+          <PiNoteThin /> <span style={{ marginLeft: 10 }}>Blogs</span>
+        </MenuNavContainer>
+      </div>
+      <div style={{ width: '65%', paddingBottom: 100 }}>
+        <div style={{ fontSize: 24, fontWeight: 'bold', padding: 45 }}>{title}</div>
+        <div style={{ padding: '0px 45px 15px 45px' }}>
+          <div style={{ padding: '0px 10px' }}>
+            <div className='form-section'>
+              <input
+                type='text'
+                value={formTitle}
+                onChange={(e) => {
+                  setFormTitle(e.target.value);
+                }}
+                placeholder='Title'
+              />
+            </div>
+            <TextArea
+              formBody={formBody}
+              setFormBody={setFormBody}
+              theme={theme}
+              setTheme={setTheme}
+              isMobile={isMobile}
             />
+            {!afterTmpImageUpload && imageEdit ? (
+              <EditImageComponent
+                uploadImage={uploadImage}
+                changeFile={changeFile}
+                imageEdit={imageEdit}
+                setCropImageMetadata={setCropImageMetadata}
+              />
+            ) : null}
+            {!afterTmpImageUpload && !imageEdit ? (
+              <SelectImage onSelectImage={onSelectImage} />
+            ) : null}
+            {afterTmpImageUpload && !imageEdit ? (
+              <img
+                src={`${process.env.REACT_APP_BASE_API_URL}/api/tmp/${user_id}/340/${afterTmpImageUpload}`}
+                alt='tmp file upload'
+              />
+            ) : null}
+            <div className='form-section'>
+              <label>Tags</label>
+              <br />
+              <input
+                type='text'
+                value={tags}
+                onChange={(e) => {
+                  setTags(e.target.value);
+                }}
+              />
+            </div>
           </div>
-          <TextArea
-            formBody={formBody}
-            setFormBody={setFormBody}
-            theme={theme}
-            setTheme={setTheme}
-          />
-          {!afterTmpImageUpload && imageEdit ? (
-            <EditImageComponent
-              uploadImage={uploadImage}
-              changeFile={changeFile}
-              imageEdit={imageEdit}
-              setCropImageMetadata={setCropImageMetadata}
-            />
-          ) : null}
-          {!afterTmpImageUpload && !imageEdit ? (
-            <SelectImage onSelectImage={onSelectImage} />
-          ) : null}
-          {afterTmpImageUpload && !imageEdit ? (
-            <img
-              src={`${process.env.REACT_APP_BASE_API_URL}/api/tmp/${user_id}/340/${afterTmpImageUpload}`}
-              alt='tmp file upload'
-            />
-          ) : null}
-          <div className='form-section'>
-            <label>Tags</label>
-            <br />
-            <input
-              type='text'
-              value={tags}
-              onChange={(e) => {
-                setTags(e.target.value);
+          <div className='flex-row' style={{ justifyContent: 'flex-end' }}>
+            <button
+              className='black-bg'
+              onClick={createDoc}
+              disabled={submitting}
+              style={{ marginRight: 10 }}
+            >
+              {submitting ? 'Creating...' : 'Create'}
+            </button>
+            <button
+              className='grey-bg'
+              onClick={() => {
+                navigate('/', { replace: true });
               }}
-            />
+              disabled={submitting}
+            >
+              Cancel
+            </button>
           </div>
         </div>
-        {!isMobile ? (
-          <div style={{ flex: 1, padding: 25 }}>
-            {theme === 11 ? (
-              formBody
-            ) : theme === 13 ? (
-              <MarkdownPreview source={formBody} wrapperElement={{ 'data-color-mode': 'light' }} />
-            ) : theme === 41 ? (
-              <MathsMarkdown source={formBody} />
-            ) : null}
-          </div>
-        ) : null}
-      </div>
-      <div style={{ backgroundColor: '#f4f4f4', padding: '32px 45px' }}>
-        <button
-          className='black-bg'
-          onClick={createDoc}
-          disabled={submitting}
-          style={{ marginRight: 10 }}
-        >
-          {submitting ? 'Creating...' : 'Create'}
-        </button>
-        <button
-          className='grey-bg'
-          onClick={() => {
-            navigate('/', { replace: true });
-          }}
-          disabled={submitting}
-        >
-          Cancel
-        </button>
       </div>
     </div>
   );

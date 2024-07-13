@@ -6,6 +6,14 @@ export const ChapterNavContainer = ({ children, onClick }) => {
   );
 };
 
+export const MenuNavContainer = ({ children, onClick, activeMenu }) => {
+  return (
+    <div className={`menu-nav p12 ${activeMenu}`} onClick={onClick}>
+      {children}
+    </div>
+  );
+};
+
 export const PageNavContainer = ChapterNavContainer;
 
 export const SectionNavContainer = ({ children, onClick }) => {

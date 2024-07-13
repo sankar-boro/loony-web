@@ -1,4 +1,7 @@
-export const TextArea = ({ formBody, setFormBody, theme, setTheme }) => {
+import MarkdownPreview from '@uiw/react-markdown-preview';
+import MathsMarkdown from '../../components/MathsMarkdown';
+
+export const TextArea = ({ formBody, setFormBody, theme, setTheme, isMobile }) => {
   return (
     <div
       style={{
@@ -53,12 +56,23 @@ export const TextArea = ({ formBody, setFormBody, theme, setTheme }) => {
             setFormBody(e.target.value);
           }}
           rows={24}
-          cols={100}
+          cols={120}
           value={formBody}
           style={{
             border: 'none',
           }}
+          placeholder='Body'
         />
+
+        <div style={{ flex: 1, minHeight: 100, marginTop: 24, padding: 5 }}>
+          {theme === 11 ? (
+            formBody
+          ) : theme === 24 ? (
+            <MarkdownPreview source={formBody} />
+          ) : theme === 41 ? (
+            <MathsMarkdown source={formBody} />
+          ) : null}
+        </div>
       </div>
     </div>
   );

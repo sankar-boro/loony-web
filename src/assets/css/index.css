@@ -2,6 +2,8 @@
   --blue: #1885F2;
   --hover-blue: #0053a7;
   --border: #dfdfdf;
+  --hover: #f7f7f7;
+  --hover-dark: #eeeeee;
 }
 
 html, body, ul, li {
@@ -316,8 +318,27 @@ button:hover {
   padding: 5px 0px;
 }
 .chapter-nav:hover, .section-nav:hover {
-  background-color: #e7e7e7;
+  background-color: #f7f6ff;
   cursor: pointer;
+}
+.menu-nav {
+  display: flex;
+  flex-direction: row;
+  font-size: 16px;
+  padding: 5px 0px;
+}
+.menu-nav:hover, .menu-nav:hover {
+  background-color: var(--hover);
+  cursor: pointer;
+}
+.active-menu {
+  background-color: var(--hover-dark);
+}
+.p12 {
+  padding: 12px;
+}
+.p10 {
+  padding: 10px;
 }
 /*
 * @Modal
@@ -433,6 +454,7 @@ button:hover {
   .book-container, 
   .form-container {
     width: 60%;
+    min-height: 100%;
   }
   .blog-container {
     width: 60%;
