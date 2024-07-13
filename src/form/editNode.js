@@ -1,11 +1,9 @@
 import { useEffect, useState, useContext } from 'react';
-import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
-import MarkdownPreview from '@uiw/react-markdown-preview';
+import { Modal, ModalBodyContainer, ModalButtonContainer } from '../components';
 import { axiosInstance } from 'loony-query';
 import Cropper from 'react-easy-crop';
 import { AuthContext } from '../context/AuthContext';
 import { TextArea } from './components/TextArea';
-import MathsMarkdown from '../components/MathsMarkdown';
 
 const getUrl = (editNode) => {
   if (editNode.identity === 100) {
@@ -23,6 +21,7 @@ export default function EditNodeComponent({ state, docIdName, doc_id, FnCallback
   const [body, setBody] = useState('');
   const [image, setImage] = useState('');
   const [theme, setTheme] = useState(11);
+  const [error, setError] = useState('');
   const [afterImageSelect, setAfterImageSelect] = useState({
     image: null,
     width: null,
@@ -54,8 +53,16 @@ export default function EditNodeComponent({ state, docIdName, doc_id, FnCallback
     }
   }, [editNode]);
 
-  const addNode = (e) => {
+  const updateNode = (e) => {
     e.preventDefault();
+    if (!title) {
+      setError('Title is required.');
+      return;
+    }
+    if (!title) {
+      setError('Body is required.');
+      return;
+    }
     const submitData = {
       title,
       body,
@@ -133,10 +140,13 @@ export default function EditNodeComponent({ state, docIdName, doc_id, FnCallback
   const imageName = docIdName === 'book_id' ? 'book' : 'blog';
 
   return (
-    <ModalMd visible={true} onClose={onCloseModal} title='Update Node'>
+    <Modal visible={true} onClose={onCloseModal} title='Update Node'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div style={{ width: '45%' }}>
+          <div>
+            {error ? (
+              <div style={{ color: '#ff4949', fontWeight: 'bold', fontSize: 14 }}>{error}</div>
+            ) : null}
             {image ? (
               <img
                 src={`${process.env.REACT_APP_BASE_API_URL}/api/${imageName}/${user_id}/340/${image}`}
@@ -173,26 +183,17 @@ export default function EditNodeComponent({ state, docIdName, doc_id, FnCallback
               />
             ) : null}
           </div>
-          <div style={{ width: '50%' }}>
-            {theme === 11 ? (
-              body
-            ) : theme === 13 ? (
-              <MarkdownPreview source={body} wrapperElement={{ 'data-color-mode': 'light' }} />
-            ) : theme === 41 ? (
-              <MathsMarkdown source={body} />
-            ) : null}
-          </div>
         </div>
       </ModalBodyContainer>
       <ModalButtonContainer>
         <button onClick={onCloseModal} className='grey-bg'>
           Cancel
         </button>
-        <button onClick={addNode} className='black-bg' style={{ marginLeft: 15 }}>
+        <button onClick={updateNode} className='black-bg' style={{ marginLeft: 15 }}>
           Update
         </button>
       </ModalButtonContainer>
-    </ModalMd>
+    </Modal>
   );
 }
 

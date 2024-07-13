@@ -1,14 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useContext } from 'react';
-import MarkdownPreview from '@uiw/react-markdown-preview';
 import { axiosInstance } from 'loony-query';
 import 'react-easy-crop/react-easy-crop.css';
 import { AuthContext } from '../context/AuthContext';
 import Cropper from 'react-easy-crop';
-import { ModalMd, ModalBodyContainer, ModalButtonContainer } from '../components';
+import { Modal, ModalBodyContainer, ModalButtonContainer } from '../components';
 import { TextArea } from './components/TextArea';
-import MathsMarkdown from '../components/MathsMarkdown';
 
 export default function AddNodeComponent({
   url,
@@ -29,6 +27,7 @@ export default function AddNodeComponent({
   const [tags, setTags] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [theme, setTheme] = useState(11);
+  const [error, setError] = useState('');
 
   const [afterImageSelect, setAfterImageSelect] = useState({
     image: null,
@@ -50,7 +49,14 @@ export default function AddNodeComponent({
     if (afterImageSelect.image) {
       imageData = await uploadImage();
     }
-    if (!formTitle || !formBody) return;
+    if (!formTitle) {
+      setError('Title is required.');
+      return;
+    }
+    if (!formBody) {
+      setError('Body is required.');
+      return;
+    }
     setSubmitting(true);
     axiosInstance
       .post(url, {
@@ -126,10 +132,13 @@ export default function AddNodeComponent({
   };
 
   return (
-    <ModalMd visible={true} onClose={onCancel} title='Add Node'>
+    <Modal visible={true} onClose={onCancel} title='Add Node'>
       <ModalBodyContainer>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div style={{ width: '45%' }}>
+          <div>
+            {error ? (
+              <div style={{ color: '#ff4949', fontWeight: 'bold', fontSize: 14 }}>{error}</div>
+            ) : null}
             <div className='form-section'>
               <label>Title</label>
               <br />
@@ -166,15 +175,6 @@ export default function AddNodeComponent({
               />
             ) : null}
           </div>
-          <div style={{ width: '50%' }}>
-            {theme === 11 ? (
-              formBody
-            ) : theme === 13 ? (
-              <MarkdownPreview source={formBody} wrapperElement={{ 'data-color-mode': 'light' }} />
-            ) : theme === 41 ? (
-              <MathsMarkdown source={formBody} />
-            ) : null}
-          </div>
         </div>
       </ModalBodyContainer>
       <ModalButtonContainer>
@@ -185,7 +185,7 @@ export default function AddNodeComponent({
           Submit
         </button>
       </ModalButtonContainer>
-    </ModalMd>
+    </Modal>
   );
 }
 

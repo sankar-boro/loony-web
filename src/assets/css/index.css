@@ -4,6 +4,7 @@
   --border: #dfdfdf;
   --hover: #f7f7f7;
   --hover-dark: #eeeeee;
+  --red: #ff4949;
 }
 
 html, body, ul, li {
@@ -372,7 +373,7 @@ button:hover {
 .modal {
   background-color: #fefefe;
   margin: 5% auto;
-  width: 30%;
+  width: 35%;
   border-radius: 12px;
 }
 

@@ -20,6 +20,7 @@ export default function CreateNewDocument({ editNode, url, title, isMobile }) {
   const [tags, setTags] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [theme, setTheme] = useState(11);
+  const [error, setError] = useState('');
 
   const [afterImageSelect, setAfterImageSelect] = useState({
     image: null,
@@ -50,7 +51,14 @@ export default function CreateNewDocument({ editNode, url, title, isMobile }) {
     if (afterImageSelect.image) {
       imageData = await uploadImage();
     }
-    if (!formTitle || !formBody) return;
+    if (!formTitle) {
+      setError('Title is required');
+      return;
+    }
+    if (!formBody) {
+      setError('Body is required');
+      return;
+    }
     setSubmitting(true);
     axiosInstance
       .post(url, {
@@ -145,6 +153,11 @@ export default function CreateNewDocument({ editNode, url, title, isMobile }) {
       </div>
       <div style={{ width: '65%', paddingBottom: 100 }}>
         <div style={{ fontSize: 24, fontWeight: 'bold', padding: 45 }}>{title}</div>
+        {error ? (
+          <div style={{ color: '#ff4949', paddingLeft: 55, fontWeight: 'bold', fontSize: 14 }}>
+            {error}
+          </div>
+        ) : null}
         <div style={{ padding: '0px 45px 15px 45px' }}>
           <div style={{ padding: '0px 10px' }}>
             <div className='form-section'>
@@ -162,7 +175,6 @@ export default function CreateNewDocument({ editNode, url, title, isMobile }) {
               setFormBody={setFormBody}
               theme={theme}
               setTheme={setTheme}
-              isMobile={isMobile}
             />
             {!afterTmpImageUpload && imageEdit ? (
               <EditImageComponent

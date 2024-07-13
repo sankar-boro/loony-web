@@ -1,7 +1,7 @@
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import MathsMarkdown from '../../components/MathsMarkdown';
 
-export const TextArea = ({ formBody, setFormBody, theme, setTheme, isMobile }) => {
+export const TextArea = ({ formBody, setFormBody, theme, setTheme }) => {
   return (
     <div
       style={{
