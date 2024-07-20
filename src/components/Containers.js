@@ -6,9 +6,9 @@ export const ChapterNavContainer = ({ children, onClick }) => {
   );
 };
 
-export const MenuNavContainer = ({ children, onClick, activeMenu }) => {
+export const MenuNavContainer = ({ children, onClick, activeMenu, route }) => {
   return (
-    <div className={`menu-nav p12 ${activeMenu}`} onClick={onClick}>
+    <div className={`menu-nav p12 ${activeMenu}`} data-id={route} onClick={onClick}>
       {children}
     </div>
   );

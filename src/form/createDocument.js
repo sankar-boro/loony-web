@@ -8,10 +8,10 @@ import { TextArea } from './components/TextArea';
 import { MenuNavContainer } from '../components/Containers';
 import { GoHome } from 'react-icons/go';
 import { PiBookLight, PiNoteThin } from 'react-icons/pi';
-
+import { PiNotePencilThin } from 'react-icons/pi';
 import 'react-easy-crop/react-easy-crop.css';
 
-export default function CreateNewDocument({ editNode, url, title, isMobile }) {
+export default function CreateNewDocument({ editNode, url, title }) {
   const navigate = useNavigate();
   const { setContext, auth } = useContext(AuthContext);
   const { user_id } = auth.user;
@@ -112,7 +112,9 @@ export default function CreateNewDocument({ editNode, url, title, isMobile }) {
   };
 
   const changeFile = onSelectImage;
-
+  const routeTo = (e) => {
+    navigate(e.target.dataset.id);
+  };
   const uploadImage = async () => {
     const formData = new FormData();
     formData.append(
@@ -138,20 +140,27 @@ export default function CreateNewDocument({ editNode, url, title, isMobile }) {
   return (
     <div className='form-container flex-row'>
       <div style={{ width: '20%', borderRight: '1px solid #ccc', paddingBottom: 100 }}>
-        <MenuNavContainer activeMenu={'active-menu'}>
-          <GoHome /> <span style={{ marginLeft: 10 }}>Create</span>
+        <MenuNavContainer activeMenu={'active-menu'} onClick={routeTo} route='/create/book'>
+          <PiNotePencilThin /> <span style={{ marginLeft: 10 }}>Create</span>
         </MenuNavContainer>
-        <MenuNavContainer>
-          <GoHome /> <span style={{ marginLeft: 10 }}>Home</span>
+        <MenuNavContainer onClick={routeTo} route='/'>
+          <GoHome />
+          <span style={{ marginLeft: 10 }}>Home</span>
         </MenuNavContainer>
-        <MenuNavContainer>
+        <MenuNavContainer onClick={routeTo} route='/books'>
           <PiBookLight /> <span style={{ marginLeft: 10 }}>Books</span>
         </MenuNavContainer>
-        <MenuNavContainer>
+        <MenuNavContainer onClick={routeTo} route='/blogs'>
           <PiNoteThin /> <span style={{ marginLeft: 10 }}>Blogs</span>
         </MenuNavContainer>
       </div>
-      <div style={{ width: '65%', paddingBottom: 100 }}>
+      <div
+        style={{
+          width: '65%',
+          paddingBottom: 100,
+          background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+        }}
+      >
         <div style={{ fontSize: 24, fontWeight: 'bold', padding: 45 }}>{title}</div>
         {error ? (
           <div style={{ color: '#ff4949', paddingLeft: 55, fontWeight: 'bold', fontSize: 14 }}>
@@ -214,13 +223,7 @@ export default function CreateNewDocument({ editNode, url, title, isMobile }) {
             >
               {submitting ? 'Creating...' : 'Create'}
             </button>
-            <button
-              className='grey-bg'
-              onClick={() => {
-                navigate('/', { replace: true });
-              }}
-              disabled={submitting}
-            >
+            <button className='grey-bg' data-id='/' onClick={routeTo} disabled={submitting}>
               Cancel
             </button>
           </div>

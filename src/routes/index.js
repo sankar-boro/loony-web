@@ -64,7 +64,8 @@ const Route = ({ context, auth }) => {
           />
           <ReactRoute path='/edit/blog/:blogId' element={<EditBlog isMobile={isMobile} />} />
           <ReactRoute path='/profile' element={<Profile isMobile={isMobile} />} />
-          <ReactRoute path='*' element={<AuthError />} />
+          <ReactRoute path='/unauthorized' element={<AuthError />} />
+          <ReactRoute path='*' element={<NotFound />} />
         </Routes>
       )}
       {auth.status === UNAUTHORIZED && (
