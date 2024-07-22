@@ -12,52 +12,48 @@ const Button = ({ onClick, icon }) => {
 export const PageNodeSettings = ({ node, setState, state }) => {
   return (
     <>
-      {node.identity >= 100 ? (
-        <div className='flex-row' style={{ marginTop: 24 }}>
-          <Button
-            icon={<MdAdd size={16} color='#9c9c9c' />}
-            onClick={(e) => {
-              setState({
-                ...state,
-                topNode: node,
-                modal: 'add_sub_section',
-              });
-              e.stopPropagation();
-            }}
-          />
-          <Button
-            icon={<AiOutlineDelete size={16} color='#9c9c9c' />}
-            onClick={(e) => {
-              setState({
-                ...state,
-                deleteNode: node,
-                modal: 'delete_page',
-              });
-              e.stopPropagation();
-            }}
-          />
-
-          <Button
-            icon={<MdOutlineEdit size={16} color='#9c9c9c' />}
-            onClick={(e) => {
-              setState({
-                ...state,
-                editNode: node,
-                modal: 'edit_node',
-              });
-              e.stopPropagation();
-            }}
-          />
-
-          <Button
-            icon={<MdContentCopy size={16} color='#9c9c9c' />}
-            onClick={(e) => {
-              navigator.clipboard.writeText(node.body);
-              e.stopPropagation();
-            }}
-          />
-        </div>
-      ) : null}
+      <div className='flex-row' style={{ marginTop: 24 }}>
+        {node.identity >= 102 ? <Button
+          icon={<MdAdd size={16} color='#9c9c9c' />}
+          onClick={(e) => {
+            setState({
+              ...state,
+              topNode: node,
+              modal: 'add_sub_section',
+            });
+            e.stopPropagation();
+          }}
+        /> : null}
+        <Button
+          icon={<AiOutlineDelete size={16} color='#9c9c9c' />}
+          onClick={(e) => {
+            setState({
+              ...state,
+              deleteNode: node,
+              modal: 'delete_page',
+            });
+            e.stopPropagation();
+          }}
+        />
+        <Button
+          icon={<MdOutlineEdit size={16} color='#9c9c9c' />}
+          onClick={(e) => {
+            setState({
+              ...state,
+              editNode: node,
+              modal: 'edit_node',
+            });
+            e.stopPropagation();
+          }}
+        />
+        <Button
+          icon={<MdContentCopy size={16} color='#9c9c9c' />}
+          onClick={(e) => {
+            navigator.clipboard.writeText(node.body);
+            e.stopPropagation();
+          }}
+        />
+      </div>
     </>
   );
 };

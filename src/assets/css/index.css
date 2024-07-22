@@ -64,6 +64,7 @@ input[type=text], input[type=password], textarea {
   outline: none;
   box-sizing: border-box;
   padding: 10px;
+  background: var(--LG-to-right);
 }
 input[type=file]::file-selector-button {
   font-weight: bold;
@@ -154,9 +155,6 @@ button:hover {
   background-color: #e2e2e2;
   cursor: pointer;
 }
-
-
-
 
 /* 
 * @Card
@@ -326,6 +324,7 @@ button:hover {
   flex-direction: row;
   font-size: 16px;
   padding: 5px 0px;
+  align-items: center;
 }
 .menu-nav:hover, .menu-nav:hover {
   background-color: white;

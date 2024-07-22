@@ -116,7 +116,7 @@ export default function Edit() {
             ) : null}
             {activeNode.theme === 11 ? (
               activeNode.body
-            ) : activeNode.theme === 13 ? (
+            ) : activeNode.theme === 24 ? (
               <MarkdownPreview
                 source={activeNode.body}
                 wrapperElement={{ 'data-color-mode': 'light' }}
@@ -151,7 +151,7 @@ export default function Edit() {
                   ) : null}
                   {subSectionNode.theme === 11 ? (
                     subSectionNode.body
-                  ) : subSectionNode.theme === 13 ? (
+                  ) : subSectionNode.theme === 24 ? (
                     <MarkdownPreview
                       source={subSectionNode.body}
                       wrapperElement={{ 'data-color-mode': 'light' }}

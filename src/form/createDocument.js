@@ -141,17 +141,17 @@ export default function CreateNewDocument({ editNode, url, title }) {
     <div className='form-container flex-row'>
       <div style={{ width: '20%', borderRight: '1px solid #ccc', paddingBottom: 100 }}>
         <MenuNavContainer activeMenu={'active-menu'} onClick={routeTo} route='/create/book'>
-          <PiNotePencilThin /> <span style={{ marginLeft: 10 }}>Create</span>
+          <span style={{ position: 'relative', top: 3 }}><PiNotePencilThin /></span> <span style={{ marginLeft: 10 }}>Create</span>
         </MenuNavContainer>
         <MenuNavContainer onClick={routeTo} route='/'>
-          <GoHome />
+          <span style={{ position: 'relative', top: 3 }}><GoHome /></span>
           <span style={{ marginLeft: 10 }}>Home</span>
         </MenuNavContainer>
         <MenuNavContainer onClick={routeTo} route='/books'>
-          <PiBookLight /> <span style={{ marginLeft: 10 }}>Books</span>
+          <span style={{ position: 'relative', top: 2 }}><PiBookLight /></span> <span style={{ marginLeft: 10 }}>Books</span>
         </MenuNavContainer>
         <MenuNavContainer onClick={routeTo} route='/blogs'>
-          <PiNoteThin /> <span style={{ marginLeft: 10 }}>Blogs</span>
+          <span style={{ position: 'relative', top: 2 }}><PiNoteThin /></span> <span style={{ marginLeft: 10 }}>Blogs</span>
         </MenuNavContainer>
       </div>
       <div
