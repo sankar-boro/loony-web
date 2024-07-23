@@ -34,6 +34,9 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
         page_id: __node.uid,
         activeNode: __node,
         activeSubSectionsBySectionId: [],
+        editNode: null,
+        addNode: null,
+        modal: ''
       });
     } else {
       axiosInstance
@@ -50,6 +53,9 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
             page_id: __node.uid,
             activeNode: __node,
             activeSubSectionsBySectionId: [],
+            editNode: null,
+            addNode: null,
+            modal: ''
           });
         });
     }
@@ -63,6 +69,9 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
         activeSubSectionsBySectionId: allSubSectionsBySectionId[uid],
         section_id: __node.uid,
         activeNode: __node,
+        editNode: null,
+        addNode: null,
+        modal: ''
       });
     } else {
       axiosInstance
@@ -78,6 +87,9 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
             },
             section_id: __node.uid,
             activeNode: __node,
+            editNode: null,
+            addNode: null,
+            modal: ''
           });
         });
     }
@@ -95,6 +107,9 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
               ...state,
               page_id: frontPage.uid,
               activeNode: frontPage,
+              editNode: null,
+              addNode: null,
+              modal: ''
             });
           }}
         >

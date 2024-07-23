@@ -254,6 +254,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
           parent_identity={topNode.identity}
           page_id={page_id}
           onCancel={onCancel}
+          heading="Add Chapter"
         />
       ) : null}
 
@@ -271,6 +272,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
           identity={102}
           page_id={page_id}
           onCancel={onCancel}
+          heading="Add Section"
         />
       ) : null}
 
@@ -288,6 +290,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
           identity={103}
           page_id={section_id}
           onCancel={onCancel}
+          heading="Add Sub Section"
         />
       ) : null}
 
@@ -299,6 +302,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
           setState={setState}
           FnCallback={editFnCallback}
           onCancel={onCancel}
+          heading="Edit Node"
         />
       ) : null}
 

@@ -1,26 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useCallback, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { axiosInstance } from 'loony-query';
-import { AuthContext } from '../context/AuthContext';
-import Cropper from 'react-easy-crop';
-import { TextArea } from './components/TextArea';
-import { MenuNavContainer } from '../components/Containers';
-import { GoHome } from 'react-icons/go';
-import { PiBookLight, PiNoteThin } from 'react-icons/pi';
-import { PiNotePencilThin } from 'react-icons/pi';
-import 'react-easy-crop/react-easy-crop.css';
+import { useState, useCallback, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "loony-query";
+import { AuthContext } from "../context/AuthContext";
+import Cropper from "react-easy-crop";
+import { TextArea } from "./components/TextArea";
+import { MenuNavContainer } from "../components/Containers";
+import { GoHome } from "react-icons/go";
+import { PiBookLight, PiNoteThin } from "react-icons/pi";
+import { PiNotePencilThin } from "react-icons/pi";
+import "react-easy-crop/react-easy-crop.css";
 
 export default function CreateNewDocument({ editNode, url, title }) {
   const navigate = useNavigate();
   const { setContext, auth } = useContext(AuthContext);
   const { user_id } = auth.user;
-  const [formTitle, setFormTitle] = useState('');
-  const [formBody, setFormBody] = useState('');
-  const [tags, setTags] = useState('');
+  const [formTitle, setFormTitle] = useState("");
+  const [formBody, setFormBody] = useState("");
+  const [tags, setTags] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [theme, setTheme] = useState(11);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const [afterImageSelect, setAfterImageSelect] = useState({
     image: null,
@@ -28,7 +28,7 @@ export default function CreateNewDocument({ editNode, url, title }) {
     height: null,
     hasImage: false,
   });
-  const [afterTmpImageUpload, setAfterTmpImageUpload] = useState('');
+  const [afterTmpImageUpload, setAfterTmpImageUpload] = useState("");
   const [imageEdit, setImageEdit] = useState(null);
   const [cropImageMetadata, setCropImageMetadata] = useState({
     width: null,
@@ -52,11 +52,11 @@ export default function CreateNewDocument({ editNode, url, title }) {
       imageData = await uploadImage();
     }
     if (!formTitle) {
-      setError('Title is required');
+      setError("Title is required");
       return;
     }
     if (!formBody) {
-      setError('Body is required');
+      setError("Body is required");
       return;
     }
     setSubmitting(true);
@@ -72,12 +72,12 @@ export default function CreateNewDocument({ editNode, url, title }) {
         setSubmitting(false);
         setContext({
           alert: {
-            alertType: 'success',
-            title: 'Created',
-            body: 'Created successfully',
+            alertType: "success",
+            title: "Created",
+            body: "Created successfully",
           },
         });
-        navigate('/', { replace: true });
+        navigate("/", { replace: true });
       })
       .catch(() => {
         setSubmitting(false);
@@ -118,65 +118,95 @@ export default function CreateNewDocument({ editNode, url, title }) {
   const uploadImage = async () => {
     const formData = new FormData();
     formData.append(
-      'metadata',
+      "metadata",
       JSON.stringify({
         oriImgMd: afterImageSelect,
         cropImgMd: cropImageMetadata,
-      }),
+      })
     );
-    formData.append('file', afterImageSelect.image);
+    formData.append("file", afterImageSelect.image);
 
-    const { data } = await axiosInstance.post('/upload_file', formData, {
+    const { data } = await axiosInstance.post("/upload_file", formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
 
     setAfterTmpImageUpload(data.name);
-    setImageEdit('');
+    setImageEdit("");
     return data;
   };
 
   return (
-    <div className='form-container flex-row'>
-      <div style={{ width: '20%', borderRight: '1px solid #ccc', paddingBottom: 100 }}>
-        <MenuNavContainer activeMenu={'active-menu'} onClick={routeTo} route='/create/book'>
-          <span style={{ position: 'relative', top: 3 }}><PiNotePencilThin /></span> <span style={{ marginLeft: 10 }}>Create</span>
+    <div className="form-container flex-row">
+      <div
+        style={{
+          width: "20%",
+          borderRight: "1px solid #ccc",
+          paddingBottom: 100,
+        }}
+      >
+        <MenuNavContainer
+          activeMenu={"active-menu"}
+          onClick={routeTo}
+          route="/create/book"
+        >
+          <span style={{ position: "relative", top: 3 }}>
+            <PiNotePencilThin />
+          </span>{" "}
+          <span style={{ marginLeft: 10 }}>Create</span>
         </MenuNavContainer>
-        <MenuNavContainer onClick={routeTo} route='/'>
-          <span style={{ position: 'relative', top: 3 }}><GoHome /></span>
+        <MenuNavContainer onClick={routeTo} route="/">
+          <span style={{ position: "relative", top: 3 }}>
+            <GoHome />
+          </span>
           <span style={{ marginLeft: 10 }}>Home</span>
         </MenuNavContainer>
-        <MenuNavContainer onClick={routeTo} route='/books'>
-          <span style={{ position: 'relative', top: 2 }}><PiBookLight /></span> <span style={{ marginLeft: 10 }}>Books</span>
+        <MenuNavContainer onClick={routeTo} route="/books">
+          <span style={{ position: "relative", top: 2 }}>
+            <PiBookLight />
+          </span>{" "}
+          <span style={{ marginLeft: 10 }}>Books</span>
         </MenuNavContainer>
-        <MenuNavContainer onClick={routeTo} route='/blogs'>
-          <span style={{ position: 'relative', top: 2 }}><PiNoteThin /></span> <span style={{ marginLeft: 10 }}>Blogs</span>
+        <MenuNavContainer onClick={routeTo} route="/blogs">
+          <span style={{ position: "relative", top: 2 }}>
+            <PiNoteThin />
+          </span>{" "}
+          <span style={{ marginLeft: 10 }}>Blogs</span>
         </MenuNavContainer>
       </div>
       <div
         style={{
-          width: '65%',
+          width: "65%",
           paddingBottom: 100,
-          background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+          background: "linear-gradient(to right, #ffffff, #F6F8FC)",
         }}
       >
-        <div style={{ fontSize: 24, fontWeight: 'bold', padding: 45 }}>{title}</div>
+        <div style={{ fontSize: 24, fontWeight: "bold", padding: 45 }}>
+          {title}
+        </div>
         {error ? (
-          <div style={{ color: '#ff4949', paddingLeft: 55, fontWeight: 'bold', fontSize: 14 }}>
+          <div
+            style={{
+              color: "#ff4949",
+              paddingLeft: 55,
+              fontWeight: "bold",
+              fontSize: 14,
+            }}
+          >
             {error}
           </div>
         ) : null}
-        <div style={{ padding: '0px 45px 15px 45px' }}>
-          <div style={{ padding: '0px 10px' }}>
-            <div className='form-section'>
+        <div style={{ padding: "0px 45px 15px 45px" }}>
+          <div style={{ padding: "0px 10px" }}>
+            <div className="form-section">
               <input
-                type='text'
+                type="text"
                 value={formTitle}
                 onChange={(e) => {
                   setFormTitle(e.target.value);
                 }}
-                placeholder='Title'
+                placeholder="Title"
               />
             </div>
             <TextArea
@@ -199,14 +229,14 @@ export default function CreateNewDocument({ editNode, url, title }) {
             {afterTmpImageUpload && !imageEdit ? (
               <img
                 src={`${process.env.REACT_APP_BASE_API_URL}/api/tmp/${user_id}/340/${afterTmpImageUpload}`}
-                alt='tmp file upload'
+                alt="tmp file upload"
               />
             ) : null}
-            <div className='form-section'>
+            <div className="form-section">
               <label>Tags</label>
               <br />
               <input
-                type='text'
+                type="text"
                 value={tags}
                 onChange={(e) => {
                   setTags(e.target.value);
@@ -214,16 +244,21 @@ export default function CreateNewDocument({ editNode, url, title }) {
               />
             </div>
           </div>
-          <div className='flex-row' style={{ justifyContent: 'flex-end' }}>
+          <div className="flex-row" style={{ justifyContent: "flex-end" }}>
             <button
-              className='black-bg'
+              className="black-bg"
               onClick={createDoc}
               disabled={submitting}
               style={{ marginRight: 10 }}
             >
-              {submitting ? 'Creating...' : 'Create'}
+              {submitting ? "Creating..." : "Create"}
             </button>
-            <button className='grey-bg' data-id='/' onClick={routeTo} disabled={submitting}>
+            <button
+              className="grey-bg"
+              data-id="/"
+              onClick={routeTo}
+              disabled={submitting}
+            >
               Cancel
             </button>
           </div>
@@ -233,7 +268,12 @@ export default function CreateNewDocument({ editNode, url, title }) {
   );
 }
 
-const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMetadata }) => {
+const EditImageComponent = ({
+  uploadImage,
+  changeFile,
+  imageEdit,
+  setCropImageMetadata,
+}) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [aspectRatio, setAspectRatio] = useState({
@@ -246,23 +286,23 @@ const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMe
   };
 
   return (
-    <div className='form-section'>
+    <div className="form-section">
       <label>Image</label>
       <div
         style={{
-          border: '1px dashed #ccc',
+          border: "1px dashed #ccc",
           padding: 24,
         }}
       >
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <div style={{ position: 'relative', width: '100%', minHeight: 350 }}>
+          <div style={{ position: "relative", width: "100%", minHeight: 350 }}>
             <Cropper
               image={imageEdit}
               crop={crop}
@@ -275,7 +315,7 @@ const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMe
           </div>
           <label>Choose another file</label>
           <br />
-          <div className='flex-row'>
+          <div className="flex-row">
             <button
               onClick={() => {
                 setAspectRatio({ width: 4, height: 3 });
@@ -292,16 +332,16 @@ const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMe
             </button>
           </div>
           <input
-            type='file'
+            type="file"
             onChange={changeFile}
             style={{
-              backgroundColor: 'white',
-              border: 'none',
+              backgroundColor: "white",
+              border: "none",
               padding: 0,
               margin: 0,
               marginTop: 20,
               borderRadius: 15,
-              width: '50%',
+              width: "50%",
             }}
           />
           <button onClick={uploadImage}>Upload</button>
@@ -313,36 +353,36 @@ const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMe
 
 const SelectImage = ({ onSelectImage }) => {
   return (
-    <div className='form-section'>
+    <div className="form-section">
       <label>Image</label>
       <div
         style={{
-          border: '1px dashed #ccc',
+          border: "1px dashed #ccc",
           padding: 24,
         }}
       >
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
           <label>Drop file here</label>
           <br />
           <span>or</span>
           <input
-            type='file'
+            type="file"
             onChange={onSelectImage}
             style={{
-              backgroundColor: 'white',
-              border: 'none',
+              backgroundColor: "white",
+              border: "none",
               padding: 0,
               margin: 0,
               marginTop: 20,
               borderRadius: 15,
-              width: '50%',
+              width: "50%",
             }}
           />
         </div>

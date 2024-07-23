@@ -1,16 +1,16 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useCallback, useContext } from 'react';
-import { axiosInstance } from 'loony-query';
-import 'react-easy-crop/react-easy-crop.css';
-import { AuthContext } from '../context/AuthContext';
-import Cropper from 'react-easy-crop';
-import { Modal, ModalBodyContainer, ModalButtonContainer } from '../components';
-import { TextArea } from './components/TextArea';
+import { useState, useCallback, useContext } from "react";
+import { axiosInstance } from "loony-query";
+import "react-easy-crop/react-easy-crop.css";
+import { AuthContext } from "../context/AuthContext";
+import Cropper from "react-easy-crop";
+import { Modal, ModalBodyContainer, ModalButtonContainer } from "../components";
+import { TextArea } from "./components/TextArea";
 
 export default function AddNodeComponent({
   url,
-  title,
+  heading,
   docIdName,
   docId,
   FnCallback,
@@ -22,12 +22,12 @@ export default function AddNodeComponent({
 }) {
   const { auth } = useContext(AuthContext);
   const { user_id } = auth.user;
-  const [formTitle, setFormTitle] = useState('');
-  const [formBody, setFormBody] = useState('');
-  const [tags, setTags] = useState('');
+  const [formTitle, setFormTitle] = useState("");
+  const [formBody, setFormBody] = useState("");
+  const [tags, setTags] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [theme, setTheme] = useState(11);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const [afterImageSelect, setAfterImageSelect] = useState({
     image: null,
@@ -35,7 +35,7 @@ export default function AddNodeComponent({
     height: null,
     hasImage: false,
   });
-  const [afterTmpImageUpload, setAfterTmpImageUpload] = useState('');
+  const [afterTmpImageUpload, setAfterTmpImageUpload] = useState("");
   const [imageEdit, setImageEdit] = useState(null);
   const [cropImageMetadata, setCropImageMetadata] = useState({
     width: null,
@@ -50,11 +50,11 @@ export default function AddNodeComponent({
       imageData = await uploadImage();
     }
     if (!formTitle) {
-      setError('Title is required.');
+      setError("Title is required.");
       return;
     }
     if (!formBody) {
-      setError('Body is required.');
+      setError("Body is required.");
       return;
     }
     setSubmitting(true);
@@ -112,84 +112,107 @@ export default function AddNodeComponent({
   const uploadImage = async () => {
     const formData = new FormData();
     formData.append(
-      'metadata',
+      "metadata",
       JSON.stringify({
         oriImgMd: afterImageSelect,
         cropImgMd: cropImageMetadata,
-      }),
+      })
     );
-    formData.append('file', afterImageSelect.image);
+    formData.append("file", afterImageSelect.image);
 
-    const { data } = await axiosInstance.post('/upload_file', formData, {
+    const { data } = await axiosInstance.post("/upload_file", formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
 
     setAfterTmpImageUpload(data.name);
-    setImageEdit('');
+    setImageEdit("");
     return data;
   };
 
   return (
-    <Modal visible={true} onClose={onCancel} title='Add Node'>
-      <ModalBodyContainer>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div>
-            {error ? (
-              <div style={{ color: '#ff4949', fontWeight: 'bold', fontSize: 14 }}>{error}</div>
-            ) : null}
-            <div className='form-section'>
-              <label>Title</label>
-              <br />
-              <input
-                type='text'
-                value={title}
-                onChange={(e) => {
-                  setFormTitle(e.target.value);
-                }}
-              />
+    <div
+      style={{
+        paddingLeft: "10%",
+        paddingRight: "20%",
+        background: "linear-gradient(to right, #ffffff, #F6F8FC)",
+        minHeight: "100vh",
+      }}
+    >
+      <div style={{}}>
+        <h2>{heading}</h2>
+        <div>
+          {error ? (
+            <div style={{ color: "#ff4949", fontWeight: "bold", fontSize: 14 }}>
+              {error}
             </div>
-            <TextArea
-              formBody={formBody}
-              setFormBody={setFormBody}
-              theme={theme}
-              setTheme={setTheme}
+          ) : null}
+          <div className="form-section">
+            <label>Title</label>
+            <br />
+            <input
+              type="text"
+              value={formTitle}
+              onChange={(e) => {
+                setFormTitle(e.target.value);
+              }}
             />
-
-            {!afterTmpImageUpload && imageEdit ? (
-              <EditImageComponent
-                uploadImage={uploadImage}
-                changeFile={changeFile}
-                imageEdit={imageEdit}
-                setCropImageMetadata={setCropImageMetadata}
-              />
-            ) : null}
-            {!afterTmpImageUpload && !imageEdit ? (
-              <SelectImage onSelectImage={onSelectImage} />
-            ) : null}
-            {afterTmpImageUpload && !imageEdit ? (
-              <img
-                src={`${process.env.REACT_APP_BASE_API_URL}/api/tmp/${user_id}/340/${afterTmpImageUpload}`}
-                alt='tmp file upload'
-              />
-            ) : null}
           </div>
+          <TextArea
+            formBody={formBody}
+            setFormBody={setFormBody}
+            theme={theme}
+            setTheme={setTheme}
+          />
+
+          {!afterTmpImageUpload && imageEdit ? (
+            <EditImageComponent
+              uploadImage={uploadImage}
+              changeFile={changeFile}
+              imageEdit={imageEdit}
+              setCropImageMetadata={setCropImageMetadata}
+            />
+          ) : null}
+          {!afterTmpImageUpload && !imageEdit ? (
+            <SelectImage onSelectImage={onSelectImage} />
+          ) : null}
+          {afterTmpImageUpload && !imageEdit ? (
+            <img
+              src={`${process.env.REACT_APP_BASE_API_URL}/api/tmp/${user_id}/340/${afterTmpImageUpload}`}
+              alt="tmp file upload"
+            />
+          ) : null}
         </div>
-      </ModalBodyContainer>
-      <ModalButtonContainer>
-        <button onClick={onCancel} className='grey-bg'>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+        }}
+      >
+        <button
+          onClick={onCancel}
+          className="grey-bg"
+          style={{ marginRight: 10 }}
+        >
           Cancel
         </button>
-        <button onClick={onCreateAction} className='black-bg'>
+        <button onClick={onCreateAction} className="black-bg">
           Submit
         </button>
-      </ModalButtonContainer>
-    </Modal>
+      </div>
+    </div>
   );
 }
 
-const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMetadata }) => {
+const EditImageComponent = ({
+  uploadImage,
+  changeFile,
+  imageEdit,
+  setCropImageMetadata,
+}) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [aspectRatio, setAspectRatio] = useState({
@@ -202,23 +225,23 @@ const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMe
   };
 
   return (
-    <div className='form-section'>
+    <div className="form-section">
       <label>Image</label>
       <div
         style={{
-          border: '1px dashed #ccc',
+          border: "1px dashed #ccc",
           padding: 24,
         }}
       >
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <div style={{ position: 'relative', width: '100%', minHeight: 350 }}>
+          <div style={{ position: "relative", width: "100%", minHeight: 350 }}>
             <Cropper
               image={imageEdit}
               crop={crop}
@@ -231,7 +254,7 @@ const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMe
           </div>
           <label>Choose another file</label>
           <br />
-          <div className='flex-row'>
+          <div className="flex-row">
             <button
               onClick={() => {
                 setAspectRatio({ width: 4, height: 3 });
@@ -248,16 +271,16 @@ const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMe
             </button>
           </div>
           <input
-            type='file'
+            type="file"
             onChange={changeFile}
             style={{
-              backgroundColor: 'white',
-              border: 'none',
+              backgroundColor: "white",
+              border: "none",
               padding: 0,
               margin: 0,
               marginTop: 20,
               borderRadius: 15,
-              width: '50%',
+              width: "50%",
             }}
           />
           <button onClick={uploadImage}>Upload</button>
@@ -269,36 +292,36 @@ const EditImageComponent = ({ uploadImage, changeFile, imageEdit, setCropImageMe
 
 const SelectImage = ({ onSelectImage }) => {
   return (
-    <div className='form-section'>
+    <div className="form-section">
       <label>Image</label>
       <div
         style={{
-          border: '1px dashed #ccc',
+          border: "1px dashed #ccc",
           padding: 24,
         }}
       >
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            alignItems: 'center',
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
           <label>Drop file here</label>
           <br />
           <span>or</span>
           <input
-            type='file'
+            type="file"
             onChange={onSelectImage}
             style={{
-              backgroundColor: 'white',
-              border: 'none',
+              backgroundColor: "white",
+              border: "none",
               padding: 0,
               margin: 0,
               marginTop: 20,
               borderRadius: 15,
-              width: '50%',
+              width: "50%",
             }}
           />
         </div>

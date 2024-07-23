@@ -85,14 +85,19 @@ export default function Edit() {
         </div>
       </div>
     );
-
   return (
     <div className='book-container'>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <PageNavigation setState={setState} nodes101={nodes101} state={state} book_id={book_id} />
 
         {/* Page */}
-        <div
+        {state.editNode || state.modal ? <ModalComponent
+          state={state}
+          setState={setState}
+          setContext={setContext}
+          book_id={book_id}
+          navigate={navigate}
+        /> :<><div
           style={{
             width: '60%',
             paddingTop: 15,
@@ -169,15 +174,10 @@ export default function Edit() {
         </div>
 
         <RightBookContainer book_id={book_id} setState={setState} state={state} />
+        </> 
+        }
       </div>
 
-      <ModalComponent
-        state={state}
-        setState={setState}
-        setContext={setContext}
-        book_id={book_id}
-        navigate={navigate}
-      />
     </div>
   );
 }
