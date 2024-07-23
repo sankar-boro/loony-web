@@ -1,16 +1,23 @@
-import { orderNodes } from 'loony-utils';
-import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { axiosInstance } from 'loony-query';
+import { orderNodes } from "loony-utils";
+import {
+  MdOutlineKeyboardArrowRight,
+  MdOutlineKeyboardArrowDown,
+} from "react-icons/md";
+import { axiosInstance } from "loony-query";
 import {
   ChapterNavContainer,
   PageNavContainer,
   SectionNavContainer,
   SectionsNavContainer,
-} from '../../components/Containers';
+} from "../../components/Containers";
 
 const Button = ({ onClick, title }) => {
   return (
-    <div className='button-none' onClick={onClick} style={{ padding: '3px 0px' }}>
+    <div
+      className="button-none"
+      onClick={onClick}
+      style={{ padding: "3px 0px" }}
+    >
       {title}
     </div>
   );
@@ -36,11 +43,11 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
         activeSubSectionsBySectionId: [],
         editNode: null,
         addNode: null,
-        modal: ''
+        modal: "",
       });
     } else {
       axiosInstance
-        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${uid}`)
+        .get(`/book/get/sections?book_id=${book_id}&page_id=${uid}`)
         .then(({ data }) => {
           const res = orderNodes(data.data, __node);
           setState({
@@ -55,7 +62,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
             activeSubSectionsBySectionId: [],
             editNode: null,
             addNode: null,
-            modal: ''
+            modal: "",
           });
         });
     }
@@ -71,11 +78,11 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
         activeNode: __node,
         editNode: null,
         addNode: null,
-        modal: ''
+        modal: "",
       });
     } else {
       axiosInstance
-        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${uid}`)
+        .get(`/book/get/sub_sections?book_id=${book_id}&page_id=${uid}`)
         .then(({ data }) => {
           const res = orderNodes(data.data, __node);
           setState({
@@ -89,7 +96,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
             activeNode: __node,
             editNode: null,
             addNode: null,
-            modal: ''
+            modal: "",
           });
         });
     }
@@ -100,7 +107,13 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
       {/*
        * @ Left Navigation
        */}
-      <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
+      <div
+        style={{
+          width: "20%",
+          paddingTop: 15,
+          borderRight: "1px solid #ebebeb",
+        }}
+      >
         <ChapterNavContainer
           onClick={() => {
             setState({
@@ -109,7 +122,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
               activeNode: frontPage,
               editNode: null,
               addNode: null,
-              modal: ''
+              modal: "",
             });
           }}
         >
@@ -120,10 +133,10 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
             setState({
               ...state,
               topNode: frontPage,
-              modal: 'add_chapter',
+              modal: "add_chapter",
             });
           }}
-          title='Add Chapter'
+          title="Add Chapter"
         />
 
         {nodes101.map((chapter) => {
@@ -135,12 +148,12 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                   getSections(chapter);
                 }}
               >
-                <div style={{ width: '90%' }}>{chapter.title}</div>
+                <div style={{ width: "90%" }}>{chapter.title}</div>
                 <div>
                   {page_id === chapter.uid ? (
-                    <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
+                    <MdOutlineKeyboardArrowDown size={16} color="#2d2d2d" />
                   ) : (
-                    <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
+                    <MdOutlineKeyboardArrowRight size={16} color="#2d2d2d" />
                   )}
                 </div>
               </PageNavContainer>
@@ -149,21 +162,21 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                   setState({
                     ...state,
                     topNode: chapter,
-                    modal: 'add_chapter',
+                    modal: "add_chapter",
                   });
                 }}
-                title='Add Chapter'
+                title="Add Chapter"
               />
               {/* Sections */}
               {page_id === chapter.uid && (
                 <SectionsNavContainer>
                   <Button
-                    title='Add Section'
+                    title="Add Section"
                     onClick={() => {
                       setState({
                         ...state,
                         topNode: chapter,
-                        modal: 'add_section',
+                        modal: "add_section",
                       });
                     }}
                   />
@@ -179,12 +192,12 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                           {section.title}
                         </SectionNavContainer>
                         <Button
-                          title='Add Section'
+                          title="Add Section"
                           onClick={(e) => {
                             setState({
                               ...state,
                               topNode: section,
-                              modal: 'add_section',
+                              modal: "add_section",
                             });
                             e.stopPropagation();
                           }}

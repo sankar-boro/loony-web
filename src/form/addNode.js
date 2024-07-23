@@ -2,11 +2,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useCallback, useContext } from "react";
 import { axiosInstance } from "loony-query";
-import "react-easy-crop/react-easy-crop.css";
 import { AuthContext } from "../context/AuthContext";
 import Cropper from "react-easy-crop";
-import { Modal, ModalBodyContainer, ModalButtonContainer } from "../components";
 import { TextArea } from "./components/TextArea";
+import "react-easy-crop/react-easy-crop.css";
 
 export default function AddNodeComponent({
   url,

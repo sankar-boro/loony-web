@@ -1,12 +1,15 @@
-import { orderNodes } from 'loony-utils';
-import { MdOutlineKeyboardArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
-import { axiosInstance } from 'loony-query';
+import { orderNodes } from "loony-utils";
+import {
+  MdOutlineKeyboardArrowRight,
+  MdOutlineKeyboardArrowDown,
+} from "react-icons/md";
+import { axiosInstance } from "loony-query";
 import {
   ChapterNavContainer,
   PageNavContainer,
   SectionNavContainer,
   SectionsNavContainer,
-} from '../../components/Containers';
+} from "../../components/Containers";
 
 export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
   const {
@@ -29,7 +32,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
       });
     } else {
       axiosInstance
-        .get(`/book/get_book_sections?book_id=${book_id}&page_id=${uid}`)
+        .get(`/book/get/sections?book_id=${book_id}&page_id=${uid}`)
         .then(({ data }) => {
           const res = orderNodes(data.data, __node);
           setState({
@@ -58,7 +61,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
       });
     } else {
       axiosInstance
-        .get(`/book/get_book_sub_sections?book_id=${book_id}&page_id=${uid}`)
+        .get(`/book/get/sub_sections?book_id=${book_id}&page_id=${uid}`)
         .then(({ data }) => {
           const res = orderNodes(data.data, __node);
           setState({
@@ -98,12 +101,12 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                 getSections(chapter);
               }}
             >
-              <div style={{ width: '90%' }}>{chapter.title}</div>
+              <div style={{ width: "90%" }}>{chapter.title}</div>
               <div>
                 {page_id === chapter.uid ? (
-                  <MdOutlineKeyboardArrowDown size={16} color='#2d2d2d' />
+                  <MdOutlineKeyboardArrowDown size={16} color="#2d2d2d" />
                 ) : (
-                  <MdOutlineKeyboardArrowRight size={16} color='#2d2d2d' />
+                  <MdOutlineKeyboardArrowRight size={16} color="#2d2d2d" />
                 )}
               </div>
             </PageNavContainer>

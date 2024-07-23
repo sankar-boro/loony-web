@@ -1,16 +1,8 @@
 import { useEffect, useState, useContext } from "react";
-import { Modal, ModalBodyContainer, ModalButtonContainer } from "../components";
 import { axiosInstance } from "loony-query";
 import Cropper from "react-easy-crop";
 import { AuthContext } from "../context/AuthContext";
 import { TextArea } from "./components/TextArea";
-
-const getUrl = (editNode) => {
-  if (editNode.identity === 100) {
-    return "/book/edit_book";
-  }
-  return "/book/edit_book_node";
-};
 
 export default function EditNodeComponent({
   heading,
@@ -19,9 +11,9 @@ export default function EditNodeComponent({
   doc_id,
   FnCallback,
   onCancel,
+  url,
 }) {
   const { editNode } = state;
-  const url = getUrl(editNode);
   const { auth } = useContext(AuthContext);
   const { user_id } = auth.user;
   const [title, setTitle] = useState("");
@@ -74,8 +66,8 @@ export default function EditNodeComponent({
       title,
       body,
       uid: editNode.uid,
-      [docIdName]: doc_id,
-      identity: editNode.identity,
+      [docIdName]: parseInt(doc_id),
+      identity: editNode.identity ? editNode.identity : null,
       images: [{ name: afterTmpImageUpload ? afterTmpImageUpload : image }],
       theme,
     };
@@ -153,6 +145,7 @@ export default function EditNodeComponent({
         paddingLeft: "5%",
         background: "linear-gradient(to right, #ffffff, #F6F8FC)",
         minHeight: "100vh",
+        paddingBottom: "10vh",
       }}
     >
       <h2>{heading}</h2>

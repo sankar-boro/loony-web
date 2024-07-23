@@ -1,11 +1,17 @@
-import { deleteOne } from 'loony-utils';
-import { axiosInstance } from 'loony-query';
-import AddNode from '../../form/addNode';
-import EditDocument from '../../form/editNode';
-import ConfirmAction from '../../components/ConfirmAction';
-import { appendChapters, appendSections, appendSubSections } from 'loony-utils';
+import { deleteOne } from "loony-utils";
+import { axiosInstance } from "loony-query";
+import AddNode from "../../form/addNode";
+import EditDocument from "../../form/editNode";
+import ConfirmAction from "../../components/ConfirmAction";
+import { appendChapters, appendSections, appendSubSections } from "loony-utils";
 
-export const ModalComponent = ({ state, setState, setContext, book_id, navigate }) => {
+export const ModalComponent = ({
+  state,
+  setState,
+  setContext,
+  book_id,
+  navigate,
+}) => {
   const {
     deleteNode,
     editNode,
@@ -28,7 +34,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
       delete_id: deleteNode.uid,
     };
     axiosInstance
-      .post(`/book/delete_book_node`, submitData)
+      .post(`/book/delete/node`, submitData)
       .then((res) => {
         if (deleteNode.identity === 101) {
           const __nodes101 = deleteOne(nodes101, res.data, submitData);
@@ -37,11 +43,15 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
             activeNode: frontPage,
             nodes101: __nodes101,
             deleteNode: null,
-            modal: '',
+            modal: "",
           });
         }
         if (deleteNode.identity === 102) {
-          const __activeSectionsByPageId = deleteOne(activeSectionsByPageId, res.data, submitData);
+          const __activeSectionsByPageId = deleteOne(
+            activeSectionsByPageId,
+            res.data,
+            submitData
+          );
           let __activeNode = null;
           nodes101.forEach((x) => {
             if (x.uid === page_id) {
@@ -57,14 +67,14 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
               [page_id]: __activeSectionsByPageId,
             },
             deleteNode: null,
-            modal: '',
+            modal: "",
           });
         }
         if (deleteNode.identity === 103) {
           const __activeSubSectionsBySectionId = deleteOne(
             activeSubSectionsBySectionId,
             res.data,
-            submitData,
+            submitData
           );
           setState({
             ...state,
@@ -73,7 +83,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
               ...allSubSectionsBySectionId,
               [section_id]: __activeSubSectionsBySectionId,
             },
-            modal: '',
+            modal: "",
             deleteNode: null,
           });
         }
@@ -84,16 +94,18 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
   };
 
   const deleteBook = () => {
-    axiosInstance.post('/book/delete_book', { book_id: parseInt(book_id) }).then(() => {
-      setContext({
-        alert: {
-          alertType: 'success',
-          title: 'Deleted Book',
-          body: 'Your book has been successfully deleted.',
-        },
+    axiosInstance
+      .post("/book/delete", { book_id: parseInt(book_id) })
+      .then(() => {
+        setContext({
+          alert: {
+            alertType: "success",
+            title: "Deleted Book",
+            body: "Your book has been successfully deleted.",
+          },
+        });
+        navigate("/", { replace: true });
       });
-      navigate('/', { replace: true });
-    });
   };
 
   const editPage = (data) => {
@@ -113,7 +125,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
       ...state,
       activeNode: __activeNode,
       nodes101: __nodes101,
-      modal: '',
+      modal: "",
     });
   };
   const editSection = (data) => {
@@ -135,20 +147,22 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
         [page_id]: __activeSectionsByPageId,
       },
       activeNode: __activeSection,
-      modal: '',
+      modal: "",
       editNode: null,
     });
   };
   const editSubSection = ({ data }) => {
-    const __activeSubSectionsBySectionId = activeSubSectionsBySectionId.map((innerNode) => {
-      if (innerNode.uid === editNode.uid) {
-        return {
-          ...innerNode,
-          ...data,
-        };
+    const __activeSubSectionsBySectionId = activeSubSectionsBySectionId.map(
+      (innerNode) => {
+        if (innerNode.uid === editNode.uid) {
+          return {
+            ...innerNode,
+            ...data,
+          };
+        }
+        return innerNode;
       }
-      return innerNode;
-    });
+    );
     setState({
       ...state,
       activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
@@ -156,7 +170,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
         ...allSubSectionsBySectionId,
         [section_id]: __activeSubSectionsBySectionId,
       },
-      modal: '',
+      modal: "",
     });
   };
 
@@ -169,7 +183,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
       ...state,
       activeNode: __activeNode,
       page_id: __activeNode.uid,
-      modal: '',
+      modal: "",
     });
   };
 
@@ -194,12 +208,16 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
       ...state,
       activeNode: data.new_node,
       nodes101: __nodes101,
-      modal: '',
+      modal: "",
     });
   };
 
   const addSectionFnCb = (data, err) => {
-    const __activeSectionsByPageId = appendSections(activeSectionsByPageId, topNode, data);
+    const __activeSectionsByPageId = appendSections(
+      activeSectionsByPageId,
+      topNode,
+      data
+    );
     let newActiveNode = data.new_node;
     setState({
       ...state,
@@ -210,7 +228,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
         ...allSectionsByPageId,
         [page_id]: __activeSectionsByPageId,
       },
-      modal: '',
+      modal: "",
     });
   };
 
@@ -218,7 +236,7 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
     const __activeSubSectionsBySectionId = appendSubSections(
       activeSubSectionsBySectionId,
       topNode,
-      data,
+      data
     );
 
     setState({
@@ -228,26 +246,26 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
         [section_id]: __activeSubSectionsBySectionId,
       },
       activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
-      modal: '',
+      modal: "",
     });
   };
 
   const onCancel = () => {
     setState({
       ...state,
-      modal: '',
+      modal: "",
     });
   };
   return (
     <>
-      {modal === 'add_chapter' ? (
+      {modal === "add_chapter" ? (
         <AddNode
           state={state}
           setState={setState}
           FnCallback={addChapterFnCb}
-          url='/book/append_book_node'
+          url="/book/append/node"
           isMobile={false}
-          docIdName='book_id'
+          docIdName="book_id"
           docId={book_id}
           parent_id={topNode.uid}
           identity={101}
@@ -258,14 +276,14 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
         />
       ) : null}
 
-      {modal === 'add_section' ? (
+      {modal === "add_section" ? (
         <AddNode
           state={state}
           setState={setState}
           FnCallback={addSectionFnCb}
-          url='/book/append_book_node'
+          url="/book/append/node"
           isMobile={false}
-          docIdName='book_id'
+          docIdName="book_id"
           docId={book_id}
           parent_id={topNode.uid}
           parent_identity={topNode.identity}
@@ -276,14 +294,14 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
         />
       ) : null}
 
-      {modal === 'add_sub_section' ? (
+      {modal === "add_sub_section" ? (
         <AddNode
           state={state}
           setState={setState}
           FnCallback={addSubSectionFnCb}
-          url='/book/append_book_node'
+          url="/book/append/node"
           isMobile={false}
-          docIdName='book_id'
+          docIdName="book_id"
           docId={book_id}
           parent_id={topNode.uid}
           parent_identity={topNode.identity}
@@ -294,41 +312,42 @@ export const ModalComponent = ({ state, setState, setContext, book_id, navigate 
         />
       ) : null}
 
-      {modal === 'edit_node' ? (
+      {modal === "edit_node" ? (
         <EditDocument
-          docIdName='book_id'
+          docIdName="book_id"
           doc_id={book_id}
           state={state}
           setState={setState}
           FnCallback={editFnCallback}
           onCancel={onCancel}
           heading="Edit Node"
+          url="/book/edit/node"
         />
       ) : null}
 
-      {modal === 'delete_book' ? (
+      {modal === "delete_book" ? (
         <ConfirmAction
-          confirmTitle='Are you sure you want to delete Book?'
+          confirmTitle="Are you sure you want to delete Book?"
           confirmAction={deleteBook}
-          title='Delete Book'
+          title="Delete Book"
           onCancel={onCancel}
         />
       ) : null}
 
-      {modal === 'delete_page' ? (
+      {modal === "delete_page" ? (
         <ConfirmAction
-          confirmTitle='Are you sure you want to delete Page?'
+          confirmTitle="Are you sure you want to delete Page?"
           confirmAction={onDeleteNode}
-          title='Delete Page'
+          title="Delete Page"
           onCancel={onCancel}
         />
       ) : null}
 
-      {modal === 'delete_node' ? (
+      {modal === "delete_node" ? (
         <ConfirmAction
-          confirmTitle='Are you sure you want to delete Node?'
+          confirmTitle="Are you sure you want to delete Node?"
           confirmAction={onDeleteNode}
-          title='Delete Node'
+          title="Delete Node"
           onCancel={onCancel}
         />
       ) : null}

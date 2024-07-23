@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
-import { axiosInstance } from 'loony-query';
-import { useNavigate } from 'react-router-dom';
-import CardLoader from '../components/CardLoader';
+import { useEffect, useState } from "react";
+import { axiosInstance } from "loony-query";
+import { useNavigate } from "react-router-dom";
+import CardLoader from "../components/CardLoader";
 
 const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className='book-container'>
-      <div className='app-body'>
+    <div className="book-container">
+      <div className="app-body">
         <Blogs navigate={navigate} />
         <Books navigate={navigate} />
       </div>
@@ -21,14 +21,14 @@ const Blogs = ({ navigate }) => {
   const [blogs, setBlogs] = useState(null);
 
   useEffect(() => {
-    axiosInstance.get('/blog/get_all_blogs').then(({ data }) => {
+    axiosInstance.get("/blog/get/all").then(({ data }) => {
       setBlogs(data.data);
     });
   }, []);
   return (
     <>
       <h3>Blogs</h3>
-      <div className='flex-row' style={{ flexWrap: 'wrap' }}>
+      <div className="flex-row" style={{ flexWrap: "wrap" }}>
         {!blogs
           ? [1, 2, 3, 4].map((key) => {
               return <CardLoader key={key} />;
@@ -41,8 +41,8 @@ const Blogs = ({ navigate }) => {
                 key={node.blog_id}
                 node={node}
                 navigate={navigate}
-                nodeType='blog'
-                nodeIdType='blog_id'
+                nodeType="blog"
+                nodeIdType="blog_id"
               />
             );
           })}
@@ -54,7 +54,7 @@ const Blogs = ({ navigate }) => {
 const Books = ({ navigate }) => {
   const [books, setBooks] = useState(null);
   useEffect(() => {
-    axiosInstance.get('/book/get_all_books').then(({ data }) => {
+    axiosInstance.get("/book/get/all").then(({ data }) => {
       setBooks(data.data);
     });
   }, []);
@@ -62,7 +62,7 @@ const Books = ({ navigate }) => {
   return (
     <>
       <h3>Books</h3>
-      <div className='flex-row' style={{ flexWrap: 'wrap' }}>
+      <div className="flex-row" style={{ flexWrap: "wrap" }}>
         {!books
           ? [5, 6, 7, 8].map((key) => {
               return <CardLoader key={key} />;
@@ -75,8 +75,8 @@ const Books = ({ navigate }) => {
                 key={node.book_id}
                 node={node}
                 navigate={navigate}
-                nodeType='book'
-                nodeIdType='book_id'
+                nodeType="book"
+                nodeIdType="book_id"
               />
             );
           })}
@@ -89,17 +89,17 @@ const Card = ({ node, navigate, nodeType, nodeIdType }) => {
   const image = JSON.parse(node.images)[0];
 
   return (
-    <div className='card' key={node[nodeIdType]}>
+    <div className="card" key={node[nodeIdType]}>
       <div
-        className='card-image'
+        className="card-image"
         style={{
           backgroundImage:
             image && image.name
               ? `url("${process.env.REACT_APP_BASE_API_URL}/api/${nodeType}/${node[nodeIdType]}/340/${image.name}")`
               : null,
-          overflow: 'hidden',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          overflow: "hidden",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
           borderTopLeftRadius: 3,
           borderTopRightRadius: 3,
         }}
@@ -107,16 +107,16 @@ const Card = ({ node, navigate, nodeType, nodeIdType }) => {
           navigate(`/view/${nodeType}/${node[nodeIdType]}`, node);
         }}
       />
-      <div className='card-body'>
+      <div className="card-body">
         <div
-          className='card-title cursor'
+          className="card-title cursor"
           onClick={() => {
             navigate(`/view/${nodeType}/${node[nodeIdType]}`, node);
           }}
         >
           {node.title}
         </div>
-        <div className='card-body' />
+        <div className="card-body" />
       </div>
     </div>
   );

@@ -41,21 +41,19 @@ export default function Edit() {
     state;
 
   const getChapters = () => {
-    axiosInstance
-      .get(`/book/get_all_book_nodes?book_id=${book_id}`)
-      .then(({ data }) => {
-        const bookTree = orderBookNodes(data.data);
-        const __frontPage = bookTree && bookTree[0];
-        const __nodes101 = bookTree.slice(1);
+    axiosInstance.get(`/book/get/nodes?book_id=${book_id}`).then(({ data }) => {
+      const bookTree = orderBookNodes(data.data);
+      const __frontPage = bookTree && bookTree[0];
+      const __nodes101 = bookTree.slice(1);
 
-        setState({
-          ...state,
-          frontPage: __frontPage,
-          activeNode: __frontPage,
-          nodes101: __nodes101,
-          page_id: __frontPage.uid,
-        });
+      setState({
+        ...state,
+        frontPage: __frontPage,
+        activeNode: __frontPage,
+        nodes101: __nodes101,
+        page_id: __frontPage.uid,
       });
+    });
   };
 
   useEffect(() => {

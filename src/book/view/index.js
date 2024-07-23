@@ -1,14 +1,14 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
-import { LuFileEdit } from 'react-icons/lu';
-import { LuFileWarning } from 'react-icons/lu';
-import { extractImage, orderBookNodes } from 'loony-utils';
-import MarkdownPreview from '@uiw/react-markdown-preview';
+import { useState, useEffect, Suspense, lazy } from "react";
+import { LuFileEdit } from "react-icons/lu";
+import { LuFileWarning } from "react-icons/lu";
+import { extractImage, orderBookNodes } from "loony-utils";
+import MarkdownPreview from "@uiw/react-markdown-preview";
 
-import { useParams, Link } from 'react-router-dom';
-import { axiosInstance } from 'loony-query';
-import PageLoader from '../../components/PageLoader';
-import { PageNavigation } from './pageNavigation';
-const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown'));
+import { useParams, Link } from "react-router-dom";
+import { axiosInstance } from "loony-query";
+import PageLoader from "../../components/PageLoader";
+import { PageNavigation } from "./pageNavigation";
+const MathsMarkdown = lazy(() => import("../../components/MathsMarkdown"));
 
 const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   const { bookId } = useParams();
@@ -25,10 +25,11 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
     nodes101: [],
     frontPage: null,
   });
-  const { activeNode, nodes101, frontPage, activeSubSectionsBySectionId } = state;
+  const { activeNode, nodes101, frontPage, activeSubSectionsBySectionId } =
+    state;
 
   const getChapters = () => {
-    axiosInstance.get(`/book/get_all_book_nodes?book_id=${book_id}`).then(({ data }) => {
+    axiosInstance.get(`/book/get/nodes?book_id=${book_id}`).then(({ data }) => {
       const bookTree = orderBookNodes(data.data);
       const __frontPage = bookTree && bookTree[0];
       const __nodes101 = bookTree.slice(1);
@@ -55,15 +56,21 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
 
   if (!frontPage)
     return (
-      <div className='book-container'>
-        <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
-          <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }} />
+      <div className="book-container">
+        <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
           <div
             style={{
-              width: '100%',
+              width: "20%",
               paddingTop: 15,
-              paddingLeft: '5%',
-              background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+              borderRight: "1px solid #ebebeb",
+            }}
+          />
+          <div
+            style={{
+              width: "100%",
+              paddingTop: 15,
+              paddingLeft: "5%",
+              background: "linear-gradient(to right, #ffffff, #F6F8FC)",
               paddingBottom: 50,
             }}
           >
@@ -74,18 +81,18 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
     );
 
   return (
-    <div className='book-container'>
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
+    <div className="book-container">
+      <div style={{ display: "flex", flexDirection: "row" }}>
         {/*
          * @ Left Navigation
          */}
         {isMobile && mobileNavOpen ? (
           <div
             style={{
-              width: '100%',
-              backgroundColor: 'rgb(0,0,0,0.5)',
+              width: "100%",
+              backgroundColor: "rgb(0,0,0,0.5)",
               zIndex: 10,
-              height: '105vh',
+              height: "105vh",
             }}
             onClick={() => {
               setMobileNavOpen(false);
@@ -94,10 +101,10 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
             <div
               style={{
                 width: 320,
-                backgroundColor: 'white',
-                maxWidth: '100%',
-                height: '100%',
-                position: 'relative',
+                backgroundColor: "white",
+                maxWidth: "100%",
+                height: "100%",
+                position: "relative",
                 padding: 12,
               }}
             >
@@ -108,11 +115,19 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                 book_id={book_id}
               />
             </div>
-            {isMobile ? <EditContainerMobile node={activeNode} book_id={book_id} /> : null}
+            {isMobile ? (
+              <EditContainerMobile node={activeNode} book_id={book_id} />
+            ) : null}
           </div>
         ) : null}
         {!isMobile ? (
-          <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }}>
+          <div
+            style={{
+              width: "20%",
+              paddingTop: 15,
+              borderRight: "1px solid #ebebeb",
+            }}
+          >
             <PageNavigation
               setState={setState}
               nodes101={nodes101}
@@ -130,12 +145,12 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
          */}
         <div
           style={{
-            width: isMobile ? '90%' : '60%',
+            width: isMobile ? "90%" : "60%",
             paddingTop: 15,
-            paddingLeft: '5%',
-            paddingRight: '5%',
-            background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
-            minHeight: '100vh',
+            paddingLeft: "5%",
+            paddingRight: "5%",
+            background: "linear-gradient(to right, #ffffff, #F6F8FC)",
+            minHeight: "100vh",
           }}
         >
           <div
@@ -143,13 +158,13 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
               marginBottom: 24,
             }}
           >
-            <div className='page-heading'>{activeNode.title}</div>
+            <div className="page-heading">{activeNode.title}</div>
             {image && image.name ? (
-              <div style={{ width: '100%', borderRadius: 5 }}>
+              <div style={{ width: "100%", borderRadius: 5 }}>
                 <img
                   src={`${process.env.REACT_APP_BASE_API_URL}/api/book/${book_id}/720/${image.name}`}
-                  alt=''
-                  width='100%'
+                  alt=""
+                  width="100%"
                 />
               </div>
             ) : null}
@@ -158,7 +173,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
             ) : activeNode.theme === 24 ? (
               <MarkdownPreview
                 source={activeNode.body}
-                wrapperElement={{ 'data-color-mode': 'light' }}
+                wrapperElement={{ "data-color-mode": "light" }}
               />
             ) : activeNode.theme === 41 ? (
               <Suspense fallback={<div>Loading component...</div>}>
@@ -169,14 +184,14 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
           {activeSubSectionsBySectionId.map((subSectionNode) => {
             const nodeImage = extractImage(subSectionNode.images);
             return (
-              <div className='page-section' key={subSectionNode.uid}>
-                <div className='section-title'>{subSectionNode.title}</div>
+              <div className="page-section" key={subSectionNode.uid}>
+                <div className="section-title">{subSectionNode.title}</div>
                 {nodeImage && nodeImage.name ? (
-                  <div style={{ width: '100%', borderRadius: 5 }}>
+                  <div style={{ width: "100%", borderRadius: 5 }}>
                     <img
                       src={`${process.env.REACT_APP_BASE_API_URL}/api/book/${book_id}/720/${nodeImage.name}`}
-                      alt=''
-                      width='100%'
+                      alt=""
+                      width="100%"
                     />
                   </div>
                 ) : null}
@@ -185,7 +200,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                 ) : subSectionNode.theme === 24 ? (
                   <MarkdownPreview
                     source={subSectionNode.body}
-                    wrapperElement={{ 'data-color-mode': 'light' }}
+                    wrapperElement={{ "data-color-mode": "light" }}
                   />
                 ) : subSectionNode.theme === 41 ? (
                   <Suspense fallback={<div>Loading component...</div>}>
@@ -200,7 +215,9 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
         {/*
          * @Page End
          */}
-        {!isMobile ? <RightBookContainer node={activeNode} book_id={book_id} /> : null}
+        {!isMobile ? (
+          <RightBookContainer node={activeNode} book_id={book_id} />
+        ) : null}
       </div>
     </div>
   );
@@ -208,21 +225,21 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
 
 const RightBookContainer = ({ node, book_id }) => {
   return (
-    <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
-      <ul className='list-item' style={{ paddingLeft: 0, listStyle: 'none' }}>
-        <li style={{ display: 'flex', alignItems: 'center' }}>
-          <LuFileEdit color='#2d2d2d' size={16} />
+    <div style={{ width: "20%", paddingLeft: 15, paddingTop: 15 }}>
+      <ul className="list-item" style={{ paddingLeft: 0, listStyle: "none" }}>
+        <li style={{ display: "flex", alignItems: "center" }}>
+          <LuFileEdit color="#2d2d2d" size={16} />
           <Link to={`/edit/book/${book_id}`} style={{ marginLeft: 5 }}>
             Edit this page
           </Link>
         </li>
-        <li style={{ display: 'flex', alignItems: 'center' }}>
-          <LuFileWarning color='#2d2d2d' size={16} />
+        <li style={{ display: "flex", alignItems: "center" }}>
+          <LuFileWarning color="#2d2d2d" size={16} />
           <span style={{ marginLeft: 5 }}>Report</span>
         </li>
       </ul>
-      <div style={{ borderTop: '1px solid #ccc', marginTop: 5, paddingTop: 5 }}>
-        <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
+      <div style={{ borderTop: "1px solid #ccc", marginTop: 5, paddingTop: 5 }}>
+        <ul style={{ paddingLeft: 0, listStyle: "none" }}>
           <li>{node.title}</li>
         </ul>
       </div>
@@ -234,21 +251,21 @@ const EditContainerMobile = ({ node, book_id }) => {
   return (
     <div
       style={{
-        display: 'flex',
-        flexDirection: 'row',
+        display: "flex",
+        flexDirection: "row",
         paddingLeft: 15,
         paddingTop: 15,
       }}
     >
-      <ul className='list-item' style={{ paddingLeft: 0, listStyle: 'none' }}>
-        <li style={{ display: 'flex', alignItems: 'center' }}>
-          <LuFileEdit color='#2d2d2d' size={16} />
+      <ul className="list-item" style={{ paddingLeft: 0, listStyle: "none" }}>
+        <li style={{ display: "flex", alignItems: "center" }}>
+          <LuFileEdit color="#2d2d2d" size={16} />
           <Link to={`/edit/book/${book_id}`} style={{ marginLeft: 5 }}>
             Edit this page
           </Link>
         </li>
-        <li style={{ display: 'flex', alignItems: 'center' }}>
-          <LuFileWarning color='#2d2d2d' size={16} />
+        <li style={{ display: "flex", alignItems: "center" }}>
+          <LuFileWarning color="#2d2d2d" size={16} />
           <span style={{ marginLeft: 5 }}>Report</span>
         </li>
       </ul>
