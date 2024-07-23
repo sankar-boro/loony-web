@@ -205,7 +205,13 @@ export default function EditNodeComponent({
           ) : null}
         </div>
       </div>
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
+        }}
+      >
         <button onClick={onCloseModal} className="grey-bg">
           Cancel
         </button>

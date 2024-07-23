@@ -1,14 +1,18 @@
-import { Modal, ModalBodyContainer, ModalButtonContainer } from '../components';
+import { Modal, ModalBodyContainer, ModalButtonContainer } from "../components";
 
 const ConfirmAction = ({ title, confirmTitle, confirmAction, onCancel }) => {
   return (
     <Modal visible={true} onClose={onCancel} title={title}>
       <ModalBodyContainer>{confirmTitle}</ModalBodyContainer>
       <ModalButtonContainer>
-        <button onClick={onCancel} className='grey-bg'>
+        <button
+          onClick={onCancel}
+          className="grey-bg"
+          style={{ marginRight: 10 }}
+        >
           Cancel
         </button>
-        <button onClick={confirmAction} className='black-bg'>
+        <button onClick={confirmAction} className="black-bg">
           Confirm
         </button>
       </ModalButtonContainer>
