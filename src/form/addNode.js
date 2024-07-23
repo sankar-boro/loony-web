@@ -134,8 +134,8 @@ export default function AddNodeComponent({
   return (
     <div
       style={{
-        paddingLeft: "10%",
-        paddingRight: "20%",
+        width: "60%",
+        paddingLeft: "5%",
         background: "linear-gradient(to right, #ffffff, #F6F8FC)",
         minHeight: "100vh",
       }}

@@ -147,7 +147,14 @@ export default function EditNodeComponent({
   const imageName = docIdName === "book_id" ? "book" : "blog";
 
   return (
-    <div style={{ paddingLeft: "10%", paddingRight: "20%" }}>
+    <div
+      style={{
+        width: "60%",
+        paddingLeft: "5%",
+        background: "linear-gradient(to right, #ffffff, #F6F8FC)",
+        minHeight: "100vh",
+      }}
+    >
       <h2>{heading}</h2>
       <div style={{}}>
         <div>
