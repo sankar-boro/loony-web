@@ -125,6 +125,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
               modal: "",
             });
           }}
+          isActive={state.activeNode.uid === frontPage.uid}
         >
           {frontPage.title}
         </ChapterNavContainer>
@@ -147,6 +148,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                   e.stopPropagation();
                   getSections(chapter);
                 }}
+                isActive={state.activeNode.uid === chapter.uid}
               >
                 <div style={{ width: "90%" }}>{chapter.title}</div>
                 <div>
@@ -188,6 +190,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                             e.stopPropagation();
                             getSubSections(section);
                           }}
+                          isActive={state.activeNode.uid === section.uid}
                         >
                           {section.title}
                         </SectionNavContainer>
