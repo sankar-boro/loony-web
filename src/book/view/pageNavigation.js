@@ -11,7 +11,13 @@ import {
   SectionsNavContainer,
 } from "../../components/Containers";
 
-export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
+export const PageNavigation = ({
+  setState,
+  setStatus,
+  nodes101,
+  state,
+  book_id,
+}) => {
   const {
     page_id,
     activeSectionsByPageId,
@@ -31,6 +37,10 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
         activeSubSectionsBySectionId: [],
       });
     } else {
+      setStatus((prevState) => ({
+        ...prevState,
+        status: "FETCHING",
+      }));
       axiosInstance
         .get(`/book/get/sections?book_id=${book_id}&page_id=${uid}`)
         .then(({ data }) => {
@@ -46,6 +56,10 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
             activeNode: __node,
             activeSubSectionsBySectionId: [],
           });
+          setStatus((prevState) => ({
+            ...prevState,
+            status: "",
+          }));
         });
     }
   };
@@ -60,6 +74,10 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
         activeNode: __node,
       });
     } else {
+      setStatus((prevState) => ({
+        ...prevState,
+        status: "FETCHING",
+      }));
       axiosInstance
         .get(`/book/get/sub_sections?book_id=${book_id}&page_id=${uid}`)
         .then(({ data }) => {
@@ -74,6 +92,10 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
             section_id: __node.uid,
             activeNode: __node,
           });
+          setStatus((prevState) => ({
+            ...prevState,
+            status: "",
+          }));
         });
     }
   };

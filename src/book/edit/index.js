@@ -9,10 +9,10 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 
 import { axiosInstance } from "loony-query";
 import { AuthContext } from "../../context/AuthContext";
-import PageLoader from "../../components/PageLoader";
 import { ModalComponent } from "./modal";
 import { PageNavigation } from "./pageNavigation";
 import { PageNodeSettings } from "./pageNodeSettings";
+import PageLoadingContainer from "../../components/PageLoadingContainer";
 const MathsMarkdown = lazy(() => import("../../components/MathsMarkdown"));
 
 export default function Edit() {
@@ -20,7 +20,10 @@ export default function Edit() {
   const book_id = parseInt(bookId);
   const navigate = useNavigate();
   const { setContext } = useContext(AuthContext);
-
+  const [status, setStatus] = useState({
+    status: "INIT",
+    error: "",
+  });
   const [state, setState] = useState({
     modal: "",
     deleteNode: null,
@@ -53,6 +56,10 @@ export default function Edit() {
         nodes101: __nodes101,
         page_id: __frontPage.uid,
       });
+      setStatus({
+        ...status,
+        status: "",
+      });
     });
   };
 
@@ -63,40 +70,17 @@ export default function Edit() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [book_id]);
 
-  if (!activeNode) return null;
-  if (!nodes101) return null;
+  if (status.status === "INIT" || status.status === "FETCHING")
+    return <PageLoadingContainer />;
+
   const image = extractImage(activeNode.images);
 
-  if (!frontPage)
-    return (
-      <div className="book-container">
-        <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
-          <div
-            style={{
-              width: "20%",
-              paddingTop: 15,
-              borderRight: "1px solid #ebebeb",
-            }}
-          />
-          <div
-            style={{
-              width: "100%",
-              paddingTop: 15,
-              paddingLeft: "5%",
-              background: "linear-gradient(to right, #ffffff, #F6F8FC)",
-              paddingBottom: 50,
-            }}
-          >
-            <PageLoader key_id={1} />
-          </div>
-        </div>
-      </div>
-    );
   return (
     <div className="book-container">
       <div style={{ display: "flex", flexDirection: "row" }}>
         <PageNavigation
           setState={setState}
+          setStatus={setStatus}
           nodes101={nodes101}
           state={state}
           book_id={book_id}

@@ -6,13 +6,17 @@ import MarkdownPreview from "@uiw/react-markdown-preview";
 
 import { useParams, Link } from "react-router-dom";
 import { axiosInstance } from "loony-query";
-import PageLoader from "../../components/PageLoader";
 import { PageNavigation } from "./pageNavigation";
+import PageLoadingContainer from "../../components/PageLoadingContainer";
 const MathsMarkdown = lazy(() => import("../../components/MathsMarkdown"));
 
 const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   const { bookId } = useParams();
   const book_id = parseInt(bookId);
+  const [status, setStatus] = useState({
+    status: "INIT",
+    error: "",
+  });
 
   const [state, setState] = useState({
     activeNode: null,
@@ -40,6 +44,10 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
         nodes101: __nodes101,
         page_id: __frontPage.uid,
       });
+      setStatus({
+        ...status,
+        status: "",
+      });
     });
   };
 
@@ -50,35 +58,10 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [book_id]);
 
-  if (!activeNode) return null;
-  if (!nodes101) return null;
-  const image = extractImage(activeNode.images);
+  if (status.status === "INIT" || status.status === "FETCHING")
+    return <PageLoadingContainer />;
 
-  if (!frontPage)
-    return (
-      <div className="book-container">
-        <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
-          <div
-            style={{
-              width: "20%",
-              paddingTop: 15,
-              borderRight: "1px solid #ebebeb",
-            }}
-          />
-          <div
-            style={{
-              width: "100%",
-              paddingTop: 15,
-              paddingLeft: "5%",
-              background: "linear-gradient(to right, #ffffff, #F6F8FC)",
-              paddingBottom: 50,
-            }}
-          >
-            <PageLoader key_id={1} />
-          </div>
-        </div>
-      </div>
-    );
+  const image = extractImage(activeNode.images);
 
   return (
     <div className="book-container">
@@ -110,6 +93,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
             >
               <PageNavigation
                 setState={setState}
+                setStatus={setStatus}
                 nodes101={nodes101}
                 state={state}
                 book_id={book_id}
@@ -130,6 +114,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
           >
             <PageNavigation
               setState={setState}
+              setStatus={setStatus}
               nodes101={nodes101}
               state={state}
               book_id={book_id}
