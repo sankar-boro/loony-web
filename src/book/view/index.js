@@ -1,11 +1,11 @@
 import { useState, useEffect, Suspense, lazy } from "react";
 import { LuFileEdit } from "react-icons/lu";
 import { LuFileWarning } from "react-icons/lu";
-import { extractImage, orderBookNodes } from "loony-utils";
+import { extractImage } from "loony-utils";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 
 import { useParams, Link } from "react-router-dom";
-import { axiosInstance } from "loony-query";
+import { getChapters } from "./utils";
 import { PageNavigation } from "./pageNavigation";
 import PageLoadingContainer from "../../components/PageLoadingContainer";
 const MathsMarkdown = lazy(() => import("../../components/MathsMarkdown"));
@@ -29,31 +29,11 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
     nodes101: [],
     frontPage: null,
   });
-  const { activeNode, nodes101, frontPage, activeSubSectionsBySectionId } =
-    state;
-
-  const getChapters = () => {
-    axiosInstance.get(`/book/get/nodes?book_id=${book_id}`).then(({ data }) => {
-      const bookTree = orderBookNodes(data.data);
-      const __frontPage = bookTree && bookTree[0];
-      const __nodes101 = bookTree.slice(1);
-      setState({
-        ...state,
-        frontPage: __frontPage,
-        activeNode: __frontPage,
-        nodes101: __nodes101,
-        page_id: __frontPage.uid,
-      });
-      setStatus({
-        ...status,
-        status: "",
-      });
-    });
-  };
+  const { activeNode, nodes101, activeSubSectionsBySectionId } = state;
 
   useEffect(() => {
     if (book_id) {
-      getChapters();
+      getChapters(book_id, setState, setStatus);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [book_id]);
@@ -99,12 +79,9 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                 book_id={book_id}
               />
             </div>
-            {isMobile ? (
-              <EditContainerMobile node={activeNode} book_id={book_id} />
-            ) : null}
+            <EditContainerMobile node={activeNode} book_id={book_id} />
           </div>
-        ) : null}
-        {!isMobile ? (
+        ) : (
           <div
             style={{
               width: "20%",
@@ -120,7 +97,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
               book_id={book_id}
             />
           </div>
-        ) : null}
+        )}
         {/*
          * @ Left Navigation End
          */}

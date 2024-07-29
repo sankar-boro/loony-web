@@ -10,6 +10,7 @@ import {
   SectionNavContainer,
   SectionsNavContainer,
 } from "../../components/Containers";
+import { getSections, getSubSections } from "./utils";
 
 const Button = ({ onClick, title }) => {
   return (
@@ -23,7 +24,13 @@ const Button = ({ onClick, title }) => {
   );
 };
 
-export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
+export const PageNavigation = ({
+  setState,
+  setStatus,
+  nodes101,
+  state,
+  book_id,
+}) => {
   const {
     page_id,
     activeSectionsByPageId,
@@ -31,76 +38,6 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
     allSectionsByPageId,
     allSubSectionsBySectionId,
   } = state;
-
-  const getSections = (__node) => {
-    const { uid } = __node;
-    if (allSectionsByPageId[uid]) {
-      setState({
-        ...state,
-        activeSectionsByPageId: allSectionsByPageId[uid],
-        page_id: __node.uid,
-        activeNode: __node,
-        activeSubSectionsBySectionId: [],
-        editNode: null,
-        addNode: null,
-        modal: "",
-      });
-    } else {
-      axiosInstance
-        .get(`/book/get/sections?book_id=${book_id}&page_id=${uid}`)
-        .then(({ data }) => {
-          const res = orderNodes(data.data, __node);
-          setState({
-            ...state,
-            activeSectionsByPageId: res,
-            allSectionsByPageId: {
-              ...allSectionsByPageId,
-              [uid]: res,
-            },
-            page_id: __node.uid,
-            activeNode: __node,
-            activeSubSectionsBySectionId: [],
-            editNode: null,
-            addNode: null,
-            modal: "",
-          });
-        });
-    }
-  };
-
-  const getSubSections = (__node) => {
-    const { uid } = __node;
-    if (allSubSectionsBySectionId[uid]) {
-      setState({
-        ...state,
-        activeSubSectionsBySectionId: allSubSectionsBySectionId[uid],
-        section_id: __node.uid,
-        activeNode: __node,
-        editNode: null,
-        addNode: null,
-        modal: "",
-      });
-    } else {
-      axiosInstance
-        .get(`/book/get/sub_sections?book_id=${book_id}&page_id=${uid}`)
-        .then(({ data }) => {
-          const res = orderNodes(data.data, __node);
-          setState({
-            ...state,
-            activeSubSectionsBySectionId: res,
-            allSubSectionsBySectionId: {
-              ...allSubSectionsBySectionId,
-              [uid]: res,
-            },
-            section_id: __node.uid,
-            activeNode: __node,
-            editNode: null,
-            addNode: null,
-            modal: "",
-          });
-        });
-    }
-  };
 
   return (
     <>
@@ -146,7 +83,7 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
               <PageNavContainer
                 onClick={(e) => {
                   e.stopPropagation();
-                  getSections(chapter);
+                  getSections(chapter, setState, allSectionsByPageId, book_id);
                 }}
                 isActive={state.activeNode.uid === chapter.uid}
               >
@@ -188,7 +125,12 @@ export const PageNavigation = ({ setState, nodes101, state, book_id }) => {
                         <SectionNavContainer
                           onClick={(e) => {
                             e.stopPropagation();
-                            getSubSections(section);
+                            getSubSections(
+                              section,
+                              setState,
+                              allSubSectionsBySectionId,
+                              book_id
+                            );
                           }}
                           isActive={state.activeNode.uid === section.uid}
                         >

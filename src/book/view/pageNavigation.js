@@ -1,15 +1,14 @@
-import { orderNodes } from "loony-utils";
 import {
   MdOutlineKeyboardArrowRight,
   MdOutlineKeyboardArrowDown,
 } from "react-icons/md";
-import { axiosInstance } from "loony-query";
 import {
   ChapterNavContainer,
   PageNavContainer,
   SectionNavContainer,
   SectionsNavContainer,
 } from "../../components/Containers";
+import { getSections, getSubSections } from "./utils";
 
 export const PageNavigation = ({
   setState,
@@ -26,79 +25,6 @@ export const PageNavigation = ({
     allSubSectionsBySectionId,
   } = state;
 
-  const getSections = (__node) => {
-    const { uid } = __node;
-    if (allSectionsByPageId[uid]) {
-      setState({
-        ...state,
-        activeSectionsByPageId: allSectionsByPageId[uid],
-        page_id: __node.uid,
-        activeNode: __node,
-        activeSubSectionsBySectionId: [],
-      });
-    } else {
-      setStatus((prevState) => ({
-        ...prevState,
-        status: "FETCHING",
-      }));
-      axiosInstance
-        .get(`/book/get/sections?book_id=${book_id}&page_id=${uid}`)
-        .then(({ data }) => {
-          const res = orderNodes(data.data, __node);
-          setState({
-            ...state,
-            activeSectionsByPageId: res,
-            allSectionsByPageId: {
-              ...allSectionsByPageId,
-              [uid]: res,
-            },
-            page_id: __node.uid,
-            activeNode: __node,
-            activeSubSectionsBySectionId: [],
-          });
-          setStatus((prevState) => ({
-            ...prevState,
-            status: "",
-          }));
-        });
-    }
-  };
-
-  const getSubSections = (__node) => {
-    const { uid } = __node;
-    if (allSubSectionsBySectionId[uid]) {
-      setState({
-        ...state,
-        activeSubSectionsBySectionId: allSubSectionsBySectionId[uid],
-        section_id: __node.uid,
-        activeNode: __node,
-      });
-    } else {
-      setStatus((prevState) => ({
-        ...prevState,
-        status: "FETCHING",
-      }));
-      axiosInstance
-        .get(`/book/get/sub_sections?book_id=${book_id}&page_id=${uid}`)
-        .then(({ data }) => {
-          const res = orderNodes(data.data, __node);
-          setState({
-            ...state,
-            activeSubSectionsBySectionId: res,
-            allSubSectionsBySectionId: {
-              ...allSubSectionsBySectionId,
-              [uid]: res,
-            },
-            section_id: __node.uid,
-            activeNode: __node,
-          });
-          setStatus((prevState) => ({
-            ...prevState,
-            status: "",
-          }));
-        });
-    }
-  };
   return (
     <>
       <ChapterNavContainer
@@ -121,7 +47,13 @@ export const PageNavigation = ({
             <PageNavContainer
               onClick={(e) => {
                 e.stopPropagation();
-                getSections(chapter);
+                getSections(
+                  chapter,
+                  setState,
+                  setStatus,
+                  book_id,
+                  allSectionsByPageId
+                );
               }}
               isActive={state.activeNode.uid === chapter.uid}
             >
@@ -142,7 +74,13 @@ export const PageNavigation = ({
                       key={section.uid}
                       onClick={(e) => {
                         e.stopPropagation();
-                        getSubSections(section);
+                        getSubSections(
+                          section,
+                          setState,
+                          setStatus,
+                          book_id,
+                          allSubSectionsBySectionId
+                        );
                       }}
                       isActive={state.activeNode.uid === section.uid}
                     >
