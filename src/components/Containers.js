@@ -9,6 +9,10 @@ export const ChapterNavContainer = ({ children, onClick, isActive }) => {
   );
 };
 
+export const ButtonNavContainer = ({ children }) => {
+  return <div className="chapter-nav">{children}</div>;
+};
+
 export const MenuNavContainer = ({ children, onClick, activeMenu, route }) => {
   return (
     <div

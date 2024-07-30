@@ -46,7 +46,7 @@ const View = ({ isMobile }) => {
         {!isMobile ? (
           <div
             style={{
-              width: "20%",
+              width: "15%",
               paddingTop: 15,
               borderRight: "1px solid #ebebeb",
             }}

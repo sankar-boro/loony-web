@@ -57,8 +57,8 @@ export const PageNavigation = ({
               }}
               isActive={state.activeNode.uid === chapter.uid}
             >
-              <div style={{ width: "90%" }}>{chapter.title}</div>
-              <div>
+              <div className="page-nav-title">{chapter.title}</div>
+              <div className="page-nav-icon">
                 {page_id === chapter.uid ? (
                   <MdOutlineKeyboardArrowDown size={16} color="#2d2d2d" />
                 ) : (

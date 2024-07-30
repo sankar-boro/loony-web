@@ -7,10 +7,13 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="book-container">
-      <div className="app-body">
-        <Blogs navigate={navigate} />
-        <Books navigate={navigate} />
+    <div className="book-container flex-row">
+      <div style={{ width: "15%" }} />
+      <div style={{ width: "80%" }}>
+        <div className="app-body">
+          <Blogs navigate={navigate} />
+          <Books navigate={navigate} />
+        </div>
       </div>
       <div style={{ height: 50 }} />
     </div>

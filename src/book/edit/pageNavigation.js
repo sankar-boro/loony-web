@@ -1,11 +1,10 @@
-import { orderNodes } from "loony-utils";
 import {
   MdOutlineKeyboardArrowRight,
   MdOutlineKeyboardArrowDown,
 } from "react-icons/md";
-import { axiosInstance } from "loony-query";
 import {
   ChapterNavContainer,
+  ButtonNavContainer,
   PageNavContainer,
   SectionNavContainer,
   SectionsNavContainer,
@@ -46,7 +45,7 @@ export const PageNavigation = ({
        */}
       <div
         style={{
-          width: "20%",
+          width: "15%",
           paddingTop: 15,
           borderRight: "1px solid #ebebeb",
         }}
@@ -66,17 +65,18 @@ export const PageNavigation = ({
         >
           {frontPage.title}
         </ChapterNavContainer>
-        <Button
-          onClick={() => {
-            setState({
-              ...state,
-              topNode: frontPage,
-              modal: "add_chapter",
-            });
-          }}
-          title="Add Chapter"
-        />
-
+        <ButtonNavContainer>
+          <Button
+            onClick={() => {
+              setState({
+                ...state,
+                topNode: frontPage,
+                modal: "add_chapter",
+              });
+            }}
+            title="Add Chapter"
+          />
+        </ButtonNavContainer>
         {nodes101.map((chapter) => {
           return (
             <div key={chapter.uid}>
@@ -102,29 +102,33 @@ export const PageNavigation = ({
                   )}
                 </div>
               </PageNavContainer>
-              <Button
-                onClick={() => {
-                  setState({
-                    ...state,
-                    topNode: chapter,
-                    modal: "add_chapter",
-                  });
-                }}
-                title="Add Chapter"
-              />
+              <ButtonNavContainer>
+                <Button
+                  onClick={() => {
+                    setState({
+                      ...state,
+                      topNode: chapter,
+                      modal: "add_chapter",
+                    });
+                  }}
+                  title="Add Chapter"
+                />
+              </ButtonNavContainer>
               {/* Sections */}
               {page_id === chapter.uid && (
                 <SectionsNavContainer>
-                  <Button
-                    title="Add Section"
-                    onClick={() => {
-                      setState({
-                        ...state,
-                        topNode: chapter,
-                        modal: "add_section",
-                      });
-                    }}
-                  />
+                  <ButtonNavContainer>
+                    <Button
+                      title="Add Section"
+                      onClick={() => {
+                        setState({
+                          ...state,
+                          topNode: chapter,
+                          modal: "add_section",
+                        });
+                      }}
+                    />
+                  </ButtonNavContainer>
                   {activeSectionsByPageId.map((section) => {
                     return (
                       <div key={section.uid}>

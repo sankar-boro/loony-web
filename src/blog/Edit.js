@@ -59,7 +59,7 @@ export default function Edit() {
       <div className="flex-row">
         <div
           style={{
-            width: "20%",
+            width: "15%",
             paddingTop: 15,
             borderRight: "1px solid #ebebeb",
           }}

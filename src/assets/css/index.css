@@ -326,6 +326,9 @@ button:hover {
   padding: 2px 0px;
   color: #6f6f6f;
   font-size: 14px;
+  width: 90%;
+  padding-left: 5%;
+  padding-right: 5%;
 }
 .chapter-nav:hover,
 .section-nav:hover {
@@ -352,6 +355,13 @@ button:hover {
 }
 .active-menu {
   background-color: var(--hover-dark);
+}
+.page-nav-title {
+  width: 90%;
+}
+.page-nav-icon {
+  position: relative;
+  top: 2px;
 }
 .p12 {
   padding: 12px;
@@ -472,11 +482,11 @@ button:hover {
   }
   .book-container,
   .form-container {
-    width: 60%;
+    width: 100%;
     min-height: 100%;
   }
   .blog-container {
-    width: 60%;
+    width: 100%;
   }
 }
 
