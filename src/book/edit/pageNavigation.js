@@ -83,7 +83,13 @@ export const PageNavigation = ({
               <PageNavContainer
                 onClick={(e) => {
                   e.stopPropagation();
-                  getSections(chapter, setState, allSectionsByPageId, book_id);
+                  getSections(
+                    chapter,
+                    setState,
+                    setStatus,
+                    allSectionsByPageId,
+                    book_id
+                  );
                 }}
                 isActive={state.activeNode.uid === chapter.uid}
               >
@@ -128,6 +134,7 @@ export const PageNavigation = ({
                             getSubSections(
                               section,
                               setState,
+                              setStatus,
                               allSubSectionsBySectionId,
                               book_id
                             );

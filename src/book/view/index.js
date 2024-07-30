@@ -35,7 +35,6 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
     if (book_id) {
       getChapters(book_id, setState, setStatus);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [book_id]);
 
   if (status.status === "INIT" || status.status === "FETCHING")

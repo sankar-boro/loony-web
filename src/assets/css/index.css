@@ -177,11 +177,6 @@ button:hover {
   height: 280px;
 }
 .page-loader {
-  width: 75%;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  background-color: white;
-  margin-right: 10px;
   height: 280px;
 }
 .card-image {
