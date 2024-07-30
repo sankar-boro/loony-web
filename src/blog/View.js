@@ -1,66 +1,45 @@
 import { useState, useEffect } from "react";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import { Link, useParams } from "react-router-dom";
-import { axiosInstance } from "loony-query";
-import { extractImage, orderBlogNodes } from "loony-utils";
+import { extractImage } from "loony-utils";
 import { LuFileWarning } from "react-icons/lu";
 import { LuFileEdit } from "react-icons/lu";
-import PageLoader from "../components/PageLoader";
+import PageLoadingContainer from "../components/PageLoadingContainer";
+import { getNodes } from "./utils";
 
 const View = ({ isMobile }) => {
   const { blogId } = useParams();
   const blog_id = parseInt(blogId);
-  const [blogs, setBlogs] = useState(null);
-  const [page_id, setPageId] = useState("");
-  const [mainNode, setMainNode] = useState(null);
-  const [childNodes, setChildNodes] = useState([]);
+
+  const [state, setState] = useState({
+    pageId: null,
+    mainNode: null,
+    activeNode: null,
+    addNode: null,
+    editNode: null,
+    nodeIndex: null,
+    rawNodes: [],
+    blogNodes: [],
+    modal: "",
+    childNodes: [],
+  });
+  const [status, setStatus] = useState({
+    status: "INIT",
+    error: "",
+  });
 
   useEffect(() => {
     if (blog_id) {
-      axiosInstance
-        .get(`/blog/get/nodes?blog_id=${blog_id}`)
-        .then(({ data }) => {
-          const blogs_ = orderBlogNodes(data.data);
-          const mainNode_ = blogs_ && blogs_[0];
-          const childNodes_ = blogs_.slice(1);
-          if (mainNode_) {
-            setBlogs(blogs_);
-            setMainNode(mainNode_);
-            setChildNodes(childNodes_);
-            setPageId(mainNode_.uid);
-          }
-        });
+      getNodes(blog_id, setState, setStatus);
     }
   }, [blog_id]);
 
-  if (!blogs) return null;
-  if (!page_id) return null;
+  if (status.status === "INIT" || status.status === "FETCHING")
+    return <PageLoadingContainer />;
+
+  const { blogNodes, childNodes, mainNode } = state;
   const image = extractImage(mainNode.images);
-  if (!mainNode)
-    return (
-      <div className="book-container">
-        <div style={{ display: "flex", flexDirection: "row", height: "100%" }}>
-          <div
-            style={{
-              width: "20%",
-              paddingTop: 15,
-              borderRight: "1px solid #ebebeb",
-            }}
-          />
-          <div
-            style={{
-              width: "100%",
-              paddingTop: 15,
-              paddingLeft: "5%",
-              background: "linear-gradient(to right, #ffffff, #F6F8FC)",
-              paddingBottom: 50,
-            }}
-          >
-            <PageLoader key_id={1} />
-          </div>
-        </div>
-      </div>
-    );
+
   return (
     <div className="book-container">
       <div style={{ display: "flex", flexDirection: "row" }}>
@@ -72,7 +51,7 @@ const View = ({ isMobile }) => {
               borderRight: "1px solid #ebebeb",
             }}
           >
-            {(blogs && blogs).map((blog_node) => {
+            {(blogNodes && blogNodes).map((blog_node) => {
               return (
                 <div className="chapter-nav-con" key={blog_node.uid}>
                   <div className="chapter-nav">{blog_node.title}</div>
@@ -84,7 +63,7 @@ const View = ({ isMobile }) => {
 
         <div
           style={{
-            width: isMobile ? "100%" : "60%",
+            width: isMobile ? "100%" : "50%",
             paddingTop: 15,
             paddingLeft: "5%",
             paddingRight: "5%",

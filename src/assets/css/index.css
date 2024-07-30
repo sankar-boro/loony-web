@@ -191,7 +191,7 @@ button:hover {
   font-weight: bold;
 }
 .card-l-title {
-  width: 75%;
+  width: 80%;
   height: 14px;
   border-radius: 3px;
   background-color: #e0e0e0;
@@ -486,7 +486,7 @@ button:hover {
   }
   .book-container,
   .form-container {
-    width: 75%;
+    width: 80%;
   }
 }
 

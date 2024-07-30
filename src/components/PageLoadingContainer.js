@@ -13,7 +13,7 @@ const PageLoadingContainer = () => {
         />
         <div
           style={{
-            width: "60%",
+            width: "50%",
             paddingTop: 15,
             paddingLeft: "5%",
             paddingRight: "5%",

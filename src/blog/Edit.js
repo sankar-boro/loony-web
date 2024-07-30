@@ -18,6 +18,8 @@ import { axiosInstance } from "loony-query";
 import AddNode from "../form/addNode";
 import EditNode from "../form/editNode";
 import ConfirmAction from "../components/ConfirmAction";
+import PageLoadingContainer from "../components/PageLoadingContainer";
+import { getNodes } from "./utils";
 
 export default function Edit() {
   const { blogId } = useParams();
@@ -35,31 +37,21 @@ export default function Edit() {
     modal: "",
     childNodes: [],
   });
+  const [status, setStatus] = useState({
+    status: "INIT",
+    error: "",
+  });
 
   useEffect(() => {
     if (blog_id) {
-      axiosInstance
-        .get(`/blog/get/nodes?blog_id=${blog_id}`)
-        .then(({ data }) => {
-          const __rawNodes = data.data;
-          const __blogNodes = orderBlogNodes(data.data);
-          const __mainNode = __blogNodes && __blogNodes[0];
-          const __childNodes = __blogNodes.slice(1);
-
-          setState({
-            ...state,
-            mainNode: __mainNode,
-            childNodes: __childNodes,
-            blogNodes: __blogNodes,
-            rawNodes: __rawNodes,
-          });
-        });
+      getNodes(blog_id, setState, setStatus);
     }
   }, [blog_id]);
 
-  const { blogNodes, mainNode, childNodes } = state;
+  if (status.status === "INIT" || status.status === "FETCHING")
+    return <PageLoadingContainer />;
 
-  if (!blogNodes || !mainNode) return null;
+  const { blogNodes, childNodes, mainNode } = state;
   const image = extractImage(mainNode.images);
 
   return (
@@ -94,213 +86,211 @@ export default function Edit() {
             blogId={blogId}
           />
         ) : (
-          <div style={{ display: "flex", flexDirection: "row" }}>
-            <div
-              style={{
-                width: "60%",
-                paddingLeft: "5%",
-                paddingRight: "5%",
-                paddingBottom: "10vh",
-                background: "linear-gradient(to right, #ffffff, #F6F8FC)",
-                minHeight: "110vh",
-              }}
-            >
-              <div>
-                <div className="page-heading">{mainNode.title}</div>
-                {image && image.name ? (
-                  <div style={{ width: "100%", borderRadius: 5 }}>
-                    <img
-                      src={`${process.env.REACT_APP_BASE_API_URL}/api/blog/${blog_id}/720/${image.name}`}
-                      alt=""
-                      width="100%"
-                    />
-                  </div>
-                ) : null}
-                <MarkdownPreview
-                  source={mainNode.body}
-                  wrapperElement={{ "data-color-mode": "light" }}
-                />
-              </div>
-              {/* Main node settings */}
-              <div className="flex-row" style={{ marginTop: 24 }}>
-                <div
-                  className="button-none cursor"
-                  onClick={() => {
-                    setState({
-                      ...state,
-                      addNode: mainNode,
-                      modal: "add_node",
-                    });
-                  }}
-                  style={{ marginRight: 10 }}
-                >
-                  <div className="btn-action">
-                    <MdAdd size={16} color="#9c9c9c" />
-                  </div>
+          <div
+            style={{
+              width: "50%",
+              paddingLeft: "5%",
+              paddingRight: "5%",
+              paddingBottom: "10vh",
+              background: "linear-gradient(to right, #ffffff, #F6F8FC)",
+              minHeight: "110vh",
+            }}
+          >
+            <div>
+              <div className="page-heading">{mainNode.title}</div>
+              {image && image.name ? (
+                <div style={{ width: "100%", borderRadius: 5 }}>
+                  <img
+                    src={`${process.env.REACT_APP_BASE_API_URL}/api/blog/${blog_id}/720/${image.name}`}
+                    alt=""
+                    width="100%"
+                  />
                 </div>
-                <div
-                  className="button-none cursor"
-                  onClick={() => {
-                    setState({
-                      ...state,
-                      editNode: mainNode,
-                      pageId: mainNode.uid,
-                      modal: "edit_node",
-                    });
-                  }}
-                  style={{ marginRight: 16 }}
-                >
-                  <div className="btn-action">
-                    <MdOutlineEdit size={16} color="#9c9c9c" />
-                  </div>
-                </div>
-                <div
-                  className="button-none cursor"
-                  onClick={(e) => {
-                    navigator.clipboard.writeText(mainNode.body);
-                    e.stopPropagation();
-                  }}
-                  style={{ marginRight: 16 }}
-                >
-                  <div className="btn-action">
-                    <MdContentCopy size={16} color="#9c9c9c" />
-                  </div>
-                </div>
-              </div>
-              {/* End main node settings */}
-
+              ) : null}
+              <MarkdownPreview
+                source={mainNode.body}
+                wrapperElement={{ "data-color-mode": "light" }}
+              />
+            </div>
+            {/* Main node settings */}
+            <div className="flex-row" style={{ marginTop: 24 }}>
               <div
-                style={{
-                  marginTop: 16,
+                className="button-none cursor"
+                onClick={() => {
+                  setState({
+                    ...state,
+                    addNode: mainNode,
+                    modal: "add_node",
+                  });
                 }}
+                style={{ marginRight: 10 }}
               >
-                {mainNode.identity !== 101 &&
-                  childNodes.map((node, nodeIndex) => {
-                    const parseImage = JSON.parse(node.images);
-                    const nodeImage =
-                      parseImage.length > 0 ? parseImage[0].name : null;
-                    return (
-                      <div
-                        style={{ marginBottom: 50, marginTop: 50 }}
-                        key={node.uid}
-                      >
-                        <div className="section-title">{node.title}</div>
-                        {nodeImage ? (
-                          <div style={{ width: "100%", borderRadius: 5 }}>
-                            <img
-                              src={`${process.env.REACT_APP_BASE_API_URL}/api/blog/${blog_id}/720/${nodeImage}`}
-                              alt=""
-                              width="100%"
-                            />
-                          </div>
-                        ) : null}
-                        <MarkdownPreview
-                          source={node.body}
-                          wrapperElement={{ "data-color-mode": "light" }}
-                        />
-
-                        {/* Node settings */}
-                        <div className="flex-row" style={{ marginTop: 24 }}>
-                          <div
-                            className="button-none cursor"
-                            onClick={() => {
-                              setState({
-                                ...state,
-                                addNode: node,
-                                pageId: mainNode.uid,
-                                modal: "add_node",
-                              });
-                            }}
-                            style={{ marginRight: 16 }}
-                          >
-                            <div className="btn-action">
-                              <MdAdd size={16} color="#9c9c9c" />
-                            </div>
-                          </div>
-                          <div
-                            className="button-none cursor"
-                            onClick={() => {
-                              setState({
-                                ...state,
-                                editNode: node,
-                                pageId: node.uid,
-                                modal: "edit_node",
-                              });
-                            }}
-                            style={{ marginRight: 16 }}
-                          >
-                            <div className="btn-action">
-                              <MdOutlineEdit size={16} color="#9c9c9c" />
-                            </div>
-                          </div>
-                          <div
-                            className="delete-button-none cursor"
-                            onClick={() => {
-                              setState({
-                                ...state,
-                                activeNode: node,
-                                nodeIndex,
-                                modal: "delete_node",
-                              });
-                            }}
-                            style={{ marginRight: 16 }}
-                          >
-                            <div className="btn-action">
-                              <AiOutlineDelete size={16} color="#9c9c9c" />
-                            </div>
-                          </div>
-                          <div
-                            className="button-none cursor"
-                            onClick={(e) => {
-                              navigator.clipboard.writeText(node.body);
-                              e.stopPropagation();
-                            }}
-                            style={{ marginRight: 16 }}
-                          >
-                            <div className="btn-action">
-                              <MdContentCopy size={16} color="#9c9c9c" />
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Node settings end */}
-                      </div>
-                    );
-                  })}
+                <div className="btn-action">
+                  <MdAdd size={16} color="#9c9c9c" />
+                </div>
+              </div>
+              <div
+                className="button-none cursor"
+                onClick={() => {
+                  setState({
+                    ...state,
+                    editNode: mainNode,
+                    pageId: mainNode.uid,
+                    modal: "edit_node",
+                  });
+                }}
+                style={{ marginRight: 16 }}
+              >
+                <div className="btn-action">
+                  <MdOutlineEdit size={16} color="#9c9c9c" />
+                </div>
+              </div>
+              <div
+                className="button-none cursor"
+                onClick={(e) => {
+                  navigator.clipboard.writeText(mainNode.body);
+                  e.stopPropagation();
+                }}
+                style={{ marginRight: 16 }}
+              >
+                <div className="btn-action">
+                  <MdContentCopy size={16} color="#9c9c9c" />
+                </div>
               </div>
             </div>
-            <div style={{ width: "20%", paddingLeft: 15, paddingTop: 15 }}>
-              <ul
-                style={{ paddingLeft: 0, listStyle: "none" }}
-                className="list-item"
-              >
-                <li onClick={() => {}}>
-                  <RxReader size={16} color="#2d2d2d" />{" "}
-                  <Link
-                    to={`/view/blog/${blog_id}`}
-                    style={{ color: "rgb(15, 107, 228)", marginLeft: 5 }}
-                  >
-                    Read Blog
-                  </Link>
-                </li>
+            {/* End main node settings */}
 
-                <li
-                  onClick={() => {
-                    setState({
-                      ...state,
-                      modal: "delete_blog",
-                    });
-                  }}
-                >
-                  <AiOutlineDelete size={16} color="#2d2d2d" /> Delete Blog
-                </li>
-                <li>
-                  <LuFileWarning size={16} color="#2d2d2d" /> Report
-                </li>
-              </ul>
+            <div
+              style={{
+                marginTop: 16,
+              }}
+            >
+              {mainNode.identity !== 101 &&
+                childNodes.map((node, nodeIndex) => {
+                  const parseImage = JSON.parse(node.images);
+                  const nodeImage =
+                    parseImage.length > 0 ? parseImage[0].name : null;
+                  return (
+                    <div
+                      style={{ marginBottom: 50, marginTop: 50 }}
+                      key={node.uid}
+                    >
+                      <div className="section-title">{node.title}</div>
+                      {nodeImage ? (
+                        <div style={{ width: "100%", borderRadius: 5 }}>
+                          <img
+                            src={`${process.env.REACT_APP_BASE_API_URL}/api/blog/${blog_id}/720/${nodeImage}`}
+                            alt=""
+                            width="100%"
+                          />
+                        </div>
+                      ) : null}
+                      <MarkdownPreview
+                        source={node.body}
+                        wrapperElement={{ "data-color-mode": "light" }}
+                      />
+
+                      {/* Node settings */}
+                      <div className="flex-row" style={{ marginTop: 24 }}>
+                        <div
+                          className="button-none cursor"
+                          onClick={() => {
+                            setState({
+                              ...state,
+                              addNode: node,
+                              pageId: mainNode.uid,
+                              modal: "add_node",
+                            });
+                          }}
+                          style={{ marginRight: 16 }}
+                        >
+                          <div className="btn-action">
+                            <MdAdd size={16} color="#9c9c9c" />
+                          </div>
+                        </div>
+                        <div
+                          className="button-none cursor"
+                          onClick={() => {
+                            setState({
+                              ...state,
+                              editNode: node,
+                              pageId: node.uid,
+                              modal: "edit_node",
+                            });
+                          }}
+                          style={{ marginRight: 16 }}
+                        >
+                          <div className="btn-action">
+                            <MdOutlineEdit size={16} color="#9c9c9c" />
+                          </div>
+                        </div>
+                        <div
+                          className="delete-button-none cursor"
+                          onClick={() => {
+                            setState({
+                              ...state,
+                              activeNode: node,
+                              nodeIndex,
+                              modal: "delete_node",
+                            });
+                          }}
+                          style={{ marginRight: 16 }}
+                        >
+                          <div className="btn-action">
+                            <AiOutlineDelete size={16} color="#9c9c9c" />
+                          </div>
+                        </div>
+                        <div
+                          className="button-none cursor"
+                          onClick={(e) => {
+                            navigator.clipboard.writeText(node.body);
+                            e.stopPropagation();
+                          }}
+                          style={{ marginRight: 16 }}
+                        >
+                          <div className="btn-action">
+                            <MdContentCopy size={16} color="#9c9c9c" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Node settings end */}
+                    </div>
+                  );
+                })}
             </div>
           </div>
         )}
+        <div style={{ width: "20%", paddingLeft: 15, paddingTop: 15 }}>
+          <ul
+            style={{ paddingLeft: 0, listStyle: "none" }}
+            className="list-item"
+          >
+            <li onClick={() => {}}>
+              <RxReader size={16} color="#2d2d2d" />{" "}
+              <Link
+                to={`/view/blog/${blog_id}`}
+                style={{ color: "rgb(15, 107, 228)", marginLeft: 5 }}
+              >
+                Read Blog
+              </Link>
+            </li>
+
+            <li
+              onClick={() => {
+                setState({
+                  ...state,
+                  modal: "delete_blog",
+                });
+              }}
+            >
+              <AiOutlineDelete size={16} color="#2d2d2d" /> Delete Blog
+            </li>
+            <li>
+              <LuFileWarning size={16} color="#2d2d2d" /> Report
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
