@@ -3,24 +3,22 @@ import { axiosInstance } from "loony-query";
 import { useNavigate } from "react-router-dom";
 import CardLoader from "../components/CardLoader";
 
-const Home = () => {
+const Home = ({ isMobile }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="book-container flex-row">
-      <div style={{ width: "15%" }} />
-      <div style={{ width: "80%" }}>
-        <div className="app-body">
-          <Blogs navigate={navigate} />
-          <Books navigate={navigate} />
-        </div>
+    <div className="home-container flex-row">
+      {isMobile ? null : <div style={{ width: "15%" }} />}
+      <div style={{ width: isMobile ? "100%" : "80%" }}>
+        <Blogs navigate={navigate} isMobile={isMobile} />
+        <Books navigate={navigate} isMobile={isMobile} />
       </div>
       <div style={{ height: 50 }} />
     </div>
   );
 };
 
-const Blogs = ({ navigate }) => {
+const Blogs = ({ navigate, isMobile }) => {
   const [blogs, setBlogs] = useState(null);
 
   useEffect(() => {
@@ -46,6 +44,7 @@ const Blogs = ({ navigate }) => {
                 navigate={navigate}
                 nodeType="blog"
                 nodeIdType="blog_id"
+                isMobile={isMobile}
               />
             );
           })}
@@ -54,7 +53,7 @@ const Blogs = ({ navigate }) => {
   );
 };
 
-const Books = ({ navigate }) => {
+const Books = ({ navigate, isMobile }) => {
   const [books, setBooks] = useState(null);
   useEffect(() => {
     axiosInstance.get("/book/get/all").then(({ data }) => {
@@ -80,6 +79,7 @@ const Books = ({ navigate }) => {
                 navigate={navigate}
                 nodeType="book"
                 nodeIdType="book_id"
+                isMobile={isMobile}
               />
             );
           })}
@@ -88,11 +88,15 @@ const Books = ({ navigate }) => {
   );
 };
 
-const Card = ({ node, navigate, nodeType, nodeIdType }) => {
+const Card = ({ node, navigate, nodeType, nodeIdType, isMobile }) => {
   const image = JSON.parse(node.images)[0];
 
   return (
-    <div className="card" key={node[nodeIdType]}>
+    <div
+      className="card"
+      key={node[nodeIdType]}
+      style={{ marginRight: isMobile ? "" : 10 }}
+    >
       <div
         className="card-image"
         style={{

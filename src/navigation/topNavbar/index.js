@@ -7,49 +7,18 @@ import { AUTHORIZED, UNAUTHORIZED } from "loony-types";
 import { AuthContext } from "../../context/AuthContext";
 import { axiosInstance } from "loony-query";
 
-const Logo = ({ isMobile, setMobileNavOpen }) => {
+const Logo = () => {
   return (
-    <div style={{ flex: 2 }}>
-      <div
-        style={{
-          paddingLeft: 20,
-          height: 55,
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        {isMobile ? (
-          <LuMenu
-            color="white"
-            size={32}
-            style={{ paddingLeft: 10, paddingRight: 10 }}
-            onClick={() => {
-              setMobileNavOpen((prevState) => !prevState);
-            }}
-          />
-        ) : null}
-        <Link className="nav-item" to="/" style={{ color: "white" }}>
-          LOONY
-        </Link>
-      </div>
-    </div>
+    <Link className="nav-item" to="/" style={{ color: "white" }}>
+      LOONY
+    </Link>
   );
 };
 
 const CreateDocument = ({ auth }) => {
   if (auth.status === AUTHORIZED) {
     return (
-      <div
-        style={{
-          color: "white",
-          textDecoration: "none",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          width: 120,
-        }}
-        className="create-button"
-      >
+      <div className="create-button">
         <button style={{ fontWeight: "bold" }}>Create</button>
         <div className="dropdown-content">
           <div className="dropdown-content-items">
@@ -74,17 +43,7 @@ const CreateDocument = ({ auth }) => {
 const Profile = ({ auth, logoutUser, navigate }) => {
   if (auth.status === AUTHORIZED) {
     return (
-      <div
-        style={{
-          color: "white",
-          textDecoration: "none",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          marginRight: 20,
-        }}
-        className="profile-button"
-      >
+      <div className="profile-button">
         <LiaUserSolid size={32} />
         <div className="profile-content">
           <div className="profile-content-items">
@@ -107,14 +66,16 @@ const Profile = ({ auth, logoutUser, navigate }) => {
   }
 
   return (
-    <button
-      style={{ fontWeight: "bold" }}
-      onClick={() => {
-        navigate("/login", { replace: true });
-      }}
-    >
-      Login
-    </button>
+    <div>
+      <button
+        style={{ fontWeight: "bold" }}
+        onClick={() => {
+          navigate("/login", { replace: true });
+        }}
+      >
+        Login
+      </button>
+    </div>
   );
 };
 const Navigation = ({ auth, setMobileNavOpen, isMobile }) => {
@@ -131,21 +92,31 @@ const Navigation = ({ auth, setMobileNavOpen, isMobile }) => {
   }, []);
 
   return (
-    <div className="top-navbar" style={{ backgroundColor: "black" }}>
-      <div className="book-container cursor" style={{ height: 55 }}>
-        <div className="flex-row" style={{ height: 55 }}>
-          <Logo setMobileNavOpen={setMobileNavOpen} isMobile={isMobile} />
-          <div style={{ flex: 1, height: 55 }}>
-            <div
-              className="view-dropdown-menu"
-              style={{
-                height: 55,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-              }}
-            >
+    <div className="top-navbar">
+      <div className="top-navbar-container">
+        <div className="flex-row">
+          <div className="con-50 flex-center">
+            {isMobile ? (
+              <div className="nav-menu-btn">
+                <LuMenu
+                  color="white"
+                  size={32}
+                  onClick={() => {
+                    setMobileNavOpen((prevState) => !prevState);
+                  }}
+                  style={{ marginRight: 10 }}
+                />
+              </div>
+            ) : null}
+            <div className="logo">
+              <Logo setMobileNavOpen={setMobileNavOpen} isMobile={isMobile} />
+            </div>
+          </div>
+          <div className="con-50 flex-end">
+            <div className="app-menu">
               <CreateDocument auth={auth} />
+            </div>
+            <div className="app-menu">
               <Profile
                 auth={auth}
                 logoutUser={logoutUser}

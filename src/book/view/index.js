@@ -1,6 +1,5 @@
 import { useState, useEffect, Suspense, lazy } from "react";
-import { LuFileEdit } from "react-icons/lu";
-import { LuFileWarning } from "react-icons/lu";
+import { LuFileWarning, LuFileEdit } from "react-icons/lu";
 import { extractImage } from "loony-utils";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 
@@ -81,7 +80,8 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
             </div>
             <EditContainerMobile node={activeNode} book_id={book_id} />
           </div>
-        ) : (
+        ) : null}
+        {!isMobile ? (
           <div
             style={{
               width: "15%",
@@ -97,7 +97,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
               book_id={book_id}
             />
           </div>
-        )}
+        ) : null}
         {/*
          * @ Left Navigation End
          */}

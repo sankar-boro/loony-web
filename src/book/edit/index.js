@@ -4,8 +4,8 @@ import MarkdownPreview from "@uiw/react-markdown-preview";
 import { orderBookNodes, extractImage } from "loony-utils";
 import { RxReader } from "react-icons/rx";
 import { AiOutlineDelete } from "react-icons/ai";
-import { LuFileWarning } from "react-icons/lu";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { LuFileWarning, LuFileEdit } from "react-icons/lu";
 
 import { axiosInstance } from "loony-query";
 import { AuthContext } from "../../context/AuthContext";
@@ -15,7 +15,7 @@ import { PageNodeSettings } from "./pageNodeSettings";
 import PageLoadingContainer from "../../components/PageLoadingContainer";
 const MathsMarkdown = lazy(() => import("../../components/MathsMarkdown"));
 
-export default function Edit() {
+export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
   const { bookId } = useParams();
   const book_id = parseInt(bookId);
   const navigate = useNavigate();
@@ -78,13 +78,56 @@ export default function Edit() {
   return (
     <div className="book-container">
       <div style={{ display: "flex", flexDirection: "row" }}>
-        <PageNavigation
-          setState={setState}
-          setStatus={setStatus}
-          nodes101={nodes101}
-          state={state}
-          book_id={book_id}
-        />
+        {isMobile && mobileNavOpen ? (
+          <div
+            style={{
+              width: "100%",
+              backgroundColor: "rgb(0,0,0,0.5)",
+              zIndex: 10,
+              height: "105vh",
+            }}
+            onClick={() => {
+              setMobileNavOpen(false);
+            }}
+          >
+            <div
+              style={{
+                width: 320,
+                backgroundColor: "white",
+                maxWidth: "100%",
+                height: "100%",
+                position: "relative",
+                padding: 12,
+              }}
+            >
+              <PageNavigation
+                setState={setState}
+                setStatus={setStatus}
+                nodes101={nodes101}
+                state={state}
+                book_id={book_id}
+              />
+            </div>
+            <EditContainerMobile node={activeNode} book_id={book_id} />
+          </div>
+        ) : null}
+        {!isMobile ? (
+          <div
+            style={{
+              width: "15%",
+              paddingTop: 15,
+              borderRight: "1px solid #ebebeb",
+            }}
+          >
+            <PageNavigation
+              setState={setState}
+              setStatus={setStatus}
+              nodes101={nodes101}
+              state={state}
+              book_id={book_id}
+            />
+          </div>
+        ) : null}
 
         {/* Page */}
         {state.editNode || state.modal ? (
@@ -99,7 +142,7 @@ export default function Edit() {
           <>
             <div
               style={{
-                width: "50%",
+                width: isMobile ? "90%" : "50%",
                 paddingTop: 15,
                 paddingLeft: "5%",
                 paddingRight: "5%",
@@ -185,11 +228,13 @@ export default function Edit() {
               </div>
             </div>
 
-            <RightBookContainer
-              book_id={book_id}
-              setState={setState}
-              state={state}
-            />
+            {!isMobile ? (
+              <RightBookContainer
+                book_id={book_id}
+                setState={setState}
+                state={state}
+              />
+            ) : null}
           </>
         )}
       </div>
@@ -221,6 +266,32 @@ const RightBookContainer = ({ book_id, setState, state }) => {
         </li>
         <li style={{ display: "flex", alignItems: "center" }}>
           <LuFileWarning size={16} color="#2d2d2d" />
+          <span style={{ marginLeft: 5 }}>Report</span>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+const EditContainerMobile = ({ node, book_id }) => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        paddingLeft: 15,
+        paddingTop: 15,
+      }}
+    >
+      <ul className="list-item" style={{ paddingLeft: 0, listStyle: "none" }}>
+        <li style={{ display: "flex", alignItems: "center" }}>
+          <LuFileEdit color="#2d2d2d" size={16} />
+          <Link to={`/edit/book/${book_id}`} style={{ marginLeft: 5 }}>
+            Edit this page
+          </Link>
+        </li>
+        <li style={{ display: "flex", alignItems: "center" }}>
+          <LuFileWarning color="#2d2d2d" size={16} />
           <span style={{ marginLeft: 5 }}>Report</span>
         </li>
       </ul>

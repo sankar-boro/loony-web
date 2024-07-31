@@ -38,10 +38,20 @@ p {
 /* 
 * @Containers
 */
+.con-50 {
+  width: 50%;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+}
 .book-container {
   margin-left: auto;
   margin-right: auto;
   height: 100%;
+}
+.home-container {
+  width: 100%;
 }
 .form-container {
   margin-left: auto;
@@ -173,7 +183,6 @@ button:hover {
   margin-bottom: 10px;
   border-radius: 8px;
   background-color: white;
-  margin-right: 10px;
   height: 280px;
 }
 .page-loader {
@@ -225,6 +234,13 @@ button:hover {
   align-items: center;
   min-height: 55px;
   border-bottom: 1px solid #ccc;
+  background-color: black;
+}
+.top-navbar-container {
+  width: calc(100% - 30px);
+  padding-left: 15px;
+  padding-right: 15px;
+  height: 55px;
 }
 .nav-item {
   text-decoration: none;
@@ -232,8 +248,18 @@ button:hover {
   font-weight: bold;
   color: #2d2d2d;
 }
-.view-dropdown-menu {
-  display: block;
+.logo,
+.nav-menu-btn {
+  display: flex;
+  align-items: center;
+  height: 55px;
+}
+.app-menu {
+  height: 55px;
+}
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
 }
 .dropdown-content,
 .profile-content {
@@ -265,6 +291,19 @@ button:hover {
   text-decoration: none;
   color: black;
   display: block;
+}
+.create-button,
+.profile-button {
+  color: white;
+  text-decoration: none;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+}
+.profile-button {
+  width: 80px;
 }
 .create-button:hover .dropdown-content {
   display: block;
@@ -327,8 +366,8 @@ button:hover {
   color: #6f6f6f;
   font-size: 14px;
   width: 90%;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 .chapter-nav:hover,
 .section-nav:hover {
@@ -357,7 +396,7 @@ button:hover {
   background-color: var(--hover-dark);
 }
 .page-nav-title {
-  width: 90%;
+  width: 95%;
 }
 .page-nav-icon {
   position: relative;
@@ -524,14 +563,14 @@ button:hover {
 
 @media (max-width: 480px) {
   .card {
-    width: calc(100% - 10px);
+    width: calc(100% - 50px);
+    margin-left: auto;
+    margin-right: auto;
     flex-wrap: wrap;
   }
   .book-container,
   .form-container {
-    width: calc(100% - 20px);
-    padding-left: 10px;
-    padding-right: 10px;
+    width: 100%;
   }
 }
 
