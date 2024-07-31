@@ -5,13 +5,14 @@ import EditDocument from "../../form/editNode";
 import ConfirmAction from "../../components/ConfirmAction";
 import { appendChapters, appendSections, appendSubSections } from "loony-utils";
 
-export const ModalComponent = ({
+export default function EditComponent({
   state,
   setState,
   setContext,
   book_id,
   navigate,
-}) => {
+  isMobile,
+}) {
   const {
     deleteNode,
     editNode,
@@ -254,6 +255,8 @@ export const ModalComponent = ({
     setState({
       ...state,
       modal: "",
+      editNode: null,
+      addNode: null,
     });
   };
   return (
@@ -264,7 +267,7 @@ export const ModalComponent = ({
           setState={setState}
           FnCallback={addChapterFnCb}
           url="/book/append/node"
-          isMobile={false}
+          isMobile={isMobile}
           docIdName="book_id"
           docId={book_id}
           parent_id={topNode.uid}
@@ -282,7 +285,7 @@ export const ModalComponent = ({
           setState={setState}
           FnCallback={addSectionFnCb}
           url="/book/append/node"
-          isMobile={false}
+          isMobile={isMobile}
           docIdName="book_id"
           docId={book_id}
           parent_id={topNode.uid}
@@ -300,7 +303,7 @@ export const ModalComponent = ({
           setState={setState}
           FnCallback={addSubSectionFnCb}
           url="/book/append/node"
-          isMobile={false}
+          isMobile={isMobile}
           docIdName="book_id"
           docId={book_id}
           parent_id={topNode.uid}
@@ -322,6 +325,7 @@ export const ModalComponent = ({
           onCancel={onCancel}
           heading="Edit Node"
           url="/book/edit/node"
+          isMobile={isMobile}
         />
       ) : null}
 
@@ -353,4 +357,4 @@ export const ModalComponent = ({
       ) : null}
     </>
   );
-};
+}

@@ -11,7 +11,7 @@ import { PiBookLight, PiNoteThin } from "react-icons/pi";
 import { PiNotePencilThin } from "react-icons/pi";
 import "react-easy-crop/react-easy-crop.css";
 
-export default function CreateNewDocument({ editNode, url, title }) {
+export default function CreateNewDocument({ url, title, isMobile }) {
   const navigate = useNavigate();
   const { setContext, auth } = useContext(AuthContext);
   const { user_id } = auth.user;
@@ -36,15 +36,6 @@ export default function CreateNewDocument({ editNode, url, title }) {
     x: null,
     y: null,
   });
-
-  useEffect(() => {
-    if (editNode) {
-      setFormTitle(editNode.title);
-      setFormBody(editNode.title);
-      const images = editNode.images ? JSON.parse(editNode.images) : [];
-      setAfterTmpImageUpload(images);
-    }
-  }, []);
 
   const createDoc = useCallback(async () => {
     let imageData = null;
@@ -139,45 +130,47 @@ export default function CreateNewDocument({ editNode, url, title }) {
 
   return (
     <div className="form-container flex-row">
-      <div
-        style={{
-          width: "20%",
-          borderRight: "1px solid #ccc",
-          paddingBottom: 100,
-        }}
-      >
-        <MenuNavContainer
-          activeMenu={"active-menu"}
-          onClick={routeTo}
-          route="/create/book"
+      {isMobile ? null : (
+        <div
+          style={{
+            width: "20%",
+            borderRight: "1px solid #ccc",
+            paddingBottom: 100,
+          }}
         >
-          <span style={{ position: "relative", top: 3 }}>
-            <PiNotePencilThin />
-          </span>{" "}
-          <span style={{ marginLeft: 10 }}>Create</span>
-        </MenuNavContainer>
-        <MenuNavContainer onClick={routeTo} route="/">
-          <span style={{ position: "relative", top: 3 }}>
-            <GoHome />
-          </span>
-          <span style={{ marginLeft: 10 }}>Home</span>
-        </MenuNavContainer>
-        <MenuNavContainer onClick={routeTo} route="/books">
-          <span style={{ position: "relative", top: 2 }}>
-            <PiBookLight />
-          </span>{" "}
-          <span style={{ marginLeft: 10 }}>Books</span>
-        </MenuNavContainer>
-        <MenuNavContainer onClick={routeTo} route="/blogs">
-          <span style={{ position: "relative", top: 2 }}>
-            <PiNoteThin />
-          </span>{" "}
-          <span style={{ marginLeft: 10 }}>Blogs</span>
-        </MenuNavContainer>
-      </div>
+          <MenuNavContainer
+            activeMenu={"active-menu"}
+            onClick={routeTo}
+            route="/create/book"
+          >
+            <span style={{ position: "relative", top: 3 }}>
+              <PiNotePencilThin />
+            </span>{" "}
+            <span style={{ marginLeft: 10 }}>Create</span>
+          </MenuNavContainer>
+          <MenuNavContainer onClick={routeTo} route="/">
+            <span style={{ position: "relative", top: 3 }}>
+              <GoHome />
+            </span>
+            <span style={{ marginLeft: 10 }}>Home</span>
+          </MenuNavContainer>
+          <MenuNavContainer onClick={routeTo} route="/books">
+            <span style={{ position: "relative", top: 2 }}>
+              <PiBookLight />
+            </span>{" "}
+            <span style={{ marginLeft: 10 }}>Books</span>
+          </MenuNavContainer>
+          <MenuNavContainer onClick={routeTo} route="/blogs">
+            <span style={{ position: "relative", top: 2 }}>
+              <PiNoteThin />
+            </span>{" "}
+            <span style={{ marginLeft: 10 }}>Blogs</span>
+          </MenuNavContainer>
+        </div>
+      )}
       <div
         style={{
-          width: "65%",
+          width: isMobile ? "100%" : "65%",
           paddingBottom: 100,
           background: "linear-gradient(to right, #ffffff, #F6F8FC)",
         }}
@@ -197,7 +190,7 @@ export default function CreateNewDocument({ editNode, url, title }) {
             {error}
           </div>
         ) : null}
-        <div style={{ padding: "0px 45px 15px 45px" }}>
+        <div style={{ padding: isMobile ? 0 : "0px 45px 15px 45px" }}>
           <div style={{ padding: "0px 10px" }}>
             <div className="form-section">
               <input

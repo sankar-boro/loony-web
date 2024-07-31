@@ -1,19 +1,21 @@
 import PageLoader from "./PageLoader";
 
-const PageLoadingContainer = () => {
+const PageLoadingContainer = ({ isMobile }) => {
   return (
     <div className="book-container">
       <div style={{ display: "flex", flexDirection: "row" }}>
+        {isMobile ? null : (
+          <div
+            style={{
+              width: "15%",
+              paddingTop: 15,
+              borderRight: "1px solid #ebebeb",
+            }}
+          />
+        )}
         <div
           style={{
-            width: "15%",
-            paddingTop: 15,
-            borderRight: "1px solid #ebebeb",
-          }}
-        />
-        <div
-          style={{
-            width: "50%",
+            width: isMobile ? "100%" : "50%",
             paddingTop: 15,
             paddingLeft: "5%",
             paddingRight: "5%",

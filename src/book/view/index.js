@@ -38,7 +38,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   }, [book_id]);
 
   if (status.status === "INIT" || status.status === "FETCHING")
-    return <PageLoadingContainer />;
+    return <PageLoadingContainer isMobile={isMobile} />;
 
   const image = extractImage(activeNode.images);
 

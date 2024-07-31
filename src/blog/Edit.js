@@ -20,8 +20,9 @@ import EditNode from "../form/editNode";
 import ConfirmAction from "../components/ConfirmAction";
 import PageLoadingContainer from "../components/PageLoadingContainer";
 import { getNodes } from "./utils";
+import { PageNavigation } from "./pageNavigation";
 
-export default function Edit() {
+export default function Edit({ isMobile, mobileNavOpen, setMobileNavOpen }) {
   const { blogId } = useParams();
   const blog_id = parseInt(blogId);
 
@@ -49,46 +50,62 @@ export default function Edit() {
   }, [blog_id]);
 
   if (status.status === "INIT" || status.status === "FETCHING")
-    return <PageLoadingContainer />;
+    return <PageLoadingContainer isMobile={isMobile} />;
 
-  const { blogNodes, childNodes, mainNode } = state;
+  const { childNodes, mainNode } = state;
   const image = extractImage(mainNode.images);
 
   return (
     <div className="book-container">
       <div className="flex-row">
-        <div
-          style={{
-            width: "15%",
-            paddingTop: 15,
-            borderRight: "1px solid #ebebeb",
-          }}
-        >
-          {blogNodes.map((chapter) => {
-            return (
-              <div className="chapter-nav-con cursor" key={chapter.uid}>
-                <div
-                  className="chapter-nav"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  {chapter.title}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        {isMobile && mobileNavOpen ? (
+          <div
+            style={{
+              width: "100%",
+              backgroundColor: "rgb(0,0,0,0.5)",
+              zIndex: 10,
+              height: "105vh",
+            }}
+            onClick={() => {
+              setMobileNavOpen(false);
+            }}
+          >
+            <div
+              style={{
+                width: 320,
+                backgroundColor: "white",
+                maxWidth: "100%",
+                height: "100%",
+                position: "relative",
+                padding: 12,
+              }}
+            >
+              <PageNavigation state={state} />
+            </div>
+          </div>
+        ) : null}
+        {!isMobile ? (
+          <div
+            style={{
+              width: "15%",
+              paddingTop: 15,
+              borderRight: "1px solid #ebebeb",
+            }}
+          >
+            <PageNavigation state={state} />
+          </div>
+        ) : null}
         {state.editNode || state.addNode ? (
           <ActivityComponent
             state={state}
             setState={setState}
             blogId={blogId}
+            isMobile={isMobile}
           />
         ) : (
           <div
             style={{
-              width: "50%",
+              width: isMobile ? "90%" : "50%",
               paddingLeft: "5%",
               paddingRight: "5%",
               paddingBottom: "10vh",
@@ -261,42 +278,19 @@ export default function Edit() {
             </div>
           </div>
         )}
-        <div style={{ width: "20%", paddingLeft: 15, paddingTop: 15 }}>
-          <ul
-            style={{ paddingLeft: 0, listStyle: "none" }}
-            className="list-item"
-          >
-            <li onClick={() => {}}>
-              <RxReader size={16} color="#2d2d2d" />{" "}
-              <Link
-                to={`/view/blog/${blog_id}`}
-                style={{ color: "rgb(15, 107, 228)", marginLeft: 5 }}
-              >
-                Read Blog
-              </Link>
-            </li>
-
-            <li
-              onClick={() => {
-                setState({
-                  ...state,
-                  modal: "delete_blog",
-                });
-              }}
-            >
-              <AiOutlineDelete size={16} color="#2d2d2d" /> Delete Blog
-            </li>
-            <li>
-              <LuFileWarning size={16} color="#2d2d2d" /> Report
-            </li>
-          </ul>
-        </div>
+        {!isMobile ? (
+          <RightBlogContainer
+            blog_id={blog_id}
+            setState={setState}
+            state={state}
+          />
+        ) : null}
       </div>
     </div>
   );
 }
 
-const ActivityComponent = ({ state, setState, blogId }) => {
+const ActivityComponent = ({ state, setState, blogId, isMobile }) => {
   const navigate = useNavigate();
   const { activeNode, childNodes, rawNodes, modal, pageId, nodeIndex } = state;
   const deleteNode = () => {
@@ -383,6 +377,8 @@ const ActivityComponent = ({ state, setState, blogId }) => {
     setState({
       ...state,
       modal: "",
+      editNode: null,
+      addNode: null,
     });
   };
 
@@ -394,7 +390,7 @@ const ActivityComponent = ({ state, setState, blogId }) => {
           setState={setState}
           FnCallback={addNodeCbFn}
           url="/blog/append/node"
-          isMobile={false}
+          isMobile={isMobile}
           docIdName="blog_id"
           docId={blogId}
           parent_id={activeNode.uid}
@@ -420,6 +416,7 @@ const ActivityComponent = ({ state, setState, blogId }) => {
           FnCallback={editFnCallback}
           onCancel={onCancel}
           url="/blog/edit/node"
+          isMobile={isMobile}
         />
       ) : null}
 
@@ -432,5 +429,37 @@ const ActivityComponent = ({ state, setState, blogId }) => {
         />
       ) : null}
     </>
+  );
+};
+
+const RightBlogContainer = ({ blog_id, setState, state }) => {
+  return (
+    <div style={{ width: "20%", paddingLeft: 15, paddingTop: 15 }}>
+      <ul style={{ paddingLeft: 0, listStyle: "none" }} className="list-item">
+        <li onClick={() => {}}>
+          <RxReader size={16} color="#2d2d2d" />{" "}
+          <Link
+            to={`/view/blog/${blog_id}`}
+            style={{ color: "rgb(15, 107, 228)", marginLeft: 5 }}
+          >
+            Read Blog
+          </Link>
+        </li>
+
+        <li
+          onClick={() => {
+            setState({
+              ...state,
+              modal: "delete_blog",
+            });
+          }}
+        >
+          <AiOutlineDelete size={16} color="#2d2d2d" /> Delete Blog
+        </li>
+        <li>
+          <LuFileWarning size={16} color="#2d2d2d" /> Report
+        </li>
+      </ul>
+    </div>
   );
 };

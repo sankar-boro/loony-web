@@ -18,6 +18,7 @@ export default function AddNodeComponent({
   page_id,
   onCancel,
   parent_identity,
+  isMobile,
 }) {
   const { auth } = useContext(AuthContext);
   const { user_id } = auth.user;
@@ -133,7 +134,7 @@ export default function AddNodeComponent({
   return (
     <div
       style={{
-        width: "60%",
+        width: isMobile ? "100%" : "60%",
         paddingLeft: "5%",
         background: "linear-gradient(to right, #ffffff, #F6F8FC)",
         minHeight: "100vh",

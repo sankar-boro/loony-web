@@ -35,7 +35,7 @@ const View = ({ isMobile }) => {
   }, [blog_id]);
 
   if (status.status === "INIT" || status.status === "FETCHING")
-    return <PageLoadingContainer />;
+    return <PageLoadingContainer isMobile={isMobile} />;
 
   const { blogNodes, childNodes, mainNode } = state;
   const image = extractImage(mainNode.images);

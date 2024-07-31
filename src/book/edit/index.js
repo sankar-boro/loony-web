@@ -9,7 +9,7 @@ import { LuFileWarning, LuFileEdit } from "react-icons/lu";
 
 import { axiosInstance } from "loony-query";
 import { AuthContext } from "../../context/AuthContext";
-import { ModalComponent } from "./modal";
+import EditComponent from "./edit";
 import { PageNavigation } from "./pageNavigation";
 import { PageNodeSettings } from "./pageNodeSettings";
 import PageLoadingContainer from "../../components/PageLoadingContainer";
@@ -71,7 +71,7 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
   }, [book_id]);
 
   if (status.status === "INIT" || status.status === "FETCHING")
-    return <PageLoadingContainer />;
+    return <PageLoadingContainer isMobile={isMobile} />;
 
   const image = extractImage(activeNode.images);
 
@@ -131,12 +131,13 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
 
         {/* Page */}
         {state.editNode || state.modal ? (
-          <ModalComponent
+          <EditComponent
             state={state}
             setState={setState}
             setContext={setContext}
             book_id={book_id}
             navigate={navigate}
+            isMobile={isMobile}
           />
         ) : (
           <>
