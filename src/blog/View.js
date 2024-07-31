@@ -149,13 +149,11 @@ const View = ({ isMobile, setMobileNavOpen, mobileNavOpen }) => {
             >
               <li>
                 <LuFileEdit color="#2d2d2d" size={16} />
-
-                <Link to={`/edit/blog/${blog_id}`} style={{ marginLeft: 5 }}>
-                  Edit this page
-                </Link>
+                <Link to={`/edit/blog/${blog_id}`}>Edit this page</Link>
               </li>
               <li>
-                <LuFileWarning color="#2d2d2d" size={16} /> Report
+                <LuFileWarning color="#2d2d2d" size={16} />
+                <Link to="">Report</Link>
               </li>
             </ul>
           </div>

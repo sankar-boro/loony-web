@@ -170,13 +170,11 @@ export const PageNavigation = ({
           >
             <li style={{ display: "flex", alignItems: "center" }}>
               <LuFileEdit color="#2d2d2d" size={16} />
-              <Link to={`/view/book/${book_id}`} style={{ marginLeft: 5 }}>
-                Read Book
-              </Link>
+              <Link to={`/view/book/${book_id}`}>Read Book</Link>
             </li>
             <li style={{ display: "flex", alignItems: "center" }}>
               <LuFileWarning color="#2d2d2d" size={16} />
-              <span style={{ marginLeft: 5 }}>Report</span>
+              <Link to="#">Report</Link>
             </li>
           </ul>
         </div>

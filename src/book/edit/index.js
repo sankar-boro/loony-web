@@ -131,7 +131,7 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
         ) : null}
 
         {/* Page */}
-        {state.editNode || state.modal ? (
+        {state.modal ? (
           <EditComponent
             state={state}
             setState={setState}
@@ -248,11 +248,9 @@ const RightBookContainer = ({ book_id, setState, state }) => {
   return (
     <div style={{ width: "18%", paddingLeft: 15, paddingTop: 15 }}>
       <ul style={{ paddingLeft: 0, listStyle: "none" }} className="list-item">
-        <li style={{ display: "flex", alignItems: "center" }}>
+        <li>
           <RxReader size={16} color="#2d2d2d" />
-          <Link to={`/view/book/${book_id}`} style={{ marginLeft: 5 }}>
-            Read Book
-          </Link>
+          <Link to={`/view/book/${book_id}`}>Read Book</Link>
         </li>
         <li
           onClick={() => {
@@ -261,14 +259,13 @@ const RightBookContainer = ({ book_id, setState, state }) => {
               modal: "delete_book",
             });
           }}
-          style={{ display: "flex", alignItems: "center" }}
         >
           <AiOutlineDelete size={16} color="#2d2d2d" />
-          <span style={{ marginLeft: 5 }}>Delete Book</span>
+          <Link to="#">Delete Book</Link>
         </li>
-        <li style={{ display: "flex", alignItems: "center" }}>
+        <li>
           <LuFileWarning size={16} color="#2d2d2d" />
-          <span style={{ marginLeft: 5 }}>Report</span>
+          <Link to="#">Report</Link>
         </li>
       </ul>
     </div>

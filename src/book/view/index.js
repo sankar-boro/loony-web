@@ -189,22 +189,15 @@ const RightBookContainer = ({ node, book_id }) => {
   return (
     <div style={{ width: "20%", paddingLeft: 15, paddingTop: 15 }}>
       <ul className="list-item" style={{ paddingLeft: 0, listStyle: "none" }}>
-        <li style={{ display: "flex", alignItems: "center" }}>
+        <li>
           <LuFileEdit color="#2d2d2d" size={16} />
-          <Link to={`/edit/book/${book_id}`} style={{ marginLeft: 5 }}>
-            Edit this page
-          </Link>
+          <Link to={`/edit/book/${book_id}`}>Edit this page</Link>
         </li>
-        <li style={{ display: "flex", alignItems: "center" }}>
+        <li>
           <LuFileWarning color="#2d2d2d" size={16} />
-          <span style={{ marginLeft: 5 }}>Report</span>
+          <Link to="#">Report</Link>
         </li>
       </ul>
-      <div style={{ borderTop: "1px solid #ccc", marginTop: 5, paddingTop: 5 }}>
-        <ul style={{ paddingLeft: 0, listStyle: "none" }}>
-          <li>{node.title}</li>
-        </ul>
-      </div>
     </div>
   );
 };

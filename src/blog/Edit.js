@@ -103,7 +103,7 @@ export default function Edit({ isMobile, mobileNavOpen, setMobileNavOpen }) {
             />
           </div>
         ) : null}
-        {state.editNode || state.addNode ? (
+        {state.modal ? (
           <ActivityComponent
             state={state}
             setState={setState}
@@ -444,16 +444,10 @@ const RightBlogContainer = ({ blog_id, setState, state }) => {
   return (
     <div style={{ width: "20%", paddingLeft: 15, paddingTop: 15 }}>
       <ul style={{ paddingLeft: 0, listStyle: "none" }} className="list-item">
-        <li onClick={() => {}}>
-          <RxReader size={16} color="#2d2d2d" />{" "}
-          <Link
-            to={`/view/blog/${blog_id}`}
-            style={{ color: "rgb(15, 107, 228)", marginLeft: 5 }}
-          >
-            Read Blog
-          </Link>
+        <li>
+          <RxReader size={16} color="#2d2d2d" />
+          <Link to={`/view/blog/${blog_id}`}>Read Blog</Link>
         </li>
-
         <li
           onClick={() => {
             setState({
@@ -462,10 +456,12 @@ const RightBlogContainer = ({ blog_id, setState, state }) => {
             });
           }}
         >
-          <AiOutlineDelete size={16} color="#2d2d2d" /> Delete Blog
+          <AiOutlineDelete size={16} color="#2d2d2d" />
+          <Link to="#">Delete Blog</Link>
         </li>
         <li>
-          <LuFileWarning size={16} color="#2d2d2d" /> Report
+          <LuFileWarning size={16} color="#2d2d2d" />
+          <Link to="#">Report</Link>
         </li>
       </ul>
     </div>

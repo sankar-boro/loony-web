@@ -24,15 +24,13 @@ export const PageNavigationEdit = ({ state, isMobile, blog_id }) => {
             className="list-item"
             style={{ paddingLeft: 0, listStyle: "none" }}
           >
-            <li style={{ display: "flex", alignItems: "center" }}>
+            <li>
               <LuFileEdit color="#2d2d2d" size={16} />
-              <Link to={`/edit/blog/${blog_id}`} style={{ marginLeft: 5 }}>
-                Edit this page
-              </Link>
+              <Link to={`/edit/blog/${blog_id}`}>Edit this page</Link>
             </li>
-            <li style={{ display: "flex", alignItems: "center" }}>
+            <li>
               <LuFileWarning color="#2d2d2d" size={16} />
-              <span style={{ marginLeft: 5 }}>Report</span>
+              <Link to="#">Report</Link>
             </li>
           </ul>
         </div>
@@ -63,15 +61,13 @@ export const PageNavigationView = ({ state, isMobile, blog_id }) => {
             className="list-item"
             style={{ paddingLeft: 0, listStyle: "none" }}
           >
-            <li style={{ display: "flex", alignItems: "center" }}>
+            <li>
               <LuFileEdit color="#2d2d2d" size={16} />
-              <Link to={`/view/blog/${blog_id}`} style={{ marginLeft: 5 }}>
-                Read Blog
-              </Link>
+              <Link to={`/view/blog/${blog_id}`}>Read Blog</Link>
             </li>
-            <li style={{ display: "flex", alignItems: "center" }}>
+            <li>
               <LuFileWarning color="#2d2d2d" size={16} />
-              <span style={{ marginLeft: 5 }}>Report</span>
+              <Link to="">Report</Link>
             </li>
           </ul>
         </div>

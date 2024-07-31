@@ -6,6 +6,7 @@
   --hover-dark: #eeeeee;
   --red: #ff4949;
   --LG-to-right: linear-gradient(to right, #ffffff, #f6f8fc);
+  --nav-text: #6f6f6f;
 }
 
 html,
@@ -324,16 +325,19 @@ button:hover {
 .list-item li {
   padding-top: 2px;
   padding-bottom: 2px;
+  display: flex;
+  align-items: center;
 }
 .list-item li a {
-  color: black;
+  color: var(--nav-text);
   text-decoration: none;
+  margin-left: 5px;
 }
 .list-item li a:hover,
 .list-item li:hover,
 .list-item li a:hover,
 .list-item svg:hover {
-  color: var(--blue);
+  color: black;
   cursor: pointer;
 }
 
