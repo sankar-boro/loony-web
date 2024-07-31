@@ -6,8 +6,9 @@ import { LuFileWarning } from "react-icons/lu";
 import { LuFileEdit } from "react-icons/lu";
 import PageLoadingContainer from "../components/PageLoadingContainer";
 import { getNodes } from "./utils";
+import { PageNavigationEdit } from "./pageNavigation";
 
-const View = ({ isMobile }) => {
+const View = ({ isMobile, setMobileNavOpen, mobileNavOpen }) => {
   const { blogId } = useParams();
   const blog_id = parseInt(blogId);
 
@@ -37,12 +38,42 @@ const View = ({ isMobile }) => {
   if (status.status === "INIT" || status.status === "FETCHING")
     return <PageLoadingContainer isMobile={isMobile} />;
 
-  const { blogNodes, childNodes, mainNode } = state;
+  const { childNodes, mainNode } = state;
   const image = extractImage(mainNode.images);
 
   return (
     <div className="book-container">
       <div style={{ display: "flex", flexDirection: "row" }}>
+        {isMobile && mobileNavOpen ? (
+          <div
+            style={{
+              width: "100%",
+              backgroundColor: "rgb(0,0,0,0.5)",
+              zIndex: 10,
+              height: "105vh",
+            }}
+            onClick={() => {
+              setMobileNavOpen(false);
+            }}
+          >
+            <div
+              style={{
+                width: 320,
+                backgroundColor: "white",
+                maxWidth: "100%",
+                height: "100%",
+                position: "relative",
+                padding: 12,
+              }}
+            >
+              <PageNavigationEdit
+                blog_id={blog_id}
+                state={state}
+                isMobile={isMobile}
+              />
+            </div>
+          </div>
+        ) : null}
         {!isMobile ? (
           <div
             style={{
@@ -51,13 +82,11 @@ const View = ({ isMobile }) => {
               borderRight: "1px solid #ebebeb",
             }}
           >
-            {(blogNodes && blogNodes).map((blog_node) => {
-              return (
-                <div className="chapter-nav-con" key={blog_node.uid}>
-                  <div className="chapter-nav">{blog_node.title}</div>
-                </div>
-              );
-            })}
+            <PageNavigationEdit
+              blog_id={blog_id}
+              state={state}
+              isMobile={isMobile}
+            />
           </div>
         ) : null}
 

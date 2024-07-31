@@ -66,7 +66,7 @@ const Profile = ({ auth, logoutUser, navigate }) => {
   }
 
   return (
-    <div>
+    <div className="login-button">
       <button
         style={{ fontWeight: "bold" }}
         onClick={() => {

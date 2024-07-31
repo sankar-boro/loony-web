@@ -28,8 +28,7 @@ const Blogs = ({ navigate, isMobile }) => {
   }, []);
   return (
     <>
-      <h3>Blogs</h3>
-      <div className="flex-row" style={{ flexWrap: "wrap" }}>
+      <div className="flex-row" style={{ flexWrap: "wrap", marginTop: 20 }}>
         {!blogs
           ? [1, 2, 3, 4].map((key) => {
               return <CardLoader key={key} />;
@@ -63,8 +62,7 @@ const Books = ({ navigate, isMobile }) => {
 
   return (
     <>
-      <h3>Books</h3>
-      <div className="flex-row" style={{ flexWrap: "wrap" }}>
+      <div className="flex-row" style={{ flexWrap: "wrap", marginTop: 20 }}>
         {!books
           ? [5, 6, 7, 8].map((key) => {
               return <CardLoader key={key} />;

@@ -106,9 +106,9 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
                 nodes101={nodes101}
                 state={state}
                 book_id={book_id}
+                isMobile={isMobile}
               />
             </div>
-            <EditContainerMobile node={activeNode} book_id={book_id} />
           </div>
         ) : null}
         {!isMobile ? (
@@ -125,6 +125,7 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
               nodes101={nodes101}
               state={state}
               book_id={book_id}
+              isMobile={isMobile}
             />
           </div>
         ) : null}
@@ -267,32 +268,6 @@ const RightBookContainer = ({ book_id, setState, state }) => {
         </li>
         <li style={{ display: "flex", alignItems: "center" }}>
           <LuFileWarning size={16} color="#2d2d2d" />
-          <span style={{ marginLeft: 5 }}>Report</span>
-        </li>
-      </ul>
-    </div>
-  );
-};
-
-const EditContainerMobile = ({ node, book_id }) => {
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        paddingLeft: 15,
-        paddingTop: 15,
-      }}
-    >
-      <ul className="list-item" style={{ paddingLeft: 0, listStyle: "none" }}>
-        <li style={{ display: "flex", alignItems: "center" }}>
-          <LuFileEdit color="#2d2d2d" size={16} />
-          <Link to={`/edit/book/${book_id}`} style={{ marginLeft: 5 }}>
-            Edit this page
-          </Link>
-        </li>
-        <li style={{ display: "flex", alignItems: "center" }}>
-          <LuFileWarning color="#2d2d2d" size={16} />
           <span style={{ marginLeft: 5 }}>Report</span>
         </li>
       </ul>

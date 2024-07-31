@@ -20,7 +20,7 @@ import EditNode from "../form/editNode";
 import ConfirmAction from "../components/ConfirmAction";
 import PageLoadingContainer from "../components/PageLoadingContainer";
 import { getNodes } from "./utils";
-import { PageNavigation } from "./pageNavigation";
+import { PageNavigationEdit, PageNavigationView } from "./pageNavigation";
 
 export default function Edit({ isMobile, mobileNavOpen, setMobileNavOpen }) {
   const { blogId } = useParams();
@@ -80,7 +80,11 @@ export default function Edit({ isMobile, mobileNavOpen, setMobileNavOpen }) {
                 padding: 12,
               }}
             >
-              <PageNavigation state={state} />
+              <PageNavigationView
+                blog_id={blog_id}
+                state={state}
+                isMobile={isMobile}
+              />
             </div>
           </div>
         ) : null}
@@ -92,7 +96,11 @@ export default function Edit({ isMobile, mobileNavOpen, setMobileNavOpen }) {
               borderRight: "1px solid #ebebeb",
             }}
           >
-            <PageNavigation state={state} />
+            <PageNavigationView
+              blog_id={blog_id}
+              state={state}
+              isMobile={isMobile}
+            />
           </div>
         ) : null}
         {state.editNode || state.addNode ? (

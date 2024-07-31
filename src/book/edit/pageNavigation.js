@@ -10,6 +10,8 @@ import {
   SectionsNavContainer,
 } from "../../components/Containers";
 import { getSections, getSubSections } from "./utils";
+import { LuFileWarning, LuFileEdit } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
 const Button = ({ onClick, title }) => {
   return (
@@ -29,6 +31,7 @@ export const PageNavigation = ({
   nodes101,
   state,
   book_id,
+  isMobile,
 }) => {
   const {
     page_id,
@@ -156,6 +159,28 @@ export const PageNavigation = ({
           </div>
         );
       })}
+
+      {isMobile ? (
+        <div
+          style={{ marginTop: 20, borderTop: "1px solid #ccc", paddingTop: 12 }}
+        >
+          <ul
+            className="list-item"
+            style={{ paddingLeft: 0, listStyle: "none" }}
+          >
+            <li style={{ display: "flex", alignItems: "center" }}>
+              <LuFileEdit color="#2d2d2d" size={16} />
+              <Link to={`/view/book/${book_id}`} style={{ marginLeft: 5 }}>
+                Read Book
+              </Link>
+            </li>
+            <li style={{ display: "flex", alignItems: "center" }}>
+              <LuFileWarning color="#2d2d2d" size={16} />
+              <span style={{ marginLeft: 5 }}>Report</span>
+            </li>
+          </ul>
+        </div>
+      ) : null}
     </>
   );
 };

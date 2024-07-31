@@ -25,13 +25,15 @@ const PageLoadingContainer = ({ isMobile }) => {
         >
           <PageLoader key_id={1} />
         </div>
-        <div
-          style={{
-            width: "20%",
-            paddingTop: 15,
-            borderRight: "1px solid #ebebeb",
-          }}
-        />
+        {isMobile ? null : (
+          <div
+            style={{
+              width: "20%",
+              paddingTop: 15,
+              borderRight: "1px solid #ebebeb",
+            }}
+          />
+        )}
       </div>
     </div>
   );

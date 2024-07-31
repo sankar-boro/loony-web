@@ -293,7 +293,8 @@ button:hover {
   display: block;
 }
 .create-button,
-.profile-button {
+.profile-button,
+.login-button {
   color: white;
   text-decoration: none;
   height: 100%;

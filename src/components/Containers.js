@@ -40,7 +40,7 @@ export const SectionNavContainer = ({ children, onClick, isActive }) => {
 
 export const SectionsNavContainer = ({ children, onClick }) => {
   return (
-    <div onClick={onClick} style={{ paddingLeft: 20 }}>
+    <div onClick={onClick} style={{ paddingLeft: "10%" }}>
       {children}
     </div>
   );
