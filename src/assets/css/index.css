@@ -407,6 +407,9 @@ button:hover {
   position: relative;
   top: 2px;
 }
+.p8_12 {
+  padding: 8px 12px;
+}
 .p12 {
   padding: 12px;
 }

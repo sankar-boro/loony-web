@@ -2,18 +2,49 @@ import { useEffect, useState } from "react";
 import { axiosInstance } from "loony-query";
 import { useNavigate } from "react-router-dom";
 import CardLoader from "../components/CardLoader";
+import { MenuNavContainer } from "../components/Containers";
+import { MdHistory } from "react-icons/md";
+import { GoHome } from "react-icons/go";
+import { IoMdTime } from "react-icons/io";
+import { AiOutlineLike } from "react-icons/ai";
 
 const Home = ({ isMobile }) => {
   const navigate = useNavigate();
 
   return (
     <div className="home-container flex-row">
-      {isMobile ? null : <div style={{ width: "15%" }} />}
-      <div style={{ width: isMobile ? "100%" : "80%" }}>
+      <div style={{ width: "15%", paddingTop: 10 }}>
+        <div style={{ width: "90%", paddingLeft: "5%", paddingRight: "5%" }}>
+          <MenuNavContainer>
+            <span style={{ marginRight: 10, position: "relative", top: 3 }}>
+              <GoHome size={16} color="#2d2d2d" />
+            </span>
+            <div className="page-nav-title">Home</div>
+          </MenuNavContainer>
+          <MenuNavContainer>
+            <span style={{ marginRight: 10, position: "relative", top: 3 }}>
+              <MdHistory size={16} color="#2d2d2d" />
+            </span>
+            <div className="page-nav-title">History</div>
+          </MenuNavContainer>
+          <MenuNavContainer>
+            <span style={{ marginRight: 10, position: "relative", top: 3 }}>
+              <IoMdTime size={16} color="#2d2d2d" />
+            </span>
+            <div className="page-nav-title">Read Later</div>
+          </MenuNavContainer>
+          <MenuNavContainer>
+            <span style={{ marginRight: 10, position: "relative", top: 3 }}>
+              <AiOutlineLike size={16} color="#2d2d2d" />
+            </span>
+            <div className="page-nav-title">Likes</div>
+          </MenuNavContainer>
+        </div>
+      </div>
+      <div style={{ width: "85%" }}>
         <Blogs navigate={navigate} isMobile={isMobile} />
         <Books navigate={navigate} isMobile={isMobile} />
       </div>
-      <div style={{ height: 50 }} />
     </div>
   );
 };
