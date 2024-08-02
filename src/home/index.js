@@ -28,7 +28,15 @@ const Blogs = ({ navigate, isMobile }) => {
   }, []);
   return (
     <>
-      <div className="flex-row" style={{ flexWrap: "wrap", marginTop: 20 }}>
+      <div
+        className="flex-row"
+        style={{
+          flexWrap: "wrap",
+          marginTop: 20,
+          display: "flex",
+          gap: 16,
+        }}
+      >
         {!blogs
           ? [1, 2, 3, 4].map((key) => {
               return <CardLoader key={key} />;
@@ -62,7 +70,15 @@ const Books = ({ navigate, isMobile }) => {
 
   return (
     <>
-      <div className="flex-row" style={{ flexWrap: "wrap", marginTop: 20 }}>
+      <div
+        className="flex-row"
+        style={{
+          flexWrap: "wrap",
+          marginTop: 20,
+          display: "flex",
+          gap: 16,
+        }}
+      >
         {!books
           ? [5, 6, 7, 8].map((key) => {
               return <CardLoader key={key} />;
@@ -90,11 +106,7 @@ const Card = ({ node, navigate, nodeType, nodeIdType, isMobile }) => {
   const image = JSON.parse(node.images)[0];
 
   return (
-    <div
-      className="card"
-      key={node[nodeIdType]}
-      style={{ marginRight: isMobile ? "" : 10 }}
-    >
+    <div className="card" key={node[nodeIdType]}>
       <div
         className="card-image"
         style={{
