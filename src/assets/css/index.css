@@ -36,6 +36,11 @@ p {
   color: #2d2d2d;
   font-size: 16px !important;
 }
+
+hr {
+  border: 0;
+  border-top: 1px solid #bbb;
+}
 /* 
 * @Containers
 */

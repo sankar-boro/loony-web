@@ -2,46 +2,21 @@ import { useEffect, useState } from "react";
 import { axiosInstance } from "loony-query";
 import { useNavigate } from "react-router-dom";
 import CardLoader from "../components/CardLoader";
-import { MenuNavContainer } from "../components/Containers";
-import { MdHistory } from "react-icons/md";
-import { GoHome } from "react-icons/go";
-import { IoMdTime } from "react-icons/io";
-import { AiOutlineLike } from "react-icons/ai";
+import Navbar from "./Navbar";
 
 const Home = ({ isMobile }) => {
   const navigate = useNavigate();
 
   return (
     <div className="home-container flex-row">
-      <div style={{ width: "15%", paddingTop: 10 }}>
-        <div style={{ width: "90%", paddingLeft: "5%", paddingRight: "5%" }}>
-          <MenuNavContainer>
-            <span style={{ marginRight: 10, position: "relative", top: 3 }}>
-              <GoHome size={16} color="#2d2d2d" />
-            </span>
-            <div className="page-nav-title">Home</div>
-          </MenuNavContainer>
-          <MenuNavContainer>
-            <span style={{ marginRight: 10, position: "relative", top: 3 }}>
-              <MdHistory size={16} color="#2d2d2d" />
-            </span>
-            <div className="page-nav-title">History</div>
-          </MenuNavContainer>
-          <MenuNavContainer>
-            <span style={{ marginRight: 10, position: "relative", top: 3 }}>
-              <IoMdTime size={16} color="#2d2d2d" />
-            </span>
-            <div className="page-nav-title">Read Later</div>
-          </MenuNavContainer>
-          <MenuNavContainer>
-            <span style={{ marginRight: 10, position: "relative", top: 3 }}>
-              <AiOutlineLike size={16} color="#2d2d2d" />
-            </span>
-            <div className="page-nav-title">Likes</div>
-          </MenuNavContainer>
-        </div>
-      </div>
-      <div style={{ width: "85%" }}>
+      {!isMobile ? <Navbar /> : null}
+      <div
+        style={{
+          width: isMobile ? "100%" : "70%",
+          paddingRight: isMobile ? "0%" : "5%",
+          paddingLeft: isMobile ? "0%" : "5%",
+        }}
+      >
         <Blogs navigate={navigate} isMobile={isMobile} />
         <Books navigate={navigate} isMobile={isMobile} />
       </div>
