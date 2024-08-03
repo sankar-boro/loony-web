@@ -8,13 +8,14 @@ export const getNodes = (blog_id, setState, setStatus) => {
     status: "INIT",
   }));
   axiosInstance.get(url).then(({ data }) => {
-    const __rawNodes = data.data;
-    const __blogNodes = orderBlogNodes(data.data);
+    const __rawNodes = data.nodes;
+    const __blogNodes = orderBlogNodes(data.nodes);
     const __mainNode = __blogNodes && __blogNodes[0];
     const __childNodes = __blogNodes.slice(1);
 
     setState((prevState) => ({
       ...prevState,
+      blog_info: data.blog,
       mainNode: __mainNode,
       childNodes: __childNodes,
       blogNodes: __blogNodes,

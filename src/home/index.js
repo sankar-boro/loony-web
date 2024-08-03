@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { axiosInstance } from "loony-query";
 import { useNavigate } from "react-router-dom";
+import { timeAgo } from "loony-utils";
+
 import CardLoader from "../components/CardLoader";
 import Navbar from "./Navbar";
 
@@ -139,7 +141,29 @@ const Card = ({ node, navigate, nodeType, nodeIdType, isMobile }) => {
         >
           {node.title}
         </div>
-        <div className="card-body" />
+        <div
+          className="flex-row"
+          style={{
+            marginTop: 5,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <div
+            className="avatar"
+            style={{
+              width: 30,
+              height: 30,
+              backgroundColor: "#ccc",
+              borderRadius: 30,
+              marginRight: 10,
+            }}
+          ></div>
+          <div style={{ fontSize: 12 }}>
+            <div className="username">Sankar Boro</div>
+            <div className="username">{timeAgo(node.created_at)}</div>
+          </div>
+        </div>
       </div>
     </div>
   );

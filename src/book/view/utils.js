@@ -89,11 +89,12 @@ export const getSubSections = (
 
 export const getChapters = (book_id, setState, setStatus) => {
   axiosInstance.get(`/book/get/nodes?book_id=${book_id}`).then(({ data }) => {
-    const bookTree = orderBookNodes(data.data);
+    const bookTree = orderBookNodes(data.chapters);
     const __frontPage = bookTree && bookTree[0];
     const __nodes101 = bookTree.slice(1);
     setState((prevState) => ({
       ...prevState,
+      book_info: data.book,
       frontPage: __frontPage,
       activeNode: __frontPage,
       nodes101: __nodes101,

@@ -1,18 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import { Link, useParams } from "react-router-dom";
-import { extractImage } from "loony-utils";
+import { extractImage, timeAgo } from "loony-utils";
 import { LuFileWarning } from "react-icons/lu";
 import { LuFileEdit } from "react-icons/lu";
 import PageLoadingContainer from "../components/PageLoadingContainer";
 import { getNodes } from "./utils";
 import { PageNavigationEdit } from "./pageNavigation";
+const MathsMarkdown = lazy(() => import("../components/MathsMarkdown"));
 
 const View = ({ isMobile, setMobileNavOpen, mobileNavOpen }) => {
   const { blogId } = useParams();
   const blog_id = parseInt(blogId);
 
   const [state, setState] = useState({
+    blog_info: null,
     pageId: null,
     mainNode: null,
     activeNode: null,
@@ -38,7 +40,7 @@ const View = ({ isMobile, setMobileNavOpen, mobileNavOpen }) => {
   if (status.status === "INIT" || status.status === "FETCHING")
     return <PageLoadingContainer isMobile={isMobile} />;
 
-  const { childNodes, mainNode } = state;
+  const { childNodes, mainNode, blog_info } = state;
   const image = extractImage(mainNode.images);
 
   return (
@@ -112,10 +114,45 @@ const View = ({ isMobile, setMobileNavOpen, mobileNavOpen }) => {
                 />
               </div>
             ) : null}
-            <MarkdownPreview
-              source={mainNode.body}
-              wrapperElement={{ "data-color-mode": "light" }}
-            />
+
+            <div
+              className="flex-row"
+              style={{
+                marginTop: 5,
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <div
+                className="avatar"
+                style={{
+                  width: 30,
+                  height: 30,
+                  backgroundColor: "#ccc",
+                  borderRadius: 30,
+                  marginRight: 10,
+                }}
+              ></div>
+              <div style={{ fontSize: 12 }}>
+                <div className="username">Sankar Boro</div>
+                <div className="username">{timeAgo(blog_info.created_at)}</div>
+              </div>
+            </div>
+
+            <div style={{ marginTop: 16 }}>
+              {mainNode.theme === 11 ? (
+                mainNode.body
+              ) : mainNode.theme === 24 ? (
+                <MarkdownPreview
+                  source={mainNode.body}
+                  wrapperElement={{ "data-color-mode": "light" }}
+                />
+              ) : mainNode.theme === 41 ? (
+                <Suspense fallback={<div>Loading component...</div>}>
+                  <MathsMarkdown source={mainNode.body} />
+                </Suspense>
+              ) : null}
+            </div>
           </div>
           {childNodes.map((blog_node) => {
             const parseImage = JSON.parse(blog_node.images);
@@ -132,10 +169,20 @@ const View = ({ isMobile, setMobileNavOpen, mobileNavOpen }) => {
                     />
                   </div>
                 ) : null}
-                <MarkdownPreview
-                  source={blog_node.body}
-                  wrapperElement={{ "data-color-mode": "light" }}
-                />
+                <div>
+                  {blog_node.theme === 11 ? (
+                    blog_node.body
+                  ) : blog_node.theme === 24 ? (
+                    <MarkdownPreview
+                      source={blog_node.body}
+                      wrapperElement={{ "data-color-mode": "light" }}
+                    />
+                  ) : blog_node.theme === 41 ? (
+                    <Suspense fallback={<div>Loading component...</div>}>
+                      <MathsMarkdown source={blog_node.body} />
+                    </Suspense>
+                  ) : null}
+                </div>
               </div>
             );
           })}

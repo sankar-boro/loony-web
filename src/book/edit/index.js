@@ -1,15 +1,15 @@
 import { useState, useEffect, useContext, Suspense, lazy } from "react";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 
-import { orderBookNodes, extractImage } from "loony-utils";
+import { extractImage, timeAgo } from "loony-utils";
 import { RxReader } from "react-icons/rx";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { LuFileWarning, LuFileEdit } from "react-icons/lu";
+import { LuFileWarning } from "react-icons/lu";
 
-import { axiosInstance } from "loony-query";
-import { AuthContext } from "../../context/AuthContext";
+import { getChapters } from "./utils";
 import EditComponent from "./edit";
+import { AuthContext } from "../../context/AuthContext";
 import { PageNavigation } from "./pageNavigation";
 import { PageNodeSettings } from "./pageNodeSettings";
 import PageLoadingContainer from "../../components/PageLoadingContainer";
@@ -25,6 +25,7 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
     error: "",
   });
   const [state, setState] = useState({
+    book_info: null,
     modal: "",
     deleteNode: null,
     editNode: null,
@@ -40,32 +41,9 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
     frontPage: null,
   });
 
-  const { activeNode, nodes101, frontPage, activeSubSectionsBySectionId } =
-    state;
-
-  const getChapters = () => {
-    axiosInstance.get(`/book/get/nodes?book_id=${book_id}`).then(({ data }) => {
-      const bookTree = orderBookNodes(data.data);
-      const __frontPage = bookTree && bookTree[0];
-      const __nodes101 = bookTree.slice(1);
-
-      setState({
-        ...state,
-        frontPage: __frontPage,
-        activeNode: __frontPage,
-        nodes101: __nodes101,
-        page_id: __frontPage.uid,
-      });
-      setStatus({
-        ...status,
-        status: "",
-      });
-    });
-  };
-
   useEffect(() => {
     if (book_id) {
-      getChapters();
+      getChapters(book_id, setState, setStatus);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [book_id]);
@@ -73,6 +51,8 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
   if (status.status === "INIT" || status.status === "FETCHING")
     return <PageLoadingContainer isMobile={isMobile} />;
 
+  const { activeNode, nodes101, activeSubSectionsBySectionId, book_info } =
+    state;
   const image = extractImage(activeNode.images);
 
   return (
@@ -164,18 +144,48 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
                     />
                   </div>
                 ) : null}
-                {activeNode.theme === 11 ? (
-                  activeNode.body
-                ) : activeNode.theme === 24 ? (
-                  <MarkdownPreview
-                    source={activeNode.body}
-                    wrapperElement={{ "data-color-mode": "light" }}
-                  />
-                ) : activeNode.theme === 41 ? (
-                  <Suspense fallback={<div>Loading component...</div>}>
-                    <MathsMarkdown source={activeNode.body} />
-                  </Suspense>
+
+                {activeNode.identity === 100 ? (
+                  <div
+                    className="flex-row"
+                    style={{
+                      marginTop: 5,
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div
+                      className="avatar"
+                      style={{
+                        width: 30,
+                        height: 30,
+                        backgroundColor: "#ccc",
+                        borderRadius: 30,
+                        marginRight: 10,
+                      }}
+                    ></div>
+                    <div style={{ fontSize: 12 }}>
+                      <div className="username">Sankar Boro</div>
+                      <div className="username">
+                        {timeAgo(book_info.created_at)}
+                      </div>
+                    </div>
+                  </div>
                 ) : null}
+                <div style={{ marginTop: 16 }}>
+                  {activeNode.theme === 11 ? (
+                    activeNode.body
+                  ) : activeNode.theme === 24 ? (
+                    <MarkdownPreview
+                      source={activeNode.body}
+                      wrapperElement={{ "data-color-mode": "light" }}
+                    />
+                  ) : activeNode.theme === 41 ? (
+                    <Suspense fallback={<div>Loading component...</div>}>
+                      <MathsMarkdown source={activeNode.body} />
+                    </Suspense>
+                  ) : null}
+                </div>
               </div>
               <PageNodeSettings
                 node={activeNode}

@@ -1,12 +1,13 @@
 import MarkdownPreview from "@uiw/react-markdown-preview";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import {
   orderBlogNodes,
   deleteBlogNode,
   extractImage,
   updateBlogNode,
   appendBlogNode,
+  timeAgo,
 } from "loony-utils";
 import { RxReader } from "react-icons/rx";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -20,13 +21,15 @@ import EditNode from "../form/editNode";
 import ConfirmAction from "../components/ConfirmAction";
 import PageLoadingContainer from "../components/PageLoadingContainer";
 import { getNodes } from "./utils";
-import { PageNavigationEdit, PageNavigationView } from "./pageNavigation";
+import { PageNavigationView } from "./pageNavigation";
+const MathsMarkdown = lazy(() => import("../components/MathsMarkdown"));
 
 export default function Edit({ isMobile, mobileNavOpen, setMobileNavOpen }) {
   const { blogId } = useParams();
   const blog_id = parseInt(blogId);
 
   const [state, setState] = useState({
+    blog_info: null,
     pageId: null,
     mainNode: null,
     activeNode: null,
@@ -52,7 +55,7 @@ export default function Edit({ isMobile, mobileNavOpen, setMobileNavOpen }) {
   if (status.status === "INIT" || status.status === "FETCHING")
     return <PageLoadingContainer isMobile={isMobile} />;
 
-  const { childNodes, mainNode } = state;
+  const { childNodes, mainNode, blog_info } = state;
   const image = extractImage(mainNode.images);
 
   return (
@@ -132,10 +135,47 @@ export default function Edit({ isMobile, mobileNavOpen, setMobileNavOpen }) {
                   />
                 </div>
               ) : null}
-              <MarkdownPreview
-                source={mainNode.body}
-                wrapperElement={{ "data-color-mode": "light" }}
-              />
+
+              <div
+                className="flex-row"
+                style={{
+                  marginTop: 5,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  className="avatar"
+                  style={{
+                    width: 30,
+                    height: 30,
+                    backgroundColor: "#ccc",
+                    borderRadius: 30,
+                    marginRight: 10,
+                  }}
+                ></div>
+                <div style={{ fontSize: 12 }}>
+                  <div className="username">Sankar Boro</div>
+                  <div className="username">
+                    {timeAgo(blog_info.created_at)}
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ marginTop: 16 }}>
+                {mainNode.theme === 11 ? (
+                  mainNode.body
+                ) : mainNode.theme === 24 ? (
+                  <MarkdownPreview
+                    source={mainNode.body}
+                    wrapperElement={{ "data-color-mode": "light" }}
+                  />
+                ) : mainNode.theme === 41 ? (
+                  <Suspense fallback={<div>Loading component...</div>}>
+                    <MathsMarkdown source={mainNode.body} />
+                  </Suspense>
+                ) : null}
+              </div>
             </div>
             {/* Main node settings */}
             <div className="flex-row" style={{ marginTop: 24 }}>
@@ -210,10 +250,20 @@ export default function Edit({ isMobile, mobileNavOpen, setMobileNavOpen }) {
                           />
                         </div>
                       ) : null}
-                      <MarkdownPreview
-                        source={node.body}
-                        wrapperElement={{ "data-color-mode": "light" }}
-                      />
+                      <div>
+                        {node.theme === 11 ? (
+                          node.body
+                        ) : node.theme === 24 ? (
+                          <MarkdownPreview
+                            source={node.body}
+                            wrapperElement={{ "data-color-mode": "light" }}
+                          />
+                        ) : node.theme === 41 ? (
+                          <Suspense fallback={<div>Loading component...</div>}>
+                            <MathsMarkdown source={node.body} />
+                          </Suspense>
+                        ) : null}
+                      </div>
 
                       {/* Node settings */}
                       <div className="flex-row" style={{ marginTop: 24 }}>

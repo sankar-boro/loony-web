@@ -5,6 +5,7 @@ import MarkdownPreview from "@uiw/react-markdown-preview";
 
 import { useParams, Link } from "react-router-dom";
 import { getChapters } from "./utils";
+import { timeAgo } from "loony-utils";
 import { PageNavigation } from "./pageNavigation";
 import PageLoadingContainer from "../../components/PageLoadingContainer";
 const MathsMarkdown = lazy(() => import("../../components/MathsMarkdown"));
@@ -18,6 +19,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   });
 
   const [state, setState] = useState({
+    book_info: null,
     activeNode: null,
     page_id: null,
     section_id: null,
@@ -28,7 +30,6 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
     nodes101: [],
     frontPage: null,
   });
-  const { activeNode, nodes101, activeSubSectionsBySectionId } = state;
 
   useEffect(() => {
     if (book_id) {
@@ -40,6 +41,8 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
   if (status.status === "INIT" || status.status === "FETCHING")
     return <PageLoadingContainer isMobile={isMobile} />;
 
+  const { activeNode, nodes101, activeSubSectionsBySectionId, book_info } =
+    state;
   const image = extractImage(activeNode.images);
 
   return (
@@ -130,18 +133,49 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }) => {
                 />
               </div>
             ) : null}
-            {activeNode.theme === 11 ? (
-              activeNode.body
-            ) : activeNode.theme === 24 ? (
-              <MarkdownPreview
-                source={activeNode.body}
-                wrapperElement={{ "data-color-mode": "light" }}
-              />
-            ) : activeNode.theme === 41 ? (
-              <Suspense fallback={<div>Loading component...</div>}>
-                <MathsMarkdown source={activeNode.body} />
-              </Suspense>
+
+            {activeNode.identity === 100 ? (
+              <div
+                className="flex-row"
+                style={{
+                  marginTop: 5,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  className="avatar"
+                  style={{
+                    width: 30,
+                    height: 30,
+                    backgroundColor: "#ccc",
+                    borderRadius: 30,
+                    marginRight: 10,
+                  }}
+                ></div>
+                <div style={{ fontSize: 12 }}>
+                  <div className="username">Sankar Boro</div>
+                  <div className="username">
+                    {timeAgo(book_info.created_at)}
+                  </div>
+                </div>
+              </div>
             ) : null}
+
+            <div style={{ marginTop: 16 }}>
+              {activeNode.theme === 11 ? (
+                activeNode.body
+              ) : activeNode.theme === 24 ? (
+                <MarkdownPreview
+                  source={activeNode.body}
+                  wrapperElement={{ "data-color-mode": "light" }}
+                />
+              ) : activeNode.theme === 41 ? (
+                <Suspense fallback={<div>Loading component...</div>}>
+                  <MathsMarkdown source={activeNode.body} />
+                </Suspense>
+              ) : null}
+            </div>
           </div>
           {activeSubSectionsBySectionId.map((subSectionNode) => {
             const nodeImage = extractImage(subSectionNode.images);
