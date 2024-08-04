@@ -14,20 +14,20 @@ const Profile = ({ isMobile }) => {
 
   return (
     <div className="book-container flex-row">
-      <Navbar />
+      {!isMobile ? <Navbar /> : null}
       <div
         style={{
-          width: "85%",
-          padding: 24,
+          width: isMobile ? "100%" : "85%",
+          padding: isMobile ? "16px 0px" : 24,
         }}
       >
         <div
           className="profile-info"
           style={{
-            width: "90%",
+            width: isMobile ? "90%" : "90%",
             height: 150,
-            paddingLeft: "5%",
-            paddingRight: "5%",
+            paddingLeft: isMobile ? "5%" : "5%",
+            paddingRight: isMobile ? "5%" : "5%",
           }}
         >
           <div
@@ -55,8 +55,14 @@ const Profile = ({ isMobile }) => {
             </div>
           </div>
         </div>
-        <hr style={{ marginTop: 25, marginBottom: 25 }} />
-        <div style={{ width: "90%", paddingLeft: "5%", paddingRight: "5%" }}>
+        <hr style={{ marginTop: 25, marginBottom: 25, width: "90%" }} />
+        <div
+          style={{
+            width: isMobile ? "100%" : "90%",
+            paddingLeft: isMobile ? "0%" : "5%",
+            paddingRight: isMobile ? "0%" : "5%",
+          }}
+        >
           <Blogs user_id={user_id} navigate={navigate} isMobile={isMobile} />
           <Books user_id={user_id} navigate={navigate} isMobile={isMobile} />
         </div>
