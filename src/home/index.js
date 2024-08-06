@@ -8,6 +8,32 @@ import Navbar from "./Navbar";
 
 const Home = ({ isMobile }) => {
   const navigate = useNavigate();
+  const [blogs, setBlogs] = useState(null);
+  const [books, setBooks] = useState(null);
+  const [book_page_no, setBookPageNo] = useState(1);
+  const [blog_page_no, setBlogPageNo] = useState(1);
+
+  useEffect(() => {
+    axiosInstance
+      .get(`/blog/get/${blog_page_no}/by_page`)
+      .then(({ data }) => {
+        setBlogs(data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axiosInstance
+      .get(`/book/get/${book_page_no}/by_page`)
+      .then(({ data }) => {
+        setBooks(data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className="home-container flex-row">
@@ -19,21 +45,14 @@ const Home = ({ isMobile }) => {
           paddingLeft: isMobile ? "0%" : "5%",
         }}
       >
-        <Blogs navigate={navigate} isMobile={isMobile} />
-        <Books navigate={navigate} isMobile={isMobile} />
+        <Documents navigate={navigate} isMobile={isMobile} documents={blogs} />
+        <Documents navigate={navigate} isMobile={isMobile} documents={books} />
       </div>
     </div>
   );
 };
 
-const Blogs = ({ navigate, isMobile }) => {
-  const [blogs, setBlogs] = useState(null);
-
-  useEffect(() => {
-    axiosInstance.get("/blog/get/all").then(({ data }) => {
-      setBlogs(data.data);
-    });
-  }, []);
+const Documents = ({ navigate, isMobile, documents }) => {
   return (
     <>
       <div
@@ -45,20 +64,24 @@ const Blogs = ({ navigate, isMobile }) => {
           gap: 16,
         }}
       >
-        {!blogs
+        {!documents
           ? [1, 2, 3, 4].map((key) => {
               return <CardLoader key={key} />;
             })
           : null}
-        {blogs &&
-          blogs.map((node) => {
+        {documents &&
+          documents.map((node) => {
+            const nodeType = node.doc_type === 1 ? "blog" : "book";
+            const nodeIdType = node.doc_type === 1 ? "blog_id" : "book_id";
+            const key = `${node[nodeType]}_${node[nodeIdType]}}`;
             return (
               <Card
-                key={node.blog_id}
+                key={key}
+                uid={key}
                 node={node}
                 navigate={navigate}
-                nodeType="blog"
-                nodeIdType="blog_id"
+                nodeType={nodeType}
+                nodeIdType={nodeIdType}
                 isMobile={isMobile}
               />
             );
@@ -68,53 +91,10 @@ const Blogs = ({ navigate, isMobile }) => {
   );
 };
 
-const Books = ({ navigate, isMobile }) => {
-  const [books, setBooks] = useState(null);
-  useEffect(() => {
-    axiosInstance.get("/book/get/all").then(({ data }) => {
-      setBooks(data.data);
-    });
-  }, []);
-
-  return (
-    <>
-      <div
-        className="flex-row"
-        style={{
-          flexWrap: "wrap",
-          marginTop: 20,
-          display: "flex",
-          gap: 16,
-        }}
-      >
-        {!books
-          ? [5, 6, 7, 8].map((key) => {
-              return <CardLoader key={key} />;
-            })
-          : null}
-        {books &&
-          books.map((node) => {
-            return (
-              <Card
-                key={node.book_id}
-                node={node}
-                navigate={navigate}
-                nodeType="book"
-                nodeIdType="book_id"
-                isMobile={isMobile}
-              />
-            );
-          })}
-      </div>
-    </>
-  );
-};
-
-const Card = ({ node, navigate, nodeType, nodeIdType, isMobile }) => {
+const Card = ({ uid, node, navigate, nodeType, nodeIdType }) => {
   const image = JSON.parse(node.images)[0];
-
   return (
-    <div className="card" key={node[nodeIdType]}>
+    <div className="card" key={uid}>
       <div
         className="card-image"
         style={{
