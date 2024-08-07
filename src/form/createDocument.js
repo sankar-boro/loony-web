@@ -56,7 +56,7 @@ export default function CreateNewDocument({ url, title, isMobile }) {
         title: formTitle,
         body: formBody,
         images: [{ name: imageData ? imageData.name : afterTmpImageUpload }],
-        tags,
+        tags: tags.split(" "),
         theme,
       })
       .then(() => {
@@ -73,7 +73,7 @@ export default function CreateNewDocument({ url, title, isMobile }) {
       .catch(() => {
         setSubmitting(false);
       });
-  }, [formTitle, formBody, afterTmpImageUpload, theme]);
+  }, [formTitle, formBody, tags, afterTmpImageUpload, theme]);
 
   const onSelectImage = (event) => {
     const selectedFile = event.target.files[0];
