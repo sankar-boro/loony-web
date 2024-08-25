@@ -5,8 +5,10 @@ import { timeAgo } from 'loony-utils';
 
 import CardLoader from '../components/CardLoader';
 import Navbar from './Navbar';
+import { AUTHORIZED } from 'loony-types';
 
-const Home = ({ isMobile }) => {
+const Home = ({ isMobile, auth }) => {
+  console.log(auth);
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState(null);
   const [books, setBooks] = useState(null);
@@ -26,26 +28,48 @@ const Home = ({ isMobile }) => {
   }, []);
 
   useEffect(() => {
-    axiosInstance
-      .get(`/book/get/${book_page_no}/by_page`)
-      .then(({ data }) => {
-        setBooks(data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    if (auth.status === AUTHORIZED) {
+      axiosInstance
+        .get(`/book/get/${auth.user.uid}/get_all_books_liked_by_user`)
+        .then(({ data }) => {
+          setBooks(data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axiosInstance
+        .get(`/book/get/${book_page_no}/by_page`)
+        .then(({ data }) => {
+          setBooks(data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [auth.status]);
 
   useEffect(() => {
-    axiosInstance
-      .get(`/tag/get_all`)
-      .then(({ data }) => {
-        setTags(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    if (auth.status === AUTHORIZED) {
+      axiosInstance
+        .get(`/tag/${auth.user.uid}/get_all_tags_user_can_follow`)
+        .then(({ data }) => {
+          setTags(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axiosInstance
+        .get(`/blog/get/${blog_page_no}/by_page`)
+        .then(({ data }) => {
+          setBlogs(data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [auth.status]);
 
   return (
     <div className='home-container flex-row'>

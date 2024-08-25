@@ -29,14 +29,14 @@ const Route = ({ context, auth }) => {
     }
   }, []);
 
-  const props = { setMobileNavOpen, mobileNavOpen, isMobile };
+  const props = { setMobileNavOpen, mobileNavOpen, isMobile, auth };
   return (
     <>
       {context.alert && <Alert alert={context.alert} onClose={() => {}} />}
       <Navigation auth={auth} setMobileNavOpen={setMobileNavOpen} isMobile={isMobile} />
       {auth.status === AUTHORIZED && (
         <Routes>
-          <ReactRoute path='/' element={<Home isMobile={isMobile} />} />
+          <ReactRoute path='/' element={<Home {...props} />} />
           <ReactRoute path='/view/book/:bookId' element={<BookView {...props} />} />
           <ReactRoute path='/view/blog/:blogId' element={<BlogView {...props} />} />
           <ReactRoute
