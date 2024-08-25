@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
-import { axiosInstance } from "loony-query";
-import { useNavigate } from "react-router-dom";
-import { timeAgo } from "loony-utils";
+import { useEffect, useState } from 'react';
+import { axiosInstance } from 'loony-query';
+import { useNavigate } from 'react-router-dom';
+import { timeAgo } from 'loony-utils';
 
-import CardLoader from "../components/CardLoader";
-import Navbar from "./Navbar";
+import CardLoader from '../components/CardLoader';
+import Navbar from './Navbar';
 
 const Home = ({ isMobile }) => {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState(null);
   const [books, setBooks] = useState(null);
+  const [tags, setTags] = useState(null);
   const [book_page_no, setBookPageNo] = useState(1);
   const [blog_page_no, setBlogPageNo] = useState(1);
 
@@ -35,18 +36,35 @@ const Home = ({ isMobile }) => {
       });
   }, []);
 
+  useEffect(() => {
+    axiosInstance
+      .get(`/tag/get_all`)
+      .then(({ data }) => {
+        setTags(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
-    <div className="home-container flex-row">
+    <div className='home-container flex-row'>
       {!isMobile ? <Navbar /> : null}
       <div
         style={{
-          width: isMobile ? "100%" : "70%",
-          paddingRight: isMobile ? "0%" : "5%",
-          paddingLeft: isMobile ? "0%" : "5%",
+          width: isMobile ? '100%' : '60%',
+          paddingRight: isMobile ? '0%' : '5%',
+          paddingLeft: isMobile ? '0%' : '5%',
         }}
       >
         <Documents navigate={navigate} isMobile={isMobile} documents={blogs} />
         <Documents navigate={navigate} isMobile={isMobile} documents={books} />
+      </div>
+      <div style={{ width: '20%' }}>
+        {tags &&
+          tags.map((tag) => {
+            return <div key={tag.uid}>{tag.name}</div>;
+          })}
       </div>
     </div>
   );
@@ -56,11 +74,11 @@ const Documents = ({ navigate, isMobile, documents }) => {
   return (
     <>
       <div
-        className="flex-row"
+        className='flex-row'
         style={{
-          flexWrap: "wrap",
+          flexWrap: 'wrap',
           marginTop: 20,
-          display: "flex",
+          display: 'flex',
           gap: 16,
         }}
       >
@@ -71,9 +89,8 @@ const Documents = ({ navigate, isMobile, documents }) => {
           : null}
         {documents &&
           documents.map((node) => {
-            const nodeType = node.doc_type === 1 ? "blog" : "book";
-            const nodeIdType = node.doc_type === 1 ? "blog_id" : "book_id";
-            const key = `${node[nodeType]}_${node[nodeIdType]}}`;
+            const nodeType = node.doc_type === 1 ? 'blog' : 'book';
+            const key = `${node[nodeType]}_${node.uid}}`;
             return (
               <Card
                 key={key}
@@ -81,7 +98,6 @@ const Documents = ({ navigate, isMobile, documents }) => {
                 node={node}
                 navigate={navigate}
                 nodeType={nodeType}
-                nodeIdType={nodeIdType}
                 isMobile={isMobile}
               />
             );
@@ -91,57 +107,57 @@ const Documents = ({ navigate, isMobile, documents }) => {
   );
 };
 
-const Card = ({ uid, node, navigate, nodeType, nodeIdType }) => {
+const Card = ({ uid, node, navigate, nodeType }) => {
   const image = JSON.parse(node.images)[0];
   return (
-    <div className="card" key={uid}>
+    <div className='card' key={uid}>
       <div
-        className="card-image"
+        className='card-image'
         style={{
           backgroundImage:
             image && image.name
-              ? `url("${process.env.REACT_APP_BASE_API_URL}/api/${nodeType}/${node[nodeIdType]}/340/${image.name}")`
+              ? `url("${process.env.REACT_APP_BASE_API_URL}/api/${nodeType}/${node.uid}/340/${image.name}")`
               : null,
-          overflow: "hidden",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          overflow: 'hidden',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           borderTopLeftRadius: 3,
           borderTopRightRadius: 3,
         }}
         onClick={() => {
-          navigate(`/view/${nodeType}/${node[nodeIdType]}`, node);
+          navigate(`/view/${nodeType}/${node.uid}`, node);
         }}
       />
-      <div className="card-body">
+      <div className='card-body'>
         <div
-          className="card-title cursor"
+          className='card-title cursor'
           onClick={() => {
-            navigate(`/view/${nodeType}/${node[nodeIdType]}`, node);
+            navigate(`/view/${nodeType}/${node.uid}`, node);
           }}
         >
           {node.title}
         </div>
         <div
-          className="flex-row"
+          className='flex-row'
           style={{
             marginTop: 5,
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
           }}
         >
           <div
-            className="avatar"
+            className='avatar'
             style={{
               width: 30,
               height: 30,
-              backgroundColor: "#ccc",
+              backgroundColor: '#ccc',
               borderRadius: 30,
               marginRight: 10,
             }}
           ></div>
           <div style={{ fontSize: 12 }}>
-            <div className="username">Sankar Boro</div>
-            <div className="username">{timeAgo(node.created_at)}</div>
+            <div className='username'>Sankar Boro</div>
+            <div className='username'>{timeAgo(node.created_at)}</div>
           </div>
         </div>
       </div>

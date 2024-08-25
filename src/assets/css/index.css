@@ -408,6 +408,10 @@ button:hover {
 .page-nav-title {
   width: 95%;
 }
+.page-nav-title a {
+  text-decoration: none;
+  color: var(--nav-text);
+}
 .page-nav-icon {
   position: relative;
   top: 2px;
