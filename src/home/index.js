@@ -7,12 +7,12 @@ import CardLoader from '../components/CardLoader';
 import Navbar from './Navbar';
 import { AUTHORIZED } from 'loony-types';
 
-const Home = ({ isMobile, auth }) => {
+const Home = (props) => {
+  const { isMobile, auth } = props;
   console.log(auth);
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState(null);
   const [books, setBooks] = useState(null);
-  const [tags, setTags] = useState(null);
   const [book_page_no, setBookPageNo] = useState(1);
   const [blog_page_no, setBlogPageNo] = useState(1);
 
@@ -52,9 +52,9 @@ const Home = ({ isMobile, auth }) => {
   useEffect(() => {
     if (auth.status === AUTHORIZED) {
       axiosInstance
-        .get(`/tag/${auth.user.uid}/get_all_tags_user_can_follow`)
+        .get(`/blog/get/${auth.user.uid}/get_all_blogs_liked_by_user`)
         .then(({ data }) => {
-          setTags(data);
+          setBlogs(data.data);
         })
         .catch((err) => {
           console.log(err);
@@ -73,7 +73,7 @@ const Home = ({ isMobile, auth }) => {
 
   return (
     <div className='home-container flex-row'>
-      {!isMobile ? <Navbar /> : null}
+      {!isMobile ? <Navbar {...props} /> : null}
       <div
         style={{
           width: isMobile ? '100%' : '60%',
@@ -83,12 +83,6 @@ const Home = ({ isMobile, auth }) => {
       >
         <Documents navigate={navigate} isMobile={isMobile} documents={blogs} />
         <Documents navigate={navigate} isMobile={isMobile} documents={books} />
-      </div>
-      <div style={{ width: '20%' }}>
-        {tags &&
-          tags.map((tag) => {
-            return <div key={tag.uid}>{tag.name}</div>;
-          })}
       </div>
     </div>
   );
