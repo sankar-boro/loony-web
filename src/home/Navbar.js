@@ -174,7 +174,7 @@ export default function Navbar({ auth }) {
             <ContentPolicy />
           </span>
           <div className='page-nav-title'>
-            <Link to={`/ContentPolicy`}>Content Policy</Link>
+            <Link to={`/policies/ContentPolicy`}>Content Policy</Link>
           </div>
         </MenuNavContainer>
         <MenuNavContainer>
@@ -182,7 +182,7 @@ export default function Navbar({ auth }) {
             <PrivacyPolicy />
           </span>
           <div className='page-nav-title'>
-            <Link to={`/PrivacyPolicy`}>Privacy Policy</Link>
+            <Link to={`/policies/PrivacyPolicy`}>Privacy Policy</Link>
           </div>
         </MenuNavContainer>
         <MenuNavContainer>
@@ -190,7 +190,7 @@ export default function Navbar({ auth }) {
             <UserAgreement />
           </span>
           <div className='page-nav-title'>
-            <Link to={`/UserAgreement`}>User Agreement</Link>
+            <Link to={`/policies/UserAgreement`}>User Agreement</Link>
           </div>
         </MenuNavContainer>
       </div>

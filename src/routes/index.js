@@ -50,11 +50,10 @@ const Route = ({ context, auth }) => {
           <ReactRoute path='/edit/book/:bookId' element={<EditBook {...props} />} />
           <ReactRoute path='/edit/blog/:blogId' element={<EditBlog {...props} />} />
           <ReactRoute path='/profile' element={<Profile {...props} />} />
+          <ReactRoute path='/policies/ContentPolicy' element={<ContentPolicy />} />
+          <ReactRoute path='/policies/PrivacyPolicy' element={<PrivacyPolicy />} />
+          <ReactRoute path='/policies/UserAgreement' element={<UserAgreement />} />
           <ReactRoute path='/unauthorized' element={<AuthError />} />
-
-          <ReactRoute path='/ContentPolicy' element={<ContentPolicy />} />
-          <ReactRoute path='/PrivacyPolicy' element={<PrivacyPolicy />} />
-          <ReactRoute path='/UserAgreement' element={<UserAgreement />} />
 
           <ReactRoute path='*' element={<NotFound />} />
         </Routes>
@@ -68,6 +67,9 @@ const Route = ({ context, auth }) => {
           <ReactRoute path='/view/blog/:blogId' element={<BlogView {...props} />} />
           <ReactRoute path='/edit/book/:bookId' element={<AuthError />} />
           <ReactRoute path='/edit/blog/:blogId' element={<AuthError />} />
+          <ReactRoute path='/policies/ContentPolicy' element={<ContentPolicy />} />
+          <ReactRoute path='/policies/PrivacyPolicy' element={<PrivacyPolicy />} />
+          <ReactRoute path='/policies/UserAgreement' element={<UserAgreement />} />
           <ReactRoute path='*' element={<NotFound />} />
         </Routes>
       )}

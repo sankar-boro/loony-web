@@ -20,7 +20,6 @@ export const deleteOne = (nodes, { deleted_ids, parent_id, updated_id, num_delet
       }
     });
   }
-  console.log('newNodes', newNodes);
   return newNodes;
 };
 

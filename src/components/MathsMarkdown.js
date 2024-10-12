@@ -9,7 +9,6 @@ const MathsMarkdown = ({ source: __source }) => (
     wrapperElement={{ 'data-color-mode': 'light' }}
     components={{
       code: ({ children = [], className, ...props }) => {
-        console.log(children);
         if (typeof children === 'string' && /^\$\$(.*)\$\$/.test(children)) {
           const html = katex.renderToString(children.replace(/^\$\$(.*)\$\$/, '$1'), {
             throwOnError: false,

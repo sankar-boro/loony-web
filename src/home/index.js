@@ -9,7 +9,6 @@ import { AUTHORIZED } from 'loony-types';
 
 const Home = (props) => {
   const { isMobile, auth } = props;
-  console.log(auth);
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState(null);
   const [books, setBooks] = useState(null);
