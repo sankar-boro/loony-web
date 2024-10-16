@@ -1,38 +1,38 @@
 const fs = require('fs')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-function findPackages () {
-  const pkgRoot = path.join(__dirname, '..', 'packages');
+function findPackages() {
+  const pkgRoot = path.join(__dirname, '..', 'packages')
 
   return fs
     .readdirSync(pkgRoot)
     .filter((entry) => {
-      const pkgPath = path.join(pkgRoot, entry);
+      const pkgPath = path.join(pkgRoot, entry)
 
-      return !['.', '..'].includes(entry) &&
+      return (
+        !['.', '..'].includes(entry) &&
         fs.lstatSync(pkgPath).isDirectory() &&
-        fs.existsSync(path.join(pkgPath, 'package.json'));
+        fs.existsSync(path.join(pkgPath, 'package.json'))
+      )
     })
     .map((dir) => {
-      const jsonPath = path.join(pkgRoot, dir, 'package.json');
-      const { name } = JSON.parse(
-        fs.readFileSync(jsonPath).toString('utf-8')
-      );
+      const jsonPath = path.join(pkgRoot, dir, 'package.json')
+      const { name } = JSON.parse(fs.readFileSync(jsonPath).toString('utf-8'))
 
-      return { dir, name };
-    });
+      return { dir, name }
+    })
 }
 
 const alias = findPackages().reduce((alias, { dir, name }) => {
-  alias[name] = path.resolve(__dirname, `../packages/${ dir}/src`);
+  alias[name] = path.resolve(__dirname, `../packages/${dir}/src`)
 
-  return alias;
-}, {});
+  return alias
+}, {})
 
 module.exports = {
-  entry: path.resolve(__dirname, '..', './src/index.tsx'),
+  entry: path.resolve(__dirname, '..', './src/main.tsx'),
   resolve: {
     alias,
     extensions: ['.tsx', '.ts', '.js'],
@@ -71,19 +71,19 @@ module.exports = {
       {
         test: /\.svg$/,
         use: ['@svgr/webpack', 'url-loader'],
-      }
+      },
     ],
   },
   output: {
     path: path.resolve(__dirname, '..', './build'),
     filename: 'bundle.js',
-    publicPath: '/'
+    publicPath: '/',
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '..', './public/index.html'),
+      template: path.resolve(__dirname, '..', './index.html'),
     }),
-    new MiniCssExtractPlugin()
+    new MiniCssExtractPlugin(),
   ],
   stats: 'errors-only',
 }

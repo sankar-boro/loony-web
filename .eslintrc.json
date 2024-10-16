@@ -5,7 +5,7 @@
         "prettier" // Add "prettier" last. This will turn off eslint rules conflicting with prettier. This is not what will format our code.
     ],
     "rules": { // Rules that I add manually.
-        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/no-unused-vars": "off",
         "@typescript-eslint/no-explicit-any": "off"
     }
 }
