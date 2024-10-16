@@ -11,7 +11,7 @@ import NotFound from '../error/NotFound.tsx'
 import AuthError from '../error/AuthError.tsx'
 import Create from '../form/createDocument.tsx'
 import { CREATE_BOOK, CREATE_BLOG } from 'loony-query'
-import { AUTHORIZED, UNAUTHORIZED } from 'loony-types'
+import { AUTHORIZED, NotificationContextProps, UNAUTHORIZED } from 'loony-types'
 import Navigation from '../navigation/topNavbar/index.tsx'
 import { Routes, Route as ReactRoute } from 'react-router-dom'
 import { useState, useEffect } from 'react'
@@ -23,9 +23,11 @@ import { AppContextProps, AuthContextProps } from 'loony-types'
 const Route = ({
   authContext,
   appContext,
+  notificationContext,
 }: {
   authContext: AuthContextProps
   appContext: AppContextProps
+  notificationContext: NotificationContextProps
 }): React.JSX.Element => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
@@ -42,6 +44,7 @@ const Route = ({
     isMobile,
     authContext,
     appContext,
+    notificationContext,
   }
 
   const onCloseAlert = () => {
@@ -53,8 +56,8 @@ const Route = ({
 
   return (
     <>
-      {appContext.alert && (
-        <Alert alert={appContext.alert} onClose={onCloseAlert} />
+      {notificationContext.alert && (
+        <Alert alert={notificationContext.alert} onClose={onCloseAlert} />
       )}
       <Navigation
         auth={authContext}

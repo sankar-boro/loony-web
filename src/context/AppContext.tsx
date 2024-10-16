@@ -2,7 +2,6 @@ import { createContext, useState, ReactNode } from 'react'
 import { AppContextProps, AppState } from 'loony-types'
 
 const AppContext = createContext<AppContextProps>({
-  alert: null,
   env: {
     base_url: import.meta.env.VITE_API_URL || undefined,
   },
@@ -16,7 +15,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     env: {
       base_url: import.meta.env.VITE_API_URL || undefined,
     },
-    alert: null,
   })
 
   return (

@@ -1,6 +1,7 @@
 export * from './app'
 export * from './doc'
 export * from './user'
+export * from './notification'
 
 import { AppState} from './app'
 import { EditState, BookEditState, BookReadState, ReadState } from './doc'
