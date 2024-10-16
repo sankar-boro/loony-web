@@ -4,11 +4,7 @@ import AddNode from '../../form/addNode.tsx'
 import EditDocument from '../../form/editNode.tsx'
 import ConfirmAction from '../../components/ConfirmAction.tsx'
 import { appendChapters, appendSections, appendSubSections } from 'loony-utils'
-import {
-  AppDispatchAction,
-  BookEditAction,
-  BookEditState,
-} from 'types/index.ts'
+import { AppDispatchAction, BookEditAction, BookEditState } from 'loony-types'
 import { NavigateFunction } from 'react-router-dom'
 
 export default function EditComponent({

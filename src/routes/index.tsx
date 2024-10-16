@@ -18,7 +18,7 @@ import { useState, useEffect } from 'react'
 import ContentPolicy from '../static/ContentPolicy.tsx'
 import PrivacyPolicy from '../static/PrivacyPolicy.tsx'
 import UserAgreement from '../static/UserAgreement.tsx'
-import { AppContextProps, AuthContextProps } from 'types/index.ts'
+import { AppContextProps, AuthContextProps } from 'loony-types'
 
 const Route = ({
   authContext,

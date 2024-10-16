@@ -22,7 +22,7 @@ import ConfirmAction from '../components/ConfirmAction.tsx'
 import PageLoadingContainer from '../components/PageLoadingContainer.tsx'
 import { getNodes } from './utils.ts'
 import { PageNavigationView } from './pageNavigation.tsx'
-import { AppRouteProps, EditAction, EditState } from 'types/index.ts'
+import { AppRouteProps, EditAction, EditState } from 'loony-types'
 import { ApiEvent } from 'loony-types'
 const MathsMarkdown = lazy(() => import('../components/MathsMarkdown.tsx'))
 

@@ -1,5 +1,5 @@
 import { createContext, useState, ReactNode } from 'react'
-import { AppContextProps, AppState } from 'types'
+import { AppContextProps, AppState } from 'loony-types'
 
 const AppContext = createContext<AppContextProps>({
   alert: null,

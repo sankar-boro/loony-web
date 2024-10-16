@@ -10,7 +10,7 @@ import type {
   EditImageComponentProps,
   AuthContextProps,
   AppContextProps,
-} from '../types/index.ts'
+} from 'loony-types'
 import AppContext from '../context/AppContext.tsx'
 
 export default function EditNodeComponent(props: ComponentProps) {

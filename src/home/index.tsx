@@ -6,7 +6,7 @@ import { timeAgo } from 'loony-utils'
 import CardLoader from '../components/CardLoader.tsx'
 import Navbar from './Navbar.tsx'
 import { AUTHORIZED } from 'loony-types'
-import { AppRouteProps } from 'types/index.ts'
+import { AppRouteProps } from 'loony-types'
 
 const Home = (props: AppRouteProps) => {
   const { isMobile, authContext, appContext } = props

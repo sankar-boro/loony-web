@@ -3,7 +3,7 @@ import AppContext, { AppProvider } from './context/AppContext.tsx'
 
 import { BrowserRouter } from 'react-router-dom'
 import Route from './routes/index.tsx'
-import { AuthContextProps } from 'types/index.ts'
+import { AuthContextProps } from 'loony-types'
 
 function App() {
   return (

@@ -1,7 +1,7 @@
 import { axiosInstance } from 'loony-query';
 import { orderBlogNodes } from 'loony-utils';
 import { ApiEvent } from 'loony-types';
-import { ApiDispatchAction, EditAction, ReadAction } from 'types';
+import { ApiDispatchAction, EditAction, ReadAction } from 'loony-types';
 
 export const getNodes = (blog_id: number, setState: EditAction | ReadAction, setStatus: ApiDispatchAction) => {
   const url = `/blog/get/nodes?blog_id=${blog_id}`;

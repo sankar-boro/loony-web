@@ -11,7 +11,7 @@ import type {
   VoidReturnFunction,
   AuthContextProps,
   AppContextProps,
-} from '../types/index.ts'
+} from 'loony-types'
 import AppContext from '../context/AppContext.tsx'
 
 type ComponentProps = {

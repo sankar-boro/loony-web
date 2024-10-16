@@ -18,7 +18,7 @@ import {
   AppRouteProps,
   BookEditAction,
   BookEditState,
-} from 'types/index.ts'
+} from 'loony-types'
 import { ApiEvent } from 'loony-types'
 const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 

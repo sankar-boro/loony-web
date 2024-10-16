@@ -15,7 +15,7 @@ import type {
   AfterImageSelect,
   CropImageMetadata,
   EditImageComponentProps,
-} from '../types/index.ts'
+} from 'loony-types'
 
 export default function CreateNewDocument({
   url,

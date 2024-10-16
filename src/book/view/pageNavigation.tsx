@@ -11,11 +11,7 @@ import {
 import { getSections, getSubSections } from './utils.ts'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
-import {
-  ApiDispatchAction,
-  BookReadAction,
-  BookReadState,
-} from 'types/index.ts'
+import { ApiDispatchAction, BookReadAction, BookReadState } from 'loony-types'
 
 export const PageNavigation = ({
   setState,

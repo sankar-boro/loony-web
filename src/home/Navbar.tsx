@@ -11,7 +11,7 @@ import userAgreement from '../assets/svgs/UserAgreement.svg'
 import { BasicMenuNavContainer } from '../components/Containers.tsx'
 import { AUTHORIZED } from 'loony-types'
 import { axiosInstance } from 'loony-query'
-import { JsonObject, AuthContextProps } from 'types/index.ts'
+import { JsonObject, AuthContextProps } from 'loony-types'
 
 const Followed = ({ authContext }: { authContext: AuthContextProps }) => {
   const [canFollowTags, setCanFollowTags] = useState<JsonObject[]>([])

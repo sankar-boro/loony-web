@@ -17,7 +17,7 @@ import {
   BookEditAction,
   BookEditState,
   Node,
-} from 'types/index.ts'
+} from 'loony-types'
 
 const Button = ({ onClick, title }: { title: string; onClick: any }) => {
   return (

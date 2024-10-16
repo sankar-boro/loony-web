@@ -3800,15 +3800,6 @@
           ]
         }
       },
-      "packages/loony-route": {
-        "packageJson": {
-          "dependencies": [
-            "npm:react-dom@^18.3.1",
-            "npm:react@^18.3.1",
-            "npm:typescript@^4.9.5"
-          ]
-        }
-      },
       "packages/loony-types": {
         "packageJson": {
           "dependencies": [

@@ -8,7 +8,7 @@ import PageLoadingContainer from '../components/PageLoadingContainer.tsx'
 import { getNodes } from './utils.ts'
 import { PageNavigationEdit } from './pageNavigation.tsx'
 import { ApiEvent } from 'loony-types'
-import { AppRouteProps, ReadState } from 'types/index.ts'
+import { AppRouteProps, ReadState } from 'loony-types'
 const MathsMarkdown = lazy(() => import('../components/MathsMarkdown.tsx'))
 
 const View = (props: AppRouteProps) => {

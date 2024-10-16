@@ -1,6 +1,6 @@
 import { MdOutlineEdit, MdContentCopy, MdAdd } from 'react-icons/md'
 import { AiOutlineDelete } from 'react-icons/ai'
-import { BookEditAction, BookEditState, Node } from '../../types/index.tsx'
+import { BookEditAction, BookEditState, Node } from 'loony-types'
 
 const Button = ({ onClick, icon }: { onClick: any; icon: any }) => {
   return (

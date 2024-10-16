@@ -2,7 +2,7 @@ import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
 import { axiosInstance } from 'loony-query'
 import { ApiEvent, UNAUTHORIZED, AUTHORIZED } from 'loony-types'
 import PageLoader from '../components/PageLoader.tsx'
-import { Auth, AuthContextProps } from '../types/index.ts'
+import { Auth, AuthContextProps } from 'loony-types'
 
 const authState: Auth = {
   status: ApiEvent.IDLE,

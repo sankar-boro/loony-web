@@ -1,7 +1,7 @@
 import { MdClose } from 'react-icons/md'
 import { FaCircleCheck, FaCircleXmark } from 'react-icons/fa6'
 import CustomSpinner from './Spinner.tsx'
-import { JsonObject, Alert } from '../types/index.ts'
+import { JsonObject, Alert } from 'loony-types'
 
 const alertTypes: JsonObject = {
   success: {

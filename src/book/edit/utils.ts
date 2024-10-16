@@ -1,6 +1,6 @@
 import { orderNodes, orderBookNodes } from 'loony-utils';
 import { axiosInstance } from "loony-query";
-import { ApiDispatchAction, BookEditAction, Node } from 'types';
+import { ApiDispatchAction, BookEditAction, Node } from 'loony-types';
 import { ApiEvent } from 'loony-types';
 
 const resetState = {

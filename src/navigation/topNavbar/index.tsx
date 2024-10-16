@@ -1,62 +1,74 @@
-import { LuMenu } from 'react-icons/lu';
-import { LiaUserSolid } from 'react-icons/lia';
-import { Link, useNavigate, NavigateFunction } from 'react-router-dom';
-import { useCallback, useContext } from 'react';
-import { AUTHORIZED, UNAUTHORIZED } from 'loony-types';
-import { AuthContext } from '../../context/AuthContext.tsx';
-import { axiosInstance } from 'loony-query';
-import type { Auth, BooleanDispatchAction, VoidReturnFunction } from "../../types/index.ts";
+import { LuMenu } from 'react-icons/lu'
+import { LiaUserSolid } from 'react-icons/lia'
+import { Link, useNavigate, NavigateFunction } from 'react-router-dom'
+import { useCallback, useContext } from 'react'
+import { AUTHORIZED, UNAUTHORIZED } from 'loony-types'
+import { AuthContext } from '../../context/AuthContext.tsx'
+import { axiosInstance } from 'loony-query'
+import type {
+  Auth,
+  BooleanDispatchAction,
+  VoidReturnFunction,
+} from 'loony-types'
 
 const Logo = () => {
   return (
-    <Link className='nav-item' to='/' style={{ color: 'white' }}>
+    <Link className="nav-item" to="/" style={{ color: 'white' }}>
       LOONY
     </Link>
-  );
-};
+  )
+}
 
 const CreateDocument = (authContext: Auth) => {
   if (authContext.status === AUTHORIZED) {
     return (
-      <div className='create-button'>
+      <div className="create-button">
         <button style={{ fontWeight: 'bold' }}>Create</button>
-        <div className='dropdown-content'>
-          <div className='dropdown-content-items'>
-            <div className='nav-list-items'>
+        <div className="dropdown-content">
+          <div className="dropdown-content-items">
+            <div className="nav-list-items">
               <ul>
                 <li>
-                  <Link to='/create/book'>Create Book</Link>
+                  <Link to="/create/book">Create Book</Link>
                 </li>
                 <li>
-                  <Link to='/create/blog'>Create Blog</Link>
+                  <Link to="/create/blog">Create Blog</Link>
                 </li>
               </ul>
             </div>
           </div>
         </div>
       </div>
-    );
+    )
   }
-  return null;
-};
+  return null
+}
 
-const Profile = ({ authContext, logoutUser, navigate }: { authContext: Auth, logoutUser: VoidReturnFunction, navigate: NavigateFunction }) => {
+const Profile = ({
+  authContext,
+  logoutUser,
+  navigate,
+}: {
+  authContext: Auth
+  logoutUser: VoidReturnFunction
+  navigate: NavigateFunction
+}) => {
   if (authContext.status === AUTHORIZED && authContext.user) {
-    const { fname, lname } = authContext.user;
+    const { fname, lname } = authContext.user
     return (
-      <div className='profile-button'>
+      <div className="profile-button">
         <LiaUserSolid size={32} />
-        <div className='profile-content'>
-          <div className='profile-content-items'>
-            <div className='nav-list-items'>
+        <div className="profile-content">
+          <div className="profile-content-items">
+            <div className="nav-list-items">
               <ul>
                 <li>
-                  <Link to='/profile'>
+                  <Link to="/profile">
                     {fname} {lname}
                   </Link>
                 </li>
                 <li>
-                  <Link to='#' onClick={logoutUser}>
+                  <Link to="#" onClick={logoutUser}>
                     Logout
                   </Link>
                 </li>
@@ -65,68 +77,80 @@ const Profile = ({ authContext, logoutUser, navigate }: { authContext: Auth, log
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
-    <div className='login-button'>
+    <div className="login-button">
       <button
         style={{ fontWeight: 'bold' }}
         onClick={() => {
-          navigate('/login', { replace: true });
+          navigate('/login', { replace: true })
         }}
       >
         Login
       </button>
     </div>
-  );
-};
-const Navigation = ({ auth, setMobileNavOpen, isMobile }: { auth: Auth, setMobileNavOpen: BooleanDispatchAction, isMobile: boolean }) => {
-  const navigate: NavigateFunction = useNavigate();
-  const authContext = useContext(AuthContext);
+  )
+}
+const Navigation = ({
+  auth,
+  setMobileNavOpen,
+  isMobile,
+}: {
+  auth: Auth
+  setMobileNavOpen: BooleanDispatchAction
+  isMobile: boolean
+}) => {
+  const navigate: NavigateFunction = useNavigate()
+  const authContext = useContext(AuthContext)
 
   const logoutUser = useCallback(() => {
     axiosInstance.post('/auth/logout').then(() => {
       authContext.setAuthContext({
         status: UNAUTHORIZED,
         user: null,
-      });
-    });
-  }, []);
+      })
+    })
+  }, [])
 
   return (
-    <div className='top-navbar'>
-      <div className='top-navbar-container'>
-        <div className='flex-row'>
-          <div className='con-50 flex-center'>
+    <div className="top-navbar">
+      <div className="top-navbar-container">
+        <div className="flex-row">
+          <div className="con-50 flex-center">
             {isMobile ? (
-              <div className='nav-menu-btn'>
+              <div className="nav-menu-btn">
                 <LuMenu
-                  color='white'
+                  color="white"
                   size={32}
                   onClick={() => {
-                    setMobileNavOpen((prevState) => !prevState);
+                    setMobileNavOpen((prevState) => !prevState)
                   }}
                   style={{ marginRight: 10 }}
                 />
               </div>
             ) : null}
-            <div className='logo'>
+            <div className="logo">
               <Logo />
             </div>
           </div>
-          <div className='con-50 flex-end'>
-            <div className='app-menu'>
+          <div className="con-50 flex-end">
+            <div className="app-menu">
               <CreateDocument {...auth} />
             </div>
-            <div className='app-menu'>
-              <Profile authContext={authContext} logoutUser={logoutUser} navigate={navigate} />
+            <div className="app-menu">
+              <Profile
+                authContext={authContext}
+                logoutUser={logoutUser}
+                navigate={navigate}
+              />
             </div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Navigation;
+export default Navigation

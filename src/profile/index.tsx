@@ -1,20 +1,22 @@
-import { useContext, useState, useEffect } from 'react';
-import { AuthContext } from '../context/AuthContext.tsx';
-import Navbar from './Navbar.tsx';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
-import { axiosInstance } from 'loony-query';
-import CardLoader from '../components/CardLoader.tsx';
-import { timeAgo } from 'loony-utils';
-import { User } from 'types/index.ts';
+import { useContext, useState, useEffect } from 'react'
+import { AuthContext } from '../context/AuthContext.tsx'
+import Navbar from './Navbar.tsx'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
+import { axiosInstance } from 'loony-query'
+import CardLoader from '../components/CardLoader.tsx'
+import { timeAgo } from 'loony-utils'
+import { User, AppRouteProps } from 'loony-types'
 
-const Profile = ({ isMobile }: { isMobile: boolean }) => {
-  const auth = useContext(AuthContext);
-  const navigate = useNavigate();
+const Profile = (props: AppRouteProps) => {
+  const { isMobile, authContext, appContext } = props
+  const { base_url } = appContext.env
+  const { user } = authContext
+  const navigate = useNavigate()
 
-  const { fname, lname, uid } = auth.user as User;
+  const { fname, lname, uid } = user as User
 
   return (
-    <div className='book-container flex-row'>
+    <div className="book-container flex-row">
       {!isMobile ? <Navbar /> : null}
       <div
         style={{
@@ -23,7 +25,7 @@ const Profile = ({ isMobile }: { isMobile: boolean }) => {
         }}
       >
         <div
-          className='profile-info'
+          className="profile-info"
           style={{
             width: isMobile ? '90%' : '90%',
             height: 150,
@@ -32,7 +34,7 @@ const Profile = ({ isMobile }: { isMobile: boolean }) => {
           }}
         >
           <div
-            className='flex-row'
+            className="flex-row"
             style={{
               marginTop: 5,
               display: 'flex',
@@ -40,7 +42,7 @@ const Profile = ({ isMobile }: { isMobile: boolean }) => {
             }}
           >
             <div
-              className='avatar'
+              className="avatar"
               style={{
                 width: 80,
                 height: 80,
@@ -50,7 +52,7 @@ const Profile = ({ isMobile }: { isMobile: boolean }) => {
               }}
             ></div>
             <div style={{ fontSize: 12 }}>
-              <div className='username'>
+              <div className="username">
                 {fname} {lname}
               </div>
             </div>
@@ -64,31 +66,51 @@ const Profile = ({ isMobile }: { isMobile: boolean }) => {
             paddingRight: isMobile ? '0%' : '5%',
           }}
         >
-          <Blogs user_id={uid} navigate={navigate} isMobile={isMobile} />
-          <Books user_id={uid} navigate={navigate} isMobile={isMobile} />
+          <Blogs
+            user_id={uid}
+            navigate={navigate}
+            isMobile={isMobile}
+            base_url={base_url}
+          />
+          <Books
+            user_id={uid}
+            navigate={navigate}
+            isMobile={isMobile}
+            base_url={base_url}
+          />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-const Blogs = ({ navigate, isMobile, user_id }: { navigate: NavigateFunction, isMobile: boolean, user_id: number }) => {
-  const [blogs, setBlogs] = useState<any[] | null>(null);
+const Blogs = ({
+  navigate,
+  isMobile,
+  user_id,
+  base_url,
+}: {
+  navigate: NavigateFunction
+  isMobile: boolean
+  user_id: number
+  base_url: string
+}) => {
+  const [blogs, setBlogs] = useState<any[] | null>(null)
 
   useEffect(() => {
     axiosInstance
       .get(`/blog/get/${user_id}/get_all_blogs_liked_by_user`)
       .then(({ data }) => {
-        setBlogs(data.data);
+        setBlogs(data.data)
       })
       .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+        console.log(err)
+      })
+  }, [])
   return (
     <>
       <div
-        className='flex-row'
+        className="flex-row"
         style={{
           flexWrap: 'wrap',
           marginTop: 20,
@@ -98,7 +120,7 @@ const Blogs = ({ navigate, isMobile, user_id }: { navigate: NavigateFunction, is
       >
         {!blogs
           ? [1, 2, 3, 4].map((key) => {
-              return <CardLoader key={key} />;
+              return <CardLoader key={key} />
             })
           : null}
         {blogs &&
@@ -108,34 +130,45 @@ const Blogs = ({ navigate, isMobile, user_id }: { navigate: NavigateFunction, is
                 key={node.uid}
                 node={node}
                 navigate={navigate}
-                nodeType='blog'
-                nodeIdType='uid'
+                nodeType="blog"
+                nodeIdType="uid"
                 isMobile={isMobile}
+                base_url={base_url}
               />
-            );
+            )
           })}
       </div>
     </>
-  );
-};
+  )
+}
 
-const Books = ({ navigate, isMobile, user_id }: { navigate: NavigateFunction, isMobile: boolean, user_id: number }) => {
-  const [books, setBooks] = useState<any[] | null>(null);
+const Books = ({
+  navigate,
+  isMobile,
+  user_id,
+  base_url,
+}: {
+  navigate: NavigateFunction
+  isMobile: boolean
+  user_id: number
+  base_url: string
+}) => {
+  const [books, setBooks] = useState<any[] | null>(null)
   useEffect(() => {
     axiosInstance
       .get(`/book/get/${user_id}/get_all_books_liked_by_user`)
       .then(({ data }) => {
-        setBooks(data.data);
+        setBooks(data.data)
       })
       .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+        console.log(err)
+      })
+  }, [])
 
   return (
     <>
       <div
-        className='flex-row'
+        className="flex-row"
         style={{
           flexWrap: 'wrap',
           marginTop: 20,
@@ -145,7 +178,7 @@ const Books = ({ navigate, isMobile, user_id }: { navigate: NavigateFunction, is
       >
         {!books
           ? [5, 6, 7, 8].map((key) => {
-              return <CardLoader key={key} />;
+              return <CardLoader key={key} />
             })
           : null}
         {books &&
@@ -155,28 +188,42 @@ const Books = ({ navigate, isMobile, user_id }: { navigate: NavigateFunction, is
                 key={node.uid}
                 node={node}
                 navigate={navigate}
-                nodeType='book'
-                nodeIdType='uid'
+                nodeType="book"
+                nodeIdType="uid"
                 isMobile={isMobile}
+                base_url={base_url}
               />
-            );
+            )
           })}
       </div>
     </>
-  );
-};
+  )
+}
 
-const Card = ({ node, navigate, nodeType, nodeIdType }: { navigate: NavigateFunction, isMobile: boolean, nodeIdType: string, nodeType: string, node: any }) => {
-  const image = JSON.parse(node.images)[0];
+const Card = ({
+  node,
+  navigate,
+  nodeType,
+  nodeIdType,
+  base_url,
+}: {
+  navigate: NavigateFunction
+  isMobile: boolean
+  nodeIdType: string
+  nodeType: string
+  node: any
+  base_url: string
+}) => {
+  const image = JSON.parse(node.images)[0]
 
   return (
-    <div className='card' key={node[nodeIdType]}>
+    <div className="card" key={node[nodeIdType]}>
       <div
-        className='card-image'
+        className="card-image"
         style={{
           backgroundImage:
             image && image.name
-              ? `url("${process.env.REACT_APP_BASE_API_URL}/api/${nodeType}/${node[nodeIdType]}/340/${image.name}")`
+              ? `url("${base_url}/api/${nodeType}/${node[nodeIdType]}/340/${image.name}")`
               : undefined,
           overflow: 'hidden',
           backgroundSize: 'cover',
@@ -185,20 +232,20 @@ const Card = ({ node, navigate, nodeType, nodeIdType }: { navigate: NavigateFunc
           borderTopRightRadius: 3,
         }}
         onClick={() => {
-          navigate(`/view/${nodeType}/${node[nodeIdType]}`, node);
+          navigate(`/view/${nodeType}/${node[nodeIdType]}`, node)
         }}
       />
-      <div className='card-body'>
+      <div className="card-body">
         <div
-          className='card-title cursor'
+          className="card-title cursor"
           onClick={() => {
-            navigate(`/view/${nodeType}/${node[nodeIdType]}`, node);
+            navigate(`/view/${nodeType}/${node[nodeIdType]}`, node)
           }}
         >
           {node.title}
         </div>
         <div
-          className='flex-row'
+          className="flex-row"
           style={{
             marginTop: 5,
             display: 'flex',
@@ -206,7 +253,7 @@ const Card = ({ node, navigate, nodeType, nodeIdType }: { navigate: NavigateFunc
           }}
         >
           <div
-            className='avatar'
+            className="avatar"
             style={{
               width: 30,
               height: 30,
@@ -216,13 +263,13 @@ const Card = ({ node, navigate, nodeType, nodeIdType }: { navigate: NavigateFunc
             }}
           ></div>
           <div style={{ fontSize: 12 }}>
-            <div className='username'>Sankar Boro</div>
-            <div className='username'>{timeAgo(node.created_at)}</div>
+            <div className="username">Sankar Boro</div>
+            <div className="username">{timeAgo(node.created_at)}</div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Profile;
+export default Profile
