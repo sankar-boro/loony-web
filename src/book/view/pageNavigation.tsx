@@ -8,7 +8,7 @@ import {
   SectionNavContainer,
   SectionsNavContainer,
 } from '../../components/Containers.tsx'
-import { getSections, getSubSections } from './utils.ts'
+import { getSections, getSubSections } from 'loony-utils'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 import { ApiDispatchAction, BookReadAction, BookReadState } from 'loony-types'

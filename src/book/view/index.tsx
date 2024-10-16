@@ -1,18 +1,13 @@
 import { useState, useEffect, Suspense, lazy } from 'react'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
-import { extractImage } from 'loony-utils'
+import { extractImage, getChapters } from 'loony-utils'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 
 import { useParams, Link } from 'react-router-dom'
-import { getChapters } from './utils.ts'
 import { timeAgo } from 'loony-utils'
 import { PageNavigation } from './pageNavigation.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
-import {
-  AppRouteProps,
-  BookReadState,
-  BooleanDispatchAction,
-} from 'loony-types'
+import { AppRouteProps, BookReadState } from 'loony-types'
 import { ApiEvent } from 'loony-types'
 const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 

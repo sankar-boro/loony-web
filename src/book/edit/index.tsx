@@ -7,7 +7,7 @@ import { AiOutlineDelete } from 'react-icons/ai'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { LuFileWarning } from 'react-icons/lu'
 
-import { getChapters } from './utils.ts'
+import { getChapters } from 'loony-utils'
 import EditComponent from './edit.tsx'
 import { PageNavigation } from './pageNavigation.tsx'
 import { PageNodeSettings } from './pageNodeSettings.tsx'
