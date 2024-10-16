@@ -1,7 +1,7 @@
 {
   "name": "loony-route",
   "version": "0.1.0",
-  "main": "index.js",
+  "main": "src/index.tsx",
   "description": "Routing in Loony web.",
   "repository": {
     "type": "git",
@@ -9,5 +9,12 @@
   },
   "author": "Sankar Boro <sankar.boro@yahoo.com>",
   "homepage": "https://github.com/sankar-boro/loony-web/tree/main/packages/loony-route#readme",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  }
 }

@@ -1,7 +1,7 @@
 {
   "name": "loony-types",
   "version": "0.1.0",
-  "main": "index.js",
+  "main": "src/index.ts",
   "description": "Types in Loony web.",
   "repository": {
     "type": "git",
@@ -9,5 +9,8 @@
   },
   "author": "Sankar Boro <sankar.boro@yahoo.com>",
   "homepage": "https://github.com/sankar-boro/loony-web/tree/main/packages/loony-types#readme",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  }
 }
