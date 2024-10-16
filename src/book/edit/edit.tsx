@@ -40,6 +40,8 @@ export default function EditComponent({
     allSubSectionsBySectionId,
     topNode,
   } = state
+  if (!topNode || !editNode) return null
+
   const onDeleteNode = () => {
     if (!deleteNode) return
     const submitData = {
@@ -120,6 +122,7 @@ export default function EditComponent({
   }
 
   const editPage = (data: any) => {
+    if (!editNode) return
     let __activeNode = null
     const __nodes101 = nodes101.map((n) => {
       if (n.uid === editNode.uid) {
@@ -140,6 +143,7 @@ export default function EditComponent({
     })
   }
   const editSection = (data: any) => {
+    if (!editNode) return
     let __activeSection = null
     const __activeSectionsByPageId = activeSectionsByPageId.map((innerNode) => {
       if (innerNode.uid === editNode.uid) {
@@ -163,6 +167,7 @@ export default function EditComponent({
     })
   }
   const editSubSection = ({ data }: any) => {
+    if (!editNode) return
     const __activeSubSectionsBySectionId = activeSubSectionsBySectionId.map(
       (innerNode) => {
         if (innerNode.uid === editNode.uid) {
@@ -199,6 +204,7 @@ export default function EditComponent({
   }
 
   const editFnCallback = (data: any) => {
+    if (!editNode) return
     if (editNode.identity === 100) {
       updateFrontPage(data)
     }
@@ -214,6 +220,7 @@ export default function EditComponent({
   }
 
   const addChapterFnCb = (data: any) => {
+    if (!topNode) return
     const __nodes101 = appendChapters(nodes101, topNode, data)
     setState({
       ...state,
@@ -224,6 +231,8 @@ export default function EditComponent({
   }
 
   const addSectionFnCb = (data: any) => {
+    if (!topNode) return
+
     const __activeSectionsByPageId = appendSections(
       activeSectionsByPageId,
       topNode,
@@ -244,6 +253,7 @@ export default function EditComponent({
   }
 
   const addSubSectionFnCb = (data: any) => {
+    if (!topNode) return
     const __activeSubSectionsBySectionId = appendSubSections(
       activeSubSectionsBySectionId,
       topNode,
@@ -269,6 +279,9 @@ export default function EditComponent({
       addNode: null,
     })
   }
+
+  if (!topNode) return
+
   return (
     <>
       {modal && modal === 'add_chapter' ? (

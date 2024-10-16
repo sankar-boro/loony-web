@@ -1,8 +1,15 @@
+import { ApiEvent } from 'loony-types'
+import { AppState} from './app'
+import { EditState, BookEditState, BookReadState, ReadState } from './doc'
+export * from './app'
+export * from './doc'
+export * from './user'
+
 export interface JsonObject {
     [key: string]: any,
 }
 export type ApiStatus = {
-    status: number,
+    status: ApiEvent,
     error: string,
 }
 
@@ -11,80 +18,6 @@ export type ApiDispatchAction = React.Dispatch<React.SetStateAction<ApiStatus>>;
 export type BooleanDispatchAction = React.Dispatch<React.SetStateAction<boolean>>;
 export type VoidReturnFunction = () => void;
 
-export type Alert = null | { status: string; title: string; body: string }
-export type AppState = {
-  alert: Alert
-  env: {
-    base_url: string
-  }
-}
-
-export interface AppContextProps extends AppState {
-  setAppContext: React.Dispatch<React.SetStateAction<AppState>>
-}
-
-export interface AuthContextProps extends Auth {
-    setAuthContext: React.Dispatch<React.SetStateAction<Auth>>
-}
-
-export type AppRouteProps = { 
-    setMobileNavOpen: React.Dispatch<React.SetStateAction<boolean>>, 
-    mobileNavOpen: boolean, 
-    isMobile: boolean, 
-    authContext: AuthContextProps,
-    appContext: AppContextProps
-}
-
-// Auth
-export interface User {
-    fname: string,
-    lname: string,
-    email: string,
-    uid: number,
-}
-export interface Auth {
-    status: number,
-    user: User | undefined | null
-}
-
-export type ReadState = {
-    doc_info: any | null;
-    pageId: number | null;
-    mainNode: any | null;
-    activeNode: any | null;
-    nodeIndex: number | null;
-    rawNodes: any[];
-    blogNodes: any[];
-    childNodes: any[];
-}
-
-export type EditState = {
-    modal: string;
-    addNode: any | null;
-    editNode: any | null;
-    deleteNode: any | null,
-} & ReadState
-
-export type BookReadState = {
-    modal: string | null,
-    doc_info: any | null,
-    activeNode: any | null,
-    page_id: number | null,
-    section_id: number | null,
-    activeSectionsByPageId: any[],
-    allSectionsByPageId: any,
-    activeSubSectionsBySectionId: any[],
-    allSubSectionsBySectionId: any,
-    nodes101: any[],
-    frontPage: any | null,
-    topNode: any | null
-}
-
-export type BookEditState = {
-    addNode: any | null,
-    deleteNode: any | null,
-    editNode: any | null
-} & BookReadState
 
 export type ComponentProps = {
     heading: string,

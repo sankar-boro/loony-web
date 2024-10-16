@@ -1,17 +1,21 @@
 import {
   MdOutlineKeyboardArrowRight,
   MdOutlineKeyboardArrowDown,
-} from "react-icons/md";
+} from 'react-icons/md'
 import {
   ChapterNavContainer,
   PageNavContainer,
   SectionNavContainer,
   SectionsNavContainer,
-} from "../../components/Containers.tsx";
-import { getSections, getSubSections } from "./utils.ts";
-import { LuFileWarning, LuFileEdit } from "react-icons/lu";
-import { Link } from "react-router-dom";
-import { ApiDispatchAction, BookReadAction, BookReadState } from "types/index.ts";
+} from '../../components/Containers.tsx'
+import { getSections, getSubSections } from './utils.ts'
+import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
+import { Link } from 'react-router-dom'
+import {
+  ApiDispatchAction,
+  BookReadAction,
+  BookReadState,
+} from 'types/index.ts'
 
 export const PageNavigation = ({
   setState,
@@ -21,34 +25,37 @@ export const PageNavigation = ({
   book_id,
   isMobile,
 }: {
-  setState: BookReadAction,
-  setStatus: ApiDispatchAction,
-  nodes101: any[],
-  state: BookReadState,
-  book_id: number,
+  setState: BookReadAction
+  setStatus: ApiDispatchAction
+  nodes101: any[]
+  state: BookReadState
+  book_id: number
   isMobile: boolean
 }) => {
   const {
     page_id,
     activeSectionsByPageId,
     frontPage,
+    activeNode,
     allSectionsByPageId,
     allSubSectionsBySectionId,
-  } = state;
+  } = state
+
+  if (!frontPage || !activeNode) return null
 
   return (
     <>
       <ChapterNavContainer
         onClick={(e) => {
-          e.stopPropagation();
+          e.stopPropagation()
           setState((prevState) => ({
             ...prevState,
             page_id: frontPage.uid,
             activeNode: frontPage,
             activeSubSectionsBySectionId: [],
-          }));
+          }))
         }}
-        isActive={state.activeNode.uid === frontPage.uid}
+        isActive={activeNode.uid === frontPage.uid}
       >
         {frontPage.title}
       </ChapterNavContainer>
@@ -57,16 +64,16 @@ export const PageNavigation = ({
           <div key={chapter.uid}>
             <PageNavContainer
               onClick={(e) => {
-                e.stopPropagation();
+                e.stopPropagation()
                 getSections(
                   chapter,
                   setState,
                   setStatus,
                   book_id,
                   allSectionsByPageId
-                );
+                )
               }}
-              isActive={state.activeNode.uid === chapter.uid}
+              isActive={activeNode.uid === chapter.uid}
             >
               <div className="page-nav-title">{chapter.title}</div>
               <div className="page-nav-icon">
@@ -77,45 +84,49 @@ export const PageNavigation = ({
                 )}
               </div>
             </PageNavContainer>
-            <SectionsNavContainer onClick={() => { return}}>
+            <SectionsNavContainer
+              onClick={() => {
+                return
+              }}
+            >
               {page_id === chapter.uid &&
                 activeSectionsByPageId.map((section) => {
                   return (
                     <SectionNavContainer
                       key={section.uid}
                       onClick={(e) => {
-                        e.stopPropagation();
+                        e.stopPropagation()
                         getSubSections(
                           section,
                           setState,
                           setStatus,
                           book_id,
                           allSubSectionsBySectionId
-                        );
+                        )
                       }}
-                      isActive={state.activeNode.uid === section.uid}
+                      isActive={activeNode.uid === section.uid}
                     >
                       {section.title}
                     </SectionNavContainer>
-                  );
+                  )
                 })}
             </SectionsNavContainer>
           </div>
-        );
+        )
       })}
       {isMobile ? (
         <div
-          style={{ marginTop: 20, borderTop: "1px solid #ccc", paddingTop: 12 }}
+          style={{ marginTop: 20, borderTop: '1px solid #ccc', paddingTop: 12 }}
         >
           <ul
             className="list-item"
-            style={{ paddingLeft: 0, listStyle: "none" }}
+            style={{ paddingLeft: 0, listStyle: 'none' }}
           >
-            <li style={{ display: "flex", alignItems: "center" }}>
+            <li style={{ display: 'flex', alignItems: 'center' }}>
               <LuFileEdit color="#2d2d2d" size={16} />
               <Link to={`/edit/book/${book_id}`}>Edit this page</Link>
             </li>
-            <li style={{ display: "flex", alignItems: "center" }}>
+            <li style={{ display: 'flex', alignItems: 'center' }}>
               <LuFileWarning color="#2d2d2d" size={16} />
               <Link to={`/edit/book/${book_id}`}>Report</Link>
             </li>
@@ -123,5 +134,5 @@ export const PageNavigation = ({
         </div>
       ) : null}
     </>
-  );
-};
+  )
+}

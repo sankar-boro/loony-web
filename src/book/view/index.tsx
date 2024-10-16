@@ -36,8 +36,8 @@ const View = ({
     page_id: null,
     section_id: null,
     activeSectionsByPageId: [],
-    allSectionsByPageId: {},
     activeSubSectionsBySectionId: [],
+    allSectionsByPageId: {},
     allSubSectionsBySectionId: {},
     nodes101: [],
     frontPage: null,
@@ -54,9 +54,15 @@ const View = ({
   if (status.status === ApiEvent.INIT || status.status === ApiEvent.START)
     return <PageLoadingContainer isMobile={isMobile} />
 
-  const { activeNode, nodes101, activeSubSectionsBySectionId, doc_info } = state
+  const {
+    activeNode,
+    nodes101,
+    frontPage,
+    activeSubSectionsBySectionId,
+    doc_info,
+  } = state
 
-  if (!activeNode) return null
+  if (!activeNode || !doc_info || !frontPage) return null
 
   const image = extractImage(activeNode.images)
 

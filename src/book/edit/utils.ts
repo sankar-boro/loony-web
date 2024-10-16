@@ -1,5 +1,7 @@
 import { orderNodes, orderBookNodes } from 'loony-utils';
 import { axiosInstance } from "loony-query";
+import { ApiDispatchAction, BookEditAction, Node } from 'types';
+import { ApiEvent } from 'loony-types';
 
 const resetState = {
   editNode: null,
@@ -7,7 +9,7 @@ const resetState = {
   modal: "",
 };
 
-export const getChapters = (book_id, setState, setStatus) => {
+export const getChapters = (book_id: number, setState: BookEditAction, setStatus: ApiDispatchAction) => {
   axiosInstance.get(`/book/get/nodes?book_id=${book_id}`).then(({ data }) => {
     const bookTree = orderBookNodes(data.chapters);
     const __frontPage = bookTree && bookTree[0];
@@ -23,17 +25,17 @@ export const getChapters = (book_id, setState, setStatus) => {
     }));
     setStatus((prevStatus) => ({
       ...prevStatus,
-      status: "",
+      status: ApiEvent.SUCCESS,
     }));
   });
 };
 
 export const getSections = (
-  __node,
-  setState,
-  setStatus,
-  allSectionsByPageId,
-  book_id
+  __node: Node,
+  setState: BookEditAction,
+  setStatus: ApiDispatchAction,
+  allSectionsByPageId: any,
+  book_id: number
 ) => {
   const { uid } = __node;
   const url = `/book/get/sections?book_id=${book_id}&page_id=${uid}`;
@@ -49,7 +51,7 @@ export const getSections = (
   } else {
     setStatus((prevState) => ({
       ...prevState,
-      status: "FETCHING",
+      status: ApiEvent.START,
     }));
     axiosInstance.get(url).then(({ data }) => {
       const res = orderNodes(data.data, __node);
@@ -67,18 +69,18 @@ export const getSections = (
       }));
       setStatus((prevState) => ({
         ...prevState,
-        status: "",
+        status: ApiEvent.SUCCESS,
       }));
     });
   }
 };
 
 export const getSubSections = (
-  __node,
-  setState,
-  setStatus,
-  allSubSectionsBySectionId,
-  book_id
+  __node: Node,
+  setState: BookEditAction,
+  setStatus: ApiDispatchAction,
+  allSubSectionsBySectionId: any,
+  book_id: number
 ) => {
   const { uid } = __node;
   const url = `/book/get/sub_sections?book_id=${book_id}&page_id=${uid}`;
@@ -93,7 +95,7 @@ export const getSubSections = (
   } else {
     setStatus((prevState) => ({
       ...prevState,
-      status: "FETCHING",
+      status: ApiEvent.START,
     }));
     axiosInstance.get(url).then(({ data }) => {
       const res = orderNodes(data.data, __node);
@@ -110,7 +112,7 @@ export const getSubSections = (
       }));
       setStatus((prevState) => ({
         ...prevState,
-        status: "",
+        status: ApiEvent.SUCCESS,
       }));
     });
   }

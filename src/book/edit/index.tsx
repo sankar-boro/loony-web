@@ -14,11 +14,12 @@ import { PageNodeSettings } from './pageNodeSettings.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import AppContext from '../../context/AppContext.tsx'
 import {
+  ApiDispatchAction,
   AppRouteProps,
   BookEditAction,
   BookEditState,
-  BooleanDispatchAction,
 } from 'types/index.ts'
+import { ApiEvent } from 'loony-types'
 const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
 export default function Edit({
@@ -33,7 +34,7 @@ export default function Edit({
   const navigate = useNavigate()
   const { setAppContext } = useContext(AppContext)
   const [status, setStatus] = useState({
-    status: 'INIT',
+    status: ApiEvent.INIT,
     error: '',
   })
   const [state, setState] = useState<BookEditState>({
@@ -60,12 +61,12 @@ export default function Edit({
     }
   }, [book_id])
 
-  if (status.status === 'INIT' || status.status === 'FETCHING')
+  if (status.status === ApiEvent.INIT || status.status === ApiEvent.START)
     return <PageLoadingContainer isMobile={isMobile} />
 
   const { activeNode, nodes101, activeSubSectionsBySectionId, doc_info } = state
 
-  if (!activeNode) return null
+  if (!activeNode || !doc_info) return null
 
   const image = extractImage(activeNode.images)
 
@@ -99,7 +100,7 @@ export default function Edit({
                 setStatus={setStatus}
                 nodes101={nodes101}
                 state={state}
-                book_id={book_id}
+                book_id={book_id as number}
                 isMobile={isMobile}
               />
             </div>
@@ -118,7 +119,7 @@ export default function Edit({
               setStatus={setStatus}
               nodes101={nodes101}
               state={state}
-              book_id={book_id}
+              book_id={book_id as number}
               isMobile={isMobile}
             />
           </div>

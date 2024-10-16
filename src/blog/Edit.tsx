@@ -120,7 +120,7 @@ export default function Edit(props: AppRouteProps) {
           <ActivityComponent
             state={state}
             setState={setState}
-            blogId={blogId as string}
+            blog_id={blog_id as number}
             isMobile={isMobile}
           />
         ) : (
@@ -359,12 +359,12 @@ export default function Edit(props: AppRouteProps) {
 const ActivityComponent = ({
   state,
   setState,
-  blogId,
+  blog_id,
   isMobile,
 }: {
   state: EditState
   setState: EditAction
-  blogId: string
+  blog_id: number
   isMobile: boolean
 }) => {
   const navigate = useNavigate()
@@ -414,11 +414,9 @@ const ActivityComponent = ({
   }
 
   const deleteBlog = () => {
-    axiosInstance
-      .post('/blog/delete', { blog_id: parseInt(blogId) })
-      .then(() => {
-        navigate('/', { replace: true })
-      })
+    axiosInstance.post('/blog/delete', { blog_id }).then(() => {
+      navigate('/', { replace: true })
+    })
   }
 
   const editFnCallback = (data: any) => {
@@ -472,7 +470,7 @@ const ActivityComponent = ({
           url="/blog/append/node"
           isMobile={isMobile}
           doc_idName="blog_id"
-          doc_id={blogId}
+          doc_id={blog_id}
           parent_id={activeNode.uid}
           identity={101}
           onCancel={onCancel}
@@ -494,7 +492,7 @@ const ActivityComponent = ({
           heading="Edit Node"
           state={state}
           doc_idName="blog_id"
-          doc_id={blogId}
+          doc_id={blog_id}
           FnCallback={editFnCallback}
           onCancel={onCancel}
           url="/blog/edit/node"

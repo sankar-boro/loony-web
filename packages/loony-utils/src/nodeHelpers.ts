@@ -1,8 +1,18 @@
-interface NodeObject {
-  [key: string]: any;
+export type Node = {
+  uid: number,
+  title: string,
+  body: string,
+  images: string,
+  user_id: number,
+  identity: number,
+  theme: number,
+  created_at: string,
+  child?: Node[],
+  updated_at?: string,
+  parent_id?: number,
 }
 
-export const deleteBlogNode = (nodes: NodeObject[], submitData: NodeObject, delete_node_index: number) => {
+export const deleteBlogNode = (nodes: Node[], submitData: any, delete_node_index: number) => {
   const copyNodes = nodes.filter((node) => {
     if (submitData.delete_node_id === node.uid) {
       return false;
@@ -15,7 +25,7 @@ export const deleteBlogNode = (nodes: NodeObject[], submitData: NodeObject, dele
   return copyNodes;
 };
 
-export const deleteOne = (nodes: NodeObject[], { deleted_ids, parent_id, updated_id }: { deleted_ids: number[], parent_id: number, updated_id: number, num_deleted_rows: number }) => {
+export const deleteOne = (nodes: Node[], { deleted_ids, parent_id, updated_id }: { deleted_ids: number[], parent_id: number, updated_id: number, num_deleted_rows: number }) => {
   const newNodes = nodes.filter((x) => !deleted_ids.includes(x.uid));
   if (updated_id) {
     newNodes.forEach((x, i) => {
@@ -27,7 +37,7 @@ export const deleteOne = (nodes: NodeObject[], { deleted_ids, parent_id, updated
   return newNodes;
 };
 
-export const appendBlogNode = (nodes: NodeObject[], topData: NodeObject, resData: NodeObject) => {
+export const appendBlogNode = (nodes: Node[], topData: Node, resData: any) => {
   const newNodes = [];
   for (let index = 0; index < nodes.length; index++) {
     const element = nodes[index];
@@ -44,7 +54,7 @@ export const appendBlogNode = (nodes: NodeObject[], topData: NodeObject, resData
   return newNodes;
 };
 
-export const updateBookNode = (nodes: NodeObject[], updatedNode: NodeObject) => {
+export const updateBookNode = (nodes: Node[], updatedNode: Node) => {
   const newNodes = nodes.map((n) => {
     if (updatedNode.uid === n.uid) {
       return { ...n, ...updatedNode };
@@ -55,7 +65,7 @@ export const updateBookNode = (nodes: NodeObject[], updatedNode: NodeObject) => 
   return newNodes;
 };
 
-export const updateBlogNode = (nodes: NodeObject[], updatedNode: NodeObject) => {
+export const updateBlogNode = (nodes: Node[], updatedNode: Node) => {
   const newNodes = nodes.map((n) => {
     if (updatedNode.uid === n.uid) {
       return { ...n, ...updatedNode };
@@ -66,7 +76,7 @@ export const updateBlogNode = (nodes: NodeObject[], updatedNode: NodeObject) => 
   return newNodes;
 };
 
-export const addNewNode = (nodes: NodeObject[], topData: NodeObject, res: NodeObject) => {
+export const addNewNode = (nodes: Node[], topData: Node, res: { new_node: Node, update_node: Node }) => {
   const { new_node, update_node } = res;
   const newNodes = [];
 
@@ -108,17 +118,17 @@ export const appendChapters = addNewNode;
 export const appendSections = addNewNode;
 export const appendSubSections = addNewNode;
 
-const groupSiblingsForParent = (parent: NodeObject, child: NodeObject) => {
+const groupSiblingsForParent = (parent: Node, child: Node[]) => {
   let pId = parent.uid;
-  const siblings: NodeObject[] = [];
+  const siblings: Node[] = [];
   let c = 0;
 
-  const removeIds: NodeObject[] = [];
-  const newSiblings: NodeObject[] = [];
+  const removeIds: number[] = [];
+  const newSiblings: Node[] = [];
 
   while (c !== child.length) {
     // eslint-disable-next-line no-loop-func
-    child.forEach((ss: NodeObject) => {
+    child.forEach((ss: Node) => {
       if (ss.parent_id === pId) {
         siblings.push(ss);
         pId = ss.uid;
@@ -128,7 +138,7 @@ const groupSiblingsForParent = (parent: NodeObject, child: NodeObject) => {
     c++;
   }
 
-  child.forEach((ss: NodeObject) => {
+  child.forEach((ss: Node) => {
     if (!removeIds.includes(ss.uid)) {
       newSiblings.push(ss);
     }
@@ -141,7 +151,7 @@ const groupSiblingsForParent = (parent: NodeObject, child: NodeObject) => {
 const groupSectionsForPage = groupSiblingsForParent;
 const groupSubSectionsForSection = groupSiblingsForParent;
 
-function reOrderFrontPage(frontPage: NodeObject, samples: NodeObject) {
+function reOrderFrontPage(frontPage: Node, samples: { allSubSectionGroups: Node[], allSectionGroups: Node[]}) {
   let { allSubSectionGroups } = samples;
   const { allSectionGroups } = samples;
   const frontPages = groupSectionsForPage(frontPage, allSectionGroups);
@@ -151,7 +161,7 @@ function reOrderFrontPage(frontPage: NodeObject, samples: NodeObject) {
   }
 
   if (frontPages.newParent.child.length > 0) {
-    const newSubSections = frontPages.newParent.child.map((section: NodeObject) => {
+    const newSubSections = frontPages.newParent.child.map((section: Node) => {
       const allSubSections = groupSubSectionsForSection(section, allSubSectionGroups);
       allSubSectionGroups = allSubSections.newSiblings;
       return allSubSections.newParent;
@@ -162,8 +172,8 @@ function reOrderFrontPage(frontPage: NodeObject, samples: NodeObject) {
   return frontPages;
 }
 
-function groupWithIdentity(apiData: NodeObject[]) {
-  const identityGroups: NodeObject = {
+function groupWithIdentity(apiData: Node[]) {
+  const identityGroups: any = {
     100: [], // Front page
     101: [], // Chapter
     102: [], // Section
@@ -178,7 +188,7 @@ function groupWithIdentity(apiData: NodeObject[]) {
   return identityGroups;
 }
 
-const groupChapters = (parent_id: number, chapters: NodeObject[]) => {
+const groupChapters = (parent_id: number, chapters: Node[]) => {
   let currentparent_id = parent_id;
   const orders = [];
   while (orders.length !== chapters.length) {
@@ -195,7 +205,7 @@ const groupChapters = (parent_id: number, chapters: NodeObject[]) => {
   return orders;
 };
 
-export const orderBookNodes = (rawApi: NodeObject[], removeIds: number[] = []) => {
+export const orderBookNodes = (rawApi: Node[], removeIds: number[] = []) => {
   let data = rawApi;
   if (removeIds && removeIds.length > 0) {
     data = rawApi.filter((d) => {
@@ -218,9 +228,9 @@ export const orderBookNodes = (rawApi: NodeObject[], removeIds: number[] = []) =
   };
   allFrontPages[101] = groupChapters(allGroups[100][0].uid, allFrontPages[101]);
 
-  const chapters: NodeObject[] = [];
+  const chapters: Node[] = [];
   Object.values(allFrontPages).forEach((frontPageObjectValue) => {
-    frontPageObjectValue.forEach((frontPage: NodeObject) => {
+    frontPageObjectValue.forEach((frontPage: Node) => {
       const { newParent, newSiblings } = reOrderFrontPage(frontPage, samples);
       samples.allSectionGroups = newSiblings;
       chapters.push(newParent);
@@ -229,7 +239,7 @@ export const orderBookNodes = (rawApi: NodeObject[], removeIds: number[] = []) =
   return chapters;
 };
 
-export const orderNodes = (nodes: NodeObject[], parentNode: NodeObject) => {
+export const orderNodes = (nodes: Node[], parentNode: Node) => {
   let currentNode = parentNode;
   const results = [];
 
@@ -266,7 +276,7 @@ export const extractImage = (images: ImageRes[] | string | null): ImageRes | nul
   return parsedImage;
 };
 
-export const orderBlogNodes = (data: NodeObject[]) => {
+export const orderBlogNodes = (data: Node[]) => {
   const totalNodes = data.length;
   const parentNodesMap = new Map();
 

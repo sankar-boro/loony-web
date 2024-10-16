@@ -8,7 +8,7 @@ export const getSections = (
   setState: BookReadAction,
   setStatus: ApiDispatchAction,
   book_id: number,
-  allSectionsByPageId: any[]
+  allSectionsByPageId: any
 ) => {
   const { uid } = __node;
   if (allSectionsByPageId[uid]) {
