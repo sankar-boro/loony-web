@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext.tsx';
-import Navbar from './Navbar.tsx';
+// import Navbar from './Navbar.tsx';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { axiosInstance } from 'loony-query';
 import CardLoader from '../components/CardLoader.tsx';
@@ -15,7 +15,7 @@ const Profile = ({ isMobile }: { isMobile: boolean }) => {
 
   return (
     <div className='book-container flex-row'>
-      {!isMobile ? <Navbar /> : null}
+      {/* {!isMobile ? <Navbar /> : null} */}
       <div
         style={{
           width: isMobile ? '100%' : '85%',
