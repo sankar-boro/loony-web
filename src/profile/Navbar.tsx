@@ -3,11 +3,10 @@ import { MdHistory } from "react-icons/md";
 import { GoHome } from "react-icons/go";
 import { IoMdTime } from "react-icons/io";
 import { AiOutlineLike } from "react-icons/ai";
-import {
-  ContentPolicy,
-  PrivacyPolicy,
-  UserAgreement,
-} from "../assets/svgs/icons.tsx";
+
+import contentPolicy from '../assets/svgs/ContentPolicy.svg';
+import privacyPolicy from '../assets/svgs/PrivacyPolicy.svg';
+import userAgreement from '../assets/svgs/UserAgreement.svg';
 
 export default function Navbar() {
   return (
@@ -46,19 +45,19 @@ export default function Navbar() {
               width: 16,
             }}
           >
-            <ContentPolicy />
+            <img src={contentPolicy} />
           </span>
           <div className="page-nav-title">Content Policy</div>
         </MenuNavContainer>
         <MenuNavContainer>
           <span style={{ marginRight: 10, height: 16, width: 16 }}>
-            <PrivacyPolicy />
+          <img src={privacyPolicy} />
           </span>
           <div className="page-nav-title">Privacy Policy</div>
         </MenuNavContainer>
         <MenuNavContainer>
           <span style={{ marginRight: 10, height: 16, width: 16 }}>
-            <UserAgreement />
+            <img src={userAgreement} />
           </span>
           <div className="page-nav-title">User Agreement</div>
         </MenuNavContainer>

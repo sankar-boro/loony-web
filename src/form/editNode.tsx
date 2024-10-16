@@ -1,162 +1,190 @@
-import React, { useEffect, useState, useContext } from "react";
-import { axiosInstance } from "loony-query";
-import Cropper from "react-easy-crop";
-import { AuthContext, type AuthContextProps } from "../context/AuthContext.tsx";
-import { TextArea } from "./components/TextArea.tsx";
-import type { ComponentProps, AfterImageSelect, CropImageMetadata, EditImageComponentProps } from "../types/index.ts";
+import React, { useEffect, useState, useContext } from 'react'
+import { axiosInstance } from 'loony-query'
+import Cropper from 'react-easy-crop'
+import { AuthContext } from '../context/AuthContext.tsx'
+import { TextArea } from './components/TextArea.tsx'
+import type {
+  ComponentProps,
+  AfterImageSelect,
+  CropImageMetadata,
+  EditImageComponentProps,
+  AuthContextProps,
+  AppContextProps,
+} from '../types/index.ts'
+import AppContext from '../context/AppContext.tsx'
 
 export default function EditNodeComponent(props: ComponentProps) {
-  const { state, FnCallback, onCancel, docIdName, doc_id, url, isMobile, heading } = props
-  const { editNode } = state;
-  const auth = useContext<AuthContextProps>(AuthContext);
-  const user_id = auth.user?.uid;
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [image, setImage] = useState("");
-  const [theme, setTheme] = useState(11);
-  const [error, setError] = useState("");
+  const {
+    state,
+    FnCallback,
+    onCancel,
+    doc_idName,
+    doc_id,
+    url,
+    isMobile,
+    heading,
+  } = props
+  const { editNode } = state
+  const auth = useContext<AuthContextProps>(AuthContext)
+  const { env } = useContext<AppContextProps>(AppContext)
+  const { base_url } = env
+  const user_id = auth.user?.uid
+  const [title, setTitle] = useState('')
+  const [body, setBody] = useState('')
+  const [image, setImage] = useState('')
+  const [theme, setTheme] = useState(11)
+  const [error, setError] = useState('')
   const [afterImageSelect, setAfterImageSelect] = useState<AfterImageSelect>({
     image: null,
     width: null,
     height: null,
     hasImage: false,
-  });
+  })
 
-  const [afterTmpImageUpload, setAfterTmpImageUpload] = useState("");
-  const [imageEdit, setImageEdit] = useState<null | string>(null);
-  const [cropImageMetadata, setCropImageMetadata] = useState<CropImageMetadata>({
-    width: null,
-    height: null,
-    x: null,
-    y: null,
-  });
+  const [afterTmpImageUpload, setAfterTmpImageUpload] = useState('')
+  const [imageEdit, setImageEdit] = useState<null | string>(null)
+  const [cropImageMetadata, setCropImageMetadata] = useState<CropImageMetadata>(
+    {
+      width: null,
+      height: null,
+      x: null,
+      y: null,
+    }
+  )
 
   useEffect(() => {
     if (editNode) {
-      setTitle(editNode.title);
-      setBody(editNode.body);
-      setBody(editNode.body);
-      const __image = JSON.parse(editNode.images);
+      setTitle(editNode.title)
+      setBody(editNode.body)
+      setBody(editNode.body)
+      const __image = JSON.parse(editNode.images)
       if (__image.length > 0) {
-        setImage(__image[0].name);
+        setImage(__image[0].name)
       }
       if (editNode.theme) {
-        setTheme(editNode.theme);
+        setTheme(editNode.theme)
       }
     }
-  }, [editNode]);
+  }, [editNode])
 
-  const updateNode: React.MouseEventHandler<HTMLButtonElement> = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
+  const updateNode: React.MouseEventHandler<HTMLButtonElement> = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault()
     if (!title) {
-      setError("Title is required.");
-      return;
+      setError('Title is required.')
+      return
     }
     if (!title) {
-      setError("Body is required.");
-      return;
+      setError('Body is required.')
+      return
     }
     const submitData = {
       title,
       body,
       uid: editNode.uid,
-      [docIdName]: parseInt(doc_id),
+      [doc_idName]: doc_id,
       identity: editNode.identity ? editNode.identity : null,
       images: [{ name: afterTmpImageUpload ? afterTmpImageUpload : image }],
       theme,
-    };
+    }
     axiosInstance
       .post(url, submitData)
       .then((res) => {
-        FnCallback(res.data);
+        FnCallback(res.data)
       })
       .catch(() => {
-        onCloseModal();
-      });
-  };
+        onCloseModal()
+      })
+  }
   const onCloseModal = () => {
-    setTitle("");
-    setBody("");
-    onCancel();
-  };
-  const onSelectImage: React.ChangeEventHandler<HTMLInputElement> = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files && event.target.files.length > 0 && event.target.files[0];
-    if (!selectedFile) return;
-    const reader = new FileReader();
+    setTitle('')
+    setBody('')
+    onCancel()
+  }
+  const onSelectImage: React.ChangeEventHandler<HTMLInputElement> = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const selectedFile =
+      event.target.files &&
+      event.target.files.length > 0 &&
+      event.target.files[0]
+    if (!selectedFile) return
+    const reader = new FileReader()
     // FileReader.onload: (l
     reader.onload = (e) => {
-      const img = new Image();
+      const img = new Image()
       img.onload = function () {
-        const width = img.naturalWidth;
-        const height = img.naturalHeight;
+        const width = img.naturalWidth
+        const height = img.naturalHeight
         if (width > height && width <= 1420) {
-          return;
+          return
         }
         if (height > width && height <= 1420) {
-          return;
+          return
         }
         setAfterImageSelect({
           hasImage: true,
           image: selectedFile,
           width,
           height,
-        });
-        setImageEdit(URL.createObjectURL(selectedFile));
-      };
-      if (e.target?.result && typeof e.target.result === "string") {
-        img.src = e.target.result;
+        })
+        setImageEdit(URL.createObjectURL(selectedFile))
       }
-    };
-    reader.readAsDataURL(selectedFile);
-  };
+      if (e.target?.result && typeof e.target.result === 'string') {
+        img.src = e.target.result
+      }
+    }
+    reader.readAsDataURL(selectedFile)
+  }
 
-  const changeFile = onSelectImage;
+  const changeFile = onSelectImage
 
   const uploadImage = async () => {
-    const formData = new FormData();
+    const formData = new FormData()
     formData.append(
-      "metadata",
+      'metadata',
       JSON.stringify({
         oriImgMd: afterImageSelect,
         cropImgMd: cropImageMetadata,
       })
-    );
-    formData.append("file", afterImageSelect.image as File);
+    )
+    formData.append('file', afterImageSelect.image as File)
 
-    const { data } = await axiosInstance.post("/upload_file", formData, {
+    const { data } = await axiosInstance.post('/upload_file', formData, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
-    });
+    })
 
-    setAfterTmpImageUpload(data.name);
-    setImageEdit("");
-    return data;
-  };
+    setAfterTmpImageUpload(data.name)
+    setImageEdit('')
+    return data
+  }
 
-  const imageName = docIdName === "book_id" ? "book" : "blog";
+  const imageName = doc_idName === 'book_id' ? 'book' : 'blog'
 
   return (
     <div
       style={{
-        width: isMobile ? "100%" : "60%",
-        paddingLeft: "5%",
-        background: "linear-gradient(to right, #ffffff, #F6F8FC)",
-        minHeight: "100vh",
-        paddingBottom: "10vh",
+        width: isMobile ? '100%' : '60%',
+        paddingLeft: '5%',
+        background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+        minHeight: '100vh',
+        paddingBottom: '10vh',
       }}
     >
       <h2>{heading}</h2>
       <div style={{}}>
         <div>
           {error ? (
-            <div style={{ color: "#ff4949", fontWeight: "bold", fontSize: 14 }}>
+            <div style={{ color: '#ff4949', fontWeight: 'bold', fontSize: 14 }}>
               {error}
             </div>
           ) : null}
           {image ? (
             <img
-              src={`${process.env.REACT_APP_BASE_API_URL}/api/${imageName}/${user_id}/340/${image}`}
+              src={`${base_url}/api/${imageName}/${user_id}/340/${image}`}
               alt="tmp file upload"
             />
           ) : null}
@@ -167,7 +195,7 @@ export default function EditNodeComponent(props: ComponentProps) {
               type="text"
               value={title}
               onChange={(e) => {
-                setTitle(e.target.value);
+                setTitle(e.target.value)
               }}
             />
           </div>
@@ -190,7 +218,7 @@ export default function EditNodeComponent(props: ComponentProps) {
           ) : null}
           {afterTmpImageUpload && !imageEdit ? (
             <img
-              src={`${process.env.REACT_APP_BASE_API_URL}/api/tmp/${user_id}/340/${afterTmpImageUpload}`}
+              src={`${base_url}/api/tmp/${user_id}/340/${afterTmpImageUpload}`}
               alt="tmp file upload"
             />
           ) : null}
@@ -198,9 +226,9 @@ export default function EditNodeComponent(props: ComponentProps) {
       </div>
       <div
         style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-end",
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
         }}
       >
         <button onClick={onCloseModal} className="grey-bg">
@@ -215,45 +243,40 @@ export default function EditNodeComponent(props: ComponentProps) {
         </button>
       </div>
     </div>
-  );
+  )
 }
 
 const EditImageComponent = (props: EditImageComponentProps) => {
-  const {
-    uploadImage,
-    changeFile,
-    imageEdit,
-    setCropImageMetadata,
-  } = props
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
+  const { uploadImage, changeFile, imageEdit, setCropImageMetadata } = props
+  const [crop, setCrop] = useState({ x: 0, y: 0 })
+  const [zoom, setZoom] = useState(1)
   const [aspectRatio, setAspectRatio] = useState({
     width: 4,
     height: 3,
-  });
+  })
 
   const onCropComplete = (_croppedArea: any, croppedAreaPixels: any) => {
-    setCropImageMetadata(croppedAreaPixels);
-  };
+    setCropImageMetadata(croppedAreaPixels)
+  }
 
   return (
     <div className="form-section">
       <label>Image</label>
       <div
         style={{
-          border: "1px dashed #ccc",
+          border: '1px dashed #ccc',
           padding: 24,
         }}
       >
         <div
           style={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
-          <div style={{ position: "relative", width: "100%", minHeight: 350 }}>
+          <div style={{ position: 'relative', width: '100%', minHeight: 350 }}>
             <Cropper
               image={imageEdit as string}
               crop={crop}
@@ -269,14 +292,14 @@ const EditImageComponent = (props: EditImageComponentProps) => {
           <div className="flex-row">
             <button
               onClick={() => {
-                setAspectRatio({ width: 4, height: 3 });
+                setAspectRatio({ width: 4, height: 3 })
               }}
             >
               4/3
             </button>
             <button
               onClick={() => {
-                setAspectRatio({ width: 9, height: 16 });
+                setAspectRatio({ width: 9, height: 16 })
               }}
             >
               9/16
@@ -286,38 +309,42 @@ const EditImageComponent = (props: EditImageComponentProps) => {
             type="file"
             onChange={changeFile}
             style={{
-              backgroundColor: "white",
-              border: "none",
+              backgroundColor: 'white',
+              border: 'none',
               padding: 0,
               margin: 0,
               marginTop: 20,
               borderRadius: 15,
-              width: "50%",
+              width: '50%',
             }}
           />
           <button onClick={uploadImage}>Upload</button>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-const SelectImage = ({ onSelectImage }: { onSelectImage: React.ChangeEventHandler<HTMLInputElement> }) => {
+const SelectImage = ({
+  onSelectImage,
+}: {
+  onSelectImage: React.ChangeEventHandler<HTMLInputElement>
+}) => {
   return (
     <div className="form-section">
       <label>Image</label>
       <div
         style={{
-          border: "1px dashed #ccc",
+          border: '1px dashed #ccc',
           padding: 24,
         }}
       >
         <div
           style={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
           <label>Drop file here</label>
@@ -327,17 +354,17 @@ const SelectImage = ({ onSelectImage }: { onSelectImage: React.ChangeEventHandle
             type="file"
             onChange={onSelectImage}
             style={{
-              backgroundColor: "white",
-              border: "none",
+              backgroundColor: 'white',
+              border: 'none',
               padding: 0,
               margin: 0,
               marginTop: 20,
               borderRadius: 15,
-              width: "50%",
+              width: '50%',
             }}
           />
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

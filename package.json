@@ -38,7 +38,8 @@
     "rehype-rewrite": "^4.0.2",
     "url-loader": "^4.1.1"
   },
-  "devDependencies": {"@eslint/js": "^9.12.0",
+  "devDependencies": {
+    "@eslint/js": "^9.12.0",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.2",

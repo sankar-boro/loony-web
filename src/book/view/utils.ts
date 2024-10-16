@@ -96,7 +96,7 @@ export const getChapters = (book_id: number, setState: BookReadAction, setStatus
     const __nodes101 = bookTree.slice(1);
     setState((prevState) => ({
       ...prevState,
-      book_info: data.book,
+      doc_info: data.book,
       frontPage: __frontPage,
       activeNode: __frontPage,
       nodes101: __nodes101,

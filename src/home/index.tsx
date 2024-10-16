@@ -1,79 +1,80 @@
-import { useEffect, useState } from 'react';
-import { axiosInstance } from 'loony-query';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
-import { timeAgo } from 'loony-utils';
+import { useEffect, useState } from 'react'
+import { axiosInstance } from 'loony-query'
+import { NavigateFunction, useNavigate } from 'react-router-dom'
+import { timeAgo } from 'loony-utils'
 
-import CardLoader from '../components/CardLoader.tsx';
-// import Navbar from './Navbar.tsx';
-import { AUTHORIZED } from 'loony-types';
-import { AppRouteProps } from 'types/index.ts';
+import CardLoader from '../components/CardLoader.tsx'
+import Navbar from './Navbar.tsx'
+import { AUTHORIZED } from 'loony-types'
+import { AppRouteProps } from 'types/index.ts'
 
 const Home = (props: AppRouteProps) => {
-  const { isMobile, authContext } = props;
-  const navigate = useNavigate();
-  const [blogs, setBlogs] = useState(null);
-  const [books, setBooks] = useState(null);
-  const [book_page_no] = useState(1);
-  const [blog_page_no] = useState(1);
+  const { isMobile, authContext, appContext } = props
+  const { base_url } = appContext.env
+  const navigate = useNavigate()
+  const [blogs, setBlogs] = useState(null)
+  const [books, setBooks] = useState(null)
+  const [book_page_no] = useState(1)
+  const [blog_page_no] = useState(1)
 
   useEffect(() => {
     axiosInstance
       .get(`/blog/get/${blog_page_no}/by_page`)
       .then(({ data }) => {
-        setBlogs(data.data);
+        setBlogs(data.data)
       })
       .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+        console.log(err)
+      })
+  }, [])
 
   useEffect(() => {
     if (authContext.status === AUTHORIZED && authContext.user) {
       axiosInstance
         .get(`/book/get/${authContext.user.uid}/get_all_books_liked_by_user`)
         .then(({ data }) => {
-          setBooks(data.data);
+          setBooks(data.data)
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     } else {
       axiosInstance
         .get(`/book/get/${book_page_no}/by_page`)
         .then(({ data }) => {
-          setBooks(data.data);
+          setBooks(data.data)
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     }
-  }, [authContext.status]);
+  }, [authContext.status])
 
   useEffect(() => {
     if (authContext.status === AUTHORIZED && authContext.user) {
       axiosInstance
         .get(`/blog/get/${authContext.user.uid}/get_all_blogs_liked_by_user`)
         .then(({ data }) => {
-          setBlogs(data.data);
+          setBlogs(data.data)
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     } else {
       axiosInstance
         .get(`/blog/get/${blog_page_no}/by_page`)
         .then(({ data }) => {
-          setBlogs(data.data);
+          setBlogs(data.data)
         })
         .catch((err) => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     }
-  }, [authContext.status]);
+  }, [authContext.status])
 
   return (
-    <div className='home-container flex-row'>
-      {/* {!isMobile ? <Navbar {...props} /> : null} */}
+    <div className="home-container flex-row">
+      {!isMobile ? <Navbar {...props} /> : null}
       <div
         style={{
           width: isMobile ? '100%' : '60%',
@@ -81,18 +82,26 @@ const Home = (props: AppRouteProps) => {
           paddingLeft: isMobile ? '0%' : '5%',
         }}
       >
-        <Documents navigate={navigate} documents={blogs} />
-        <Documents navigate={navigate} documents={books} />
+        <Documents navigate={navigate} documents={blogs} base_url={base_url} />
+        <Documents navigate={navigate} documents={books} base_url={base_url} />
       </div>
     </div>
-  );
-};
+  )
+}
 
-const Documents = ({ navigate, documents }: { navigate: NavigateFunction, documents: any }) => {
+const Documents = ({
+  navigate,
+  documents,
+  base_url,
+}: {
+  navigate: NavigateFunction
+  documents: any
+  base_url: string
+}) => {
   return (
     <>
       <div
-        className='flex-row'
+        className="flex-row"
         style={{
           flexWrap: 'wrap',
           marginTop: 20,
@@ -102,13 +111,13 @@ const Documents = ({ navigate, documents }: { navigate: NavigateFunction, docume
       >
         {!documents
           ? [1, 2, 3, 4].map((key) => {
-              return <CardLoader key={key} />;
+              return <CardLoader key={key} />
             })
           : null}
         {documents &&
           documents.map((node: any) => {
-            const nodeType = node.doc_type === 1 ? 'blog' : 'book';
-            const key = `${node[nodeType]}_${node.uid}}`;
+            const nodeType = node.doc_type === 1 ? 'blog' : 'book'
+            const key = `${node[nodeType]}_${node.uid}}`
             return (
               <Card
                 key={key}
@@ -116,24 +125,37 @@ const Documents = ({ navigate, documents }: { navigate: NavigateFunction, docume
                 node={node}
                 navigate={navigate}
                 nodeType={nodeType}
+                base_url={base_url}
               />
-            );
+            )
           })}
       </div>
     </>
-  );
-};
+  )
+}
 
-const Card = ({ uid, node, navigate, nodeType }: { uid: string, node: any, navigate: NavigateFunction, nodeType: string }) => {
-  const image = JSON.parse(node.images)[0];
+const Card = ({
+  uid,
+  node,
+  navigate,
+  nodeType,
+  base_url,
+}: {
+  uid: string
+  node: any
+  navigate: NavigateFunction
+  nodeType: string
+  base_url: string
+}) => {
+  const image = JSON.parse(node.images)[0]
   return (
-    <div className='card' key={uid}>
+    <div className="card" key={uid}>
       <div
-        className='card-image'
+        className="card-image"
         style={{
           backgroundImage:
             image && image.name
-              ? `url("${process.env.REACT_APP_BASE_API_URL}/api/${nodeType}/${node.uid}/340/${image.name}")`
+              ? `url("${base_url}/api/${nodeType}/${node.uid}/340/${image.name}")`
               : undefined,
           overflow: 'hidden',
           backgroundSize: 'cover',
@@ -142,20 +164,20 @@ const Card = ({ uid, node, navigate, nodeType }: { uid: string, node: any, navig
           borderTopRightRadius: 3,
         }}
         onClick={() => {
-          navigate(`/view/${nodeType}/${node.uid}`, node);
+          navigate(`/view/${nodeType}/${node.uid}`, node)
         }}
       />
-      <div className='card-body'>
+      <div className="card-body">
         <div
-          className='card-title cursor'
+          className="card-title cursor"
           onClick={() => {
-            navigate(`/view/${nodeType}/${node.uid}`, node);
+            navigate(`/view/${nodeType}/${node.uid}`, node)
           }}
         >
           {node.title}
         </div>
         <div
-          className='flex-row'
+          className="flex-row"
           style={{
             marginTop: 5,
             display: 'flex',
@@ -163,7 +185,7 @@ const Card = ({ uid, node, navigate, nodeType }: { uid: string, node: any, navig
           }}
         >
           <div
-            className='avatar'
+            className="avatar"
             style={{
               width: 30,
               height: 30,
@@ -173,12 +195,12 @@ const Card = ({ uid, node, navigate, nodeType }: { uid: string, node: any, navig
             }}
           ></div>
           <div style={{ fontSize: 12 }}>
-            <div className='username'>Sankar Boro</div>
-            <div className='username'>{timeAgo(node.created_at)}</div>
+            <div className="username">Sankar Boro</div>
+            <div className="username">{timeAgo(node.created_at)}</div>
           </div>
         </div>
       </div>
     </div>
-  );
-};
-export default Home;
+  )
+}
+export default Home

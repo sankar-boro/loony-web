@@ -1,25 +1,26 @@
-import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
-import { axiosInstance } from 'loony-query';
-import { ApiEvent, UNAUTHORIZED, AUTHORIZED } from 'loony-types';
-import PageLoader from '../components/PageLoader.tsx';
-import { Auth} from '../types/index.ts'
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
+import { axiosInstance } from 'loony-query'
+import { ApiEvent, UNAUTHORIZED, AUTHORIZED } from 'loony-types'
+import PageLoader from '../components/PageLoader.tsx'
+import { Auth, AuthContextProps } from '../types/index.ts'
 
 const authState: Auth = {
   status: ApiEvent.IDLE,
   user: null,
 }
 
-export interface AuthContextProps extends Auth {
-  setAuthContext: Dispatch<SetStateAction<Auth>>
-}
-
 export const AuthContext = React.createContext<AuthContextProps>({
   ...authState,
-  setAuthContext: () => { return; },
-});
+  setAuthContext: () => {
+    return
+  },
+})
 
-const useAuthSession = (): [Auth, React.Dispatch<React.SetStateAction<Auth>>] => {
-  const [authContext, setAuthContext] = useState(authState);
+const useAuthSession = (): [
+  Auth,
+  React.Dispatch<React.SetStateAction<Auth>>
+] => {
+  const [authContext, setAuthContext] = useState(authState)
 
   useEffect(() => {
     axiosInstance
@@ -28,26 +29,33 @@ const useAuthSession = (): [Auth, React.Dispatch<React.SetStateAction<Auth>>] =>
         setAuthContext({
           user: data,
           status: AUTHORIZED,
-        });
+        })
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err)
         setAuthContext({
           user: null,
           status: UNAUTHORIZED,
-        });
-      });
-  }, []);
-  return [authContext, setAuthContext];
-};
+        })
+      })
+  }, [])
+  return [authContext, setAuthContext]
+}
 
-export const AuthProvider = ({ children }: { children: React.ReactNode } ) => {
-  const [authContext, setAuthContext] = useAuthSession();
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [authContext, setAuthContext] = useAuthSession()
 
   if (authContext.status === ApiEvent.IDLE)
     return (
-      <div className='book-container'>
+      <div className="book-container">
         <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
-          <div style={{ width: '20%', paddingTop: 15, borderRight: '1px solid #ebebeb' }} />
+          <div
+            style={{
+              width: '20%',
+              paddingTop: 15,
+              borderRight: '1px solid #ebebeb',
+            }}
+          />
           <div
             style={{
               width: '100%',
@@ -61,16 +69,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode } ) => {
           </div>
         </div>
       </div>
-    );
+    )
 
   return (
     <AuthContext.Provider
       value={{
         ...authContext,
-        setAuthContext
+        setAuthContext,
       }}
     >
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}

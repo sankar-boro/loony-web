@@ -1,24 +1,21 @@
-import { useState, useEffect, lazy, Suspense } from "react";
-import MarkdownPreview from "@uiw/react-markdown-preview";
-import { Link, useParams } from "react-router-dom";
-import { extractImage, timeAgo } from "loony-utils";
-import { LuFileWarning } from "react-icons/lu";
-import { LuFileEdit } from "react-icons/lu";
-import PageLoadingContainer from "../components/PageLoadingContainer.tsx";
-import { getNodes } from "./utils.ts";
-import { PageNavigationEdit } from "./pageNavigation.tsx";
-import { ApiEvent } from "loony-types";
-import { AppRouteProps, ReadState } from "types/index.ts";
-const MathsMarkdown = lazy(() => import("../components/MathsMarkdown.tsx"));
+import { useState, useEffect, lazy, Suspense } from 'react'
+import MarkdownPreview from '@uiw/react-markdown-preview'
+import { Link, useParams } from 'react-router-dom'
+import { extractImage, timeAgo } from 'loony-utils'
+import { LuFileWarning } from 'react-icons/lu'
+import { LuFileEdit } from 'react-icons/lu'
+import PageLoadingContainer from '../components/PageLoadingContainer.tsx'
+import { getNodes } from './utils.ts'
+import { PageNavigationEdit } from './pageNavigation.tsx'
+import { ApiEvent } from 'loony-types'
+import { AppRouteProps, ReadState } from 'types/index.ts'
+const MathsMarkdown = lazy(() => import('../components/MathsMarkdown.tsx'))
 
-const View = (
-  props: AppRouteProps
-  
-) => {
-  const { isMobile, setMobileNavOpen, mobileNavOpen } = props
-
-  const { blogId } = useParams();
-  const blog_id = blogId && parseInt(blogId);
+const View = (props: AppRouteProps) => {
+  const { isMobile, setMobileNavOpen, mobileNavOpen, appContext } = props
+  const { base_url } = appContext.env
+  const { blogId } = useParams()
+  const blog_id = blogId && parseInt(blogId)
 
   const [state, setState] = useState<ReadState>({
     doc_info: null,
@@ -29,46 +26,46 @@ const View = (
     rawNodes: [],
     blogNodes: [],
     childNodes: [],
-  });
+  })
   const [status, setStatus] = useState({
     status: ApiEvent.IDLE,
-    error: "",
-  });
+    error: '',
+  })
 
   useEffect(() => {
     if (blog_id) {
-      getNodes(blog_id, setState, setStatus);
+      getNodes(blog_id, setState, setStatus)
     }
-  }, [blog_id]);
+  }, [blog_id])
 
   if (status.status === ApiEvent.IDLE || status.status === ApiEvent.START)
-    return <PageLoadingContainer isMobile={isMobile} />;
+    return <PageLoadingContainer isMobile={isMobile} />
 
-  const { childNodes, mainNode, doc_info } = state;
-  const image = extractImage(mainNode.images);
+  const { childNodes, mainNode, doc_info } = state
+  const image = extractImage(mainNode.images)
 
   return (
     <div className="book-container">
-      <div style={{ display: "flex", flexDirection: "row" }}>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
         {isMobile && mobileNavOpen ? (
           <div
             style={{
-              width: "100%",
-              backgroundColor: "rgb(0,0,0,0.5)",
+              width: '100%',
+              backgroundColor: 'rgb(0,0,0,0.5)',
               zIndex: 10,
-              height: "105vh",
+              height: '105vh',
             }}
             onClick={() => {
-              setMobileNavOpen(false);
+              setMobileNavOpen(false)
             }}
           >
             <div
               style={{
                 width: 320,
-                backgroundColor: "white",
-                maxWidth: "100%",
-                height: "100%",
-                position: "relative",
+                backgroundColor: 'white',
+                maxWidth: '100%',
+                height: '100%',
+                position: 'relative',
                 padding: 12,
               }}
             >
@@ -83,9 +80,9 @@ const View = (
         {!isMobile ? (
           <div
             style={{
-              width: "15%",
+              width: '15%',
               paddingTop: 15,
-              borderRight: "1px solid #ebebeb",
+              borderRight: '1px solid #ebebeb',
             }}
           >
             <PageNavigationEdit
@@ -98,21 +95,21 @@ const View = (
 
         <div
           style={{
-            width: isMobile ? "100%" : "50%",
+            width: isMobile ? '100%' : '50%',
             paddingTop: 15,
-            paddingLeft: "5%",
-            paddingRight: "5%",
-            background: "linear-gradient(to right, #ffffff, #F6F8FC)",
+            paddingLeft: '5%',
+            paddingRight: '5%',
+            background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
             marginBottom: 24,
-            minHeight: "110vh",
+            minHeight: '110vh',
           }}
         >
           <div style={{ marginBottom: 24 }}>
             <div className="page-heading">{mainNode.title}</div>
             {image && image.name ? (
-              <div style={{ width: "100%", borderRadius: 5 }}>
+              <div style={{ width: '100%', borderRadius: 5 }}>
                 <img
-                  src={`${process.env.REACT_APP_BASE_API_URL}/api/blog/${blog_id}/720/${image.name}`}
+                  src={`${base_url}/api/blog/${blog_id}/720/${image.name}`}
                   alt=""
                   width="100%"
                 />
@@ -123,8 +120,8 @@ const View = (
               className="flex-row"
               style={{
                 marginTop: 5,
-                display: "flex",
-                alignItems: "center",
+                display: 'flex',
+                alignItems: 'center',
               }}
             >
               <div
@@ -132,7 +129,7 @@ const View = (
                 style={{
                   width: 30,
                   height: 30,
-                  backgroundColor: "#ccc",
+                  backgroundColor: '#ccc',
                   borderRadius: 30,
                   marginRight: 10,
                 }}
@@ -149,7 +146,7 @@ const View = (
               ) : mainNode.theme === 24 ? (
                 <MarkdownPreview
                   source={mainNode.body}
-                  wrapperElement={{ "data-color-mode": "light" }}
+                  wrapperElement={{ 'data-color-mode': 'light' }}
                 />
               ) : mainNode.theme === 41 ? (
                 <Suspense fallback={<div>Loading component...</div>}>
@@ -159,15 +156,15 @@ const View = (
             </div>
           </div>
           {childNodes.map((blog_node) => {
-            const parseImage = JSON.parse(blog_node.images);
-            const nodeImage = parseImage.length > 0 ? parseImage[0].name : null;
+            const parseImage = JSON.parse(blog_node.images)
+            const nodeImage = parseImage.length > 0 ? parseImage[0].name : null
             return (
               <div className="page-section" key={blog_node.uid}>
                 <div className="section-title">{blog_node.title}</div>
                 {nodeImage ? (
-                  <div style={{ width: "100%", borderRadius: 5 }}>
+                  <div style={{ width: '100%', borderRadius: 5 }}>
                     <img
-                      src={`${process.env.REACT_APP_BASE_API_URL}/api/blog/${blog_id}/720/${nodeImage}`}
+                      src={`${base_url}/api/blog/${blog_id}/720/${nodeImage}`}
                       alt=""
                       width="100%"
                     />
@@ -179,7 +176,7 @@ const View = (
                   ) : blog_node.theme === 24 ? (
                     <MarkdownPreview
                       source={blog_node.body}
-                      wrapperElement={{ "data-color-mode": "light" }}
+                      wrapperElement={{ 'data-color-mode': 'light' }}
                     />
                   ) : blog_node.theme === 41 ? (
                     <Suspense fallback={<div>Loading component...</div>}>
@@ -188,14 +185,14 @@ const View = (
                   ) : null}
                 </div>
               </div>
-            );
+            )
           })}
           <div style={{ height: 50 }} />
         </div>
         {!isMobile ? (
-          <div style={{ width: "20%", paddingLeft: 15, paddingTop: 15 }}>
+          <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
             <ul
-              style={{ paddingLeft: 0, listStyle: "none" }}
+              style={{ paddingLeft: 0, listStyle: 'none' }}
               className="list-item"
             >
               <li>
@@ -211,7 +208,7 @@ const View = (
         ) : null}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default View;
+export default View

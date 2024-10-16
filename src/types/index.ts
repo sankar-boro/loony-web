@@ -1,7 +1,3 @@
-import { AppState } from "context/AppContext";
-import { AuthContextProps } from "context/AuthContext";
-
-// deno-lint-ignore-file no-explicit-any
 export interface JsonObject {
     [key: string]: any,
 }
@@ -14,11 +10,29 @@ export type AppDispatchAction = React.Dispatch<React.SetStateAction<AppState>>
 export type ApiDispatchAction = React.Dispatch<React.SetStateAction<ApiStatus>>;
 export type BooleanDispatchAction = React.Dispatch<React.SetStateAction<boolean>>;
 export type VoidReturnFunction = () => void;
+
+export type Alert = null | { status: string; title: string; body: string }
+export type AppState = {
+  alert: Alert
+  env: {
+    base_url: string
+  }
+}
+
+export interface AppContextProps extends AppState {
+  setAppContext: React.Dispatch<React.SetStateAction<AppState>>
+}
+
+export interface AuthContextProps extends Auth {
+    setAuthContext: React.Dispatch<React.SetStateAction<Auth>>
+}
+
 export type AppRouteProps = { 
     setMobileNavOpen: React.Dispatch<React.SetStateAction<boolean>>, 
     mobileNavOpen: boolean, 
     isMobile: boolean, 
-    authContext: AuthContextProps
+    authContext: AuthContextProps,
+    appContext: AppContextProps
 }
 
 // Auth
@@ -53,7 +67,7 @@ export type EditState = {
 
 export type BookReadState = {
     modal: string | null,
-    book_info: any | null,
+    doc_info: any | null,
     activeNode: any | null,
     page_id: number | null,
     section_id: number | null,
@@ -75,8 +89,8 @@ export type BookEditState = {
 export type ComponentProps = {
     heading: string,
     state: JsonObject,
-    docIdName: string,
-    doc_id: string,
+    doc_idName: string,
+    doc_id: number,
     FnCallback: (data: any) => void,
     onCancel: VoidReturnFunction,
     url: string,

@@ -1,34 +1,45 @@
-import { useState, useEffect, useContext, Suspense, lazy } from "react";
-import MarkdownPreview from "@uiw/react-markdown-preview";
+import { useState, useEffect, useContext, Suspense, lazy } from 'react'
+import MarkdownPreview from '@uiw/react-markdown-preview'
 
-import { extractImage, timeAgo } from "loony-utils";
-import { RxReader } from "react-icons/rx";
-import { AiOutlineDelete } from "react-icons/ai";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { LuFileWarning } from "react-icons/lu";
+import { extractImage, timeAgo } from 'loony-utils'
+import { RxReader } from 'react-icons/rx'
+import { AiOutlineDelete } from 'react-icons/ai'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { LuFileWarning } from 'react-icons/lu'
 
-import { getChapters } from "./utils";
-import EditComponent from "./edit";
-import { AuthContext } from "../../context/AuthContext";
-import { PageNavigation } from "./pageNavigation";
-import { PageNodeSettings } from "./pageNodeSettings";
-import PageLoadingContainer from "../../components/PageLoadingContainer";
-const MathsMarkdown = lazy(() => import("../../components/MathsMarkdown"));
+import { getChapters } from './utils'
+import EditComponent from './edit'
+import { PageNavigation } from './pageNavigation'
+import { PageNodeSettings } from './pageNodeSettings'
+import PageLoadingContainer from '../../components/PageLoadingContainer'
+import {
+  AppDispatchAction,
+  AppRouteProps,
+  BookEditAction,
+  BookEditState,
+} from 'types'
+import AppContext from 'context/AppContext'
+const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown'))
 
-export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
-  const { documentId } = useParams();
-  const document_id = parseInt(documentId);
-  const navigate = useNavigate();
-  const { setContext } = useContext(AuthContext);
+export default function Edit({
+  mobileNavOpen,
+  setMobileNavOpen,
+  isMobile,
+  appContext,
+}: AppRouteProps) {
+  const { base_url } = appContext.env
+  const { documentId } = useParams()
+  const doc_id = documentId && parseInt(documentId)
+  const navigate = useNavigate()
   const [status, setStatus] = useState({
-    status: "INIT",
-    error: "",
-  });
-  const [state, setState] = useState({
-    document_info: null,
-    modal: "",
-    deleteNode: null,
-    editNode: null,
+    status: 'INIT',
+    error: '',
+  })
+  const { setAppContext } = useContext(AppContext)
+
+  const [state, setState] = useState<BookEditState>({
+    doc_info: null,
+    modal: '',
     activeNode: null,
     topNode: null,
     page_id: null,
@@ -39,44 +50,49 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
     allSubSectionsBySectionId: {},
     nodes101: [],
     frontPage: null,
-  });
+    addNode: null,
+    deleteNode: null,
+    editNode: null,
+  })
 
   useEffect(() => {
-    if (document_id) {
-      getChapters(document_id, setState, setStatus);
+    if (doc_id) {
+      getChapters(doc_id, setState, setStatus)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [document_id]);
+  }, [doc_id])
 
-  if (status.status === "INIT" || status.status === "FETCHING")
-    return <PageLoadingContainer isMobile={isMobile} />;
+  if (status.status === 'INIT' || status.status === 'FETCHING')
+    return <PageLoadingContainer isMobile={isMobile} />
 
-  const { activeNode, nodes101, activeSubSectionsBySectionId, document_info } =
-    state;
-  const image = extractImage(activeNode.images);
+  const { activeNode, nodes101, activeSubSectionsBySectionId, doc_info } = state
+
+  if (!activeNode) return null
+
+  const image = extractImage(activeNode.images)
 
   return (
     <div className="document-container">
-      <div style={{ display: "flex", flexDirection: "row" }}>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
         {isMobile && mobileNavOpen ? (
           <div
             style={{
-              width: "100%",
-              backgroundColor: "rgb(0,0,0,0.5)",
+              width: '100%',
+              backgroundColor: 'rgb(0,0,0,0.5)',
               zIndex: 10,
-              height: "105vh",
+              height: '105vh',
             }}
             onClick={() => {
-              setMobileNavOpen(false);
+              setMobileNavOpen(false)
             }}
           >
             <div
               style={{
                 width: 320,
-                backgroundColor: "white",
-                maxWidth: "100%",
-                height: "100%",
-                position: "relative",
+                backgroundColor: 'white',
+                maxWidth: '100%',
+                height: '100%',
+                position: 'relative',
                 padding: 12,
               }}
             >
@@ -85,7 +101,7 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
                 setStatus={setStatus}
                 nodes101={nodes101}
                 state={state}
-                document_id={document_id}
+                doc_id={doc_id}
                 isMobile={isMobile}
               />
             </div>
@@ -94,9 +110,9 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
         {!isMobile ? (
           <div
             style={{
-              width: "15%",
+              width: '15%',
               paddingTop: 15,
-              borderRight: "1px solid #ebebeb",
+              borderRight: '1px solid #ebebeb',
             }}
           >
             <PageNavigation
@@ -104,7 +120,7 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
               setStatus={setStatus}
               nodes101={nodes101}
               state={state}
-              document_id={document_id}
+              doc_id={doc_id as number}
               isMobile={isMobile}
             />
           </div>
@@ -113,10 +129,10 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
         {/* Page */}
         {state.modal ? (
           <EditComponent
-            state={state}
+            state={state as BookEditState}
             setState={setState}
-            setContext={setContext}
-            document_id={document_id}
+            setAppContext={setAppContext as AppDispatchAction}
+            doc_id={doc_id as number}
             navigate={navigate}
             isMobile={isMobile}
           />
@@ -124,21 +140,21 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
           <>
             <div
               style={{
-                width: isMobile ? "90%" : "50%",
+                width: isMobile ? '90%' : '50%',
                 paddingTop: 15,
-                paddingLeft: "5%",
-                paddingRight: "5%",
+                paddingLeft: '5%',
+                paddingRight: '5%',
                 paddingBottom: 100,
-                background: "linear-gradient(to right, #ffffff, #F6F8FC)",
-                minHeight: "100vh",
+                background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+                minHeight: '100vh',
               }}
             >
               <div>
                 <div className="page-heading">{activeNode.title}</div>
                 {image && image.name ? (
-                  <div style={{ width: "100%", borderRadius: 5 }}>
+                  <div style={{ width: '100%', borderRadius: 5 }}>
                     <img
-                      src={`${process.env.REACT_APP_BASE_API_URL}/api/document/${document_id}/720/${image.name}`}
+                      src={`${base_url}/api/document/${doc_id}/720/${image.name}`}
                       alt=""
                       width="100%"
                     />
@@ -150,8 +166,8 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
                     className="flex-row"
                     style={{
                       marginTop: 5,
-                      display: "flex",
-                      alignItems: "center",
+                      display: 'flex',
+                      alignItems: 'center',
                     }}
                   >
                     <div
@@ -159,7 +175,7 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
                       style={{
                         width: 30,
                         height: 30,
-                        backgroundColor: "#ccc",
+                        backgroundColor: '#ccc',
                         borderRadius: 30,
                         marginRight: 10,
                       }}
@@ -167,7 +183,7 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
                     <div style={{ fontSize: 12 }}>
                       <div className="username">Sankar Boro</div>
                       <div className="username">
-                        {timeAgo(document_info.created_at)}
+                        {timeAgo(doc_info.created_at)}
                       </div>
                     </div>
                   </div>
@@ -178,7 +194,7 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
                   ) : activeNode.theme === 24 ? (
                     <MarkdownPreview
                       source={activeNode.body}
-                      wrapperElement={{ "data-color-mode": "light" }}
+                      wrapperElement={{ 'data-color-mode': 'light' }}
                     />
                   ) : activeNode.theme === 41 ? (
                     <Suspense fallback={<div>Loading component...</div>}>
@@ -201,7 +217,7 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
                 {activeSubSectionsBySectionId.map((subSectionNode) => {
                   const subSectionNodeImage = extractImage(
                     subSectionNode.images
-                  );
+                  )
 
                   return (
                     <div className="page-section" key={subSectionNode.uid}>
@@ -209,9 +225,9 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
                         {subSectionNode.title}
                       </div>
                       {subSectionNodeImage && subSectionNodeImage.name ? (
-                        <div style={{ width: "100%", borderRadius: 5 }}>
+                        <div style={{ width: '100%', borderRadius: 5 }}>
                           <img
-                            src={`${process.env.REACT_APP_BASE_API_URL}/api/document/${document_id}/720/${subSectionNodeImage.name}`}
+                            src={`${base_url}/api/document/${doc_id}/720/${subSectionNodeImage.name}`}
                             alt=""
                             width="100%"
                           />
@@ -222,7 +238,7 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
                       ) : subSectionNode.theme === 24 ? (
                         <MarkdownPreview
                           source={subSectionNode.body}
-                          wrapperElement={{ "data-color-mode": "light" }}
+                          wrapperElement={{ 'data-color-mode': 'light' }}
                         />
                       ) : subSectionNode.theme === 41 ? (
                         <Suspense fallback={<div>Loading component...</div>}>
@@ -235,14 +251,14 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
                         state={state}
                       />
                     </div>
-                  );
+                  )
                 })}
               </div>
             </div>
 
             {!isMobile ? (
               <RightDocumentContainer
-                document_id={document_id}
+                doc_id={doc_id as number}
                 setState={setState}
                 state={state}
               />
@@ -251,23 +267,31 @@ export default function Edit({ mobileNavOpen, setMobileNavOpen, isMobile }) {
         )}
       </div>
     </div>
-  );
+  )
 }
 
-const RightDocumentContainer = ({ document_id, setState, state }) => {
+const RightDocumentContainer = ({
+  doc_id,
+  setState,
+  state,
+}: {
+  doc_id: number
+  setState: BookEditAction
+  state: BookEditState
+}) => {
   return (
-    <div style={{ width: "18%", paddingLeft: 15, paddingTop: 15 }}>
-      <ul style={{ paddingLeft: 0, listStyle: "none" }} className="list-item">
+    <div style={{ width: '18%', paddingLeft: 15, paddingTop: 15 }}>
+      <ul style={{ paddingLeft: 0, listStyle: 'none' }} className="list-item">
         <li>
           <RxReader size={16} color="#2d2d2d" />
-          <Link to={`/view/document/${document_id}`}>Read Document</Link>
+          <Link to={`/view/document/${doc_id}`}>Read Document</Link>
         </li>
         <li
           onClick={() => {
             setState({
               ...state,
-              modal: "delete_document",
-            });
+              modal: 'delete_document',
+            })
           }}
         >
           <AiOutlineDelete size={16} color="#2d2d2d" />
@@ -279,5 +303,5 @@ const RightDocumentContainer = ({ document_id, setState, state }) => {
         </li>
       </ul>
     </div>
-  );
-};
+  )
+}

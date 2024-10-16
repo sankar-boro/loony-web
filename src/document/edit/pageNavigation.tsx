@@ -1,36 +1,36 @@
 import {
   MdOutlineKeyboardArrowRight,
   MdOutlineKeyboardArrowDown,
-} from "react-icons/md";
+} from 'react-icons/md'
 import {
   ChapterNavContainer,
   ButtonNavContainer,
   PageNavContainer,
   SectionNavContainer,
   SectionsNavContainer,
-} from "../../components/Containers";
-import { getSections, getSubSections } from "./utils";
-import { LuFileWarning, LuFileEdit } from "react-icons/lu";
-import { Link } from "react-router-dom";
+} from '../../components/Containers'
+import { getSections, getSubSections } from './utils'
+import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
+import { Link } from 'react-router-dom'
 
 const Button = ({ onClick, title }) => {
   return (
     <div
       className="button-none"
       onClick={onClick}
-      style={{ padding: "3px 0px" }}
+      style={{ padding: '3px 0px' }}
     >
       {title}
     </div>
-  );
-};
+  )
+}
 
 export const PageNavigation = ({
   setState,
   setStatus,
   nodes101,
   state,
-  document_id,
+  doc_id,
   isMobile,
 }) => {
   const {
@@ -39,7 +39,7 @@ export const PageNavigation = ({
     frontPage,
     allSectionsByPageId,
     allSubSectionsBySectionId,
-  } = state;
+  } = state
 
   return (
     <>
@@ -51,8 +51,8 @@ export const PageNavigation = ({
             activeNode: frontPage,
             editNode: null,
             addNode: null,
-            modal: "",
-          });
+            modal: '',
+          })
         }}
         isActive={state.activeNode.uid === frontPage.uid}
       >
@@ -64,8 +64,8 @@ export const PageNavigation = ({
             setState({
               ...state,
               topNode: frontPage,
-              modal: "add_chapter",
-            });
+              modal: 'add_chapter',
+            })
           }}
           title="Add Chapter"
         />
@@ -75,18 +75,18 @@ export const PageNavigation = ({
           <div key={chapter.uid}>
             <PageNavContainer
               onClick={(e) => {
-                e.stopPropagation();
+                e.stopPropagation()
                 getSections(
                   chapter,
                   setState,
                   setStatus,
                   allSectionsByPageId,
                   document_id
-                );
+                )
               }}
               isActive={state.activeNode.uid === chapter.uid}
             >
-              <div style={{ width: "90%" }}>{chapter.title}</div>
+              <div style={{ width: '90%' }}>{chapter.title}</div>
               <div>
                 {page_id === chapter.uid ? (
                   <MdOutlineKeyboardArrowDown size={16} color="#2d2d2d" />
@@ -101,8 +101,8 @@ export const PageNavigation = ({
                   setState({
                     ...state,
                     topNode: chapter,
-                    modal: "add_chapter",
-                  });
+                    modal: 'add_chapter',
+                  })
                 }}
                 title="Add Chapter"
               />
@@ -117,8 +117,8 @@ export const PageNavigation = ({
                       setState({
                         ...state,
                         topNode: chapter,
-                        modal: "add_section",
-                      });
+                        modal: 'add_section',
+                      })
                     }}
                   />
                 </ButtonNavContainer>
@@ -127,14 +127,14 @@ export const PageNavigation = ({
                     <div key={section.uid}>
                       <SectionNavContainer
                         onClick={(e) => {
-                          e.stopPropagation();
+                          e.stopPropagation()
                           getSubSections(
                             section,
                             setState,
                             setStatus,
                             allSubSectionsBySectionId,
                             document_id
-                          );
+                          )
                         }}
                         isActive={state.activeNode.uid === section.uid}
                       >
@@ -146,33 +146,33 @@ export const PageNavigation = ({
                           setState({
                             ...state,
                             topNode: section,
-                            modal: "add_section",
-                          });
-                          e.stopPropagation();
+                            modal: 'add_section',
+                          })
+                          e.stopPropagation()
                         }}
                       />
                     </div>
-                  );
+                  )
                 })}
               </SectionsNavContainer>
             )}
           </div>
-        );
+        )
       })}
 
       {isMobile ? (
         <div
-          style={{ marginTop: 20, borderTop: "1px solid #ccc", paddingTop: 12 }}
+          style={{ marginTop: 20, borderTop: '1px solid #ccc', paddingTop: 12 }}
         >
           <ul
             className="list-item"
-            style={{ paddingLeft: 0, listStyle: "none" }}
+            style={{ paddingLeft: 0, listStyle: 'none' }}
           >
-            <li style={{ display: "flex", alignItems: "center" }}>
+            <li style={{ display: 'flex', alignItems: 'center' }}>
               <LuFileEdit color="#2d2d2d" size={16} />
               <Link to={`/view/document/${document_id}`}>Read Document</Link>
             </li>
-            <li style={{ display: "flex", alignItems: "center" }}>
+            <li style={{ display: 'flex', alignItems: 'center' }}>
               <LuFileWarning color="#2d2d2d" size={16} />
               <Link to="#">Report</Link>
             </li>
@@ -180,5 +180,5 @@ export const PageNavigation = ({
         </div>
       ) : null}
     </>
-  );
-};
+  )
+}

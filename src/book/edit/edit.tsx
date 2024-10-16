@@ -1,26 +1,30 @@
-import { deleteOne } from "loony-utils";
-import { axiosInstance } from "loony-query";
-import AddNode from "../../form/addNode.tsx";
-import EditDocument from "../../form/editNode.tsx";
-import ConfirmAction from "../../components/ConfirmAction.tsx";
-import { appendChapters, appendSections, appendSubSections } from "loony-utils";
-import { AppDispatchAction, BookEditAction, BookEditState } from "types/index.ts";
-import { NavigateFunction } from "react-router-dom";
+import { deleteOne } from 'loony-utils'
+import { axiosInstance } from 'loony-query'
+import AddNode from '../../form/addNode.tsx'
+import EditDocument from '../../form/editNode.tsx'
+import ConfirmAction from '../../components/ConfirmAction.tsx'
+import { appendChapters, appendSections, appendSubSections } from 'loony-utils'
+import {
+  AppDispatchAction,
+  BookEditAction,
+  BookEditState,
+} from 'types/index.ts'
+import { NavigateFunction } from 'react-router-dom'
 
 export default function EditComponent({
   state,
   setState,
   setAppContext,
-  book_id,
+  doc_id,
   navigate,
   isMobile,
 }: {
-  state: BookEditState,
-  setState: BookEditAction,
-  setAppContext: AppDispatchAction,
-  book_id: string,
-  navigate: NavigateFunction,
-  isMobile: boolean,
+  state: BookEditState
+  setState: BookEditAction
+  setAppContext: AppDispatchAction
+  doc_id: number
+  navigate: NavigateFunction
+  isMobile: boolean
 }) {
   const {
     deleteNode,
@@ -35,38 +39,38 @@ export default function EditComponent({
     allSectionsByPageId,
     allSubSectionsBySectionId,
     topNode,
-  } = state;
+  } = state
   const onDeleteNode = () => {
-    if (!deleteNode) return;
+    if (!deleteNode) return
     const submitData = {
       identity: deleteNode.identity,
       parent_id: deleteNode.parent_id,
       delete_id: deleteNode.uid,
-    };
+    }
     axiosInstance
       .post(`/book/delete/node`, submitData)
       .then((res) => {
         if (deleteNode.identity === 101) {
-          const __nodes101 = deleteOne(nodes101, res.data);
+          const __nodes101 = deleteOne(nodes101, res.data)
           setState({
             ...state,
             activeNode: frontPage,
             nodes101: __nodes101,
             deleteNode: null,
-            modal: "",
-          });
+            modal: '',
+          })
         }
         if (deleteNode.identity === 102) {
           const __activeSectionsByPageId = deleteOne(
             activeSectionsByPageId,
             res.data
-          );
-          let __activeNode = null;
+          )
+          let __activeNode = null
           nodes101.forEach((x) => {
             if (x.uid === page_id) {
-              __activeNode = x;
+              __activeNode = x
             }
-          });
+          })
           setState({
             ...state,
             activeNode: __activeNode,
@@ -76,14 +80,14 @@ export default function EditComponent({
               [page_id as number]: __activeSectionsByPageId,
             },
             deleteNode: null,
-            modal: "",
-          });
+            modal: '',
+          })
         }
         if (deleteNode.identity === 103) {
           const __activeSubSectionsBySectionId = deleteOne(
             activeSubSectionsBySectionId,
             res.data
-          );
+          )
           setState({
             ...state,
             activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
@@ -91,63 +95,61 @@ export default function EditComponent({
               ...allSubSectionsBySectionId,
               [section_id as number]: __activeSubSectionsBySectionId,
             },
-            modal: "",
+            modal: '',
             deleteNode: null,
-          });
+          })
         }
       })
       .catch((err) => {
-        console.log(err);
-      });
-  };
+        console.log(err)
+      })
+  }
 
   const deleteBook = () => {
-    axiosInstance
-      .post("/book/delete", { book_id: parseInt(book_id) })
-      .then(() => {
-        setAppContext((prevState) => ({
-          ...prevState,
-          alert: {
-            status: "success",
-            title: "Deleted Book",
-            body: "Your book has been successfully deleted."
-          },
-        }));
-        navigate("/", { replace: true });
-      });
-  };
+    axiosInstance.post('/book/delete', { book_id: doc_id }).then(() => {
+      setAppContext((prevState) => ({
+        ...prevState,
+        alert: {
+          status: 'success',
+          title: 'Deleted Book',
+          body: 'Your book has been successfully deleted.',
+        },
+      }))
+      navigate('/', { replace: true })
+    })
+  }
 
   const editPage = (data: any) => {
-    let __activeNode = null;
+    let __activeNode = null
     const __nodes101 = nodes101.map((n) => {
       if (n.uid === editNode.uid) {
         const t = {
           ...n,
           ...data,
-        };
-        __activeNode = t;
-        return t;
+        }
+        __activeNode = t
+        return t
       }
-      return n;
-    });
+      return n
+    })
     setState({
       ...state,
       activeNode: __activeNode,
       nodes101: __nodes101,
-      modal: "",
-    });
-  };
+      modal: '',
+    })
+  }
   const editSection = (data: any) => {
-    let __activeSection = null;
+    let __activeSection = null
     const __activeSectionsByPageId = activeSectionsByPageId.map((innerNode) => {
       if (innerNode.uid === editNode.uid) {
         __activeSection = {
           ...innerNode,
           ...data.data,
-        };
+        }
       }
-      return innerNode;
-    });
+      return innerNode
+    })
     setState({
       ...state,
       activeSectionsByPageId: __activeSectionsByPageId,
@@ -156,10 +158,10 @@ export default function EditComponent({
         [page_id as number]: __activeSectionsByPageId,
       },
       activeNode: __activeSection,
-      modal: "",
+      modal: '',
       editNode: null,
-    });
-  };
+    })
+  }
   const editSubSection = ({ data }: any) => {
     const __activeSubSectionsBySectionId = activeSubSectionsBySectionId.map(
       (innerNode) => {
@@ -167,11 +169,11 @@ export default function EditComponent({
           return {
             ...innerNode,
             ...data,
-          };
+          }
         }
-        return innerNode;
+        return innerNode
       }
-    );
+    )
     setState({
       ...state,
       activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
@@ -179,55 +181,55 @@ export default function EditComponent({
         ...allSubSectionsBySectionId,
         [section_id as number]: __activeSubSectionsBySectionId,
       },
-      modal: "",
-    });
-  };
+      modal: '',
+    })
+  }
 
   const updateFrontPage = (data: any) => {
     const __activeNode = {
       ...frontPage,
       ...data,
-    };
+    }
     setState({
       ...state,
       activeNode: __activeNode,
       page_id: __activeNode.uid,
-      modal: "",
-    });
-  };
+      modal: '',
+    })
+  }
 
   const editFnCallback = (data: any) => {
     if (editNode.identity === 100) {
-      updateFrontPage(data);
+      updateFrontPage(data)
     }
     if (editNode.identity === 101) {
-      editPage(data);
+      editPage(data)
     }
     if (editNode.identity === 102) {
-      editSection(data);
+      editSection(data)
     }
     if (editNode.identity === 103) {
-      editSubSection(data);
+      editSubSection(data)
     }
-  };
+  }
 
   const addChapterFnCb = (data: any) => {
-    const __nodes101 = appendChapters(nodes101, topNode, data);
+    const __nodes101 = appendChapters(nodes101, topNode, data)
     setState({
       ...state,
       activeNode: data.new_node,
       nodes101: __nodes101,
-      modal: "",
-    });
-  };
+      modal: '',
+    })
+  }
 
   const addSectionFnCb = (data: any) => {
     const __activeSectionsByPageId = appendSections(
       activeSectionsByPageId,
       topNode,
       data
-    );
-    const newActiveNode = data.new_node;
+    )
+    const newActiveNode = data.new_node
     setState({
       ...state,
       section_id: newActiveNode.uid,
@@ -237,16 +239,16 @@ export default function EditComponent({
         ...allSectionsByPageId,
         [page_id as number]: __activeSectionsByPageId,
       },
-      modal: "",
-    });
-  };
+      modal: '',
+    })
+  }
 
   const addSubSectionFnCb = (data: any) => {
     const __activeSubSectionsBySectionId = appendSubSections(
       activeSubSectionsBySectionId,
       topNode,
       data
-    );
+    )
 
     setState({
       ...state,
@@ -255,28 +257,28 @@ export default function EditComponent({
         [section_id as number]: __activeSubSectionsBySectionId,
       },
       activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
-      modal: "",
-    });
-  };
+      modal: '',
+    })
+  }
 
   const onCancel = () => {
     setState({
       ...state,
-      modal: "",
+      modal: '',
       editNode: null,
       addNode: null,
-    });
-  };
+    })
+  }
   return (
     <>
-      {modal && modal === "add_chapter" ? (
+      {modal && modal === 'add_chapter' ? (
         <AddNode
           state={state}
           FnCallback={addChapterFnCb}
           url="/book/append/node"
           isMobile={isMobile}
-          docIdName="book_id"
-          docId={book_id}
+          doc_idName="book_id"
+          doc_id={doc_id as number}
           parent_id={topNode.uid}
           identity={101}
           parent_identity={topNode.identity}
@@ -286,14 +288,14 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === "add_section" ? (
+      {modal && modal === 'add_section' ? (
         <AddNode
           state={state}
           FnCallback={addSectionFnCb}
           url="/book/append/node"
           isMobile={isMobile}
-          docIdName="book_id"
-          docId={book_id}
+          doc_idName="book_id"
+          doc_id={doc_id}
           parent_id={topNode.uid}
           parent_identity={topNode.identity}
           identity={102}
@@ -303,14 +305,14 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === "add_sub_section" ? (
+      {modal && modal === 'add_sub_section' ? (
         <AddNode
           state={state}
           FnCallback={addSubSectionFnCb}
           url="/book/append/node"
           isMobile={isMobile}
-          docIdName="book_id"
-          docId={book_id}
+          doc_idName="book_id"
+          doc_id={doc_id}
           parent_id={topNode.uid}
           parent_identity={topNode.identity}
           identity={103}
@@ -320,10 +322,10 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === "edit_node" ? (
+      {modal && modal === 'edit_node' ? (
         <EditDocument
-          docIdName="book_id"
-          doc_id={book_id}
+          doc_idName="book_id"
+          doc_id={doc_id}
           state={state}
           FnCallback={editFnCallback}
           onCancel={onCancel}
@@ -333,7 +335,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === "delete_book" ? (
+      {modal && modal === 'delete_book' ? (
         <ConfirmAction
           confirmTitle="Are you sure you want to delete Book?"
           confirmAction={deleteBook}
@@ -342,7 +344,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === "delete_page" ? (
+      {modal && modal === 'delete_page' ? (
         <ConfirmAction
           confirmTitle="Are you sure you want to delete Page?"
           confirmAction={onDeleteNode}
@@ -351,7 +353,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === "delete_node" ? (
+      {modal && modal === 'delete_node' ? (
         <ConfirmAction
           confirmTitle="Are you sure you want to delete Node?"
           confirmAction={onDeleteNode}
@@ -360,5 +362,5 @@ export default function EditComponent({
         />
       ) : null}
     </>
-  );
+  )
 }

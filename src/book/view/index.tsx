@@ -1,27 +1,37 @@
-import { useState, useEffect, Suspense, lazy } from "react";
-import { LuFileWarning, LuFileEdit } from "react-icons/lu";
-import { extractImage } from "loony-utils";
-import MarkdownPreview from "@uiw/react-markdown-preview";
+import { useState, useEffect, Suspense, lazy } from 'react'
+import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
+import { extractImage } from 'loony-utils'
+import MarkdownPreview from '@uiw/react-markdown-preview'
 
-import { useParams, Link } from "react-router-dom";
-import { getChapters } from "./utils.ts";
-import { timeAgo } from "loony-utils";
-import { PageNavigation } from "./pageNavigation.tsx";
-import PageLoadingContainer from "../../components/PageLoadingContainer.tsx";
-import { BookReadState, BooleanDispatchAction } from "types/index.ts";
-import { ApiEvent } from "loony-types";
-const MathsMarkdown = lazy(() => import("../../components/MathsMarkdown.tsx"));
+import { useParams, Link } from 'react-router-dom'
+import { getChapters } from './utils.ts'
+import { timeAgo } from 'loony-utils'
+import { PageNavigation } from './pageNavigation.tsx'
+import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
+import {
+  AppRouteProps,
+  BookReadState,
+  BooleanDispatchAction,
+} from 'types/index.ts'
+import { ApiEvent } from 'loony-types'
+const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
-const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }: { mobileNavOpen: boolean, setMobileNavOpen: BooleanDispatchAction, isMobile: boolean }) => {
-  const { bookId } = useParams();
-  const book_id = bookId && parseInt(bookId);
+const View = ({
+  mobileNavOpen,
+  setMobileNavOpen,
+  isMobile,
+  appContext,
+}: AppRouteProps) => {
+  const { base_url } = appContext.env
+  const { bookId } = useParams()
+  const book_id = bookId && parseInt(bookId)
   const [status, setStatus] = useState({
     status: ApiEvent.INIT,
-    error: "",
-  });
+    error: '',
+  })
 
   const [state, setState] = useState<BookReadState>({
-    book_info: null,
+    doc_info: null,
     activeNode: null,
     page_id: null,
     section_id: null,
@@ -31,51 +41,50 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }: { mobileNavOpen: bo
     allSubSectionsBySectionId: {},
     nodes101: [],
     frontPage: null,
-    modal: "",
+    modal: '',
     topNode: null,
-  });
+  })
 
   useEffect(() => {
     if (book_id) {
-      getChapters(book_id, setState, setStatus);
+      getChapters(book_id, setState, setStatus)
     }
-  }, [book_id]);
+  }, [book_id])
 
   if (status.status === ApiEvent.INIT || status.status === ApiEvent.START)
-    return <PageLoadingContainer isMobile={isMobile} />;
+    return <PageLoadingContainer isMobile={isMobile} />
 
-  const { activeNode, nodes101, activeSubSectionsBySectionId, book_info } =
-    state;
+  const { activeNode, nodes101, activeSubSectionsBySectionId, doc_info } = state
 
-  if (!activeNode) return null;
-  
-  const image = extractImage(activeNode.images);
+  if (!activeNode) return null
+
+  const image = extractImage(activeNode.images)
 
   return (
     <div className="book-container">
-      <div style={{ display: "flex", flexDirection: "row" }}>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
         {/*
          * @ Left Navigation
          */}
         {isMobile && mobileNavOpen ? (
           <div
             style={{
-              width: "100%",
-              backgroundColor: "rgb(0,0,0,0.5)",
+              width: '100%',
+              backgroundColor: 'rgb(0,0,0,0.5)',
               zIndex: 10,
-              height: "105vh",
+              height: '105vh',
             }}
             onClick={() => {
-              setMobileNavOpen(false);
+              setMobileNavOpen(false)
             }}
           >
             <div
               style={{
                 width: 320,
-                backgroundColor: "white",
-                maxWidth: "100%",
-                height: "100%",
-                position: "relative",
+                backgroundColor: 'white',
+                maxWidth: '100%',
+                height: '100%',
+                position: 'relative',
                 padding: 12,
               }}
             >
@@ -93,9 +102,9 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }: { mobileNavOpen: bo
         {!isMobile ? (
           <div
             style={{
-              width: "15%",
+              width: '15%',
               paddingTop: 15,
-              borderRight: "1px solid #ebebeb",
+              borderRight: '1px solid #ebebeb',
             }}
           >
             <PageNavigation
@@ -117,12 +126,12 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }: { mobileNavOpen: bo
          */}
         <div
           style={{
-            width: isMobile ? "90%" : "50%",
+            width: isMobile ? '90%' : '50%',
             paddingTop: 15,
-            paddingLeft: "5%",
-            paddingRight: "5%",
-            background: "linear-gradient(to right, #ffffff, #F6F8FC)",
-            minHeight: "100vh",
+            paddingLeft: '5%',
+            paddingRight: '5%',
+            background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
+            minHeight: '100vh',
           }}
         >
           <div
@@ -132,9 +141,9 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }: { mobileNavOpen: bo
           >
             <div className="page-heading">{activeNode.title}</div>
             {image && image.name ? (
-              <div style={{ width: "100%", borderRadius: 5 }}>
+              <div style={{ width: '100%', borderRadius: 5 }}>
                 <img
-                  src={`${process.env.REACT_APP_BASE_API_URL}/api/book/${book_id}/720/${image.name}`}
+                  src={`${base_url}/api/book/${book_id}/720/${image.name}`}
                   alt=""
                   width="100%"
                 />
@@ -146,8 +155,8 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }: { mobileNavOpen: bo
                 className="flex-row"
                 style={{
                   marginTop: 5,
-                  display: "flex",
-                  alignItems: "center",
+                  display: 'flex',
+                  alignItems: 'center',
                 }}
               >
                 <div
@@ -155,16 +164,14 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }: { mobileNavOpen: bo
                   style={{
                     width: 30,
                     height: 30,
-                    backgroundColor: "#ccc",
+                    backgroundColor: '#ccc',
                     borderRadius: 30,
                     marginRight: 10,
                   }}
                 ></div>
                 <div style={{ fontSize: 12 }}>
                   <div className="username">Sankar Boro</div>
-                  <div className="username">
-                    {timeAgo(book_info.created_at)}
-                  </div>
+                  <div className="username">{timeAgo(doc_info.created_at)}</div>
                 </div>
               </div>
             ) : null}
@@ -175,7 +182,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }: { mobileNavOpen: bo
               ) : activeNode.theme === 24 ? (
                 <MarkdownPreview
                   source={activeNode.body}
-                  wrapperElement={{ "data-color-mode": "light" }}
+                  wrapperElement={{ 'data-color-mode': 'light' }}
                 />
               ) : activeNode.theme === 41 ? (
                 <Suspense fallback={<div>Loading component...</div>}>
@@ -185,14 +192,14 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }: { mobileNavOpen: bo
             </div>
           </div>
           {activeSubSectionsBySectionId.map((subSectionNode) => {
-            const nodeImage = extractImage(subSectionNode.images);
+            const nodeImage = extractImage(subSectionNode.images)
             return (
               <div className="page-section" key={subSectionNode.uid}>
                 <div className="section-title">{subSectionNode.title}</div>
                 {nodeImage && nodeImage.name ? (
-                  <div style={{ width: "100%", borderRadius: 5 }}>
+                  <div style={{ width: '100%', borderRadius: 5 }}>
                     <img
-                      src={`${process.env.REACT_APP_BASE_API_URL}/api/book/${book_id}/720/${nodeImage.name}`}
+                      src={`${base_url}/api/book/${book_id}/720/${nodeImage.name}`}
                       alt=""
                       width="100%"
                     />
@@ -203,7 +210,7 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }: { mobileNavOpen: bo
                 ) : subSectionNode.theme === 24 ? (
                   <MarkdownPreview
                     source={subSectionNode.body}
-                    wrapperElement={{ "data-color-mode": "light" }}
+                    wrapperElement={{ 'data-color-mode': 'light' }}
                   />
                 ) : subSectionNode.theme === 41 ? (
                   <Suspense fallback={<div>Loading component...</div>}>
@@ -211,25 +218,23 @@ const View = ({ mobileNavOpen, setMobileNavOpen, isMobile }: { mobileNavOpen: bo
                   </Suspense>
                 ) : null}
               </div>
-            );
+            )
           })}
           <div style={{ height: 50 }} />
         </div>
         {/*
          * @Page End
          */}
-        {!isMobile ? (
-          <RightBookContainer book_id={book_id as number} />
-        ) : null}
+        {!isMobile ? <RightBookContainer book_id={book_id as number} /> : null}
       </div>
     </div>
-  );
-};
+  )
+}
 
 const RightBookContainer = ({ book_id }: { book_id: number }) => {
   return (
-    <div style={{ width: "20%", paddingLeft: 15, paddingTop: 15 }}>
-      <ul className="list-item" style={{ paddingLeft: 0, listStyle: "none" }}>
+    <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
+      <ul className="list-item" style={{ paddingLeft: 0, listStyle: 'none' }}>
         <li>
           <LuFileEdit color="#2d2d2d" size={16} />
           <Link to={`/edit/book/${book_id}`}>Edit this page</Link>
@@ -240,7 +245,7 @@ const RightBookContainer = ({ book_id }: { book_id: number }) => {
         </li>
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default View;
+export default View
