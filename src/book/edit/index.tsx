@@ -68,6 +68,7 @@ export default function Edit({
 
   const image = extractImage(activeNode.images)
 
+  console.log(state)
   return (
     <div className="book-container">
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -124,7 +125,7 @@ export default function Edit({
         ) : null}
 
         {/* Page */}
-        {state.modal === 'edit_node' ? (
+        {state.modal ? (
           <EditComponent
             state={state as EditBookState}
             setState={setState as EditBookAction}

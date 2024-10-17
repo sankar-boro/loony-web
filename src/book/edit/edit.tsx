@@ -41,7 +41,6 @@ export default function EditComponent({
     allSubSectionsBySectionId,
     topNode,
   } = state
-  if (!topNode || !editNode) return null
 
   const onDeleteNode = () => {
     if (!deleteNode) return
@@ -292,7 +291,7 @@ export default function EditComponent({
 
   return (
     <>
-      {modal && modal === 'add_chapter' ? (
+      {modal && modal === 'add_chapter' && topNode ? (
         <AddNode
           FnCallback={addChapterFnCb}
           url="/book/append/node"
@@ -308,7 +307,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === 'add_section' ? (
+      {modal && modal === 'add_section' && topNode ? (
         <AddNode
           FnCallback={addSectionFnCb}
           url="/book/append/node"
@@ -324,7 +323,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === 'add_sub_section' ? (
+      {modal && modal === 'add_sub_section' && topNode ? (
         <AddNode
           FnCallback={addSubSectionFnCb}
           url="/book/append/node"

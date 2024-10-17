@@ -27,6 +27,7 @@ type AfterImageSelect = {
 }
 
 export default function AddNodeComponent(props: AddNodeComponentProps) {
+  console.log(props)
   const {
     url,
     heading,
@@ -84,8 +85,10 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
       .post(url, {
         title: formTitle,
         body: formBody,
-        images: [{ name: imageData ? imageData.name : afterTmpImageUpload }],
-        tags: [],
+        images: imageData
+          ? [{ name: imageData ? imageData.name : afterTmpImageUpload }]
+          : [],
+        tags: null,
         [doc_idName]: doc_id,
         parent_id,
         identity,
@@ -95,6 +98,9 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
       })
       .then((data) => {
         FnCallback(data.data)
+      })
+      .catch((e) => {
+        console.log(e)
       })
   }, [formTitle, formBody, afterTmpImageUpload])
 
