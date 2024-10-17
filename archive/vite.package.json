@@ -1,0 +1,52 @@
+{
+    "name": "loony-web",
+    "private": true,
+    "version": "0.1.0",
+    "scripts": {
+      "start": "webpack serve --config ./config/webpack.config.js --env env=dev",
+      "dev": "webpack serve --config ./config/webpack.config.js --env env=dev",
+      "build": "webpack --config ./config/webpack.config.js --env env=prod",
+      "lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
+      "format": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "clean:cache": "./scripts/clean-cache.sh",
+      "dev:vite": "vite",
+      "build:vite": "tsc -b && vite build",
+      "lint:vite": "eslint .",
+      "preview:vite": "vite preview"
+    },
+    "workspaces": [
+      "packages/*"
+    ],
+    "dependencies": {
+      "@uiw/react-markdown-preview": "^5.1.3",
+      "axios": "^1.6.7",
+      "katex": "^0.16.11",
+      "loony-query": "0.1.0",
+      "loony-types": "0.1.0",
+      "loony-utils": "0.1.0",
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1",
+      "react-easy-crop": "^5.0.6",
+      "react-icons": "^5.0.1",
+      "react-image-crop": "^11.0.5",
+      "react-router-dom": "^6.23.0",
+      "rehype-rewrite": "^4.0.2",
+      "url-loader": "^4.1.1"
+    },
+    "devDependencies": {
+      "@eslint/js": "^9.12.0",
+      "@types/katex": "^0.16.7",
+      "@types/react": "^18.3.11",
+      "@types/react-dom": "^18.3.1",
+      "@vitejs/plugin-react": "^4.3.2",
+      "eslint": "^9.12.0",
+      "eslint-plugin-react-hooks": "^5.0.0",
+      "eslint-plugin-react-refresh": "^0.4.12",
+      "globals": "^15.11.0",
+      "typescript": "^5.5.3",
+      "typescript-eslint": "^8.9.0",
+      "vite": "^5.4.9"
+    }
+  }
+  

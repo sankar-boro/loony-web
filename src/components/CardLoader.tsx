@@ -4,9 +4,9 @@ const CardLoader = () => {
       <div
         className="card-image"
         style={{
-          overflow: "hidden",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          overflow: 'hidden',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           borderTopLeftRadius: 3,
           borderTopRightRadius: 3,
         }}
@@ -15,16 +15,16 @@ const CardLoader = () => {
         <div className="card-l-title cursor" />
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
           }}
         >
           <div
             style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
               marginTop: 10,
             }}
           >
@@ -43,7 +43,7 @@ const CardLoader = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CardLoader;
+export default CardLoader
