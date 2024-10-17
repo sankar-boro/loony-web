@@ -2,7 +2,7 @@ import { useState, useCallback, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { axiosInstance } from 'loony-query'
 import { AuthContext } from '../context/AuthContext.tsx'
-import Cropper from 'react-easy-crop'
+import Cropper, { Area } from 'react-easy-crop'
 import { TextArea } from './components/TextArea.tsx'
 import { MenuNavContainer } from '../components/Containers.tsx'
 import { GoHome } from 'react-icons/go'
@@ -131,8 +131,8 @@ export default function CreateNewDocument({
   }
 
   const changeFile = onSelectImage
-  const routeTo = (e: any) => {
-    navigate(e.target.dataset.id)
+  const routeTo = () => {
+    return
   }
   const uploadImage = async () => {
     const formData = new FormData()
@@ -298,7 +298,7 @@ const EditImageComponent = (props: EditImageComponentProps) => {
     height: 3,
   })
 
-  const onCropComplete = (croppedArea: any, croppedAreaPixels: any) => {
+  const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
     setCropImageMetadata(croppedAreaPixels)
   }
 

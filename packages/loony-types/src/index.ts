@@ -4,7 +4,7 @@ export * from './user'
 export * from './notification'
 
 import { AppState} from './app'
-import { EditState, BookEditState, BookReadState, ReadState } from './doc'
+import { ReadBookState, EditBlogState, EditBookState, ReadBlogState, DocNode } from './doc'
 
 export enum ApiEvent {
   INIT        = 1,
@@ -21,9 +21,6 @@ export const APP_CSS = {
 };
 
 
-export interface JsonObject {
-    [key: string]: any,
-}
 export type ApiStatus = {
     status: ApiEvent,
     error: string,
@@ -35,19 +32,19 @@ export type BooleanDispatchAction = React.Dispatch<React.SetStateAction<boolean>
 export type VoidReturnFunction = () => void;
 
 
-export type ComponentProps = {
+export type EditNodeComponentProps = {
     heading: string,
-    state: JsonObject,
+    state: EditBlogState | EditBookState,
     doc_idName: string,
     doc_id: number,
-    FnCallback: (data: any) => void,
+    FnCallback: (data: { data: DocNode }) => void,
     onCancel: VoidReturnFunction,
     url: string,
     isMobile: boolean,
 }
   
 export type EditImageComponentProps = {
-    uploadImage: () => Promise<any>,
+    uploadImage: () => Promise<{ name: string }>,
     changeFile: React.ChangeEventHandler<HTMLInputElement>,
     imageEdit: string | null,
     setCropImageMetadata: React.Dispatch<React.SetStateAction<CropImageMetadata>>,
@@ -67,8 +64,8 @@ export type AfterImageSelect = {
     hasImage: boolean,
 }
 
-export type EditAction = React.Dispatch<React.SetStateAction<EditState>>;
-export type ReadAction = React.Dispatch<React.SetStateAction<ReadState>>;
+export type ReadBlogAction = React.Dispatch<React.SetStateAction<ReadBlogState>>;
+export type EditBlogAction = React.Dispatch<React.SetStateAction<EditBlogState>>;
 
-export type BookEditAction = React.Dispatch<React.SetStateAction<BookEditState>>;
-export type BookReadAction = React.Dispatch<React.SetStateAction<BookReadState>>;
+export type EditBookAction = React.Dispatch<React.SetStateAction<EditBookState>>;
+export type ReadBookAction = React.Dispatch<React.SetStateAction<ReadBookState>>;

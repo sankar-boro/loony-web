@@ -13,7 +13,7 @@ import { PageNavigation } from './pageNavigation.tsx'
 import { PageNodeSettings } from './pageNodeSettings.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import AppContext from '../../context/AppContext.tsx'
-import { AppRouteProps, BookEditAction, BookEditState } from 'loony-types'
+import { AppRouteProps, EditBookAction, EditBookState } from 'loony-types'
 import { ApiEvent } from 'loony-types'
 const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
@@ -32,7 +32,7 @@ export default function Edit({
     status: ApiEvent.INIT,
     error: '',
   })
-  const [state, setState] = useState<BookEditState>({
+  const [state, setState] = useState<EditBookState>({
     doc_info: null,
     modal: '',
     activeNode: null,
@@ -48,6 +48,9 @@ export default function Edit({
     addNode: null,
     deleteNode: null,
     editNode: null,
+    mainNode: null,
+    rawNodes: [],
+    doc_id: book_id as number,
   })
 
   useEffect(() => {
@@ -123,8 +126,8 @@ export default function Edit({
         {/* Page */}
         {state.modal ? (
           <EditComponent
-            state={state as BookEditState}
-            setState={setState as BookEditAction}
+            state={state as EditBookState}
+            setState={setState as EditBookAction}
             setAppContext={setAppContext}
             doc_id={book_id as number}
             navigate={navigate}
@@ -270,8 +273,8 @@ const RightBookContainer = ({
   state,
 }: {
   book_id: string
-  setState: BookEditAction
-  state: BookEditState
+  setState: EditBookAction
+  state: EditBookState
 }) => {
   return (
     <div style={{ width: '18%', paddingLeft: 15, paddingTop: 15 }}>

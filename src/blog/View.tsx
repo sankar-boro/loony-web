@@ -5,10 +5,10 @@ import { extractImage, timeAgo } from 'loony-utils'
 import { LuFileWarning } from 'react-icons/lu'
 import { LuFileEdit } from 'react-icons/lu'
 import PageLoadingContainer from '../components/PageLoadingContainer.tsx'
-import { getNodes } from 'loony-utils'
+import { getBlogNodes } from 'loony-utils'
 import { PageNavigationEdit } from './pageNavigation.tsx'
 import { ApiEvent } from 'loony-types'
-import { AppRouteProps, ReadState } from 'loony-types'
+import { AppRouteProps, ReadBlogState } from 'loony-types'
 const MathsMarkdown = lazy(() => import('../components/MathsMarkdown.tsx'))
 
 const View = (props: AppRouteProps) => {
@@ -17,15 +17,13 @@ const View = (props: AppRouteProps) => {
   const { blogId } = useParams()
   const blog_id = blogId && parseInt(blogId)
 
-  const [state, setState] = useState<ReadState>({
+  const [state, setState] = useState<ReadBlogState>({
     doc_info: null,
-    pageId: null,
     mainNode: null,
-    activeNode: null,
-    nodeIndex: null,
     rawNodes: [],
-    blogNodes: [],
     childNodes: [],
+    topNode: null,
+    doc_id: blog_id as number,
   })
   const [status, setStatus] = useState({
     status: ApiEvent.IDLE,
@@ -34,7 +32,7 @@ const View = (props: AppRouteProps) => {
 
   useEffect(() => {
     if (blog_id) {
-      getNodes(blog_id, setState, setStatus)
+      getBlogNodes(blog_id, setState, setStatus)
     }
   }, [blog_id])
 
@@ -42,6 +40,9 @@ const View = (props: AppRouteProps) => {
     return <PageLoadingContainer isMobile={isMobile} />
 
   const { childNodes, mainNode, doc_info } = state
+
+  if (!mainNode || !doc_info) return null
+
   const image = extractImage(mainNode.images)
 
   return (

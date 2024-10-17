@@ -3,11 +3,11 @@
 import { useState, useCallback, useContext } from 'react'
 import { axiosInstance } from 'loony-query'
 import { AuthContext } from '../context/AuthContext.tsx'
-import Cropper from 'react-easy-crop'
+import Cropper, { Area } from 'react-easy-crop'
 import { TextArea } from './components/TextArea.tsx'
 import 'react-easy-crop/react-easy-crop.css'
 import type {
-  JsonObject,
+  // JsonObject,
   VoidReturnFunction,
   AuthContextProps,
   AppContextProps,
@@ -16,21 +16,21 @@ import AppContext from '../context/AppContext.tsx'
 
 type ComponentProps = {
   heading: string
-  state: JsonObject
+  // state: JsonObject
   doc_idName: string
   doc_id: number
   parent_id: number
   identity: number
   page_id: number
   parent_identity: number
-  FnCallback: (data: any) => void
+  FnCallback: (data: Node) => void
   onCancel: VoidReturnFunction
   url: string
   isMobile: boolean
 }
 
 type EditImageComponentProps = {
-  uploadImage: () => Promise<any>
+  uploadImage: () => Promise<{ name: string }>
   changeFile: React.ChangeEventHandler<HTMLInputElement>
   imageEdit: string | null
   setCropImageMetadata: React.Dispatch<React.SetStateAction<CropImageMetadata>>
@@ -92,7 +92,7 @@ export default function AddNodeComponent(props: ComponentProps) {
   )
 
   const onCreateAction = useCallback(async () => {
-    let imageData = null
+    let imageData = { name: '' }
     if (afterImageSelect.image) {
       imageData = await uploadImage()
     }
@@ -170,11 +170,15 @@ export default function AddNodeComponent(props: ComponentProps) {
     )
     formData.append('file', afterImageSelect.image as File)
 
-    const { data } = await axiosInstance.post('/upload_file', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
+    const { data }: { data: { name: string } } = await axiosInstance.post(
+      '/upload_file',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    )
 
     setAfterTmpImageUpload(data.name)
     setImageEdit('')
@@ -266,7 +270,7 @@ const EditImageComponent = (props: EditImageComponentProps) => {
     height: 3,
   })
 
-  const onCropComplete = (croppedArea: any, croppedAreaPixels: any) => {
+  const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
     setCropImageMetadata(croppedAreaPixels)
   }
 

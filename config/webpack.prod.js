@@ -1,5 +1,5 @@
 const webpack = require('webpack')
-const Dotenv = require('dotenv-webpack');
+const { APP_NAME } = require('./app.config.json')
 
 module.exports = {
   mode: 'production',
@@ -9,10 +9,7 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.name': JSON.stringify('Codevolution'),
+      'process.env.name': APP_NAME,
     }),
-    new Dotenv({
-      path: './dev.env'
-    })
   ],
 }

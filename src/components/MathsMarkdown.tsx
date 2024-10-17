@@ -9,7 +9,7 @@ export default function MathsMarkdown({ source }: { source: string }) {
       source={source}
       wrapperElement={{ 'data-color-mode': 'light' }}
       components={{
-        code: ({ children, className, node }: any) => {
+        code: ({ children, className, node }) => {
           if (typeof children === 'string' && /^\$\$(.*)\$\$/.test(children)) {
             const html = katex.renderToString(
               children.replace(/^\$\$(.*)\$\$/, '$1'),

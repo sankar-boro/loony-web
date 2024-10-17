@@ -4,7 +4,12 @@ import AddNode from '../../form/addNode.tsx'
 import EditDocument from '../../form/editNode.tsx'
 import ConfirmAction from '../../components/ConfirmAction.tsx'
 import { appendChapters, appendSections, appendSubSections } from 'loony-utils'
-import { AppDispatchAction, BookEditAction, BookEditState } from 'loony-types'
+import {
+  AppDispatchAction,
+  EditBookAction,
+  EditBookState,
+  DocNode,
+} from 'loony-types'
 import { NavigateFunction } from 'react-router-dom'
 
 export default function EditComponent({
@@ -15,8 +20,8 @@ export default function EditComponent({
   navigate,
   isMobile,
 }: {
-  state: BookEditState
-  setState: BookEditAction
+  state: EditBookState
+  setState: EditBookAction
   setAppContext: AppDispatchAction
   doc_id: number
   navigate: NavigateFunction
@@ -117,7 +122,7 @@ export default function EditComponent({
     })
   }
 
-  const editPage = (data: any) => {
+  const editPage = (data: DocNode) => {
     if (!editNode) return
     let __activeNode = null
     const __nodes101 = nodes101.map((n) => {
@@ -138,7 +143,7 @@ export default function EditComponent({
       modal: '',
     })
   }
-  const editSection = (data: any) => {
+  const editSection = ({ data }: { data: DocNode }) => {
     if (!editNode) return
     let __activeSection = null
     const __activeSectionsByPageId = activeSectionsByPageId.map((innerNode) => {
@@ -162,7 +167,7 @@ export default function EditComponent({
       editNode: null,
     })
   }
-  const editSubSection = ({ data }: any) => {
+  const editSubSection = ({ data }: { data: DocNode }) => {
     if (!editNode) return
     const __activeSubSectionsBySectionId = activeSubSectionsBySectionId.map(
       (innerNode) => {
@@ -186,7 +191,7 @@ export default function EditComponent({
     })
   }
 
-  const updateFrontPage = (data: any) => {
+  const updateFrontPage = (data: DocNode) => {
     const __activeNode = {
       ...frontPage,
       ...data,
@@ -199,13 +204,13 @@ export default function EditComponent({
     })
   }
 
-  const editFnCallback = (data: any) => {
+  const editFnCallback = (data: { data: DocNode }) => {
     if (!editNode) return
     if (editNode.identity === 100) {
-      updateFrontPage(data)
+      updateFrontPage(data.data)
     }
     if (editNode.identity === 101) {
-      editPage(data)
+      editPage(data.data)
     }
     if (editNode.identity === 102) {
       editSection(data)
@@ -215,7 +220,10 @@ export default function EditComponent({
     }
   }
 
-  const addChapterFnCb = (data: any) => {
+  const addChapterFnCb = (data: {
+    new_node: DocNode
+    update_node: DocNode
+  }) => {
     if (!topNode) return
     const __nodes101 = appendChapters(nodes101, topNode, data)
     setState({
@@ -226,7 +234,10 @@ export default function EditComponent({
     })
   }
 
-  const addSectionFnCb = (data: any) => {
+  const addSectionFnCb = (data: {
+    new_node: DocNode
+    update_node: DocNode
+  }) => {
     if (!topNode) return
 
     const __activeSectionsByPageId = appendSections(
@@ -248,7 +259,10 @@ export default function EditComponent({
     })
   }
 
-  const addSubSectionFnCb = (data: any) => {
+  const addSubSectionFnCb = (data: {
+    new_node: DocNode
+    update_node: DocNode
+  }) => {
     if (!topNode) return
     const __activeSubSectionsBySectionId = appendSubSections(
       activeSubSectionsBySectionId,

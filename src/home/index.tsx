@@ -6,14 +6,14 @@ import { timeAgo } from 'loony-utils'
 import CardLoader from '../components/CardLoader.tsx'
 import Navbar from './Navbar.tsx'
 import { AUTHORIZED } from 'loony-types'
-import { AppRouteProps } from 'loony-types'
+import { AppRouteProps, DocNode } from 'loony-types'
 
 const Home = (props: AppRouteProps) => {
   const { isMobile, authContext, appContext } = props
   const { base_url } = appContext.env
   const navigate = useNavigate()
-  const [blogs, setBlogs] = useState(null)
-  const [books, setBooks] = useState(null)
+  const [blogs, setBlogs] = useState<DocNode[]>([])
+  const [books, setBooks] = useState<DocNode[]>([])
   const [book_page_no] = useState(1)
   const [blog_page_no] = useState(1)
 
@@ -95,7 +95,7 @@ const Documents = ({
   base_url,
 }: {
   navigate: NavigateFunction
-  documents: any
+  documents: DocNode[]
   base_url: string
 }) => {
   return (
@@ -115,7 +115,7 @@ const Documents = ({
             })
           : null}
         {documents &&
-          documents.map((node: any) => {
+          documents.map((node: DocNode) => {
             const nodeType = node.doc_type === 1 ? 'blog' : 'book'
             const key = `${node[nodeType]}_${node.uid}}`
             return (
@@ -142,7 +142,7 @@ const Card = ({
   base_url,
 }: {
   uid: string
-  node: any
+  node: DocNode
   navigate: NavigateFunction
   nodeType: string
   base_url: string
@@ -164,14 +164,14 @@ const Card = ({
           borderTopRightRadius: 3,
         }}
         onClick={() => {
-          navigate(`/view/${nodeType}/${node.uid}`, node)
+          navigate(`/view/${nodeType}/${node.uid}`)
         }}
       />
       <div className="card-body">
         <div
           className="card-title cursor"
           onClick={() => {
-            navigate(`/view/${nodeType}/${node.uid}`, node)
+            navigate(`/view/${nodeType}/${node.uid}`)
           }}
         >
           {node.title}

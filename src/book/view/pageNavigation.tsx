@@ -11,7 +11,12 @@ import {
 import { getSections, getSubSections } from 'loony-utils'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
-import { ApiDispatchAction, BookReadAction, BookReadState } from 'loony-types'
+import {
+  ApiDispatchAction,
+  ReadBookAction,
+  ReadBookState,
+  DocNode,
+} from 'loony-types'
 
 export const PageNavigation = ({
   setState,
@@ -21,10 +26,10 @@ export const PageNavigation = ({
   book_id,
   isMobile,
 }: {
-  setState: BookReadAction
+  setState: ReadBookAction
   setStatus: ApiDispatchAction
-  nodes101: any[]
-  state: BookReadState
+  nodes101: DocNode[]
+  state: ReadBookState
   book_id: number
   isMobile: boolean
 }) => {
@@ -65,8 +70,8 @@ export const PageNavigation = ({
                   chapter,
                   setState,
                   setStatus,
-                  book_id,
-                  allSectionsByPageId
+                  allSectionsByPageId,
+                  book_id
                 )
               }}
               isActive={activeNode.uid === chapter.uid}
@@ -96,8 +101,8 @@ export const PageNavigation = ({
                           section,
                           setState,
                           setStatus,
-                          book_id,
-                          allSubSectionsBySectionId
+                          allSubSectionsBySectionId,
+                          book_id
                         )
                       }}
                       isActive={activeNode.uid === section.uid}

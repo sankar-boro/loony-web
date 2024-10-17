@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { axiosInstance } from 'loony-query'
-import Cropper from 'react-easy-crop'
+import Cropper, { Area } from 'react-easy-crop'
 import { AuthContext } from '../context/AuthContext.tsx'
 import { TextArea } from './components/TextArea.tsx'
 import type {
-  ComponentProps,
+  EditNodeComponentProps,
   AfterImageSelect,
   CropImageMetadata,
   EditImageComponentProps,
@@ -13,7 +13,7 @@ import type {
 } from 'loony-types'
 import AppContext from '../context/AppContext.tsx'
 
-export default function EditNodeComponent(props: ComponentProps) {
+export default function EditNodeComponent(props: EditNodeComponentProps) {
   const {
     state,
     FnCallback,
@@ -70,6 +70,8 @@ export default function EditNodeComponent(props: ComponentProps) {
   const updateNode: React.MouseEventHandler<HTMLButtonElement> = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    if (!editNode) return
+
     e.preventDefault()
     if (!title) {
       setError('Title is required.')
@@ -255,7 +257,7 @@ const EditImageComponent = (props: EditImageComponentProps) => {
     height: 3,
   })
 
-  const onCropComplete = (_croppedArea: any, croppedAreaPixels: any) => {
+  const onCropComplete = (_croppedArea: Area, croppedAreaPixels: Area) => {
     setCropImageMetadata(croppedAreaPixels)
   }
 

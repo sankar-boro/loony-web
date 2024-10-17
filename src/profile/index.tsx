@@ -1,11 +1,10 @@
-import { useContext, useState, useEffect } from 'react'
-import { AuthContext } from '../context/AuthContext.tsx'
+import { useState, useEffect } from 'react'
 import Navbar from './Navbar.tsx'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { axiosInstance } from 'loony-query'
 import CardLoader from '../components/CardLoader.tsx'
 import { timeAgo } from 'loony-utils'
-import { User, AppRouteProps } from 'loony-types'
+import { User, AppRouteProps, DocNode } from 'loony-types'
 
 const Profile = (props: AppRouteProps) => {
   const { isMobile, authContext, appContext } = props
@@ -95,7 +94,7 @@ const Blogs = ({
   user_id: number
   base_url: string
 }) => {
-  const [blogs, setBlogs] = useState<any[] | null>(null)
+  const [blogs, setBlogs] = useState<DocNode[] | null>(null)
 
   useEffect(() => {
     axiosInstance
@@ -153,7 +152,7 @@ const Books = ({
   user_id: number
   base_url: string
 }) => {
-  const [books, setBooks] = useState<any[] | null>(null)
+  const [books, setBooks] = useState<DocNode[] | null>(null)
   useEffect(() => {
     axiosInstance
       .get(`/book/get/${user_id}/get_all_books_liked_by_user`)
@@ -182,7 +181,7 @@ const Books = ({
             })
           : null}
         {books &&
-          books.map((node) => {
+          books.map((node: DocNode) => {
             return (
               <Card
                 key={node.uid}
@@ -211,7 +210,7 @@ const Card = ({
   isMobile: boolean
   nodeIdType: string
   nodeType: string
-  node: any
+  node: DocNode
   base_url: string
 }) => {
   const image = JSON.parse(node.images)[0]
@@ -232,14 +231,14 @@ const Card = ({
           borderTopRightRadius: 3,
         }}
         onClick={() => {
-          navigate(`/view/${nodeType}/${node[nodeIdType]}`, node)
+          navigate(`/view/${nodeType}/${node[nodeIdType]}`)
         }}
       />
       <div className="card-body">
         <div
           className="card-title cursor"
           onClick={() => {
-            navigate(`/view/${nodeType}/${node[nodeIdType]}`, node)
+            navigate(`/view/${nodeType}/${node[nodeIdType]}`)
           }}
         >
           {node.title}

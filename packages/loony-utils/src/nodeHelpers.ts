@@ -1,22 +1,7 @@
 // import { orderNodes, orderBookNodes } from 'loony-utils';
 import { axiosInstance } from "loony-query";
-import { ApiDispatchAction, BookEditAction, BookReadAction, EditAction, ReadAction } from 'loony-types';
-import { ApiEvent } from 'loony-types';
-
-export type Node = {
-  uid: number,
-  title: string,
-  body: string,
-  images: string,
-  user_id: number,
-  identity: number,
-  theme: number,
-  created_at: string,
-  child?: Node[],
-  updated_at?: string,
-  parent_id?: number,
-}
-
+import { ApiDispatchAction, AppendNodeResponse, EditBookAction, EditBlogAction, GroupedNodesById, ReadBlogAction, ReadBookAction } from 'loony-types';
+import { ApiEvent, DocNode } from 'loony-types';
 
 const resetState = {
   editNode: null,
@@ -25,7 +10,7 @@ const resetState = {
 };
 
 
-export const getNodes = (blog_id: number, setState: EditAction | ReadAction, setStatus: ApiDispatchAction) => {
+export const getBlogNodes = (blog_id: number, setState: ReadBlogAction | EditBlogAction, setStatus: ApiDispatchAction) => {
   const url = `/blog/get/nodes?blog_id=${blog_id}`;
   setStatus((prevState) => ({
     ...prevState,
@@ -37,7 +22,7 @@ export const getNodes = (blog_id: number, setState: EditAction | ReadAction, set
     const __mainNode = __blogNodes && __blogNodes[0];
     const __childNodes = __blogNodes.slice(1);
 
-    setState((prevState: any) => ({
+    setState((prevState) => ({
       ...prevState,
       doc_info: data.blog,
       mainNode: __mainNode,
@@ -53,7 +38,7 @@ export const getNodes = (blog_id: number, setState: EditAction | ReadAction, set
 };
 
 
-export const getChapters = (book_id: number, setState: BookReadAction | BookEditAction, setStatus: ApiDispatchAction) => {
+export const getChapters = (book_id: number, setState: ReadBookAction | EditBookAction, setStatus: ApiDispatchAction) => {
   axiosInstance.get(`/book/get/nodes?book_id=${book_id}`).then(({ data }) => {
     const bookTree = orderBookNodes(data.chapters);
     const __frontPage = bookTree && bookTree[0];
@@ -75,10 +60,10 @@ export const getChapters = (book_id: number, setState: BookReadAction | BookEdit
 };
 
 export const getSections = (
-  __node: Node,
-  setState: BookEditAction | BookReadAction,
+  __node: DocNode,
+  setState: ReadBookAction | EditBookAction,
   setStatus: ApiDispatchAction,
-  allSectionsByPageId: any,
+  allSectionsByPageId: GroupedNodesById,
   book_id: number
 ) => {
   const { uid } = __node;
@@ -120,10 +105,10 @@ export const getSections = (
 };
 
 export const getSubSections = (
-  __node: Node,
-  setState: BookEditAction | BookReadAction,
+  __node: DocNode,
+  setState: ReadBookAction | EditBookAction,
   setStatus: ApiDispatchAction,
-  allSubSectionsBySectionId: any,
+  allSubSectionsBySectionId: GroupedNodesById,
   book_id: number
 ) => {
   const { uid } = __node;
@@ -163,7 +148,7 @@ export const getSubSections = (
 };
 
 
-export const deleteBlogNode = (nodes: Node[], submitData: any, delete_node_index: number) => {
+export const deleteBlogNode = (nodes: DocNode[], submitData: { delete_node_id, update_parent_id }, delete_node_index: number) => {
   const copyNodes = nodes.filter((node) => {
     if (submitData.delete_node_id === node.uid) {
       return false;
@@ -176,7 +161,7 @@ export const deleteBlogNode = (nodes: Node[], submitData: any, delete_node_index
   return copyNodes;
 };
 
-export const deleteOne = (nodes: Node[], { deleted_ids, parent_id, updated_id }: { deleted_ids: number[], parent_id: number, updated_id: number, num_deleted_rows: number }) => {
+export const deleteOne = (nodes: DocNode[], { deleted_ids, parent_id, updated_id }: { deleted_ids: number[], parent_id: number, updated_id: number, num_deleted_rows: number }) => {
   const newNodes = nodes.filter((x) => !deleted_ids.includes(x.uid));
   if (updated_id) {
     newNodes.forEach((x, i) => {
@@ -188,7 +173,7 @@ export const deleteOne = (nodes: Node[], { deleted_ids, parent_id, updated_id }:
   return newNodes;
 };
 
-export const appendBlogNode = (nodes: Node[], topData: Node, resData: any) => {
+export const appendBlogNode = (nodes: DocNode[], topData: DocNode, resData: AppendNodeResponse) => {
   const newNodes = [];
   for (let index = 0; index < nodes.length; index++) {
     const element = nodes[index];
@@ -205,7 +190,7 @@ export const appendBlogNode = (nodes: Node[], topData: Node, resData: any) => {
   return newNodes;
 };
 
-export const updateBookNode = (nodes: Node[], updatedNode: Node) => {
+export const updateBookNode = (nodes: DocNode[], updatedNode: DocNode) => {
   const newNodes = nodes.map((n) => {
     if (updatedNode.uid === n.uid) {
       return { ...n, ...updatedNode };
@@ -216,7 +201,7 @@ export const updateBookNode = (nodes: Node[], updatedNode: Node) => {
   return newNodes;
 };
 
-export const updateBlogNode = (nodes: Node[], updatedNode: Node) => {
+export const updateBlogNode = (nodes: DocNode[], updatedNode: DocNode) => {
   const newNodes = nodes.map((n) => {
     if (updatedNode.uid === n.uid) {
       return { ...n, ...updatedNode };
@@ -227,7 +212,7 @@ export const updateBlogNode = (nodes: Node[], updatedNode: Node) => {
   return newNodes;
 };
 
-export const addNewNode = (nodes: Node[], topData: Node, res: { new_node: Node, update_node: Node }) => {
+export const addNewNode = (nodes: DocNode[], topData: DocNode, res: { new_node: DocNode, update_node: DocNode }) => {
   const { new_node, update_node } = res;
   const newNodes = [];
 
@@ -269,17 +254,17 @@ export const appendChapters = addNewNode;
 export const appendSections = addNewNode;
 export const appendSubSections = addNewNode;
 
-const groupSiblingsForParent = (parent: Node, child: Node[]) => {
+const groupSiblingsForParent = (parent: DocNode, child: DocNode[]) => {
   let pId = parent.uid;
-  const siblings: Node[] = [];
+  const siblings: DocNode[] = [];
   let c = 0;
 
   const removeIds: number[] = [];
-  const newSiblings: Node[] = [];
+  const newSiblings: DocNode[] = [];
 
   while (c !== child.length) {
     // eslint-disable-next-line no-loop-func
-    child.forEach((ss: Node) => {
+    child.forEach((ss: DocNode) => {
       if (ss.parent_id === pId) {
         siblings.push(ss);
         pId = ss.uid;
@@ -289,7 +274,7 @@ const groupSiblingsForParent = (parent: Node, child: Node[]) => {
     c++;
   }
 
-  child.forEach((ss: Node) => {
+  child.forEach((ss: DocNode) => {
     if (!removeIds.includes(ss.uid)) {
       newSiblings.push(ss);
     }
@@ -302,7 +287,7 @@ const groupSiblingsForParent = (parent: Node, child: Node[]) => {
 const groupSectionsForPage = groupSiblingsForParent;
 const groupSubSectionsForSection = groupSiblingsForParent;
 
-function reOrderFrontPage(frontPage: Node, samples: { allSubSectionGroups: Node[], allSectionGroups: Node[]}) {
+function reOrderFrontPage(frontPage: DocNode, samples: { allSubSectionGroups: DocNode[], allSectionGroups: DocNode[]}) {
   let { allSubSectionGroups } = samples;
   const { allSectionGroups } = samples;
   const frontPages = groupSectionsForPage(frontPage, allSectionGroups);
@@ -312,7 +297,7 @@ function reOrderFrontPage(frontPage: Node, samples: { allSubSectionGroups: Node[
   }
 
   if (frontPages.newParent.child.length > 0) {
-    const newSubSections = frontPages.newParent.child.map((section: Node) => {
+    const newSubSections = frontPages.newParent.child.map((section: DocNode) => {
       const allSubSections = groupSubSectionsForSection(section, allSubSectionGroups);
       allSubSectionGroups = allSubSections.newSiblings;
       return allSubSections.newParent;
@@ -323,8 +308,8 @@ function reOrderFrontPage(frontPage: Node, samples: { allSubSectionGroups: Node[
   return frontPages;
 }
 
-function groupWithIdentity(apiData: Node[]) {
-  const identityGroups: any = {
+function groupWithIdentity(apiData: DocNode[]) {
+  const identityGroups = {
     100: [], // Front page
     101: [], // Chapter
     102: [], // Section
@@ -339,7 +324,7 @@ function groupWithIdentity(apiData: Node[]) {
   return identityGroups;
 }
 
-const groupChapters = (parent_id: number, chapters: Node[]) => {
+const groupChapters = (parent_id: number, chapters: DocNode[]) => {
   let currentparent_id = parent_id;
   const orders = [];
   while (orders.length !== chapters.length) {
@@ -356,7 +341,7 @@ const groupChapters = (parent_id: number, chapters: Node[]) => {
   return orders;
 };
 
-export const orderBookNodes = (rawApi: Node[], removeIds: number[] = []) => {
+export const orderBookNodes = (rawApi: DocNode[], removeIds: number[] = []) => {
   let data = rawApi;
   if (removeIds && removeIds.length > 0) {
     data = rawApi.filter((d) => {
@@ -379,9 +364,9 @@ export const orderBookNodes = (rawApi: Node[], removeIds: number[] = []) => {
   };
   allFrontPages[101] = groupChapters(allGroups[100][0].uid, allFrontPages[101]);
 
-  const chapters: Node[] = [];
+  const chapters: DocNode[] = [];
   Object.values(allFrontPages).forEach((frontPageObjectValue) => {
-    frontPageObjectValue.forEach((frontPage: Node) => {
+    frontPageObjectValue.forEach((frontPage: DocNode) => {
       const { newParent, newSiblings } = reOrderFrontPage(frontPage, samples);
       samples.allSectionGroups = newSiblings;
       chapters.push(newParent);
@@ -390,7 +375,7 @@ export const orderBookNodes = (rawApi: Node[], removeIds: number[] = []) => {
   return chapters;
 };
 
-export const orderNodes = (nodes: Node[], parentNode: Node) => {
+export const orderNodes = (nodes: DocNode[], parentNode: DocNode) => {
   let currentNode = parentNode;
   const results = [];
 
@@ -427,7 +412,7 @@ export const extractImage = (images: ImageRes[] | string | null): ImageRes | nul
   return parsedImage;
 };
 
-export const orderBlogNodes = (data: Node[]) => {
+export const orderBlogNodes = (data: DocNode[]) => {
   const totalNodes = data.length;
   const parentNodesMap = new Map();
 

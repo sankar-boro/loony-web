@@ -1,8 +1,14 @@
 import { MdOutlineEdit, MdContentCopy, MdAdd } from 'react-icons/md'
 import { AiOutlineDelete } from 'react-icons/ai'
-import { BookEditAction, BookEditState, Node } from 'loony-types'
+import { EditBookAction, EditBookState, DocNode } from 'loony-types'
 
-const Button = ({ onClick, icon }: { onClick: any; icon: any }) => {
+const Button = ({
+  onClick,
+  icon,
+}: {
+  onClick: React.MouseEventHandler<HTMLDivElement>
+  icon: React.ReactNode
+}) => {
   return (
     <div
       className="button-none cursor"
@@ -19,9 +25,9 @@ export const PageNodeSettings = ({
   setState,
   state,
 }: {
-  node: Node
-  setState: BookEditAction
-  state: BookEditState
+  node: DocNode
+  setState: EditBookAction
+  state: EditBookState
 }) => {
   return (
     <>
@@ -29,7 +35,7 @@ export const PageNodeSettings = ({
         {node.identity >= 102 ? (
           <Button
             icon={<MdAdd size={16} color="#9c9c9c" />}
-            onClick={(e: any) => {
+            onClick={(e) => {
               setState({
                 ...state,
                 topNode: node,
@@ -41,7 +47,7 @@ export const PageNodeSettings = ({
         ) : null}
         <Button
           icon={<AiOutlineDelete size={16} color="#9c9c9c" />}
-          onClick={(e: any) => {
+          onClick={(e) => {
             setState({
               ...state,
               deleteNode: node,
@@ -52,7 +58,7 @@ export const PageNodeSettings = ({
         />
         <Button
           icon={<MdOutlineEdit size={16} color="#9c9c9c" />}
-          onClick={(e: any) => {
+          onClick={(e) => {
             setState({
               ...state,
               editNode: node,
@@ -63,7 +69,7 @@ export const PageNodeSettings = ({
         />
         <Button
           icon={<MdContentCopy size={16} color="#9c9c9c" />}
-          onClick={(e: any) => {
+          onClick={(e) => {
             navigator.clipboard.writeText(node.body)
             e.stopPropagation()
           }}

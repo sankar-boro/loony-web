@@ -1,22 +1,22 @@
 import { BasicMenuNavContainer } from '../components/Containers.tsx'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
-import { EditState, ReadState } from 'loony-types'
+import { EditBlogState, ReadBlogState } from 'loony-types'
 
 export const PageNavigationEdit = ({
   state,
   isMobile,
   blog_id,
 }: {
-  state: EditState | ReadState
+  state: EditBlogState | ReadBlogState
   isMobile: boolean
   blog_id: number
 }) => {
-  const { blogNodes } = state
+  const { childNodes } = state
 
   return (
     <>
-      {blogNodes.map((chapter) => {
+      {childNodes.map((chapter) => {
         return (
           <div key={chapter.uid}>
             <BasicMenuNavContainer>
@@ -53,15 +53,15 @@ export const PageNavigationView = ({
   isMobile,
   blog_id,
 }: {
-  state: EditState
+  state: EditBlogState
   isMobile: boolean
   blog_id: number
 }) => {
-  const { blogNodes } = state
+  const { childNodes } = state
 
   return (
     <>
-      {blogNodes.map((chapter) => {
+      {childNodes.map((chapter) => {
         return (
           <div key={chapter.uid}>
             <BasicMenuNavContainer>

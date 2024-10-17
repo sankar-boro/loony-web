@@ -14,12 +14,18 @@ import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 import {
   ApiDispatchAction,
-  BookEditAction,
-  BookEditState,
-  Node,
+  EditBookState,
+  EditBookAction,
+  DocNode,
 } from 'loony-types'
 
-const Button = ({ onClick, title }: { title: string; onClick: any }) => {
+const Button = ({
+  onClick,
+  title,
+}: {
+  title: string
+  onClick: React.MouseEventHandler<HTMLDivElement>
+}) => {
   return (
     <div
       className="button-none"
@@ -32,10 +38,10 @@ const Button = ({ onClick, title }: { title: string; onClick: any }) => {
 }
 
 export const PageNavigation = (props: {
-  setState: BookEditAction
+  setState: EditBookAction
   setStatus: ApiDispatchAction
-  nodes101: Node[]
-  state: BookEditState
+  nodes101: DocNode[]
+  state: EditBookState
   book_id: number
   isMobile: boolean
 }) => {
@@ -153,7 +159,7 @@ export const PageNavigation = (props: {
                       </SectionNavContainer>
                       <Button
                         title="Add Section"
-                        onClick={(e: any) => {
+                        onClick={(e) => {
                           setState({
                             ...state,
                             topNode: section,

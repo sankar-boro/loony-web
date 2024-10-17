@@ -7,7 +7,7 @@ import { useParams, Link } from 'react-router-dom'
 import { timeAgo } from 'loony-utils'
 import { PageNavigation } from './pageNavigation.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
-import { AppRouteProps, BookReadState } from 'loony-types'
+import { AppRouteProps, ReadBookState } from 'loony-types'
 import { ApiEvent } from 'loony-types'
 const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
@@ -25,7 +25,7 @@ const View = ({
     error: '',
   })
 
-  const [state, setState] = useState<BookReadState>({
+  const [state, setState] = useState<ReadBookState>({
     doc_info: null,
     activeNode: null,
     page_id: null,
@@ -36,8 +36,6 @@ const View = ({
     allSubSectionsBySectionId: {},
     nodes101: [],
     frontPage: null,
-    modal: '',
-    topNode: null,
   })
 
   useEffect(() => {
