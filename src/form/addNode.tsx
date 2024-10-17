@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import { useState, useCallback, useContext } from 'react'
 import { axiosInstance } from 'loony-query'
 import { AuthContext } from '../context/AuthContext.tsx'
@@ -7,34 +5,12 @@ import Cropper, { Area } from 'react-easy-crop'
 import { TextArea } from './components/TextArea.tsx'
 import 'react-easy-crop/react-easy-crop.css'
 import type {
-  // JsonObject,
-  VoidReturnFunction,
   AuthContextProps,
   AppContextProps,
+  AddNodeComponentProps,
+  EditImageComponentProps,
 } from 'loony-types'
 import AppContext from '../context/AppContext.tsx'
-
-type ComponentProps = {
-  heading: string
-  // state: JsonObject
-  doc_idName: string
-  doc_id: number
-  parent_id: number
-  identity: number
-  page_id: number
-  parent_identity: number
-  FnCallback: (data: Node) => void
-  onCancel: VoidReturnFunction
-  url: string
-  isMobile: boolean
-}
-
-type EditImageComponentProps = {
-  uploadImage: () => Promise<{ name: string }>
-  changeFile: React.ChangeEventHandler<HTMLInputElement>
-  imageEdit: string | null
-  setCropImageMetadata: React.Dispatch<React.SetStateAction<CropImageMetadata>>
-}
 
 type CropImageMetadata = {
   width: number | null
@@ -50,7 +26,7 @@ type AfterImageSelect = {
   hasImage: boolean
 }
 
-export default function AddNodeComponent(props: ComponentProps) {
+export default function AddNodeComponent(props: AddNodeComponentProps) {
   const {
     url,
     heading,

@@ -124,7 +124,7 @@ export default function Edit({
         ) : null}
 
         {/* Page */}
-        {state.modal ? (
+        {state.modal === 'edit_node' ? (
           <EditComponent
             state={state as EditBookState}
             setState={setState as EditBookAction}

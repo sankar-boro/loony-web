@@ -290,13 +290,10 @@ export default function EditComponent({
     })
   }
 
-  if (!topNode) return
-
   return (
     <>
       {modal && modal === 'add_chapter' ? (
         <AddNode
-          state={state}
           FnCallback={addChapterFnCb}
           url="/book/append/node"
           isMobile={isMobile}
@@ -313,7 +310,6 @@ export default function EditComponent({
 
       {modal && modal === 'add_section' ? (
         <AddNode
-          state={state}
           FnCallback={addSectionFnCb}
           url="/book/append/node"
           isMobile={isMobile}
@@ -330,7 +326,6 @@ export default function EditComponent({
 
       {modal && modal === 'add_sub_section' ? (
         <AddNode
-          state={state}
           FnCallback={addSubSectionFnCb}
           url="/book/append/node"
           isMobile={isMobile}

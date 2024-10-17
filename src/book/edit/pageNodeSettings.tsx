@@ -61,6 +61,7 @@ export const PageNodeSettings = ({
           onClick={(e) => {
             setState({
               ...state,
+              topNode: node,
               editNode: node,
               modal: 'edit_node',
             })

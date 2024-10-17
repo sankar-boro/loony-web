@@ -2,6 +2,7 @@ export * from './app'
 export * from './doc'
 export * from './user'
 export * from './notification'
+export * from './form'
 
 import { AppState} from './app'
 import { ReadBookState, EditBlogState, EditBookState, ReadBlogState, DocNode } from './doc'
@@ -41,27 +42,6 @@ export type EditNodeComponentProps = {
     onCancel: VoidReturnFunction,
     url: string,
     isMobile: boolean,
-}
-  
-export type EditImageComponentProps = {
-    uploadImage: () => Promise<{ name: string }>,
-    changeFile: React.ChangeEventHandler<HTMLInputElement>,
-    imageEdit: string | null,
-    setCropImageMetadata: React.Dispatch<React.SetStateAction<CropImageMetadata>>,
-}
-  
-export type CropImageMetadata = {
-    width: number | null, 
-    height: number | null, 
-    x: number | null, 
-    y: number | null
-}
-  
-export type AfterImageSelect = {
-    image: null | File,
-    width: null | number,
-    height: null | number,
-    hasImage: boolean,
 }
 
 export type ReadBlogAction = React.Dispatch<React.SetStateAction<ReadBlogState>>;
