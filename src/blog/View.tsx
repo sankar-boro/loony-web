@@ -40,7 +40,6 @@ const View = (props: AppRouteProps) => {
     return <PageLoadingContainer isMobile={isMobile} />
 
   const { childNodes, mainNode, doc_info } = state
-
   if (!mainNode || !doc_info) return null
 
   const image = extractImage(mainNode.images)

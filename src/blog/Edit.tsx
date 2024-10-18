@@ -67,6 +67,7 @@ export default function Edit(props: AppRouteProps) {
 
   const { childNodes, mainNode, doc_info } = state
 
+  console.log(state)
   if (!mainNode || !doc_info) {
     return null
   }
@@ -370,7 +371,8 @@ const ActivityComponent = ({
   isMobile: boolean
 }) => {
   const { activeNode, childNodes, rawNodes, modal, nodeIndex, mainNode } = state
-  if (!activeNode || !mainNode) return null
+  console.log('==========', state)
+  if (!mainNode) return null
 
   const navigate = useNavigate()
 
@@ -465,7 +467,7 @@ const ActivityComponent = ({
 
   return (
     <>
-      {modal === 'add_node' ? (
+      {modal === 'add_node' && activeNode ? (
         <AddNode
           heading="Add Node"
           state={state}

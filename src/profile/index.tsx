@@ -100,7 +100,7 @@ const Blogs = ({
     axiosInstance
       .get(`/blog/get/${user_id}/get_all_blogs_liked_by_user`)
       .then(({ data }) => {
-        setBlogs(data.data)
+        setBlogs(data)
       })
       .catch((err) => {
         console.log(err)
@@ -157,7 +157,7 @@ const Books = ({
     axiosInstance
       .get(`/book/get/${user_id}/get_all_books_liked_by_user`)
       .then(({ data }) => {
-        setBooks(data.data)
+        setBooks(data)
       })
       .catch((err) => {
         console.log(err)

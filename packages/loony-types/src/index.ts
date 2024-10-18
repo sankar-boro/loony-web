@@ -38,7 +38,7 @@ export type EditNodeComponentProps = {
     state: EditBlogState | EditBookState,
     doc_idName: string,
     doc_id: number,
-    FnCallback: (data: { data: DocNode }) => void,
+    FnCallback: (data: DocNode ) => void,
     onCancel: VoidReturnFunction,
     url: string,
     isMobile: boolean,

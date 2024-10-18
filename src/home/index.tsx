@@ -21,7 +21,7 @@ const Home = (props: AppRouteProps) => {
     axiosInstance
       .get(`/blog/get/${blog_page_no}/by_page`)
       .then(({ data }) => {
-        setBlogs(data.data)
+        setBlogs(data)
       })
       .catch((err) => {
         console.log(err)
@@ -33,7 +33,7 @@ const Home = (props: AppRouteProps) => {
       axiosInstance
         .get(`/book/get/${authContext.user.uid}/get_all_books_liked_by_user`)
         .then(({ data }) => {
-          setBooks(data.data)
+          setBooks(data)
         })
         .catch((err) => {
           console.log(err)
@@ -42,7 +42,7 @@ const Home = (props: AppRouteProps) => {
       axiosInstance
         .get(`/book/get/${book_page_no}/by_page`)
         .then(({ data }) => {
-          setBooks(data.data)
+          setBooks(data)
         })
         .catch((err) => {
           console.log(err)
@@ -55,7 +55,7 @@ const Home = (props: AppRouteProps) => {
       axiosInstance
         .get(`/blog/get/${authContext.user.uid}/get_all_blogs_liked_by_user`)
         .then(({ data }) => {
-          setBlogs(data.data)
+          setBlogs(data)
         })
         .catch((err) => {
           console.log(err)
@@ -64,7 +64,7 @@ const Home = (props: AppRouteProps) => {
       axiosInstance
         .get(`/blog/get/${blog_page_no}/by_page`)
         .then(({ data }) => {
-          setBlogs(data.data)
+          setBlogs(data)
         })
         .catch((err) => {
           console.log(err)

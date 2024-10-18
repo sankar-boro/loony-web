@@ -27,7 +27,6 @@ type AfterImageSelect = {
 }
 
 export default function AddNodeComponent(props: AddNodeComponentProps) {
-  console.log(props)
   const {
     url,
     heading,
@@ -41,7 +40,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
     parent_identity,
     isMobile,
   } = props
-
+  console.log('addnode', props)
   const auth = useContext<AuthContextProps>(AuthContext)
   const { env } = useContext<AppContextProps>(AppContext)
 
@@ -96,8 +95,8 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
         theme,
         parent_identity,
       })
-      .then((data) => {
-        FnCallback(data.data)
+      .then(({ data }) => {
+        FnCallback(data)
       })
       .catch((e) => {
         console.log(e)
