@@ -148,15 +148,26 @@ export const getSubSections = (
 };
 
 
-export const deleteBlogNode = (nodes: DocNode[], submitData: { delete_node_id, update_parent_id }, delete_node_index: number) => {
+export const deleteBlogNode = (
+  nodes: DocNode[], 
+  submitData: { delete_node: {
+    identity: number,
+    uid: number,
+  },
+  update_node: {
+    parent_id: number | undefined,
+    uid: null | number,
+  } }, 
+  delete_node_index: number
+) => {
   const copyNodes = nodes.filter((node) => {
-    if (submitData.delete_node_id === node.uid) {
+    if (submitData.delete_node.uid === node.uid) {
       return false;
     }
     return true;
   });
   if (copyNodes[delete_node_index + 1]) {
-    copyNodes[delete_node_index + 1].parent_id = submitData.update_parent_id;
+    copyNodes[delete_node_index + 1].parent_id = submitData.update_node.parent_id;
   }
   return copyNodes;
 };

@@ -2,11 +2,15 @@ interface Indexer {
     [key: string]: any;  // Allows indexing with any string key
 }
 
+type DocImages = {
+    name: string
+}
+
 export type DocNode = {
     uid: number,
     title: string,
     body: string,
-    images: string,
+    images: string | DocImages[],
     user_id: number,
     identity: number,
     theme: number,
@@ -18,7 +22,7 @@ export type DocNode = {
 
 export type AppendNodeResponse = {
     new_node: DocNode,
-    update_node: DocNode & { update_row_parent_id: number }
+    update_node: DocNode & { parent_id: number | null }
 }
 
 export type GroupedNodesById = {
@@ -27,7 +31,15 @@ export type GroupedNodesById = {
 
 // Doc State
 
+export enum DocStatus {
+    EditNode,
+    DeleteNode,
+    CreateNode,
+    None
+}
+
 type CommonDocState = {
+    status: number,
     topNode: DocNode | null,
     doc_id: number
 }

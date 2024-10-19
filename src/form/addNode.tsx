@@ -40,7 +40,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
     parent_identity,
     isMobile,
   } = props
-  console.log('addnode', props)
+
   const auth = useContext<AuthContextProps>(AuthContext)
   const { env } = useContext<AppContextProps>(AppContext)
 

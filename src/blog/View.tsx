@@ -7,7 +7,7 @@ import { LuFileEdit } from 'react-icons/lu'
 import PageLoadingContainer from '../components/PageLoadingContainer.tsx'
 import { getBlogNodes } from 'loony-utils'
 import { PageNavigationEdit } from './pageNavigation.tsx'
-import { ApiEvent } from 'loony-types'
+import { ApiEvent, DocStatus } from 'loony-types'
 import { AppRouteProps, ReadBlogState } from 'loony-types'
 const MathsMarkdown = lazy(() => import('../components/MathsMarkdown.tsx'))
 
@@ -18,6 +18,7 @@ const View = (props: AppRouteProps) => {
   const blog_id = blogId && parseInt(blogId)
 
   const [state, setState] = useState<ReadBlogState>({
+    status: DocStatus.None,
     doc_info: null,
     mainNode: null,
     rawNodes: [],
@@ -156,7 +157,7 @@ const View = (props: AppRouteProps) => {
             </div>
           </div>
           {childNodes.map((blog_node) => {
-            const parseImage = JSON.parse(blog_node.images)
+            const parseImage = JSON.parse(blog_node.images as string)
             const nodeImage = parseImage.length > 0 ? parseImage[0].name : null
             return (
               <div className="page-section" key={blog_node.uid}>

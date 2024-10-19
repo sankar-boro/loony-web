@@ -17,7 +17,7 @@ type CommonFormComponentProps = {
   }
   
   export type AddNodeComponentProps = {
-    FnCallback: (data: { new_node: DocNode; update_node: DocNode }) => void
+    FnCallback: (data: { new_node: DocNode; update_node: DocNode & { parent_id: number | null } }) => void
   } & CommonFormComponentProps
   
   export type EditNodeComponentProps = {

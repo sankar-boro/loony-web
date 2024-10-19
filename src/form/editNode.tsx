@@ -11,6 +11,7 @@ import type {
   AuthContextProps,
   AppContextProps,
 } from 'loony-types'
+import { getUrl } from 'loony-utils'
 import AppContext from '../context/AppContext.tsx'
 
 export default function EditNodeComponent(props: EditNodeComponentProps) {
@@ -24,7 +25,8 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
     isMobile,
     heading,
   } = props
-  const { editNode } = state
+  const { editNode, mainNode } = state
+  if (!editNode || !mainNode) return null
   const auth = useContext<AuthContextProps>(AuthContext)
   const { env } = useContext<AppContextProps>(AppContext)
   const { base_url } = env
@@ -57,9 +59,14 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
       setTitle(editNode.title)
       setBody(editNode.body)
       setBody(editNode.body)
-      const __image = JSON.parse(editNode.images)
-      if (__image.length > 0) {
-        setImage(__image[0].name)
+      if (typeof editNode.images === 'string') {
+        const __image = JSON.parse(editNode.images)
+        if (__image.length > 0) {
+          setImage(__image[0].name)
+        }
+      }
+      if (Array.isArray(editNode.images)) {
+        setImage(editNode.images[0].name)
       }
       if (editNode.theme) {
         setTheme(editNode.theme)
@@ -70,8 +77,7 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
   const updateNode: React.MouseEventHandler<HTMLButtonElement> = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    if (!editNode) return
-
+    const url__ = getUrl(editNode, mainNode, url)
     e.preventDefault()
     if (!title) {
       setError('Title is required.')
@@ -91,7 +97,7 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
       theme,
     }
     axiosInstance
-      .post(url, submitData)
+      .post(url__, submitData)
       .then((res) => {
         FnCallback(res.data)
       })
