@@ -1,6 +1,6 @@
 import MarkdownPreview from '@uiw/react-markdown-preview'
 
-import { useState, useEffect, lazy, Suspense, useCallback } from 'react'
+import { lazy, Suspense, useCallback } from 'react'
 import {
   orderBlogNodes,
   deleteBlogNode,
@@ -13,15 +13,13 @@ import { RxReader } from 'react-icons/rx'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { LuFileWarning } from 'react-icons/lu'
 import { MdAdd, MdOutlineEdit, MdContentCopy } from 'react-icons/md'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { axiosInstance } from 'loony-query'
-import AddNode from '../form/addNode.tsx'
-import EditNodeForm from '../form/editNode.tsx'
-import ConfirmAction from '../components/ConfirmAction.tsx'
-import PageLoadingContainer from '../components/PageLoadingContainer.tsx'
-import { getBlogNodes } from 'loony-utils'
-import { PageNavigationView } from './pageNavigation.tsx'
+import AddNode from '../../form/addNode.tsx'
+import EditNodeForm from '../../form/editNode.tsx'
+import ConfirmAction from '../../components/ConfirmAction.tsx'
+import { PageNavigationView } from '../pageNavigation.tsx'
 import {
   AppendNodeResponse,
   AppRouteProps,
@@ -30,48 +28,24 @@ import {
 } from 'loony-types'
 import { ApiEvent, DocNode, DocStatus } from 'loony-types'
 
-const MathsMarkdown = lazy(() => import('../components/MathsMarkdown.tsx'))
+const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
-export default function Edit(props: AppRouteProps) {
-  const { isMobile, mobileNavOpen, setMobileNavOpen, appContext } = props
-  const { base_url } = appContext.env
-  const { blogId } = useParams()
-  const blog_id = blogId && parseInt(blogId)
+export default function RenderComponent({
+  props,
+  state,
+  blog_id,
+  setState,
+}: {
+  props: AppRouteProps
+  state: EditBlogState
+  blog_id: number
+  setState: React.Dispatch<React.SetStateAction<EditBlogState>>
+}) {
+  const base_url = props.appContext.env.base_url
+  const { isMobile, mobileNavOpen, setMobileNavOpen } = props
+  const { mainNode, childNodes, doc_info } = state
 
-  const [state, setState] = useState<EditBlogState>({
-    status: DocStatus.None,
-    doc_info: null,
-    mainNode: null,
-    activeNode: null,
-    addNode: null,
-    editNode: null,
-    nodeIndex: null,
-    topNode: null,
-    doc_id: blog_id as number,
-    rawNodes: [],
-    childNodes: [],
-    modal: '',
-    deleteNode: null,
-  })
-  const [status, setStatus] = useState({
-    status: ApiEvent.IDLE,
-    error: '',
-  })
-
-  useEffect(() => {
-    if (blog_id) {
-      getBlogNodes(blog_id, setState, setStatus)
-    }
-  }, [blog_id])
-
-  if (status.status === ApiEvent.IDLE || status.status === ApiEvent.START)
-    return <PageLoadingContainer isMobile={isMobile} />
-
-  const { childNodes, mainNode, doc_info } = state
-
-  if (!mainNode || !doc_info) {
-    return null
-  }
+  if (!mainNode || !doc_info) return null
 
   const image = extractImage(mainNode.images)
 
@@ -361,7 +335,6 @@ export default function Edit(props: AppRouteProps) {
     </div>
   )
 }
-
 const ActivityComponent = ({
   state,
   setState,
@@ -427,11 +400,11 @@ const ActivityComponent = ({
     }
   }, [state.status])
 
-  const deleteBlog = () => {
+  const deleteBlog = useCallback(() => {
     axiosInstance.post('/blog/delete', { blog_id }).then(() => {
       navigate('/', { replace: true })
     })
-  }
+  }, [])
 
   const editFnCallback = useCallback(
     (data: DocNode) => {
@@ -451,30 +424,34 @@ const ActivityComponent = ({
     [state.status]
   )
 
-  const addNodeCbFn = useCallback((data: AppendNodeResponse) => {
-    if (!activeNode) return
-    const __rawNodes = appendBlogNode(rawNodes, activeNode, data)
-    const __orderChildNodes = orderBlogNodes(__rawNodes)
-    const __mainNode = __orderChildNodes && __orderChildNodes[0]
-    const __childNodes = __orderChildNodes.slice(1)
+  const addNodeCbFn = useCallback(
+    (data: AppendNodeResponse) => {
+      if (!activeNode) return
+      const __rawNodes = appendBlogNode(rawNodes, activeNode, data)
+      const __orderChildNodes = orderBlogNodes(__rawNodes)
+      const __mainNode = __orderChildNodes && __orderChildNodes[0]
+      const __childNodes = __orderChildNodes.slice(1)
 
-    setState({
-      ...state,
-      rawNodes: __rawNodes,
-      childNodes: __childNodes,
-      mainNode: __mainNode,
-      modal: '',
-    })
-  }, [])
+      setState({
+        ...state,
+        addNode: null,
+        rawNodes: __rawNodes,
+        childNodes: __childNodes,
+        mainNode: __mainNode,
+        modal: '',
+      })
+    },
+    [state.status]
+  )
 
-  const onCancel = () => {
+  const onCancel = useCallback(() => {
     setState({
       ...state,
       modal: '',
       editNode: null,
       addNode: null,
     })
-  }
+  }, [])
 
   return (
     <>

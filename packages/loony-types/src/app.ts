@@ -1,3 +1,4 @@
+import { BooleanDispatchAction } from '.'
 import { AuthContextProps } from './user'
 
 export type AppState = {
@@ -11,7 +12,7 @@ export interface AppContextProps extends AppState {
 }
 
 export type AppRouteProps = { 
-    setMobileNavOpen: React.Dispatch<React.SetStateAction<boolean>>, 
+    setMobileNavOpen: BooleanDispatchAction, 
     mobileNavOpen: boolean, 
     isMobile: boolean, 
     authContext: AuthContextProps,

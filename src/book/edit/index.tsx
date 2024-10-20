@@ -13,7 +13,12 @@ import { PageNavigation } from './pageNavigation.tsx'
 import { PageNodeSettings } from './pageNodeSettings.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import AppContext from '../../context/AppContext.tsx'
-import { AppRouteProps, EditBookAction, EditBookState } from 'loony-types'
+import {
+  AppRouteProps,
+  DocStatus,
+  EditBookAction,
+  EditBookState,
+} from 'loony-types'
 import { ApiEvent } from 'loony-types'
 const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
@@ -33,6 +38,7 @@ export default function Edit({
     error: '',
   })
   const [state, setState] = useState<EditBookState>({
+    status: DocStatus.None,
     doc_info: null,
     modal: '',
     activeNode: null,

@@ -1,6 +1,6 @@
 import Home from '../home/index.tsx'
 import BlogView from '../blog/View.tsx'
-import EditBlog from '../blog/Edit.tsx'
+import EditBlog from '../blog/edit/index.tsx'
 import EditBook from '../book/edit/index.tsx'
 import BookView from '../book/view/index.tsx'
 import Profile from '../profile/index.tsx'

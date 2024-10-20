@@ -11,6 +11,7 @@ import {
   DocNode,
 } from 'loony-types'
 import { NavigateFunction } from 'react-router-dom'
+import { useCallback } from 'react'
 
 export default function EditComponent({
   state,
@@ -280,14 +281,14 @@ export default function EditComponent({
     })
   }
 
-  const onCancel = () => {
+  const onCancel = useCallback(() => {
     setState({
       ...state,
       modal: '',
       editNode: null,
       addNode: null,
     })
-  }
+  }, [])
 
   return (
     <>
@@ -347,7 +348,7 @@ export default function EditComponent({
           FnCallback={editFnCallback}
           onCancel={onCancel}
           heading="Edit Node"
-          url="/book/edit/node"
+          url="/book/edit"
           isMobile={isMobile}
         />
       ) : null}

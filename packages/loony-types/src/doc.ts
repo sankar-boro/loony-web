@@ -22,7 +22,7 @@ export type DocNode = {
 
 export type AppendNodeResponse = {
     new_node: DocNode,
-    update_node: DocNode & { parent_id: number | null }
+    update_node: DocNode
 }
 
 export type GroupedNodesById = {

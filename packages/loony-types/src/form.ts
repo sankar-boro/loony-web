@@ -1,6 +1,5 @@
 import { DocNode } from './doc'
-
-export type VoidReturnFunction = () => void;
+import { VoidReturnFunction } from './common'
 
 type CommonFormComponentProps = {
     heading: string
@@ -17,7 +16,7 @@ type CommonFormComponentProps = {
   }
   
   export type AddNodeComponentProps = {
-    FnCallback: (data: { new_node: DocNode; update_node: DocNode & { parent_id: number | null } }) => void
+    FnCallback: (data: { new_node: DocNode; update_node: DocNode }) => void
   } & CommonFormComponentProps
   
   export type EditNodeComponentProps = {
