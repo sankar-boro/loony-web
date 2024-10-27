@@ -1,6 +1,6 @@
-import MarkdownPreview from '@uiw/react-markdown-preview';
+import MarkdownPreview from '@uiw/react-markdown-preview'
 
-const body = `### Loony Privacy Policy
+const body = `# Loony Privacy Policy
 
 **Effective Date: 12 October, 2014**
 
@@ -84,16 +84,19 @@ If you have any questions or concerns about this Privacy Policy or how we handle
 
 By using **Loony**, you agree to this Privacy Policy. Thank you for trusting us with your information and being part of our creative community!
 
----`;
+---`
 
 const PrivacyPolicy = () => {
   return (
-    <div className='home-container'>
+    <div className="home-container">
       <div style={{ width: '60%', marginRight: 'auto', marginLeft: 'auto' }}>
-        <MarkdownPreview source={body} wrapperElement={{ 'data-color-mode': 'light' }} />
+        <MarkdownPreview
+          source={body}
+          wrapperElement={{ 'data-color-mode': 'light' }}
+        />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PrivacyPolicy;
+export default PrivacyPolicy

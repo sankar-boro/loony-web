@@ -9,15 +9,14 @@ import privacyPolicy from '../assets/svgs/PrivacyPolicy.svg'
 import userAgreement from '../assets/svgs/UserAgreement.svg'
 
 import { BasicMenuNavContainer } from '../components/Containers.tsx'
-import { AUTHORIZED } from 'loony-types'
 import { axiosInstance } from 'loony-query'
-import { JsonObject, AuthContextProps } from 'loony-types'
+import { JsonObject, AuthContextProps, AuthStatus } from 'loony-types'
 
 const Followed = ({ authContext }: { authContext: AuthContextProps }) => {
   const [canFollowTags, setCanFollowTags] = useState<JsonObject[]>([])
 
   useEffect(() => {
-    if (authContext.status === AUTHORIZED && authContext.user) {
+    if (authContext.status === AuthStatus.AUTHORIZED && authContext.user) {
       axiosInstance
         .get(`/tag/${authContext.user.uid}/get_all_tags_user_can_follow`)
         .then(({ data }) => {
@@ -77,7 +76,7 @@ const Recommended = ({ authContext }: { authContext: AuthContextProps }) => {
   const [followedTags, setFollowedTags] = useState<JsonObject[]>([])
 
   useEffect(() => {
-    if (authContext.status === AUTHORIZED && authContext.user) {
+    if (authContext.status === AuthStatus.AUTHORIZED && authContext.user) {
       axiosInstance
         .get(`/tag/${authContext.user.uid}/get_all_tags_user_has_followed`)
         .then(({ data }) => {
@@ -163,13 +162,13 @@ export default function Navbar({
           </span>
           <div className="page-nav-title">Likes</div>
         </BasicMenuNavContainer>
-        {authContext.status === AUTHORIZED ? (
+        {authContext.status === AuthStatus.AUTHORIZED ? (
           <>
             <hr />
             <Followed authContext={authContext} />
           </>
         ) : null}
-        {authContext.status === AUTHORIZED ? (
+        {authContext.status === AuthStatus.AUTHORIZED ? (
           <>
             <hr />
             <Recommended authContext={authContext} />

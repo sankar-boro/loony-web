@@ -45,6 +45,7 @@ export default function Edit(props: AppRouteProps) {
       props={props}
       blog_id={blog_id as number}
       setState={setState}
+      authContext={props.authContext}
     />
   )
 }

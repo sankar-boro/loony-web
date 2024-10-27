@@ -1,7 +1,6 @@
-import MarkdownPreview from '@uiw/react-markdown-preview';
+import MarkdownPreview from '@uiw/react-markdown-preview'
 
-
-const body = `### Loony Content Policy
+const body = `# Loony Content Policy
 
 **Effective Date: 12 October, 2014**
 
@@ -72,16 +71,19 @@ This policy may be updated or modified from time to time. Users will be notified
 
 By using **Loony**, you agree to follow this Content Policy. Thank you for helping us maintain a respectful, creative, and engaging community!
 
----`;
+---`
 
 const ContentPolicy = (): React.JSX.Element => {
   return (
-    <div className='home-container'>
+    <div className="home-container">
       <div style={{ width: '60%', marginRight: 'auto', marginLeft: 'auto' }}>
-        <MarkdownPreview source={body} wrapperElement={{ 'data-color-mode': 'light' }} />
+        <MarkdownPreview
+          source={body}
+          wrapperElement={{ 'data-color-mode': 'light' }}
+        />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ContentPolicy;
+export default ContentPolicy

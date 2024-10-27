@@ -2,6 +2,8 @@ interface Indexer {
     [key: string]: any;  // Allows indexing with any string key
 }
 
+export type JsonObject = Indexer;
+
 type DocImages = {
     name: string
 }

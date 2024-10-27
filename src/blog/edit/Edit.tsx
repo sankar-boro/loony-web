@@ -19,12 +19,16 @@ import { axiosInstance } from 'loony-query'
 import AddNode from '../../form/addNode.tsx'
 import EditNodeForm from '../../form/editNode.tsx'
 import ConfirmAction from '../../components/ConfirmAction.tsx'
-import { PageNavigationView } from '../pageNavigation.tsx'
+import {
+  Chapters,
+  Edit as EditPage,
+} from '../../components/BlogPageNavigation.tsx'
 import {
   AppendNodeResponse,
   AppRouteProps,
   EditBlogState,
   EditBlogAction,
+  AuthContextProps,
 } from 'loony-types'
 import { ApiEvent, DocNode, DocStatus } from 'loony-types'
 
@@ -35,11 +39,13 @@ export default function RenderComponent({
   state,
   blog_id,
   setState,
+  authContext,
 }: {
   props: AppRouteProps
   state: EditBlogState
   blog_id: number
   setState: React.Dispatch<React.SetStateAction<EditBlogState>>
+  authContext: AuthContextProps
 }) {
   const base_url = props.appContext.env.base_url
   const { isMobile, mobileNavOpen, setMobileNavOpen } = props
@@ -74,11 +80,7 @@ export default function RenderComponent({
                 padding: 12,
               }}
             >
-              <PageNavigationView
-                blog_id={blog_id as number}
-                state={state}
-                isMobile={isMobile}
-              />
+              <Chapters state={state} />
             </div>
           </div>
         ) : null}
@@ -90,11 +92,7 @@ export default function RenderComponent({
               borderRight: '1px solid #ebebeb',
             }}
           >
-            <PageNavigationView
-              blog_id={blog_id as number}
-              state={state}
-              isMobile={isMobile}
-            />
+            <Chapters state={state} />
           </div>
         ) : null}
         {state.modal ? (

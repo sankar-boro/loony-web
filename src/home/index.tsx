@@ -5,8 +5,7 @@ import { timeAgo } from 'loony-utils'
 
 import CardLoader from '../components/CardLoader.tsx'
 import Navbar from './Navbar.tsx'
-import { AUTHORIZED } from 'loony-types'
-import { AppRouteProps, DocNode } from 'loony-types'
+import { AppRouteProps, DocNode, AuthStatus } from 'loony-types'
 
 const Home = (props: AppRouteProps) => {
   const { isMobile, authContext, appContext } = props
@@ -29,7 +28,7 @@ const Home = (props: AppRouteProps) => {
   }, [])
 
   useEffect(() => {
-    if (authContext.status === AUTHORIZED && authContext.user) {
+    if (authContext.status === AuthStatus.AUTHORIZED && authContext.user) {
       axiosInstance
         .get(`/book/get/${authContext.user.uid}/get_all_books_liked_by_user`)
         .then(({ data }) => {
@@ -51,7 +50,7 @@ const Home = (props: AppRouteProps) => {
   }, [authContext.status])
 
   useEffect(() => {
-    if (authContext.status === AUTHORIZED && authContext.user) {
+    if (authContext.status === AuthStatus.AUTHORIZED && authContext.user) {
       axiosInstance
         .get(`/blog/get/${authContext.user.uid}/get_all_blogs_liked_by_user`)
         .then(({ data }) => {

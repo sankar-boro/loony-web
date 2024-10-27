@@ -16,6 +16,7 @@ const View = ({
   setMobileNavOpen,
   isMobile,
   appContext,
+  authContext,
 }: AppRouteProps) => {
   const { base_url } = appContext.env
   const { bookId } = useParams()

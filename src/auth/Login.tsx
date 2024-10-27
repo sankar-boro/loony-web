@@ -2,7 +2,7 @@ import { useContext, useState } from 'react'
 import { axiosInstance } from 'loony-query'
 import { AuthContext } from '../context/AuthContext.tsx'
 import { Link, useNavigate } from 'react-router-dom'
-import { AUTHORIZED } from 'loony-types'
+import { AuthStatus } from 'loony-types'
 
 const handleLoginError = (data: string | object): string[] => {
   return [data as string]
@@ -50,7 +50,7 @@ const Login = ({ isMobile }: { isMobile: boolean }) => {
       .post('/auth/login', formData)
       .then(({ data }) => {
         authContext.setAuthContext({
-          status: AUTHORIZED,
+          status: AuthStatus.AUTHORIZED,
           user: data,
         })
         navigate('/', {})

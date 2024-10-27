@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { axiosInstance } from 'loony-query'
-import { ApiEvent, UNAUTHORIZED, AUTHORIZED } from 'loony-types'
+import { ApiEvent, AuthStatus } from 'loony-types'
 import PageLoader from '../components/PageLoader.tsx'
 import { Auth, AuthContextProps } from 'loony-types'
 
 const authState: Auth = {
-  status: ApiEvent.IDLE,
+  status: AuthStatus.IDLE,
   user: null,
 }
 
@@ -28,14 +28,14 @@ const useAuthSession = (): [
       .then(({ data }) => {
         setAuthContext({
           user: data,
-          status: AUTHORIZED,
+          status: AuthStatus.AUTHORIZED,
         })
       })
       .catch((err) => {
         console.log(err)
         setAuthContext({
           user: null,
-          status: UNAUTHORIZED,
+          status: AuthStatus.UNAUTHORIZED,
         })
       })
   }, [])
@@ -45,7 +45,7 @@ const useAuthSession = (): [
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [authContext, setAuthContext] = useAuthSession()
 
-  if (authContext.status === ApiEvent.IDLE)
+  if (authContext.status === AuthStatus.IDLE)
     return (
       <div className="book-container">
         <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>

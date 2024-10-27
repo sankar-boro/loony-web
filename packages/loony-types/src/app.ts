@@ -3,7 +3,12 @@ import { AuthContextProps } from './user'
 
 export type AppState = {
   env: {
-    base_url: string
+    base_url: string,
+  },
+  device: {
+    type: string,
+    width: number,
+    height: number,
   }
 }
 
