@@ -16,6 +16,9 @@ import {
   ReadBookAction,
   ReadBookState,
   DocNode,
+  EditBookAction,
+  EditBookState,
+  VoidReturnFunction,
 } from 'loony-types'
 
 export const PageNavigation = ({
@@ -25,13 +28,15 @@ export const PageNavigation = ({
   state,
   book_id,
   isMobile,
+  viewFrontPage,
 }: {
-  setState: ReadBookAction
+  setState: ReadBookAction | EditBookAction
   setStatus: ApiDispatchAction
   nodes101: DocNode[]
-  state: ReadBookState
+  state: ReadBookState | EditBookState
   book_id: number
   isMobile: boolean
+  viewFrontPage: VoidReturnFunction
 }) => {
   const {
     page_id,
@@ -47,15 +52,7 @@ export const PageNavigation = ({
   return (
     <>
       <ChapterNavContainer
-        onClick={(e) => {
-          e.stopPropagation()
-          setState((prevState) => ({
-            ...prevState,
-            page_id: frontPage.uid,
-            activeNode: frontPage,
-            activeSubSectionsBySectionId: [],
-          }))
-        }}
+        onClick={viewFrontPage}
         isActive={activeNode.uid === frontPage.uid}
       >
         {frontPage.title}

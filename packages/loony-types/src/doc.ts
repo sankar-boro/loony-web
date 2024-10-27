@@ -12,7 +12,7 @@ export type DocNode = {
     uid: number,
     title: string,
     body: string,
-    images: string | DocImages[],
+    images: string,
     user_id: number,
     identity: number,
     theme: number,

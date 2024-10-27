@@ -39,7 +39,7 @@ const Followed = ({ authContext }: { authContext: AuthContextProps }) => {
       <div>Recommendations</div>
       {canFollowTags.map((tag) => {
         return (
-          <BasicMenuNavContainer key={tag.uid}>
+          <BasicMenuNavContainer key={`r-${tag.uid}`}>
             <span
               style={{
                 marginRight: 10,
@@ -93,12 +93,13 @@ const Recommended = ({ authContext }: { authContext: AuthContextProps }) => {
       user_id: authContext.user && authContext.user.uid,
     })
   }
+
   return (
     <div>
       <div>Followed</div>
       {followedTags.map((tag) => {
         return (
-          <BasicMenuNavContainer key={tag.uid}>
+          <BasicMenuNavContainer key={`f-${tag.uid}`}>
             <span
               style={{
                 marginRight: 10,

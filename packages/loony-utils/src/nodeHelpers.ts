@@ -405,24 +405,6 @@ export const orderNodes = (nodes: DocNode[], parentNode: DocNode) => {
   return results;
 };
 
-type ImageRes = {
-  name: string
-}
-
-export const extractImage = (images: ImageRes[] | string | null): ImageRes | null => {
-  if (!images) return null;
-  if (typeof images === "object") {
-    return images[0];
-  }
-  let parsedImage = null;
-  const image = images && JSON.parse(images);
-  if (image && Array.isArray(image) && image.length > 0) {
-    parsedImage = image[0];
-  }
-
-  return parsedImage;
-};
-
 export const orderBlogNodes = (data: DocNode[]) => {
   const totalNodes = data.length;
   const parentNodesMap = new Map();

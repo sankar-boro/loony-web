@@ -4,10 +4,7 @@ import { useParams } from 'react-router-dom'
 import { extractImage, timeAgo } from 'loony-utils'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import { getBlogNodes } from 'loony-utils'
-import {
-  Chapters,
-  Edit as EditPage,
-} from '../../components/BlogPageNavigation.tsx'
+import { Chapters, Edit as EditPage } from '../common/BlogPageNavigation.tsx'
 
 import { ApiEvent, DocStatus } from 'loony-types'
 import { AppRouteProps, ReadBlogState } from 'loony-types'

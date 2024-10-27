@@ -19,10 +19,7 @@ import { axiosInstance } from 'loony-query'
 import AddNode from '../../form/addNode.tsx'
 import EditNodeForm from '../../form/editNode.tsx'
 import ConfirmAction from '../../components/ConfirmAction.tsx'
-import {
-  Chapters,
-  Edit as EditPage,
-} from '../../components/BlogPageNavigation.tsx'
+import { Chapters } from '../common/BlogPageNavigation.tsx'
 import {
   AppendNodeResponse,
   AppRouteProps,

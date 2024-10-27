@@ -1,4 +1,11 @@
-import { useState, useEffect, useContext, Suspense, lazy } from 'react'
+import {
+  useState,
+  useEffect,
+  useContext,
+  Suspense,
+  lazy,
+  useCallback,
+} from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 
 import { extractImage, timeAgo } from 'loony-utils'
@@ -9,7 +16,7 @@ import { LuFileWarning } from 'react-icons/lu'
 
 import { getChapters } from 'loony-utils'
 import EditComponent from './edit.tsx'
-import { PageNavigation } from './pageNavigation.tsx'
+import { PageNavigation } from '../common/pageNavigation.tsx'
 import { PageNodeSettings } from './pageNodeSettings.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import AppContext from '../../context/AppContext.tsx'
@@ -65,6 +72,16 @@ export default function Edit({
     }
   }, [book_id])
 
+  const viewFrontPage = useCallback(() => {
+    setState({
+      ...state,
+      page_id: state?.frontPage?.uid || null,
+      activeNode: state?.frontPage,
+      editNode: null,
+      addNode: null,
+      modal: '',
+    })
+  }, [])
   if (status.status === ApiEvent.INIT || status.status === ApiEvent.START)
     return <PageLoadingContainer isMobile={isMobile} />
 
@@ -74,7 +91,6 @@ export default function Edit({
 
   const image = extractImage(activeNode.images)
 
-  console.log(state)
   return (
     <div className="book-container">
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -107,6 +123,7 @@ export default function Edit({
                 state={state}
                 book_id={book_id as number}
                 isMobile={isMobile}
+                viewFrontPage={viewFrontPage}
               />
             </div>
           </div>
@@ -126,6 +143,7 @@ export default function Edit({
               state={state}
               book_id={book_id as number}
               isMobile={isMobile}
+              viewFrontPage={viewFrontPage}
             />
           </div>
         ) : null}

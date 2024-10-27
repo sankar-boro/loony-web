@@ -68,7 +68,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
   )
 
   const onCreateAction = useCallback(async () => {
-    let imageData = { name: '' }
+    let imageData = null
     if (afterImageSelect.image) {
       imageData = await uploadImage()
     }
@@ -84,9 +84,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
       .post(url, {
         title: formTitle,
         body: formBody,
-        images: imageData
-          ? [{ name: imageData ? imageData.name : afterTmpImageUpload }]
-          : [],
+        images: imageData ? [imageData] : [],
         tags: null,
         [doc_idName]: doc_id,
         parent_id,
@@ -103,40 +101,41 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
       })
   }, [formTitle, formBody, afterTmpImageUpload])
 
-  const onSelectImage: React.ChangeEventHandler<HTMLInputElement> = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const selectedFile =
-      event.target.files &&
-      event.target.files.length > 0 &&
-      event.target.files[0]
-    if (!selectedFile) return
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      const img = new Image()
-      img.onload = function () {
-        const width = img.naturalWidth
-        const height = img.naturalHeight
-        if (width > height && width <= 1420) {
-          return
+  const onSelectImage: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const selectedFile =
+        event.target.files &&
+        event.target.files.length > 0 &&
+        event.target.files[0]
+      if (!selectedFile) return
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const img = new Image()
+        img.onload = function () {
+          const width = img.naturalWidth
+          const height = img.naturalHeight
+          if (width > height && width <= 1420) {
+            return
+          }
+          if (height > width && height <= 1420) {
+            return
+          }
+          setAfterImageSelect({
+            hasImage: true,
+            image: selectedFile,
+            width,
+            height,
+          })
+          setImageEdit(URL.createObjectURL(selectedFile))
         }
-        if (height > width && height <= 1420) {
-          return
+        if (e.target?.result && typeof e.target.result === 'string') {
+          img.src = e.target.result
         }
-        setAfterImageSelect({
-          hasImage: true,
-          image: selectedFile,
-          width,
-          height,
-        })
-        setImageEdit(URL.createObjectURL(selectedFile))
       }
-      if (e.target?.result && typeof e.target.result === 'string') {
-        img.src = e.target.result
-      }
-    }
-    reader.readAsDataURL(selectedFile)
-  }
+      reader.readAsDataURL(selectedFile)
+    },
+    []
+  )
 
   const changeFile = onSelectImage
 
