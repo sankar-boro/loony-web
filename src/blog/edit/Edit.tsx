@@ -27,7 +27,7 @@ import {
   EditBlogAction,
   AuthContextProps,
 } from 'loony-types'
-import { ApiEvent, DocNode, DocStatus } from 'loony-types'
+import { DocNode, DocStatus } from 'loony-types'
 
 const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
@@ -36,8 +36,8 @@ export default function RenderComponent({
   state,
   blog_id,
   setState,
-  authContext,
-}: {
+}: // authContext,
+{
   props: AppRouteProps
   state: EditBlogState
   blog_id: number

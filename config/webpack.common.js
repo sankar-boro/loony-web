@@ -3,9 +3,11 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-function findPackages() {
-  const pkgRoot = path.join(__dirname, '..', 'packages')
+const pkgRoot = path.join(__dirname, '..', 'packages')
+const main = path.resolve(__dirname, '..', './src/main.tsx')
+const indexHtml = path.resolve(__dirname, '..', './index.html')
 
+function findPackages() {
   return fs
     .readdirSync(pkgRoot)
     .filter((entry) => {
@@ -32,7 +34,7 @@ const alias = findPackages().reduce((alias, { dir, name }) => {
 }, {})
 
 module.exports = {
-  entry: path.resolve(__dirname, '..', './src/main.tsx'),
+  entry: main,
   resolve: {
     alias,
     extensions: ['.tsx', '.ts', '.js'],
@@ -81,7 +83,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '..', './index.html'),
+      template: indexHtml,
     }),
     new MiniCssExtractPlugin(),
   ],

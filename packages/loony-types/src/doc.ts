@@ -4,10 +4,6 @@ interface Indexer {
 
 export type JsonObject = Indexer;
 
-type DocImages = {
-    name: string
-}
-
 export type DocNode = {
     uid: number,
     title: string,

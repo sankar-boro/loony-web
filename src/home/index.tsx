@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { axiosInstance } from 'loony-query'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { parseImage, timeAgo } from 'loony-utils'
@@ -7,8 +7,22 @@ import CardLoader from '../components/CardLoader.tsx'
 import Navbar from './Navbar.tsx'
 import { AppRouteProps, DocNode, AuthStatus } from 'loony-types'
 
+// Utility function to handle data fetching based on auth status
+const fetchData = async (
+  url: string,
+  setData: React.Dispatch<React.SetStateAction<DocNode[]>>
+) => {
+  try {
+    const { data } = await axiosInstance.get(url)
+    setData(data)
+  } catch (err) {
+    console.error('Error fetching data:', err)
+  }
+}
+
 const Home = (props: AppRouteProps) => {
   const { isMobile, authContext, appContext } = props
+  const { user } = authContext
   const { base_url } = appContext.env
   const navigate = useNavigate()
   const [blogs, setBlogs] = useState<DocNode[]>([])
@@ -16,60 +30,31 @@ const Home = (props: AppRouteProps) => {
   const [book_page_no] = useState(1)
   const [blog_page_no] = useState(1)
 
-  useEffect(() => {
-    axiosInstance
-      .get(`/blog/get/${blog_page_no}/by_page`)
-      .then(({ data }) => {
-        setBlogs(data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+  // Fetch blogs based on auth status
+  const fetchBlogs = useCallback(() => {
+    const url =
+      authContext.status === AuthStatus.AUTHORIZED && user
+        ? `/blog/get/${user.uid}/get_all_blogs_liked_by_user`
+        : `/blog/get/${blog_page_no}/by_page`
+    fetchData(url, setBlogs)
+  }, [])
+
+  // Fetch books based on auth status
+  const fetchBooks = useCallback(() => {
+    const url =
+      authContext.status === AuthStatus.AUTHORIZED && user
+        ? `/book/get/${user.uid}/get_all_books_liked_by_user`
+        : `/book/get/${book_page_no}/by_page`
+    fetchData(url, setBooks)
   }, [])
 
   useEffect(() => {
-    if (authContext.status === AuthStatus.AUTHORIZED && authContext.user) {
-      axiosInstance
-        .get(`/book/get/${authContext.user.uid}/get_all_books_liked_by_user`)
-        .then(({ data }) => {
-          setBooks(data)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    } else {
-      axiosInstance
-        .get(`/book/get/${book_page_no}/by_page`)
-        .then(({ data }) => {
-          setBooks(data)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
-  }, [authContext.status])
+    fetchBlogs()
+  }, [fetchBlogs])
 
   useEffect(() => {
-    if (authContext.status === AuthStatus.AUTHORIZED && authContext.user) {
-      axiosInstance
-        .get(`/blog/get/${authContext.user.uid}/get_all_blogs_liked_by_user`)
-        .then(({ data }) => {
-          setBlogs(data)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    } else {
-      axiosInstance
-        .get(`/blog/get/${blog_page_no}/by_page`)
-        .then(({ data }) => {
-          setBlogs(data)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
-  }, [authContext.status])
+    fetchBooks()
+  }, [fetchBooks])
 
   return (
     <div className="home-container flex-row">
@@ -125,7 +110,7 @@ const Documents = ({
               return <CardLoader key={key} />
             })
           : null}
-        {documents &&
+        {Array.isArray(documents) &&
           documents.map((node: DocNode) => {
             return (
               <Card

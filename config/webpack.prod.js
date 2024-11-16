@@ -1,5 +1,6 @@
 const webpack = require('webpack')
-const { APP_NAME } = require('./app.config.json')
+const { prod } = require('./app.config.json')
+const { APP_NAME } = prod
 
 module.exports = {
   mode: 'production',

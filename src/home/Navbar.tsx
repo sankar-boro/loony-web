@@ -19,7 +19,7 @@ const Followed = ({ authContext }: { authContext: AuthContextProps }) => {
     if (authContext.status === AuthStatus.AUTHORIZED && authContext.user) {
       axiosInstance
         .get(`/tag/${authContext.user.uid}/get_all_tags_user_can_follow`)
-        .then(({ data }) => {
+        .then(({ data }: { data: JsonObject[] }) => {
           setCanFollowTags(data)
         })
         .catch((err) => {
@@ -27,6 +27,7 @@ const Followed = ({ authContext }: { authContext: AuthContextProps }) => {
         })
     }
   }, [])
+
   const user_removed_a_followed_tag = (tag_id: number) => {
     axiosInstance.post(`/tag/user_removed_a_followed_tag`, {
       tag_id,
@@ -37,37 +38,38 @@ const Followed = ({ authContext }: { authContext: AuthContextProps }) => {
   return (
     <div>
       <div>Recommendations</div>
-      {canFollowTags.map((tag) => {
-        return (
-          <BasicMenuNavContainer key={`r-${tag.uid}`}>
-            <span
-              style={{
-                marginRight: 10,
-                backgroundColor: '#ccc',
-                width: 35,
-                height: 30,
-                borderRadius: 30,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {tag.name.substr(0, 1)}
-            </span>
-            <div className="page-nav-title">
-              <span>{tag.name}</span>
-              <button
-                onClick={() => {
-                  user_removed_a_followed_tag(tag.uid)
+      {Array.isArray(canFollowTags) &&
+        canFollowTags.map((tag) => {
+          return (
+            <BasicMenuNavContainer key={`r-${tag.uid}`}>
+              <span
+                style={{
+                  marginRight: 10,
+                  backgroundColor: '#ccc',
+                  width: 35,
+                  height: 30,
+                  borderRadius: 30,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
-                style={{ marginLeft: 10 }}
               >
-                Remove
-              </button>
-            </div>
-          </BasicMenuNavContainer>
-        )
-      })}
+                {tag.name.substr(0, 1)}
+              </span>
+              <div className="page-nav-title">
+                <span>{tag.name}</span>
+                <button
+                  onClick={() => {
+                    user_removed_a_followed_tag(tag.uid)
+                  }}
+                  style={{ marginLeft: 10 }}
+                >
+                  Remove
+                </button>
+              </div>
+            </BasicMenuNavContainer>
+          )
+        })}
     </div>
   )
 }
@@ -79,7 +81,7 @@ const Recommended = ({ authContext }: { authContext: AuthContextProps }) => {
     if (authContext.status === AuthStatus.AUTHORIZED && authContext.user) {
       axiosInstance
         .get(`/tag/${authContext.user.uid}/get_all_tags_user_has_followed`)
-        .then(({ data }) => {
+        .then(({ data }: { data: JsonObject[] }) => {
           setFollowedTags(data)
         })
         .catch((err) => {
@@ -97,36 +99,37 @@ const Recommended = ({ authContext }: { authContext: AuthContextProps }) => {
   return (
     <div>
       <div>Followed</div>
-      {followedTags.map((tag) => {
-        return (
-          <BasicMenuNavContainer key={`f-${tag.uid}`}>
-            <span
-              style={{
-                marginRight: 10,
-                backgroundColor: '#ccc',
-                width: 35,
-                height: 30,
-                borderRadius: 30,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {tag.name.substr(0, 1)}
-            </span>
-            <div className="page-nav-title">
-              <span>{tag.name}</span>
-              <button
-                onClick={() => {
-                  user_removed_a_followed_tag(tag.uid)
+      {Array.isArray(followedTags) &&
+        followedTags.map((tag) => {
+          return (
+            <BasicMenuNavContainer key={`f-${tag.uid}`}>
+              <span
+                style={{
+                  marginRight: 10,
+                  backgroundColor: '#ccc',
+                  width: 35,
+                  height: 30,
+                  borderRadius: 30,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
-                Remove
-              </button>
-            </div>
-          </BasicMenuNavContainer>
-        )
-      })}
+                {tag.name.substr(0, 1)}
+              </span>
+              <div className="page-nav-title">
+                <span>{tag.name}</span>
+                <button
+                  onClick={() => {
+                    user_removed_a_followed_tag(tag.uid)
+                  }}
+                >
+                  Remove
+                </button>
+              </div>
+            </BasicMenuNavContainer>
+          )
+        })}
     </div>
   )
 }
