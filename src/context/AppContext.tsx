@@ -1,11 +1,15 @@
 import { createContext, useState, ReactNode, useEffect } from 'react'
 import { AppContextProps, AppState } from 'loony-types'
-
 import config from '../../config/app.config.json'
+
+const appConfig: any = config
+const env: string = config.env
+const currentConfig: any = appConfig[env]
+const { API_URL } = currentConfig
 
 const AppContext = createContext<AppContextProps>({
   env: {
-    base_url: config.API_URL,
+    base_url: API_URL,
   },
   device: {
     type: 'desktop',
@@ -20,7 +24,7 @@ const AppContext = createContext<AppContextProps>({
 export function AppProvider({ children }: { children: ReactNode }) {
   const [state, setAppContext] = useState<AppState>({
     env: {
-      base_url: config.API_URL,
+      base_url: API_URL,
     },
     device: {
       type: 'desktop',

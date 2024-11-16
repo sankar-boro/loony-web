@@ -132,7 +132,7 @@ const Login = ({ isMobile }: { isMobile: boolean }) => {
               ) : null}
 
               <div className="input-container">
-                <label htmlFor="phone">Email or Phone Number</label>
+                <label htmlFor="phone">Email/Username</label>
                 <input
                   type="text"
                   id="phone"
