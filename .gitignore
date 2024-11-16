@@ -27,5 +27,5 @@ config/app.config.json
 deno.lock
 package-lock.json
 package.json
-.yarn/
 build/
+.yarn/

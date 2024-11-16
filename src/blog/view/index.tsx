@@ -1,23 +1,24 @@
 import { useState, useEffect, lazy, Suspense } from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { extractImage, timeAgo } from 'loony-utils'
-import { LuFileWarning } from 'react-icons/lu'
-import { LuFileEdit } from 'react-icons/lu'
-import PageLoadingContainer from '../components/PageLoadingContainer.tsx'
+import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import { getBlogNodes } from 'loony-utils'
-import { PageNavigationEdit } from './pageNavigation.tsx'
-import { ApiEvent } from 'loony-types'
+import { Chapters, Edit as EditPage } from '../common/BlogPageNavigation.tsx'
+
+import { ApiEvent, DocStatus } from 'loony-types'
 import { AppRouteProps, ReadBlogState } from 'loony-types'
-const MathsMarkdown = lazy(() => import('../components/MathsMarkdown.tsx'))
+const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
 const View = (props: AppRouteProps) => {
-  const { isMobile, setMobileNavOpen, mobileNavOpen, appContext } = props
+  const { isMobile, setMobileNavOpen, mobileNavOpen, appContext, authContext } =
+    props
   const { base_url } = appContext.env
   const { blogId } = useParams()
   const blog_id = blogId && parseInt(blogId)
 
   const [state, setState] = useState<ReadBlogState>({
+    status: DocStatus.None,
     doc_info: null,
     mainNode: null,
     rawNodes: [],
@@ -40,7 +41,6 @@ const View = (props: AppRouteProps) => {
     return <PageLoadingContainer isMobile={isMobile} />
 
   const { childNodes, mainNode, doc_info } = state
-
   if (!mainNode || !doc_info) return null
 
   const image = extractImage(mainNode.images)
@@ -70,11 +70,7 @@ const View = (props: AppRouteProps) => {
                 padding: 12,
               }}
             >
-              <PageNavigationEdit
-                blog_id={blog_id as number}
-                state={state}
-                isMobile={isMobile}
-              />
+              <Chapters state={state} />
             </div>
           </div>
         ) : null}
@@ -86,11 +82,7 @@ const View = (props: AppRouteProps) => {
               borderRight: '1px solid #ebebeb',
             }}
           >
-            <PageNavigationEdit
-              blog_id={blog_id as number}
-              state={state}
-              isMobile={isMobile}
-            />
+            <Chapters state={state} />
           </div>
         ) : null}
 
@@ -157,7 +149,7 @@ const View = (props: AppRouteProps) => {
             </div>
           </div>
           {childNodes.map((blog_node) => {
-            const parseImage = JSON.parse(blog_node.images)
+            const parseImage = JSON.parse(blog_node.images as string)
             const nodeImage = parseImage.length > 0 ? parseImage[0].name : null
             return (
               <div className="page-section" key={blog_node.uid}>
@@ -192,19 +184,11 @@ const View = (props: AppRouteProps) => {
         </div>
         {!isMobile ? (
           <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
-            <ul
-              style={{ paddingLeft: 0, listStyle: 'none' }}
-              className="list-item"
-            >
-              <li>
-                <LuFileEdit color="#2d2d2d" size={16} />
-                <Link to={`/edit/blog/${blog_id}`}>Edit this page</Link>
-              </li>
-              <li>
-                <LuFileWarning color="#2d2d2d" size={16} />
-                <Link to="">Report</Link>
-              </li>
-            </ul>
+            <EditPage
+              blog_id={blog_id as number}
+              authContext={authContext}
+              doc_info={doc_info}
+            />
           </div>
         ) : null}
       </div>

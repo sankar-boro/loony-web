@@ -3,24 +3,15 @@ export * from './doc'
 export * from './user'
 export * from './notification'
 export * from './form'
+export * from './common'
 
-import { AppState} from './app'
+import { VoidReturnFunction, ApiEvent } from './common'
+import { AppState } from './app'
 import { ReadBookState, EditBlogState, EditBookState, ReadBlogState, DocNode } from './doc'
 
-export enum ApiEvent {
-  INIT        = 1,
-  START       = 2,
-  SUCCESS     = 3,
-  FAILED      = 4,
-  IDLE        = 5,
-}
-
-export const UNAUTHORIZED = 300;
-export const AUTHORIZED = 105;
 export const APP_CSS = {
   linearGradient: 'linear-gradient(to right, #ffffff, #F6F8FC)',
 };
-
 
 export type ApiStatus = {
     status: ApiEvent,
@@ -29,8 +20,6 @@ export type ApiStatus = {
 
 export type AppDispatchAction = React.Dispatch<React.SetStateAction<AppState>>
 export type ApiDispatchAction = React.Dispatch<React.SetStateAction<ApiStatus>>;
-export type BooleanDispatchAction = React.Dispatch<React.SetStateAction<boolean>>;
-export type VoidReturnFunction = () => void;
 
 
 export type EditNodeComponentProps = {
@@ -38,7 +27,7 @@ export type EditNodeComponentProps = {
     state: EditBlogState | EditBookState,
     doc_idName: string,
     doc_id: number,
-    FnCallback: (data: { data: DocNode }) => void,
+    FnCallback: (data: DocNode ) => void,
     onCancel: VoidReturnFunction,
     url: string,
     isMobile: boolean,

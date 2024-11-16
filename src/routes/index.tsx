@@ -1,6 +1,17 @@
+import { useState, lazy, Suspense } from 'react'
+import { Routes, Route as ReactRoute } from 'react-router-dom'
+
+import { CREATE_BOOK, CREATE_BLOG } from 'loony-query'
+import {
+  NotificationContextProps,
+  AppContextProps,
+  AuthContextProps,
+  AuthStatus,
+} from 'loony-types'
+
 import Home from '../home/index.tsx'
-import BlogView from '../blog/View.tsx'
-import EditBlog from '../blog/Edit.tsx'
+import BlogView from '../blog/view/index.tsx'
+import EditBlog from '../blog/edit/index.tsx'
 import EditBook from '../book/edit/index.tsx'
 import BookView from '../book/view/index.tsx'
 import Profile from '../profile/index.tsx'
@@ -8,17 +19,13 @@ import Login from '../auth/Login.tsx'
 import Signup from '../auth/Signup.tsx'
 import Alert from '../components/Alert.tsx'
 import NotFound from '../error/NotFound.tsx'
-import AuthError from '../error/AuthError.tsx'
+import UnAuthorized from '../error/UnAuthorized.tsx'
 import Create from '../form/createDocument.tsx'
-import { CREATE_BOOK, CREATE_BLOG } from 'loony-query'
-import { AUTHORIZED, NotificationContextProps, UNAUTHORIZED } from 'loony-types'
 import Navigation from '../navigation/topNavbar/index.tsx'
-import { Routes, Route as ReactRoute } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import ContentPolicy from '../static/ContentPolicy.tsx'
-import PrivacyPolicy from '../static/PrivacyPolicy.tsx'
-import UserAgreement from '../static/UserAgreement.tsx'
-import { AppContextProps, AuthContextProps } from 'loony-types'
+import PageLoadingContainer from '../components/PageLoadingContainer.tsx'
+const ContentPolicy = lazy(() => import('../static/ContentPolicy.tsx'))
+const PrivacyPolicy = lazy(() => import('../static/PrivacyPolicy.tsx'))
+const UserAgreement = lazy(() => import('../static/UserAgreement.tsx'))
 
 const Route = ({
   authContext,
@@ -30,14 +37,7 @@ const Route = ({
   notificationContext: NotificationContextProps
 }): React.JSX.Element => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    if (window.innerWidth <= 720) {
-      setIsMobile(true)
-    }
-  }, [])
-
+  const isMobile = appContext.device.type === 'mobile' ? true : false
   const props = {
     setMobileNavOpen,
     mobileNavOpen,
@@ -64,7 +64,7 @@ const Route = ({
         setMobileNavOpen={setMobileNavOpen}
         isMobile={isMobile}
       />
-      {authContext.status === AUTHORIZED && (
+      {authContext.status === AuthStatus.AUTHORIZED && (
         <Routes>
           <ReactRoute path="/" element={<Home {...props} />} />
           <ReactRoute
@@ -98,22 +98,45 @@ const Route = ({
           <ReactRoute path="/profile" element={<Profile {...props} />} />
           <ReactRoute
             path="/policies/ContentPolicy"
-            element={<ContentPolicy />}
+            element={
+              <Suspense
+                fallback={
+                  <PageLoadingContainer title="Content Policy" {...props} />
+                }
+              >
+                <ContentPolicy />
+              </Suspense>
+            }
           />
           <ReactRoute
             path="/policies/PrivacyPolicy"
-            element={<PrivacyPolicy />}
+            element={
+              <Suspense
+                fallback={
+                  <PageLoadingContainer title="Privacy Policy" {...props} />
+                }
+              >
+                <PrivacyPolicy />
+              </Suspense>
+            }
           />
           <ReactRoute
             path="/policies/UserAgreement"
-            element={<UserAgreement />}
+            element={
+              <Suspense
+                fallback={
+                  <PageLoadingContainer title="User Agreement" {...props} />
+                }
+              >
+                <UserAgreement />
+              </Suspense>
+            }
           />
-          <ReactRoute path="/unauthorized" element={<AuthError />} />
-
+          <ReactRoute path="/unauthorized" element={<UnAuthorized />} />
           <ReactRoute path="*" element={<NotFound />} />
         </Routes>
       )}
-      {authContext.status === UNAUTHORIZED && (
+      {authContext.status === AuthStatus.UNAUTHORIZED && (
         <Routes>
           <ReactRoute path="/" element={<Home {...props} />} />
           <ReactRoute path="/login" element={<Login {...props} />} />
@@ -126,19 +149,43 @@ const Route = ({
             path="/view/blog/:blogId"
             element={<BlogView {...props} />}
           />
-          <ReactRoute path="/edit/book/:bookId" element={<AuthError />} />
-          <ReactRoute path="/edit/blog/:blogId" element={<AuthError />} />
+          <ReactRoute path="/edit/book/:bookId" element={<UnAuthorized />} />
+          <ReactRoute path="/edit/blog/:blogId" element={<UnAuthorized />} />
           <ReactRoute
             path="/policies/ContentPolicy"
-            element={<ContentPolicy />}
+            element={
+              <Suspense
+                fallback={
+                  <PageLoadingContainer title="Content Policy" {...props} />
+                }
+              >
+                <ContentPolicy />
+              </Suspense>
+            }
           />
           <ReactRoute
             path="/policies/PrivacyPolicy"
-            element={<PrivacyPolicy />}
+            element={
+              <Suspense
+                fallback={
+                  <PageLoadingContainer title="Privacy Policy" {...props} />
+                }
+              >
+                <PrivacyPolicy />
+              </Suspense>
+            }
           />
           <ReactRoute
             path="/policies/UserAgreement"
-            element={<UserAgreement />}
+            element={
+              <Suspense
+                fallback={
+                  <PageLoadingContainer title="User Agreement" {...props} />
+                }
+              >
+                <UserAgreement />
+              </Suspense>
+            }
           />
           <ReactRoute path="*" element={<NotFound />} />
         </Routes>

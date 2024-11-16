@@ -2,7 +2,7 @@ import { LuMenu } from 'react-icons/lu'
 import { LiaUserSolid } from 'react-icons/lia'
 import { Link, useNavigate, NavigateFunction } from 'react-router-dom'
 import { useCallback, useContext } from 'react'
-import { AUTHORIZED, UNAUTHORIZED } from 'loony-types'
+import { AuthStatus } from 'loony-types'
 import { AuthContext } from '../../context/AuthContext.tsx'
 import { axiosInstance } from 'loony-query'
 import type {
@@ -20,7 +20,7 @@ const Logo = () => {
 }
 
 const CreateDocument = (authContext: Auth) => {
-  if (authContext.status === AUTHORIZED) {
+  if (authContext.status === AuthStatus.AUTHORIZED) {
     return (
       <div className="create-button">
         <button style={{ fontWeight: 'bold' }}>Create</button>
@@ -53,7 +53,7 @@ const Profile = ({
   logoutUser: VoidReturnFunction
   navigate: NavigateFunction
 }) => {
-  if (authContext.status === AUTHORIZED && authContext.user) {
+  if (authContext.status === AuthStatus.AUTHORIZED && authContext.user) {
     const { fname, lname } = authContext.user
     return (
       <div className="profile-button">
@@ -108,7 +108,7 @@ const Navigation = ({
   const logoutUser = useCallback(() => {
     axiosInstance.post('/auth/logout').then(() => {
       authContext.setAuthContext({
-        status: UNAUTHORIZED,
+        status: AuthStatus.UNAUTHORIZED,
         user: null,
       })
     })

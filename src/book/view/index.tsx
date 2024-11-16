@@ -1,11 +1,11 @@
-import { useState, useEffect, Suspense, lazy } from 'react'
+import { useState, useEffect, Suspense, lazy, useCallback } from 'react'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { extractImage, getChapters } from 'loony-utils'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 
 import { useParams, Link } from 'react-router-dom'
 import { timeAgo } from 'loony-utils'
-import { PageNavigation } from './pageNavigation.tsx'
+import { PageNavigation } from '../common/pageNavigation.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import { AppRouteProps, ReadBookState } from 'loony-types'
 import { ApiEvent } from 'loony-types'
@@ -44,9 +44,14 @@ const View = ({
     }
   }, [book_id])
 
-  if (status.status === ApiEvent.INIT || status.status === ApiEvent.START)
-    return <PageLoadingContainer isMobile={isMobile} />
-
+  const viewFrontPage = useCallback(() => {
+    setState({
+      ...state,
+      page_id: state.frontPage?.uid || null,
+      activeNode: frontPage,
+      activeSubSectionsBySectionId: [],
+    })
+  }, [])
   const {
     activeNode,
     nodes101,
@@ -54,6 +59,9 @@ const View = ({
     activeSubSectionsBySectionId,
     doc_info,
   } = state
+
+  if (status.status === ApiEvent.INIT || status.status === ApiEvent.START)
+    return <PageLoadingContainer isMobile={isMobile} />
 
   if (!activeNode || !doc_info || !frontPage) return null
 
@@ -94,6 +102,7 @@ const View = ({
                 state={state}
                 book_id={book_id as number}
                 isMobile={isMobile}
+                viewFrontPage={viewFrontPage}
               />
             </div>
           </div>
@@ -113,6 +122,7 @@ const View = ({
               state={state}
               book_id={book_id as number}
               isMobile={isMobile}
+              viewFrontPage={viewFrontPage}
             />
           </div>
         ) : null}

@@ -2,26 +2,20 @@ import { useContext, useState } from 'react'
 import { axiosInstance } from 'loony-query'
 import { AuthContext } from '../context/AuthContext.tsx'
 import { Link, useNavigate } from 'react-router-dom'
-import { AUTHORIZED } from 'loony-types'
+import { AuthStatus } from 'loony-types'
 
-const handleLoginError = (data: string | object): string[] => {
-  return [data as string]
-  // const errs: string[] = []
-  // if (typeof data === 'string') {
-  //   return [data]
-  // }
+const handleLoginError = (err: any): string[] => {
+  const errs: string[] = []
+  if (typeof err === 'string') {
+    return [err]
+  }
 
-  // if (typeof data === 'object') {
-  //   for (const key in data) {
-  //     const x = data[key][0]
-  //     if (x.code && x.code === 'length') {
-  //       errs.push(`${key} length cannot be less then ${x.params.min}.`)
-  //     } else {
-  //       errs.push(x.code)
-  //     }
-  //   }
-  // }
-  // return errs
+  if (typeof err === 'object') {
+    if (err && err.response && err.response.data) {
+      return [err.response.data]
+    }
+  }
+  return errs
 }
 
 const Login = ({ isMobile }: { isMobile: boolean }) => {
@@ -50,13 +44,13 @@ const Login = ({ isMobile }: { isMobile: boolean }) => {
       .post('/auth/login', formData)
       .then(({ data }) => {
         authContext.setAuthContext({
-          status: AUTHORIZED,
+          status: AuthStatus.AUTHORIZED,
           user: data,
         })
         navigate('/', {})
       })
       .catch((err) => {
-        setLoginError(handleLoginError(err.response.data))
+        setLoginError(handleLoginError(err))
       })
   }
   return (
@@ -138,7 +132,7 @@ const Login = ({ isMobile }: { isMobile: boolean }) => {
               ) : null}
 
               <div className="input-container">
-                <label htmlFor="phone">Email or Phone Number</label>
+                <label htmlFor="phone">Email/Username</label>
                 <input
                   type="text"
                   id="phone"

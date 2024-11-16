@@ -11,6 +11,7 @@ import {
   DocNode,
 } from 'loony-types'
 import { NavigateFunction } from 'react-router-dom'
+import { useCallback } from 'react'
 
 export default function EditComponent({
   state,
@@ -142,14 +143,14 @@ export default function EditComponent({
       modal: '',
     })
   }
-  const editSection = ({ data }: { data: DocNode }) => {
+  const editSection = (data: DocNode) => {
     if (!editNode) return
     let __activeSection = null
     const __activeSectionsByPageId = activeSectionsByPageId.map((innerNode) => {
       if (innerNode.uid === editNode.uid) {
         __activeSection = {
           ...innerNode,
-          ...data.data,
+          ...data,
         }
       }
       return innerNode
@@ -166,7 +167,7 @@ export default function EditComponent({
       editNode: null,
     })
   }
-  const editSubSection = ({ data }: { data: DocNode }) => {
+  const editSubSection = (data: DocNode) => {
     if (!editNode) return
     const __activeSubSectionsBySectionId = activeSubSectionsBySectionId.map(
       (innerNode) => {
@@ -203,13 +204,13 @@ export default function EditComponent({
     })
   }
 
-  const editFnCallback = (data: { data: DocNode }) => {
+  const editFnCallback = (data: DocNode) => {
     if (!editNode) return
     if (editNode.identity === 100) {
-      updateFrontPage(data.data)
+      updateFrontPage(data)
     }
     if (editNode.identity === 101) {
-      editPage(data.data)
+      editPage(data)
     }
     if (editNode.identity === 102) {
       editSection(data)
@@ -280,14 +281,14 @@ export default function EditComponent({
     })
   }
 
-  const onCancel = () => {
+  const onCancel = useCallback(() => {
     setState({
       ...state,
       modal: '',
       editNode: null,
       addNode: null,
     })
-  }
+  }, [])
 
   return (
     <>
@@ -347,7 +348,7 @@ export default function EditComponent({
           FnCallback={editFnCallback}
           onCancel={onCancel}
           heading="Edit Node"
-          url="/book/edit/node"
+          url="/book/edit"
           isMobile={isMobile}
         />
       ) : null}

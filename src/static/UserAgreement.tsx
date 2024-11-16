@@ -1,6 +1,6 @@
-import MarkdownPreview from '@uiw/react-markdown-preview';
+import MarkdownPreview from '@uiw/react-markdown-preview'
 
-const body = `### Loony User Agreement
+const body = `# Loony User Agreement
 
 **Effective Date: 12 October, 2014**
 
@@ -111,16 +111,19 @@ If you have any questions about this Agreement, please contact us at:
 
 By using **Loony**, you acknowledge that you have read, understood, and agree to be bound by this User Agreement.
 
----`;
+---`
 
 const UserAgreement = () => {
   return (
-    <div className='home-container'>
+    <div className="home-container">
       <div style={{ width: '60%', marginRight: 'auto', marginLeft: 'auto' }}>
-        <MarkdownPreview source={body} wrapperElement={{ 'data-color-mode': 'light' }} />
+        <MarkdownPreview
+          source={body}
+          wrapperElement={{ 'data-color-mode': 'light' }}
+        />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UserAgreement;
+export default UserAgreement

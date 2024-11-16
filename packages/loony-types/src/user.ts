@@ -5,8 +5,15 @@ export interface User {
     email: string,
     uid: number,
 }
+
+export enum AuthStatus {
+    IDLE = 1,
+    UNAUTHORIZED = 2,
+    AUTHORIZED = 3,
+}
+
 export interface Auth {
-    status: number,
+    status: AuthStatus,
     user: User | undefined | null
 }
 

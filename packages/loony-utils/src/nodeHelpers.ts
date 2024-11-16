@@ -17,14 +17,14 @@ export const getBlogNodes = (blog_id: number, setState: ReadBlogAction | EditBlo
     status: ApiEvent.INIT,
   }));
   axiosInstance.get(url).then(({ data }) => {
-    const __rawNodes = [data.blog, ...data.nodes];
+    const __rawNodes = [data.main_node, ...data.child_nodes];
     const __blogNodes = orderBlogNodes(__rawNodes);
     const __mainNode = __blogNodes && __blogNodes[0];
     const __childNodes = __blogNodes.slice(1);
 
     setState((prevState) => ({
       ...prevState,
-      doc_info: data.blog,
+      doc_info: data.main_node,
       mainNode: __mainNode,
       childNodes: __childNodes,
       blogNodes: __blogNodes,
@@ -32,7 +32,7 @@ export const getBlogNodes = (blog_id: number, setState: ReadBlogAction | EditBlo
     }));
     setStatus((prevState) => ({
       ...prevState,
-      status: ApiEvent.IDLE,
+      status: ApiEvent.SUCCESS,
     }));
   });
 };
@@ -40,13 +40,13 @@ export const getBlogNodes = (blog_id: number, setState: ReadBlogAction | EditBlo
 
 export const getChapters = (book_id: number, setState: ReadBookAction | EditBookAction, setStatus: ApiDispatchAction) => {
   axiosInstance.get(`/book/get/nodes?book_id=${book_id}`).then(({ data }) => {
-    const bookTree = orderBookNodes(data.chapters);
+    const bookTree = orderBookNodes(data.child_nodes);
     const __frontPage = bookTree && bookTree[0];
     const __nodes101 = bookTree.slice(1);
 
     setState((prevState) => ({
       ...prevState,
-      doc_info: data.book,
+      doc_info: data.main_node,
       frontPage: __frontPage,
       activeNode: __frontPage,
       nodes101: __nodes101,
@@ -83,7 +83,7 @@ export const getSections = (
       status: ApiEvent.START,
     }));
     axiosInstance.get(url).then(({ data }) => {
-      const res = orderNodes(data.data, __node);
+      const res = orderNodes(data, __node);
       setState((prevState) => ({
         ...prevState,
         ...resetState,
@@ -127,7 +127,7 @@ export const getSubSections = (
       status: ApiEvent.START,
     }));
     axiosInstance.get(url).then(({ data }) => {
-      const res = orderNodes(data.data, __node);
+      const res = orderNodes(data, __node);
       setState((prevState) => ({
         ...prevState,
         ...resetState,
@@ -148,15 +148,26 @@ export const getSubSections = (
 };
 
 
-export const deleteBlogNode = (nodes: DocNode[], submitData: { delete_node_id, update_parent_id }, delete_node_index: number) => {
+export const deleteBlogNode = (
+  nodes: DocNode[], 
+  submitData: { delete_node: {
+    identity: number,
+    uid: number,
+  },
+  update_node: {
+    parent_id: number | undefined,
+    uid: null | number,
+  } }, 
+  delete_node_index: number
+) => {
   const copyNodes = nodes.filter((node) => {
-    if (submitData.delete_node_id === node.uid) {
+    if (submitData.delete_node.uid === node.uid) {
       return false;
     }
     return true;
   });
   if (copyNodes[delete_node_index + 1]) {
-    copyNodes[delete_node_index + 1].parent_id = submitData.update_parent_id;
+    copyNodes[delete_node_index + 1].parent_id = submitData.update_node.parent_id;
   }
   return copyNodes;
 };
@@ -392,24 +403,6 @@ export const orderNodes = (nodes: DocNode[], parentNode: DocNode) => {
   }
 
   return results;
-};
-
-type ImageRes = {
-  name: string
-}
-
-export const extractImage = (images: ImageRes[] | string | null): ImageRes | null => {
-  if (!images) return null;
-  if (typeof images === "object") {
-    return images[0];
-  }
-  let parsedImage = null;
-  const image = images && JSON.parse(images);
-  if (image && Array.isArray(image) && image.length > 0) {
-    parsedImage = image[0];
-  }
-
-  return parsedImage;
 };
 
 export const orderBlogNodes = (data: DocNode[]) => {

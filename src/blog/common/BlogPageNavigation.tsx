@@ -1,0 +1,57 @@
+import { BasicMenuNavContainer } from '../../components/Containers.tsx'
+import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
+import { Link } from 'react-router-dom'
+import {
+  AuthContextProps,
+  AuthStatus,
+  DocNode,
+  EditBlogState,
+  ReadBlogState,
+} from 'loony-types'
+
+export const Chapters = ({
+  state,
+}: {
+  state: EditBlogState | ReadBlogState
+}) => {
+  const { childNodes } = state
+  return (
+    <>
+      {childNodes.map((chapter) => {
+        return (
+          <div key={chapter.uid}>
+            <BasicMenuNavContainer>
+              <div className="page-nav-title">{chapter.title}</div>
+            </BasicMenuNavContainer>
+          </div>
+        )
+      })}
+    </>
+  )
+}
+
+export const Edit = ({
+  blog_id,
+  authContext,
+  doc_info,
+}: {
+  blog_id: number
+  authContext: AuthContextProps
+  doc_info: DocNode
+}) => {
+  return (
+    <ul className="list-item" style={{ paddingLeft: 0, listStyle: 'none' }}>
+      {authContext.status === AuthStatus.AUTHORIZED &&
+      authContext.user?.uid === doc_info.user_id ? (
+        <li>
+          <LuFileEdit color="#2d2d2d" size={16} />
+          <Link to={`/edit/blog/${blog_id}`}>Edit this page</Link>
+        </li>
+      ) : null}
+      <li>
+        <LuFileWarning color="#2d2d2d" size={16} />
+        <Link to="#">Report</Link>
+      </li>
+    </ul>
+  )
+}

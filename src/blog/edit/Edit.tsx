@@ -1,6 +1,6 @@
 import MarkdownPreview from '@uiw/react-markdown-preview'
 
-import { useState, useEffect, lazy, Suspense } from 'react'
+import { lazy, Suspense, useCallback } from 'react'
 import {
   orderBlogNodes,
   deleteBlogNode,
@@ -13,63 +13,42 @@ import { RxReader } from 'react-icons/rx'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { LuFileWarning } from 'react-icons/lu'
 import { MdAdd, MdOutlineEdit, MdContentCopy } from 'react-icons/md'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { axiosInstance } from 'loony-query'
-import AddNode from '../form/addNode.tsx'
-import EditNodeForm from '../form/editNode.tsx'
-import ConfirmAction from '../components/ConfirmAction.tsx'
-import PageLoadingContainer from '../components/PageLoadingContainer.tsx'
-import { getBlogNodes } from 'loony-utils'
-import { PageNavigationView } from './pageNavigation.tsx'
+import AddNode from '../../form/addNode.tsx'
+import EditNodeForm from '../../form/editNode.tsx'
+import ConfirmAction from '../../components/ConfirmAction.tsx'
+import { Chapters } from '../common/BlogPageNavigation.tsx'
 import {
   AppendNodeResponse,
   AppRouteProps,
   EditBlogState,
   EditBlogAction,
+  AuthContextProps,
 } from 'loony-types'
-import { ApiEvent, DocNode } from 'loony-types'
-const MathsMarkdown = lazy(() => import('../components/MathsMarkdown.tsx'))
+import { DocNode, DocStatus } from 'loony-types'
 
-export default function Edit(props: AppRouteProps) {
-  const { isMobile, mobileNavOpen, setMobileNavOpen, appContext } = props
-  const { base_url } = appContext.env
-  const { blogId } = useParams()
-  const blog_id = blogId && parseInt(blogId)
+const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
-  const [state, setState] = useState<EditBlogState>({
-    doc_info: null,
-    mainNode: null,
-    activeNode: null,
-    addNode: null,
-    editNode: null,
-    nodeIndex: null,
-    topNode: null,
-    doc_id: blog_id as number,
-    rawNodes: [],
-    childNodes: [],
-    modal: '',
-    deleteNode: null,
-  })
-  const [status, setStatus] = useState({
-    status: ApiEvent.IDLE,
-    error: '',
-  })
+export default function RenderComponent({
+  props,
+  state,
+  blog_id,
+  setState,
+}: // authContext,
+{
+  props: AppRouteProps
+  state: EditBlogState
+  blog_id: number
+  setState: React.Dispatch<React.SetStateAction<EditBlogState>>
+  authContext: AuthContextProps
+}) {
+  const base_url = props.appContext.env.base_url
+  const { isMobile, mobileNavOpen, setMobileNavOpen } = props
+  const { mainNode, childNodes, doc_info } = state
 
-  useEffect(() => {
-    if (blog_id) {
-      getBlogNodes(blog_id, setState, setStatus)
-    }
-  }, [blog_id])
-
-  if (status.status === ApiEvent.IDLE || status.status === ApiEvent.START)
-    return <PageLoadingContainer isMobile={isMobile} />
-
-  const { childNodes, mainNode, doc_info } = state
-
-  if (!mainNode || !doc_info) {
-    return null
-  }
+  if (!mainNode || !doc_info) return null
 
   const image = extractImage(mainNode.images)
 
@@ -98,11 +77,7 @@ export default function Edit(props: AppRouteProps) {
                 padding: 12,
               }}
             >
-              <PageNavigationView
-                blog_id={blog_id as number}
-                state={state}
-                isMobile={isMobile}
-              />
+              <Chapters state={state} />
             </div>
           </div>
         ) : null}
@@ -114,11 +89,7 @@ export default function Edit(props: AppRouteProps) {
               borderRight: '1px solid #ebebeb',
             }}
           >
-            <PageNavigationView
-              blog_id={blog_id as number}
-              state={state}
-              isMobile={isMobile}
-            />
+            <Chapters state={state} />
           </div>
         ) : null}
         {state.modal ? (
@@ -197,6 +168,7 @@ export default function Edit(props: AppRouteProps) {
                 onClick={() => {
                   setState({
                     ...state,
+                    status: DocStatus.CreateNode,
                     addNode: mainNode,
                     modal: 'add_node',
                   })
@@ -212,6 +184,7 @@ export default function Edit(props: AppRouteProps) {
                 onClick={() => {
                   setState({
                     ...state,
+                    status: DocStatus.DeleteNode,
                     editNode: mainNode,
                     modal: 'edit_node',
                   })
@@ -244,7 +217,7 @@ export default function Edit(props: AppRouteProps) {
             >
               {mainNode.identity !== 101 &&
                 childNodes.map((node, nodeIndex) => {
-                  const parseImage = JSON.parse(node.images)
+                  const parseImage = JSON.parse(node.images as string)
                   const nodeImage =
                     parseImage.length > 0 ? parseImage[0].name : null
                   return (
@@ -314,7 +287,7 @@ export default function Edit(props: AppRouteProps) {
                           onClick={() => {
                             setState({
                               ...state,
-                              activeNode: node,
+                              deleteNode: node,
                               nodeIndex,
                               modal: 'delete_node',
                             })
@@ -357,7 +330,6 @@ export default function Edit(props: AppRouteProps) {
     </div>
   )
 }
-
 const ActivityComponent = ({
   state,
   setState,
@@ -370,15 +342,16 @@ const ActivityComponent = ({
   isMobile: boolean
 }) => {
   const { activeNode, childNodes, rawNodes, modal, nodeIndex, mainNode } = state
-  if (!activeNode || !mainNode) return null
+
+  if (!mainNode) return null
 
   const navigate = useNavigate()
 
-  const deleteNode = () => {
+  const deleteNode = useCallback(() => {
     if (!activeNode) return
     const delete_node = activeNode
     if (childNodes) {
-      let updateNode: DocNode | null = null
+      let updateNode: DocNode | undefined
       rawNodes.forEach((r) => {
         if (r.parent_id === delete_node.uid) {
           updateNode = r
@@ -386,11 +359,16 @@ const ActivityComponent = ({
       })
 
       const submitData = {
-        identity: delete_node.identity,
-        update_parent_id: delete_node.parent_id,
-        delete_node_id: delete_node.uid,
-        update_node_id: !updateNode ? null : updateNode.uid,
+        delete_node: {
+          identity: delete_node.identity,
+          uid: delete_node.uid,
+        },
+        update_node: {
+          parent_id: delete_node.parent_id,
+          uid: updateNode ? updateNode.uid : null,
+        },
       }
+
       axiosInstance
         .post(`/blog/delete/node`, submitData)
         .then(() => {
@@ -415,73 +393,79 @@ const ActivityComponent = ({
           console.log(err)
         })
     }
-  }
+  }, [state.status])
 
-  const deleteBlog = () => {
+  const deleteBlog = useCallback(() => {
     axiosInstance.post('/blog/delete', { blog_id }).then(() => {
       navigate('/', { replace: true })
     })
-  }
+  }, [])
 
-  const editFnCallback = (data: DocNode) => {
-    const __rawNodes = updateBlogNode(rawNodes, data)
-    const __orderChildNodes = orderBlogNodes(__rawNodes)
-    const __mainNode = __orderChildNodes && __orderChildNodes[0]
-    const __childNodes = __orderChildNodes.slice(1)
+  const editFnCallback = useCallback(
+    (data: DocNode) => {
+      const __rawNodes = updateBlogNode(rawNodes, data)
+      const __orderChildNodes = orderBlogNodes(__rawNodes)
+      const __mainNode = __orderChildNodes && __orderChildNodes[0]
+      const __childNodes = __orderChildNodes.slice(1)
 
-    setState({
-      ...state,
-      mainNode: __mainNode,
-      childNodes: __childNodes,
-      rawNodes: __rawNodes,
-      modal: '',
-    })
-  }
+      setState({
+        ...state,
+        mainNode: __mainNode,
+        childNodes: __childNodes,
+        rawNodes: __rawNodes,
+        modal: '',
+      })
+    },
+    [state.status]
+  )
 
-  const addNodeCbFn = (data: AppendNodeResponse) => {
-    if (!activeNode) return
-    const __rawNodes = appendBlogNode(rawNodes, activeNode, data)
-    const __orderChildNodes = orderBlogNodes(__rawNodes)
-    const __mainNode = __orderChildNodes && __orderChildNodes[0]
-    const __childNodes = __orderChildNodes.slice(1)
+  const addNodeCbFn = useCallback(
+    (data: AppendNodeResponse) => {
+      if (!activeNode) return
+      const __rawNodes = appendBlogNode(rawNodes, activeNode, data)
+      const __orderChildNodes = orderBlogNodes(__rawNodes)
+      const __mainNode = __orderChildNodes && __orderChildNodes[0]
+      const __childNodes = __orderChildNodes.slice(1)
 
-    setState({
-      ...state,
-      rawNodes: __rawNodes,
-      childNodes: __childNodes,
-      mainNode: __mainNode,
-      modal: '',
-    })
-  }
+      setState({
+        ...state,
+        addNode: null,
+        rawNodes: __rawNodes,
+        childNodes: __childNodes,
+        mainNode: __mainNode,
+        modal: '',
+      })
+    },
+    [state.status]
+  )
 
-  const onCancel = () => {
+  const onCancel = useCallback(() => {
     setState({
       ...state,
       modal: '',
       editNode: null,
       addNode: null,
     })
-  }
+  }, [])
 
   return (
     <>
-      {modal === 'add_node' ? (
+      {modal === 'add_node' && state.addNode ? (
         <AddNode
           heading="Add Node"
-          state={state}
           FnCallback={addNodeCbFn}
           url="/blog/append/node"
           isMobile={isMobile}
           doc_idName="blog_id"
           doc_id={blog_id}
-          parent_id={activeNode.uid}
+          parent_id={state.addNode.uid}
           identity={101}
           onCancel={onCancel}
           page_id={mainNode.uid as number}
-          parent_identity={activeNode.uid}
+          parent_identity={state.addNode.uid}
         />
       ) : null}
-      {modal === 'delete_node' ? (
+      {modal === 'delete_node' && state.deleteNode ? (
         <ConfirmAction
           confirmTitle="Are you sure you want to delete Node?"
           confirmAction={deleteNode}
@@ -490,7 +474,7 @@ const ActivityComponent = ({
         />
       ) : null}
 
-      {modal === 'edit_node' ? (
+      {modal === 'edit_node' && state.editNode ? (
         <EditNodeForm
           heading="Edit Node"
           state={state}
@@ -498,7 +482,7 @@ const ActivityComponent = ({
           doc_id={blog_id}
           FnCallback={editFnCallback}
           onCancel={onCancel}
-          url="/blog/edit/node"
+          url="/blog/edit"
           isMobile={isMobile}
         />
       ) : null}

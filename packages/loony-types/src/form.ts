@@ -1,6 +1,5 @@
 import { DocNode } from './doc'
-
-export type VoidReturnFunction = () => void;
+import { VoidReturnFunction } from './common'
 
 type CommonFormComponentProps = {
     heading: string
