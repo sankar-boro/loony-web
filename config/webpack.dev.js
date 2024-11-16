@@ -1,7 +1,8 @@
 const webpack = require('webpack')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
-const { APP_HOST, APP_PORT, APP_NAME } = require('./app.config.json')
+const { dev } = require('./app.config.json')
+const { WEB_HOST, WEB_PORT, APP_NAME } = dev
 
 module.exports = {
   mode: 'development',
@@ -9,8 +10,8 @@ module.exports = {
   devServer: {
     hot: true,
     open: true,
-    host: APP_HOST,
-    port: APP_PORT,
+    host: WEB_HOST,
+    port: WEB_PORT,
     historyApiFallback: true,
     allowedHosts: 'all',
   },
