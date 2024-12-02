@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const pkgRoot = path.join(__dirname, '..', 'packages')
 const main = path.resolve(__dirname, '..', './src/main.tsx')
-const indexHtml = path.resolve(__dirname, '..', './index.html')
+const indexHtml = path.resolve(__dirname, '..', './public/index.html')
 
 function findPackages() {
   return fs
@@ -63,16 +63,16 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
-        test: /\.(?:ico|gif|png|jpg|jpeg|svg)$/i,
+        test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
         type: 'asset/resource',
       },
       {
-        test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+        test: /\.(woff(2)?|eot|ttf|otf)$/,
         type: 'asset/inline',
       },
       {
         test: /\.svg$/,
-        use: ['@svgr/webpack', 'url-loader'],
+        use: ['@svgr/webpack'],
       },
     ],
   },

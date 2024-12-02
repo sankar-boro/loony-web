@@ -70,6 +70,10 @@ export default function CreateNewDocument({
       return
     }
     setSubmitting(true)
+    const uploadImages = []
+    if (imageData && imageData.name) {
+      uploadImages.push({ name: imageData.name })
+    }
     axiosInstance
       .post(url, {
         title: formTitle,

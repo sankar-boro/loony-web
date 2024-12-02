@@ -34,7 +34,7 @@ const Home = (props: AppRouteProps) => {
   const fetchBlogs = useCallback(() => {
     const url =
       authContext.status === AuthStatus.AUTHORIZED && user
-        ? `/blog/get/${user.uid}/get_all_blogs_liked_by_user`
+        ? `/blog/get/${user.uid}/get_users_blog`
         : `/blog/get/${blog_page_no}/by_page`
     fetchData(url, setBlogs)
   }, [])
@@ -43,7 +43,7 @@ const Home = (props: AppRouteProps) => {
   const fetchBooks = useCallback(() => {
     const url =
       authContext.status === AuthStatus.AUTHORIZED && user
-        ? `/book/get/${user.uid}/get_all_books_liked_by_user`
+        ? `/book/get/${user.uid}/get_users_book`
         : `/book/get/${book_page_no}/by_page`
     fetchData(url, setBooks)
   }, [])
