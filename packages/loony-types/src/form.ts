@@ -38,8 +38,8 @@ export type AfterImageSelect = {
 }
 
   export type EditImageComponentProps = {
-    uploadImage: () => Promise<{ name: string }>
-    changeFile: React.ChangeEventHandler<HTMLInputElement>
+    uploadImage: () => void;
+    onSelectImage: React.ChangeEventHandler<HTMLInputElement>
     imageEdit: string | null
     setCropImageMetadata: React.Dispatch<React.SetStateAction<CropImageMetadata>>
   }
