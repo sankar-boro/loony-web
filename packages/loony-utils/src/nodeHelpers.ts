@@ -46,6 +46,7 @@ export const getChapters = (book_id: number, setState: ReadBookAction | EditBook
 
     setState((prevState) => ({
       ...prevState,
+      mainNode: data.main_node,
       doc_info: data.main_node,
       frontPage: __frontPage,
       activeNode: __frontPage,

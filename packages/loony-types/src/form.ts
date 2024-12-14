@@ -4,7 +4,7 @@ import { VoidReturnFunction } from './common'
 type CommonFormComponentProps = {
     heading: string
     // state: JsonObject
-    doc_idName: string
+    docIdName: string
     doc_id: number
     parent_id: number
     identity: number

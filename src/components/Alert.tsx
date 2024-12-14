@@ -70,7 +70,7 @@ const AlertComponent = ({
           </div>
           <div style={{ width: '50%' }}>
             <div style={{ fontSize: 20 }}>{alert.title}</div>
-            <div style={{ fontSize: 14, paddingTop: 5 }}>{alert.body}</div>
+            <div style={{ fontSize: 14, paddingTop: 5 }}>{alert.content}</div>
           </div>
           <div
             onClick={onClose}

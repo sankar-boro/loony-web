@@ -3,7 +3,7 @@ import {
   useEffect,
   useContext,
   Suspense,
-  lazy,
+  // lazy,
   useCallback,
 } from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
@@ -27,7 +27,7 @@ import {
   EditBookState,
 } from 'loony-types'
 import { ApiEvent } from 'loony-types'
-const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
+// const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
 export default function Edit({
   mobileNavOpen,
@@ -211,18 +211,9 @@ export default function Edit({
                   </div>
                 ) : null}
                 <div style={{ marginTop: 16 }}>
-                  {activeNode.theme === 11 ? (
-                    activeNode.body
-                  ) : activeNode.theme === 24 ? (
-                    <MarkdownPreview
-                      source={activeNode.body}
-                      wrapperElement={{ 'data-color-mode': 'light' }}
-                    />
-                  ) : activeNode.theme === 41 ? (
-                    <Suspense fallback={<div>Loading component...</div>}>
-                      <MathsMarkdown source={activeNode.body} />
-                    </Suspense>
-                  ) : null}
+                  <Suspense fallback={<div>Loading component...</div>}>
+                    <MarkdownPreview source={activeNode.content} />
+                  </Suspense>
                 </div>
               </div>
               <PageNodeSettings
@@ -255,18 +246,9 @@ export default function Edit({
                           />
                         </div>
                       ) : null}
-                      {subSectionNode.theme === 11 ? (
-                        subSectionNode.body
-                      ) : subSectionNode.theme === 24 ? (
-                        <MarkdownPreview
-                          source={subSectionNode.body}
-                          wrapperElement={{ 'data-color-mode': 'light' }}
-                        />
-                      ) : subSectionNode.theme === 41 ? (
-                        <Suspense fallback={<div>Loading component...</div>}>
-                          <MathsMarkdown source={subSectionNode.body} />
-                        </Suspense>
-                      ) : null}
+                      <Suspense fallback={<div>Loading component...</div>}>
+                        <MarkdownPreview source={activeNode.content} />
+                      </Suspense>
                       <PageNodeSettings
                         node={subSectionNode}
                         setState={setState}

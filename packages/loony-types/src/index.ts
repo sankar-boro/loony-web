@@ -25,7 +25,7 @@ export type ApiDispatchAction = React.Dispatch<React.SetStateAction<ApiStatus>>;
 export type EditNodeComponentProps = {
     heading: string,
     state: EditBlogState | EditBookState,
-    doc_idName: string,
+    docIdName: string,
     doc_id: number,
     FnCallback: (data: DocNode ) => void,
     onCancel: VoidReturnFunction,

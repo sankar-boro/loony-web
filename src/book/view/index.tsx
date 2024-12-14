@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy, useCallback } from 'react'
+import { useState, useEffect, Suspense, useCallback } from 'react'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { extractImage, getChapters } from 'loony-utils'
 import MarkdownPreview from '@uiw/react-markdown-preview'
@@ -9,7 +9,7 @@ import { PageNavigation } from '../common/pageNavigation.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import { AppRouteProps, ReadBookState } from 'loony-types'
 import { ApiEvent } from 'loony-types'
-const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
+// const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
 const View = ({
   mobileNavOpen,
@@ -186,18 +186,18 @@ const View = ({
             ) : null}
 
             <div style={{ marginTop: 16 }}>
-              {activeNode.theme === 11 ? (
-                activeNode.body
+              {/* {activeNode.theme === 11 ? (
+                activeNode.content
               ) : activeNode.theme === 24 ? (
                 <MarkdownPreview
-                  source={activeNode.body}
+                  source={activeNode.content}
                   wrapperElement={{ 'data-color-mode': 'light' }}
                 />
               ) : activeNode.theme === 41 ? (
-                <Suspense fallback={<div>Loading component...</div>}>
-                  <MathsMarkdown source={activeNode.body} />
-                </Suspense>
-              ) : null}
+              ) : null} */}
+              <Suspense fallback={<div>Loading component...</div>}>
+                <MarkdownPreview source={activeNode.content} />
+              </Suspense>
             </div>
           </div>
           {activeSubSectionsBySectionId.map((subSectionNode) => {
@@ -214,18 +214,18 @@ const View = ({
                     />
                   </div>
                 ) : null}
-                {subSectionNode.theme === 11 ? (
-                  subSectionNode.body
+                {/* {subSectionNode.theme === 11 ? (
+                  subSectionNode.content
                 ) : subSectionNode.theme === 24 ? (
                   <MarkdownPreview
-                    source={subSectionNode.body}
+                    source={subSectionNode.content}
                     wrapperElement={{ 'data-color-mode': 'light' }}
                   />
                 ) : subSectionNode.theme === 41 ? (
-                  <Suspense fallback={<div>Loading component...</div>}>
-                    <MathsMarkdown source={subSectionNode.body} />
-                  </Suspense>
-                ) : null}
+                ) : null} */}
+                <Suspense fallback={<div>Loading component...</div>}>
+                  <MarkdownPreview source={subSectionNode.content} />
+                </Suspense>
               </div>
             )
           })}

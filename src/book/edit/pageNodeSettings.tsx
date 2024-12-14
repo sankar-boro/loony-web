@@ -71,7 +71,7 @@ export const PageNodeSettings = ({
         <Button
           icon={<MdContentCopy size={16} color="#9c9c9c" />}
           onClick={(e) => {
-            navigator.clipboard.writeText(node.body)
+            navigator.clipboard.writeText(node.content)
             e.stopPropagation()
           }}
         />

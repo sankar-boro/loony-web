@@ -1,6 +1,6 @@
 import MarkdownPreview from '@uiw/react-markdown-preview'
 
-import { lazy, Suspense, useCallback } from 'react'
+import { Suspense, useCallback } from 'react'
 import {
   orderBlogNodes,
   deleteBlogNode,
@@ -29,7 +29,7 @@ import {
 } from 'loony-types'
 import { DocNode, DocStatus } from 'loony-types'
 
-const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
+// const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
 export default function RenderComponent({
   props,
@@ -147,18 +147,21 @@ export default function RenderComponent({
               </div>
 
               <div style={{ marginTop: 16 }}>
-                {mainNode.theme === 11 ? (
-                  mainNode.body
+                {/* {mainNode.theme === 11 ? (
+                  mainNode.content
                 ) : mainNode.theme === 24 ? (
                   <MarkdownPreview
-                    source={mainNode.body}
+                    source={mainNode.content}
                     wrapperElement={{ 'data-color-mode': 'light' }}
                   />
                 ) : mainNode.theme === 41 ? (
                   <Suspense fallback={<div>Loading component...</div>}>
-                    <MathsMarkdown source={mainNode.body} />
+                    <MathsMarkdown source={mainNode.content} />
                   </Suspense>
-                ) : null}
+                ) : null} */}
+                <Suspense fallback={<div>Loading component...</div>}>
+                  <MarkdownPreview source={mainNode.content} />
+                </Suspense>
               </div>
             </div>
             {/* Main node settings */}
@@ -198,7 +201,7 @@ export default function RenderComponent({
               <div
                 className="button-none cursor"
                 onClick={(e) => {
-                  navigator.clipboard.writeText(mainNode.body)
+                  navigator.clipboard.writeText(mainNode.content)
                   e.stopPropagation()
                 }}
                 style={{ marginRight: 16 }}
@@ -236,18 +239,21 @@ export default function RenderComponent({
                         </div>
                       ) : null}
                       <div>
-                        {node.theme === 11 ? (
-                          node.body
+                        {/* {node.theme === 11 ? (
+                          node.content
                         ) : node.theme === 24 ? (
                           <MarkdownPreview
-                            source={node.body}
+                            source={node.content}
                             wrapperElement={{ 'data-color-mode': 'light' }}
                           />
                         ) : node.theme === 41 ? (
                           <Suspense fallback={<div>Loading component...</div>}>
-                            <MathsMarkdown source={node.body} />
+                            <MathsMarkdown source={node.content} />
                           </Suspense>
-                        ) : null}
+                        ) : null} */}
+                        <Suspense fallback={<div>Loading component...</div>}>
+                          <MarkdownPreview source={node.content} />
+                        </Suspense>
                       </div>
 
                       {/* Node settings */}
@@ -301,7 +307,7 @@ export default function RenderComponent({
                         <div
                           className="button-none cursor"
                           onClick={(e) => {
-                            navigator.clipboard.writeText(node.body)
+                            navigator.clipboard.writeText(node.content)
                             e.stopPropagation()
                           }}
                           style={{ marginRight: 16 }}
@@ -456,7 +462,7 @@ const ActivityComponent = ({
           FnCallback={addNodeCbFn}
           url="/blog/append/node"
           isMobile={isMobile}
-          doc_idName="blog_id"
+          docIdName="blog_id"
           doc_id={blog_id}
           parent_id={state.addNode.uid}
           identity={101}
@@ -478,7 +484,7 @@ const ActivityComponent = ({
         <EditNodeForm
           heading="Edit Node"
           state={state}
-          doc_idName="blog_id"
+          docIdName="blog_id"
           doc_id={blog_id}
           FnCallback={editFnCallback}
           onCancel={onCancel}

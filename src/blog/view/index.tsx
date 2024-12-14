@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 import { useParams } from 'react-router-dom'
 import { extractImage, timeAgo } from 'loony-utils'
@@ -8,7 +8,7 @@ import { Chapters, Edit as EditPage } from '../common/BlogPageNavigation.tsx'
 
 import { ApiEvent, DocStatus } from 'loony-types'
 import { AppRouteProps, ReadBlogState } from 'loony-types'
-const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
+// const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
 const View = (props: AppRouteProps) => {
   const { isMobile, setMobileNavOpen, mobileNavOpen, appContext, authContext } =
@@ -134,18 +134,21 @@ const View = (props: AppRouteProps) => {
             </div>
 
             <div style={{ marginTop: 16 }}>
-              {mainNode.theme === 11 ? (
-                mainNode.body
+              {/* {mainNode.theme === 11 ? (
+                mainNode.content
               ) : mainNode.theme === 24 ? (
                 <MarkdownPreview
-                  source={mainNode.body}
+                  source={mainNode.content}
                   wrapperElement={{ 'data-color-mode': 'light' }}
                 />
               ) : mainNode.theme === 41 ? (
                 <Suspense fallback={<div>Loading component...</div>}>
-                  <MathsMarkdown source={mainNode.body} />
+                  <MarkdownPreview source={mainNode.content} />
                 </Suspense>
-              ) : null}
+              ) : null} */}
+              <Suspense fallback={<div>Loading component...</div>}>
+                <MarkdownPreview source={mainNode.content} />
+              </Suspense>
             </div>
           </div>
           {childNodes.map((blog_node) => {
@@ -164,18 +167,21 @@ const View = (props: AppRouteProps) => {
                   </div>
                 ) : null}
                 <div>
-                  {blog_node.theme === 11 ? (
-                    blog_node.body
+                  {/* {blog_node.theme === 11 ? (
+                    blog_node.content
                   ) : blog_node.theme === 24 ? (
                     <MarkdownPreview
-                      source={blog_node.body}
+                      source={blog_node.content}
                       wrapperElement={{ 'data-color-mode': 'light' }}
                     />
                   ) : blog_node.theme === 41 ? (
                     <Suspense fallback={<div>Loading component...</div>}>
-                      <MathsMarkdown source={blog_node.body} />
+                      <MathsMarkdown source={blog_node.content} />
                     </Suspense>
-                  ) : null}
+                  ) : null} */}
+                  <Suspense fallback={<div>Loading component...</div>}>
+                    <MarkdownPreview source={blog_node.content} />
+                  </Suspense>
                 </div>
               </div>
             )
