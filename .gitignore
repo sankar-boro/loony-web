@@ -29,3 +29,5 @@ package-lock.json
 package.json
 build/
 .yarn/
+scripts/deploy.sh
+run.sh

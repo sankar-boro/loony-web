@@ -3,9 +3,6 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "start": "webpack serve --config ./config/webpack.config.js",
-    "dev": "webpack serve --config ./config/webpack.config.js",
-    "build": "webpack --config ./config/webpack.config.js",
     "lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
     "format": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
