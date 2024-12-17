@@ -136,7 +136,6 @@ const View = (props: AppRouteProps) => {
             </div>
           </div>
           {childNodes.map((blogNode) => {
-            console.log('blogNode', blogNode)
             const parseImage = JSON.parse(blogNode.images as string)
             const nodeImage = parseImage.length > 0 ? parseImage[0].name : null
             return (

@@ -383,7 +383,7 @@ const ActivityComponent = ({
             submitData,
             nodeIndex as number
           )
-          const __orderChildNodes = orderBlogNodes(__rawNodes)
+          const __orderChildNodes = orderBlogNodes(__rawNodes, mainNode)
           const __mainNode = __orderChildNodes && __orderChildNodes[0]
           const __childNodes = __orderChildNodes.slice(1)
 
@@ -410,7 +410,7 @@ const ActivityComponent = ({
   const editFnCallback = useCallback(
     (data: DocNode) => {
       const __rawNodes = updateBlogNode(rawNodes, data)
-      const __orderChildNodes = orderBlogNodes(__rawNodes)
+      const __orderChildNodes = orderBlogNodes(__rawNodes, mainNode)
       const __mainNode = __orderChildNodes && __orderChildNodes[0]
       const __childNodes = __orderChildNodes.slice(1)
 
@@ -429,7 +429,7 @@ const ActivityComponent = ({
     (data: AppendNodeResponse) => {
       if (!activeNode) return
       const __rawNodes = appendBlogNode(rawNodes, activeNode, data)
-      const __orderChildNodes = orderBlogNodes(__rawNodes)
+      const __orderChildNodes = orderBlogNodes(__rawNodes, mainNode)
       const __mainNode = __orderChildNodes && __orderChildNodes[0]
       const __childNodes = __orderChildNodes.slice(1)
 

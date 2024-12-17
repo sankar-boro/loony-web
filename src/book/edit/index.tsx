@@ -1,11 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useContext,
-  Suspense,
-  // lazy,
-  useCallback,
-} from 'react'
+import { useState, useEffect, useContext, Suspense } from 'react'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 
 import { extractImage, timeAgo } from 'loony-utils'
@@ -27,7 +20,6 @@ import {
   EditBookState,
 } from 'loony-types'
 import { ApiEvent } from 'loony-types'
-// const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
 
 export default function Edit({
   mobileNavOpen,
@@ -61,7 +53,6 @@ export default function Edit({
     addNode: null,
     deleteNode: null,
     editNode: null,
-    mainNode: null,
     rawNodes: [],
     doc_id: book_id as number,
   })
@@ -72,7 +63,7 @@ export default function Edit({
     }
   }, [book_id])
 
-  const viewFrontPage = useCallback(() => {
+  const viewFrontPage = () => {
     setState({
       ...state,
       page_id: state?.frontPage?.uid || null,
@@ -81,7 +72,8 @@ export default function Edit({
       addNode: null,
       modal: '',
     })
-  }, [])
+  }
+
   if (status.status === ApiEvent.INIT || status.status === ApiEvent.START)
     return <PageLoadingContainer isMobile={isMobile} />
 

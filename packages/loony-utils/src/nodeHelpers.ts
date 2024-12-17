@@ -18,7 +18,7 @@ export const getBlogNodes = (blog_id: number, setState: ReadBlogAction | EditBlo
   }));
   axiosInstance.get(url).then(({ data }) => {
     const __rawNodes = data.child_nodes;
-    const __blogNodes = orderBlogNodes(data.child_nodes);
+    const __blogNodes = orderBlogNodes(data.child_nodes, data.main_node);
     const mainNode = __blogNodes && __blogNodes[0];
     const __childNodes = __blogNodes.length >= 2 ? __blogNodes.slice(1) : [];
 
@@ -404,14 +404,8 @@ export const orderNodes = (nodes: DocNode[], parentNode: DocNode) => {
   return results;
 };
 
-export const orderBlogNodes = (data: DocNode[]) => {
-  let parentNode = undefined
-  for(let i=0; i < data.length; i++) {
-    if (!data[i].parent_id) {
-      parentNode = data[i]
-      break;
-    }
-  }
+export const orderBlogNodes = (data: DocNode[], main_node: DocNode) => {
+  let parentNode = main_node
 
   const orderedNodes = [parentNode]
 

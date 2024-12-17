@@ -13,7 +13,6 @@ export default function Edit(props: AppRouteProps) {
   const [state, setState] = useState<EditBlogState>({
     status: DocStatus.None,
     mainNode: null,
-    mainNode: null,
     activeNode: null,
     addNode: null,
     editNode: null,

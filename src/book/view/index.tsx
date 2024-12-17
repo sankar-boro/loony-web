@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { extractImage, getChapters } from 'loony-utils'
 
@@ -44,14 +44,15 @@ const View = ({
     }
   }, [book_id])
 
-  const viewFrontPage = useCallback(() => {
+  const viewFrontPage = () => {
     setState({
       ...state,
       page_id: state.frontPage?.uid || null,
       activeNode: frontPage,
       activeSubSectionsBySectionId: [],
     })
-  }, [])
+  }
+
   const {
     activeNode,
     nodes101,
