@@ -17,15 +17,14 @@ export const getBlogNodes = (blog_id: number, setState: ReadBlogAction | EditBlo
     status: ApiEvent.INIT,
   }));
   axiosInstance.get(url).then(({ data }) => {
-    const __rawNodes = [data.main_node, ...data.child_nodes];
-    const __blogNodes = orderBlogNodes(__rawNodes);
-    const __mainNode = __blogNodes && __blogNodes[0];
-    const __childNodes = __blogNodes.slice(1);
+    const __rawNodes = data.child_nodes;
+    const __blogNodes = orderBlogNodes(data.child_nodes);
+    const mainNode = __blogNodes && __blogNodes[0];
+    const __childNodes = __blogNodes.length >= 2 ? __blogNodes.slice(1) : [];
 
     setState((prevState) => ({
       ...prevState,
-      doc_info: data.main_node,
-      mainNode: __mainNode,
+      mainNode,
       childNodes: __childNodes,
       blogNodes: __blogNodes,
       rawNodes: __rawNodes,
@@ -41,17 +40,16 @@ export const getBlogNodes = (blog_id: number, setState: ReadBlogAction | EditBlo
 export const getChapters = (book_id: number, setState: ReadBookAction | EditBookAction, setStatus: ApiDispatchAction) => {
   axiosInstance.get(`/book/get/nodes?book_id=${book_id}`).then(({ data }) => {
     const bookTree = orderBookNodes(data.child_nodes);
-    const __frontPage = bookTree && bookTree[0];
+    const mainNode = bookTree && bookTree[0];
     const __nodes101 = bookTree.slice(1);
 
     setState((prevState) => ({
       ...prevState,
-      mainNode: data.main_node,
-      doc_info: data.main_node,
-      frontPage: __frontPage,
-      activeNode: __frontPage,
+      mainNode,
+      frontPage: mainNode,
+      activeNode: mainNode,
       nodes101: __nodes101,
-      page_id: __frontPage.uid,
+      page_id: mainNode.uid,
     }));
     setStatus((prevStatus) => ({
       ...prevStatus,
@@ -407,32 +405,24 @@ export const orderNodes = (nodes: DocNode[], parentNode: DocNode) => {
 };
 
 export const orderBlogNodes = (data: DocNode[]) => {
-  const totalNodes = data.length;
-  const parentNodesMap = new Map();
-
-  data.forEach((node) => node.parent_id && parentNodesMap.set(node.parent_id, node));
-
-  const elements = [];
-  let currentIndex = 0;
-  let parentData = null;
-  let found = false;
-
-  while (!found) {
-    if (!data[currentIndex].parent_id) {
-      found = true;
-      parentData = data[currentIndex];
+  let parentNode = undefined
+  for(let i=0; i < data.length; i++) {
+    if (!data[i].parent_id) {
+      parentNode = data[i]
       break;
-    } else {
-      currentIndex += 1;
     }
   }
 
-  elements.push(parentData);
-  while (elements.length !== totalNodes) {
-    const cElement = parentNodesMap.get(parentData.uid);
-    elements.push(cElement);
-    parentData = cElement;
-  }
+  const orderedNodes = [parentNode]
 
-  return elements;
+  while (orderedNodes.length !== data.length) {
+    for (let i=0; i < data.length; i++) {
+      if (data[i].parent_id === parentNode.uid) {
+        parentNode = data[i]
+        orderedNodes.push(data[i]);
+        break;
+      }
+    }
+  }
+  return orderedNodes;
 };

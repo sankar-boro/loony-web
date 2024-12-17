@@ -7,7 +7,7 @@ export type JsonObject = Indexer;
 export type DocNode = {
     uid: number,
     title: string,
-    body: string,
+    content: string,
     images: string,
     user_id: number,
     identity: number,
@@ -43,7 +43,7 @@ type CommonDocState = {
 }
 
 type ReadDocState = {
-    doc_info: DocNode | null;
+    mainNode: DocNode | null;
     mainNode: DocNode | null;
     rawNodes: DocNode[];
 } & CommonDocState
@@ -73,7 +73,7 @@ type CommonBookState = {
 }
 
 export type ReadBookState = CommonBookState & {
-    doc_info: DocNode | null,
+    mainNode: DocNode | null,
     activeNode: DocNode | null,
     nodes101: DocNode[],
     frontPage: DocNode | null

@@ -1,7 +1,6 @@
-import { useState, useEffect, Suspense, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { extractImage, getChapters } from 'loony-utils'
-import MarkdownPreview from '@uiw/react-markdown-preview'
 
 import { useParams, Link } from 'react-router-dom'
 import { timeAgo } from 'loony-utils'
@@ -9,7 +8,7 @@ import { PageNavigation } from '../common/pageNavigation.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import { AppRouteProps, ReadBookState } from 'loony-types'
 import { ApiEvent } from 'loony-types'
-// const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
+import BasicMarkdown from '../../components/BasicMarkdown.tsx'
 
 const View = ({
   mobileNavOpen,
@@ -17,16 +16,17 @@ const View = ({
   isMobile,
   appContext,
 }: AppRouteProps) => {
+  const isDesktop = !isMobile
   const { base_url } = appContext.env
   const { bookId } = useParams()
   const book_id = bookId && parseInt(bookId)
-  const [status, setStatus] = useState({
+  const [pageStatus, setStatus] = useState({
     status: ApiEvent.INIT,
     error: '',
   })
 
   const [state, setState] = useState<ReadBookState>({
-    doc_info: null,
+    mainNode: null,
     activeNode: null,
     page_id: null,
     section_id: null,
@@ -57,15 +57,21 @@ const View = ({
     nodes101,
     frontPage,
     activeSubSectionsBySectionId,
-    doc_info,
+    mainNode,
   } = state
 
-  if (status.status === ApiEvent.INIT || status.status === ApiEvent.START)
+  const image = useMemo(
+    () => extractImage(activeNode?.images),
+    [activeNode?.images]
+  )
+
+  if (
+    pageStatus.status === ApiEvent.INIT ||
+    pageStatus.status === ApiEvent.START
+  )
     return <PageLoadingContainer isMobile={isMobile} />
 
-  if (!activeNode || !doc_info || !frontPage) return null
-
-  const image = extractImage(activeNode.images)
+  if (!activeNode || !mainNode || !frontPage) return null
 
   return (
     <div className="book-container">
@@ -107,7 +113,7 @@ const View = ({
             </div>
           </div>
         ) : null}
-        {!isMobile ? (
+        {isDesktop ? (
           <div
             style={{
               width: '15%',
@@ -180,24 +186,13 @@ const View = ({
                 ></div>
                 <div style={{ fontSize: 12 }}>
                   <div className="username">Sankar Boro</div>
-                  <div className="username">{timeAgo(doc_info.created_at)}</div>
+                  <div className="username">{timeAgo(mainNode.created_at)}</div>
                 </div>
               </div>
             ) : null}
 
             <div style={{ marginTop: 16 }}>
-              {/* {activeNode.theme === 11 ? (
-                activeNode.content
-              ) : activeNode.theme === 24 ? (
-                <MarkdownPreview
-                  source={activeNode.content}
-                  wrapperElement={{ 'data-color-mode': 'light' }}
-                />
-              ) : activeNode.theme === 41 ? (
-              ) : null} */}
-              <Suspense fallback={<div>Loading component...</div>}>
-                <MarkdownPreview source={activeNode.content} />
-              </Suspense>
+              <BasicMarkdown source={activeNode.content} />
             </div>
           </div>
           {activeSubSectionsBySectionId.map((subSectionNode) => {
@@ -214,18 +209,7 @@ const View = ({
                     />
                   </div>
                 ) : null}
-                {/* {subSectionNode.theme === 11 ? (
-                  subSectionNode.content
-                ) : subSectionNode.theme === 24 ? (
-                  <MarkdownPreview
-                    source={subSectionNode.content}
-                    wrapperElement={{ 'data-color-mode': 'light' }}
-                  />
-                ) : subSectionNode.theme === 41 ? (
-                ) : null} */}
-                <Suspense fallback={<div>Loading component...</div>}>
-                  <MarkdownPreview source={subSectionNode.content} />
-                </Suspense>
+                <BasicMarkdown source={subSectionNode.content} />
               </div>
             )
           })}
@@ -234,7 +218,7 @@ const View = ({
         {/*
          * @Page End
          */}
-        {!isMobile ? <RightBookContainer book_id={book_id as number} /> : null}
+        {isDesktop ? <RightBookContainer book_id={book_id as number} /> : null}
       </div>
     </div>
   )

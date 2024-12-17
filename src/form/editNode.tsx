@@ -131,8 +131,8 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
             />
           </div>
           <TextArea
-            formBody={content}
-            setFormBody={setContent}
+            formContent={content}
+            setFormContent={setContent}
             theme={theme}
             setTheme={setTheme}
           />

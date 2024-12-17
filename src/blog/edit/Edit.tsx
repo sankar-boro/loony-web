@@ -46,9 +46,9 @@ export default function RenderComponent({
 }) {
   const base_url = props.appContext.env.base_url
   const { isMobile, mobileNavOpen, setMobileNavOpen } = props
-  const { mainNode, childNodes, doc_info } = state
+  const { mainNode, childNodes } = state
 
-  if (!mainNode || !doc_info) return null
+  if (!mainNode || !mainNode) return null
 
   const image = extractImage(mainNode.images)
 
@@ -142,7 +142,7 @@ export default function RenderComponent({
                 ></div>
                 <div style={{ fontSize: 12 }}>
                   <div className="username">Sankar Boro</div>
-                  <div className="username">{timeAgo(doc_info.created_at)}</div>
+                  <div className="username">{timeAgo(mainNode.created_at)}</div>
                 </div>
               </div>
 

@@ -46,7 +46,7 @@ export default function Edit({
   })
   const [state, setState] = useState<EditBookState>({
     status: DocStatus.None,
-    doc_info: null,
+    mainNode: null,
     modal: '',
     activeNode: null,
     topNode: null,
@@ -85,9 +85,9 @@ export default function Edit({
   if (status.status === ApiEvent.INIT || status.status === ApiEvent.START)
     return <PageLoadingContainer isMobile={isMobile} />
 
-  const { activeNode, nodes101, activeSubSectionsBySectionId, doc_info } = state
+  const { activeNode, nodes101, activeSubSectionsBySectionId, mainNode } = state
 
-  if (!activeNode || !doc_info) return null
+  if (!activeNode || !mainNode) return null
 
   const image = extractImage(activeNode.images)
 
@@ -205,7 +205,7 @@ export default function Edit({
                     <div style={{ fontSize: 12 }}>
                       <div className="username">Sankar Boro</div>
                       <div className="username">
-                        {timeAgo(doc_info.created_at)}
+                        {timeAgo(mainNode.created_at)}
                       </div>
                     </div>
                   </div>

@@ -2,14 +2,14 @@ import MathsMarkdown from '../../components/MathsMarkdown.tsx'
 import MarkdownPreview from '@uiw/react-markdown-preview'
 
 type TextAreaProps = {
-  formBody: string
-  setFormBody: (_: string) => void
+  formContent: string
+  setFormContent: (_: string) => void
   theme: number
   setTheme: (_: number) => void
 }
 
 export const TextArea = (props: TextAreaProps) => {
-  const { formBody, setFormBody, theme, setTheme } = props
+  const { formContent, setFormContent, theme, setTheme } = props
 
   return (
     <div
@@ -62,11 +62,11 @@ export const TextArea = (props: TextAreaProps) => {
       <div>
         <textarea
           onChange={(e) => {
-            setFormBody(e.target.value)
+            setFormContent(e.target.value)
           }}
           rows={24}
           cols={120}
-          value={formBody}
+          value={formContent}
           style={{
             border: 'none',
           }}
@@ -75,14 +75,14 @@ export const TextArea = (props: TextAreaProps) => {
 
         <div style={{ flex: 1, minHeight: 100, marginTop: 24, padding: 5 }}>
           {theme === 11 ? (
-            formBody
+            formContent
           ) : theme === 24 ? (
             <MarkdownPreview
-              source={formBody}
+              source={formContent}
               wrapperElement={{ 'data-color-mode': 'light' }}
             />
           ) : theme === 41 ? (
-            <MathsMarkdown source={formBody} />
+            <MathsMarkdown source={formContent} />
           ) : null}
         </div>
       </div>

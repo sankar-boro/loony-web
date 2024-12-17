@@ -2,7 +2,7 @@ type ImageRes = {
     name: string
 }
   
-export const extractImage = (images: ImageRes[] | string | null): ImageRes | null => {
+export const extractImage = (images: ImageRes[] | string | null | undefined): ImageRes | null => {
     if (!images) return null;
 
     if (typeof images === "object" && images.length > 0) {

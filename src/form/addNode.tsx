@@ -33,7 +33,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
 
   const { user } = authContext as Auth
   const [formTitle, setFormTitle] = useState('')
-  const [formBody, setFormBody] = useState('')
+  const [formContent, setFormContent] = useState('')
   const [theme, setTheme] = useState(11)
   const [error, setError] = useState('')
   const [formImages, setFormImages] = useState(null)
@@ -43,14 +43,14 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
       setError('Title is required.')
       return
     }
-    if (!formBody) {
+    if (!formContent) {
       setError('Body is required.')
       return
     }
     axiosInstance
       .post(url, {
         title: formTitle,
-        body: formBody,
+        content: formContent,
         images: formImages,
         tags: null,
         [docIdName]: doc_id,
@@ -66,7 +66,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
       .catch((e) => {
         console.log(e)
       })
-  }, [formTitle, formBody])
+  }, [formTitle, formContent])
 
   return (
     <div
@@ -97,8 +97,8 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
             />
           </div>
           <TextArea
-            formBody={formBody}
-            setFormBody={setFormBody}
+            formContent={formContent}
+            setFormContent={setFormContent}
             theme={theme}
             setTheme={setTheme}
           />

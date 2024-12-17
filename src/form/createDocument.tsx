@@ -28,7 +28,7 @@ export default function CreateNewDocument({
 
   const { user } = authContext as Auth
   const [formTitle, setFormTitle] = useState('')
-  const [formBody, setFormBody] = useState('')
+  const [formContent, setFormContent] = useState('')
   const [tags, setTags] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [theme, setTheme] = useState(11)
@@ -40,7 +40,7 @@ export default function CreateNewDocument({
       setError('Title is required')
       return
     }
-    if (!formBody) {
+    if (!formContent) {
       setError('Body is required')
       return
     }
@@ -49,7 +49,7 @@ export default function CreateNewDocument({
     axiosInstance
       .post(url, {
         title: formTitle,
-        content: formBody,
+        content: formContent,
         images: formImages ? formImages : [],
         tags: tags.split(' '),
         theme,
@@ -69,7 +69,7 @@ export default function CreateNewDocument({
       .catch(() => {
         setSubmitting(false)
       })
-  }, [formTitle, formBody, tags, theme])
+  }, [formTitle, formContent, tags, theme])
 
   const routeTo = () => {
     return
@@ -150,8 +150,8 @@ export default function CreateNewDocument({
               />
             </div>
             <TextArea
-              formBody={formBody}
-              setFormBody={setFormBody}
+              formContent={formContent}
+              setFormContent={setFormContent}
               theme={theme}
               setTheme={setTheme}
             />

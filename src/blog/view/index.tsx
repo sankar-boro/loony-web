@@ -1,5 +1,4 @@
-import { useState, useEffect, Suspense } from 'react'
-import MarkdownPreview from '@uiw/react-markdown-preview'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { extractImage, timeAgo } from 'loony-utils'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
@@ -8,7 +7,7 @@ import { Chapters, Edit as EditPage } from '../common/BlogPageNavigation.tsx'
 
 import { ApiEvent, DocStatus } from 'loony-types'
 import { AppRouteProps, ReadBlogState } from 'loony-types'
-// const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
+import BasicMarkdown from '../../components/BasicMarkdown.tsx'
 
 const View = (props: AppRouteProps) => {
   const { isMobile, setMobileNavOpen, mobileNavOpen, appContext, authContext } =
@@ -19,7 +18,6 @@ const View = (props: AppRouteProps) => {
 
   const [state, setState] = useState<ReadBlogState>({
     status: DocStatus.None,
-    doc_info: null,
     mainNode: null,
     rawNodes: [],
     childNodes: [],
@@ -40,8 +38,8 @@ const View = (props: AppRouteProps) => {
   if (status.status === ApiEvent.IDLE || status.status === ApiEvent.START)
     return <PageLoadingContainer isMobile={isMobile} />
 
-  const { childNodes, mainNode, doc_info } = state
-  if (!mainNode || !doc_info) return null
+  const { childNodes, mainNode } = state
+  if (!mainNode || !mainNode) return null
 
   const image = extractImage(mainNode.images)
 
@@ -129,34 +127,21 @@ const View = (props: AppRouteProps) => {
               ></div>
               <div style={{ fontSize: 12 }}>
                 <div className="username">Sankar Boro</div>
-                <div className="username">{timeAgo(doc_info.created_at)}</div>
+                <div className="username">{timeAgo(mainNode.created_at)}</div>
               </div>
             </div>
 
             <div style={{ marginTop: 16 }}>
-              {/* {mainNode.theme === 11 ? (
-                mainNode.content
-              ) : mainNode.theme === 24 ? (
-                <MarkdownPreview
-                  source={mainNode.content}
-                  wrapperElement={{ 'data-color-mode': 'light' }}
-                />
-              ) : mainNode.theme === 41 ? (
-                <Suspense fallback={<div>Loading component...</div>}>
-                  <MarkdownPreview source={mainNode.content} />
-                </Suspense>
-              ) : null} */}
-              <Suspense fallback={<div>Loading component...</div>}>
-                <MarkdownPreview source={mainNode.content} />
-              </Suspense>
+              <BasicMarkdown source={mainNode.content} />
             </div>
           </div>
-          {childNodes.map((blog_node) => {
-            const parseImage = JSON.parse(blog_node.images as string)
+          {childNodes.map((blogNode) => {
+            console.log('blogNode', blogNode)
+            const parseImage = JSON.parse(blogNode.images as string)
             const nodeImage = parseImage.length > 0 ? parseImage[0].name : null
             return (
-              <div className="page-section" key={blog_node.uid}>
-                <div className="section-title">{blog_node.title}</div>
+              <div className="page-section" key={blogNode.uid}>
+                <div className="section-title">{blogNode.title}</div>
                 {nodeImage ? (
                   <div style={{ width: '100%', borderRadius: 5 }}>
                     <img
@@ -167,21 +152,7 @@ const View = (props: AppRouteProps) => {
                   </div>
                 ) : null}
                 <div>
-                  {/* {blog_node.theme === 11 ? (
-                    blog_node.content
-                  ) : blog_node.theme === 24 ? (
-                    <MarkdownPreview
-                      source={blog_node.content}
-                      wrapperElement={{ 'data-color-mode': 'light' }}
-                    />
-                  ) : blog_node.theme === 41 ? (
-                    <Suspense fallback={<div>Loading component...</div>}>
-                      <MathsMarkdown source={blog_node.content} />
-                    </Suspense>
-                  ) : null} */}
-                  <Suspense fallback={<div>Loading component...</div>}>
-                    <MarkdownPreview source={blog_node.content} />
-                  </Suspense>
+                  <BasicMarkdown source={blogNode.content} />
                 </div>
               </div>
             )
@@ -193,7 +164,7 @@ const View = (props: AppRouteProps) => {
             <EditPage
               blog_id={blog_id as number}
               authContext={authContext}
-              doc_info={doc_info}
+              mainNode={mainNode}
             />
           </div>
         ) : null}

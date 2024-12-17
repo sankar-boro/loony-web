@@ -33,16 +33,16 @@ export const Chapters = ({
 export const Edit = ({
   blog_id,
   authContext,
-  doc_info,
+  mainNode,
 }: {
   blog_id: number
   authContext: AuthContextProps
-  doc_info: DocNode
+  mainNode: DocNode
 }) => {
   return (
     <ul className="list-item" style={{ paddingLeft: 0, listStyle: 'none' }}>
       {authContext.status === AuthStatus.AUTHORIZED &&
-      authContext.user?.uid === doc_info.user_id ? (
+      authContext.user?.uid === mainNode.user_id ? (
         <li>
           <LuFileEdit color="#2d2d2d" size={16} />
           <Link to={`/edit/blog/${blog_id}`}>Edit this page</Link>
