@@ -39,6 +39,7 @@ export default function Edit({
   const [state, setState] = useState<EditBookState>({
     status: DocStatus.None,
     mainNode: null,
+    childNodes: [],
     modal: '',
     activeNode: null,
     topNode: null,
@@ -53,7 +54,6 @@ export default function Edit({
     addNode: null,
     deleteNode: null,
     editNode: null,
-    rawNodes: [],
     doc_id: book_id as number,
   })
 

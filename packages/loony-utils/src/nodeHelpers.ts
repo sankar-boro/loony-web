@@ -16,17 +16,16 @@ export const getBlogNodes = (blog_id: number, setState: ReadBlogAction | EditBlo
     status: ApiEvent.INIT,
   }));
   axiosInstance.get(url).then(({ data }) => {
-    const __rawNodes = data.child_nodes;
-    const __blogNodes = orderBlogNodes(data.child_nodes, data.main_node);
-    const mainNode = __blogNodes && __blogNodes[0];
-    const __childNodes = __blogNodes.length >= 2 ? __blogNodes.slice(1) : [];
+    const unOrderedChildNodes = data.child_nodes;
+    const blogNodes = orderBlogNodes(unOrderedChildNodes, data.main_node);
+    const mainNode = blogNodes && blogNodes[0];
+    const childNodes = blogNodes.length >= 2 ? blogNodes.slice(1) : [];
 
     setState((prevState) => ({
       ...prevState,
       mainNode,
-      childNodes: __childNodes,
-      blogNodes: __blogNodes,
-      rawNodes: __rawNodes,
+      childNodes,
+      blogNodes,
     }));
     setStatus((prevState) => ({
       ...prevState,
@@ -145,9 +144,15 @@ export const getSubSections = (
   }
 };
 
-
+/**
+ * 
+ * @param childNodes 
+ * @param submitData 
+ * @param delete_node_index 
+ * @returns 
+ */
 export const deleteBlogNode = (
-  nodes: DocNode[], 
+  childNodes: DocNode[], 
   submitData: { 
     delete_node: {
       identity: number,
@@ -157,17 +162,21 @@ export const deleteBlogNode = (
       parent_id: number | undefined,
       uid: null | number,
     } | null
-  }, 
-  delete_node_index: number
+  }
 ) => {
-  const copyNodes = nodes.filter((node) => {
+  const copyNodes = childNodes.filter((node) => {
     if (submitData.delete_node.uid === node.uid) {
       return false;
     }
     return true;
   });
-  if (copyNodes[delete_node_index + 1]) {
-    copyNodes[delete_node_index + 1].parent_id = submitData.update_node.parent_id;
+  if (submitData.update_node) {
+    return copyNodes.map((node) => {
+      if (node.uid === submitData.update_node.uid) {
+        node.parent_id = submitData.update_node.parent_id;
+      }
+      return node;
+    })
   }
   return copyNodes;
 };
@@ -184,20 +193,48 @@ export const deleteOne = (nodes: DocNode[], { deleted_ids, parent_id, updated_id
   return newNodes;
 };
 
-export const appendBlogNode = (nodes: DocNode[], topData: DocNode, resData: AppendNodeResponse) => {
+/**
+ * 
+ * @param childNodes DocNode[]
+ * @param topData DocNode
+ * @param resData AppendNodeResponse
+ * @returns DocNode[]
+ */
+export const appendBlogNode = (
+  childNodes: DocNode[], 
+  topNode: DocNode, 
+  resData: AppendNodeResponse,
+  mainNode: DocNode
+) => {
+  const newNode = resData.new_node;
   const newNodes = [];
-  for (let index = 0; index < nodes.length; index++) {
-    const element = nodes[index];
-    if (topData.uid === element.uid) {
-      newNodes.push(element);
-      newNodes.push(resData.new_node);
-      if (nodes[index + 1]) {
-        nodes[index + 1].parent_id = resData.update_node.update_row_parent_id;
+
+  // if there are no child nodes
+  if (childNodes.length === 0) {
+    return [resData.new_node];
+  }
+
+  // if the new node is a child of the main node
+  if (resData.new_node.parent_id === mainNode.uid) {
+    const newChildNodes = childNodes;
+    newChildNodes[0].parent_id = resData.new_node.uid; 
+    return [resData.new_node, ...newChildNodes];
+  }
+
+  // if there are child nodes
+  for (let index = 0; index < childNodes.length; index++) {
+    if (newNode.parent_id === childNodes[index].uid) {
+      newNodes.push(childNodes[index]);
+      newNodes.push(newNode);
+
+      if (childNodes[index + 1]) {
+        childNodes[index + 1].parent_id = newNode.uid;
       }
     } else {
-      newNodes.push(element);
+      newNodes.push(childNodes[index]);
     }
   }
+  
   return newNodes;
 };
 
@@ -430,19 +467,30 @@ export const orderNodes = (nodes: DocNode[], parentNode: DocNode) => {
  * @returns DocNode[]
  */
 export const orderBlogNodes = (nodes: DocNode[], mainNode: DocNode, removeIds?: number[]) => {
-  // setup
-  let allNodes = mainNode ? [mainNode, ...nodes] : nodes;
-  allNodes = filterNodes(allNodes, removeIds);
+  return [mainNode, ...orderBlogChildNodes(nodes, mainNode, removeIds)];
+};
+
+
+/**
+ * 
+ * @param nodes DocNode[]
+ * @param mainNode DocNode
+ * @param removeIds number[]
+ * @returns DocNode[]
+ */
+export const orderBlogChildNodes = (nodes: DocNode[], mainNode: DocNode, removeIds?: number[]) => {
   
-  // algo variables
-  const results = [mainNode]
+  let childNodes = nodes;
+  childNodes = filterNodes(childNodes, removeIds);
+  
+  const results = []
   let parentNode = mainNode
 
-  while (allNodes.length !== results.length) {
-    for (let i=0; i < nodes.length; i++) {
-      if (nodes[i].parent_id === parentNode.uid) {
-        parentNode = nodes[i]
-        results.push(nodes[i]);
+  while (childNodes.length !== results.length) {
+    for (let i=0; i < childNodes.length; i++) {
+      if (childNodes[i].parent_id === parentNode.uid) {
+        parentNode = childNodes[i]
+        results.push(childNodes[i]);
         break;
       }
     }

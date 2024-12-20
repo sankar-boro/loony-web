@@ -19,7 +19,6 @@ const View = (props: AppRouteProps) => {
   const [state, setState] = useState<ReadBlogState>({
     status: DocStatus.None,
     mainNode: null,
-    rawNodes: [],
     childNodes: [],
     topNode: null,
     doc_id: blog_id as number,

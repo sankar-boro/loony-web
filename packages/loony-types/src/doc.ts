@@ -44,8 +44,7 @@ type CommonDocState = {
 
 type ReadDocState = {
     mainNode: DocNode | null;
-    mainNode: DocNode | null;
-    rawNodes: DocNode[];
+    childNodes: DocNode[];
 } & CommonDocState
 
 type EditDocState = {

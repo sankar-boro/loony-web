@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import MarkdownPreview from '@uiw/react-markdown-preview'
 
 import { Suspense, useCallback } from 'react'
 import {
-  orderBlogNodes,
   deleteBlogNode,
   extractImage,
   updateBlogNode,
   appendBlogNode,
   timeAgo,
+  orderBlogChildNodes,
 } from 'loony-utils'
 import { RxReader } from 'react-icons/rx'
 import { AiOutlineDelete } from 'react-icons/ai'
@@ -347,21 +348,18 @@ const ActivityComponent = ({
   blog_id: number
   isMobile: boolean
 }) => {
-  const { activeNode, childNodes, rawNodes, modal, nodeIndex, mainNode } = state
+  const { activeNode, childNodes, modal, nodeIndex, mainNode, addNode } = state
 
   if (!mainNode) return null
 
   const navigate = useNavigate()
 
   const deleteNode = () => {
-    console.log({
-      activeNode
-    })
     if (!state.deleteNode) return
     const delete_node = state.deleteNode
     if (childNodes) {
       let updateNode: DocNode | undefined
-      rawNodes.forEach((r) => {
+      childNodes.forEach((r) => {
         if (r.parent_id === delete_node.uid) {
           updateNode = r
         }
@@ -381,20 +379,16 @@ const ActivityComponent = ({
       axiosInstance
         .post(`/blog/delete/node`, submitData)
         .then(() => {
-          const __rawNodes = deleteBlogNode(
-            rawNodes,
-            submitData,
-            nodeIndex as number
+          const nodesAfterDelete = deleteBlogNode(
+            childNodes,
+            submitData
           )
-          const __orderChildNodes = orderBlogNodes(__rawNodes, mainNode)
-          const __mainNode = __orderChildNodes && __orderChildNodes[0]
-          const __childNodes = __orderChildNodes.slice(1)
+          const orderChildNodes = orderBlogChildNodes(nodesAfterDelete, mainNode)
+          const newChildNodes = orderChildNodes.length >= 2 ? orderChildNodes.slice(1) : []
 
           setState({
             ...state,
-            rawNodes: __rawNodes,
-            mainNode: __mainNode,
-            childNodes: __childNodes,
+            childNodes: newChildNodes,
             modal: '',
           })
         })
@@ -412,41 +406,31 @@ const ActivityComponent = ({
 
   const editFnCallback = useCallback(
     (data: DocNode) => {
-      const __rawNodes = updateBlogNode(rawNodes, data)
-      const __orderChildNodes = orderBlogNodes(__rawNodes, mainNode)
-      const __mainNode = __orderChildNodes && __orderChildNodes[0]
-      const __childNodes = __orderChildNodes.slice(1)
+      const nodesAfterUpdate = updateBlogNode(childNodes, data)
+      const orderChildNodes = orderBlogChildNodes(nodesAfterUpdate, mainNode)
+      const newChildNodes = orderChildNodes.length >= 2 ? orderChildNodes.slice(1) : []
 
       setState({
         ...state,
-        mainNode: __mainNode,
-        childNodes: __childNodes,
-        rawNodes: __rawNodes,
+        childNodes: newChildNodes,
         modal: '',
       })
     },
     [state.status]
   )
 
-  const addNodeCbFn = useCallback(
-    (data: AppendNodeResponse) => {
-      if (!activeNode) return
-      const __rawNodes = appendBlogNode(rawNodes, activeNode, data)
-      const __orderChildNodes = orderBlogNodes(__rawNodes, mainNode)
-      const __mainNode = __orderChildNodes && __orderChildNodes[0]
-      const __childNodes = __orderChildNodes.slice(1)
-
+  const addNodeCbFn = (data: AppendNodeResponse) => {
+      if (!addNode) return
+      const nodesAfterAdd = appendBlogNode(childNodes, addNode, data, mainNode)
+      const newChildNodes = orderBlogChildNodes(nodesAfterAdd, mainNode)
+      
       setState({
         ...state,
         addNode: null,
-        rawNodes: __rawNodes,
-        childNodes: __childNodes,
-        mainNode: __mainNode,
+        childNodes: newChildNodes,
         modal: '',
       })
-    },
-    [state.status]
-  )
+    }
 
   const onCancel = useCallback(() => {
     setState({

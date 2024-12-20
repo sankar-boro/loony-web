@@ -19,7 +19,6 @@ export default function Edit(props: AppRouteProps) {
     nodeIndex: null,
     topNode: null,
     doc_id: blog_id as number,
-    rawNodes: [],
     childNodes: [],
     modal: '',
     deleteNode: null,
