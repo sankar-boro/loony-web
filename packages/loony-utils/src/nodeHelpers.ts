@@ -1,4 +1,3 @@
-// import { orderNodes, orderBookNodes } from 'loony-utils';
 import { axiosInstance } from "loony-query";
 import { ApiDispatchAction, AppendNodeResponse, EditBookAction, EditBlogAction, GroupedNodesById, ReadBlogAction, ReadBookAction } from 'loony-types';
 import { ApiEvent, DocNode } from 'loony-types';
@@ -39,7 +38,7 @@ export const getBlogNodes = (blog_id: number, setState: ReadBlogAction | EditBlo
 
 export const getChapters = (book_id: number, setState: ReadBookAction | EditBookAction, setStatus: ApiDispatchAction) => {
   axiosInstance.get(`/book/get/nodes?book_id=${book_id}`).then(({ data }) => {
-    const bookTree = orderBookNodes(data.child_nodes);
+    const bookTree = orderBookNodes(data.child_nodes, data.main_node, []);
     const mainNode = bookTree && bookTree[0];
     const __nodes101 = bookTree.slice(1);
 
@@ -149,14 +148,16 @@ export const getSubSections = (
 
 export const deleteBlogNode = (
   nodes: DocNode[], 
-  submitData: { delete_node: {
-    identity: number,
-    uid: number,
-  },
-  update_node: {
-    parent_id: number | undefined,
-    uid: null | number,
-  } }, 
+  submitData: { 
+    delete_node: {
+      identity: number,
+      uid: number,
+    },
+    update_node: {
+      parent_id: number | undefined,
+      uid: null | number,
+    } | null
+  }, 
   delete_node_index: number
 ) => {
   const copyNodes = nodes.filter((node) => {
@@ -351,18 +352,29 @@ const groupChapters = (parent_id: number, chapters: DocNode[]) => {
   return orders;
 };
 
-export const orderBookNodes = (rawApi: DocNode[], removeIds: number[] = []) => {
-  let data = rawApi;
+const filterNodes = (nodes: DocNode[], removeIds = []) => {
   if (removeIds && removeIds.length > 0) {
-    data = rawApi.filter((d) => {
+    return nodes.filter((d) => {
       if (removeIds.includes(d.uid)) {
         return false;
       }
       return true;
     });
   }
+  return nodes
+}
 
-  const allGroups = groupWithIdentity(data);
+/**
+ * 
+ * @param nodes DocNode[]
+ * @param mainNode DocNode
+ * @param removeIds number[]
+ * @returns DocNode[]
+ */
+export const orderBookNodes = (nodes: DocNode[], mainNode?: DocNode, removeIds: number[] = []) => {
+  let allNodes = mainNode ? [mainNode, ...nodes] : nodes;
+  allNodes = filterNodes(allNodes, removeIds);
+  const allGroups = groupWithIdentity(allNodes);
   const samples = {
     allSectionGroups: allGroups[102],
     allSubSectionGroups: allGroups[103],
@@ -385,17 +397,23 @@ export const orderBookNodes = (rawApi: DocNode[], removeIds: number[] = []) => {
   return chapters;
 };
 
+/**
+ * 
+ * @param nodes DocNode[]
+ * @param parentNode DocNode 
+ * @returns DocNode[]
+ */
 export const orderNodes = (nodes: DocNode[], parentNode: DocNode) => {
-  let currentNode = parentNode;
+  let updateParentNode = parentNode;
   const results = [];
 
   while (results.length !== nodes.length) {
     // eslint-disable-next-line no-loop-func
     for (let i = 0; i < nodes.length; i++) {
       const thisNode = nodes[i];
-      if (currentNode.uid === thisNode.parent_id) {
+      if (updateParentNode.uid === thisNode.parent_id) {
         results.push(thisNode);
-        currentNode = thisNode;
+        updateParentNode = thisNode;
         break;
       }
     }
@@ -404,19 +422,31 @@ export const orderNodes = (nodes: DocNode[], parentNode: DocNode) => {
   return results;
 };
 
-export const orderBlogNodes = (data: DocNode[], main_node: DocNode) => {
-  let parentNode = main_node
+/**
+ * 
+ * @param nodes DocNode[]
+ * @param mainNode DocNode
+ * @param removeIds number[]
+ * @returns DocNode[]
+ */
+export const orderBlogNodes = (nodes: DocNode[], mainNode: DocNode, removeIds?: number[]) => {
+  // setup
+  let allNodes = mainNode ? [mainNode, ...nodes] : nodes;
+  allNodes = filterNodes(allNodes, removeIds);
+  
+  // algo variables
+  const results = [mainNode]
+  let parentNode = mainNode
 
-  const orderedNodes = [parentNode]
-
-  while (orderedNodes.length !== data.length) {
-    for (let i=0; i < data.length; i++) {
-      if (data[i].parent_id === parentNode.uid) {
-        parentNode = data[i]
-        orderedNodes.push(data[i]);
+  while (allNodes.length !== results.length) {
+    for (let i=0; i < nodes.length; i++) {
+      if (nodes[i].parent_id === parentNode.uid) {
+        parentNode = nodes[i]
+        results.push(nodes[i]);
         break;
       }
     }
   }
-  return orderedNodes;
+
+  return results;
 };

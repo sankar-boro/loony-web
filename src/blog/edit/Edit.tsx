@@ -353,9 +353,12 @@ const ActivityComponent = ({
 
   const navigate = useNavigate()
 
-  const deleteNode = useCallback(() => {
-    if (!activeNode) return
-    const delete_node = activeNode
+  const deleteNode = () => {
+    console.log({
+      activeNode
+    })
+    if (!state.deleteNode) return
+    const delete_node = state.deleteNode
     if (childNodes) {
       let updateNode: DocNode | undefined
       rawNodes.forEach((r) => {
@@ -369,10 +372,10 @@ const ActivityComponent = ({
           identity: delete_node.identity,
           uid: delete_node.uid,
         },
-        update_node: {
+        update_node: updateNode ? {
           parent_id: delete_node.parent_id,
           uid: updateNode ? updateNode.uid : null,
-        },
+        } : null,
       }
 
       axiosInstance
@@ -399,7 +402,7 @@ const ActivityComponent = ({
           console.log(err)
         })
     }
-  }, [state.status])
+  }
 
   const deleteBlog = useCallback(() => {
     axiosInstance.post('/blog/delete', { blog_id }).then(() => {

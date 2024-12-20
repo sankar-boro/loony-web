@@ -37,6 +37,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
   const [theme, setTheme] = useState(11)
   const [error, setError] = useState('')
   const [formImages, setFormImages] = useState(null)
+  const [tags, setTags] = useState('')
 
   const onCreateAction = useCallback(async () => {
     if (!formTitle) {
@@ -51,13 +52,12 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
       .post(url, {
         title: formTitle,
         content: formContent,
-        images: formImages,
-        tags: null,
+        images: formImages ? formImages : [],
+        tags: tags.split(' '),
         [docIdName]: doc_id,
         parent_id,
         identity,
         page_id,
-        theme,
         parent_identity,
       })
       .then(({ data }) => {
@@ -107,6 +107,17 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
             user={user}
             setFormImages={setFormImages}
           />
+          <div className="form-section">
+              <label>Tags</label>
+              <br />
+              <input
+                type="text"
+                value={tags}
+                onChange={(e) => {
+                  setTags(e.target.value)
+                }}
+              />
+            </div>
         </div>
       </div>
       <div
