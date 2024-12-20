@@ -74,6 +74,17 @@ export default function EditComponent({
               __activeNode = x
             }
           })
+          console.log({
+            ...state,
+            activeNode: __activeNode,
+            activeSectionsByPageId: __activeSectionsByPageId,
+            allSectionsByPageId: {
+              ...allSectionsByPageId,
+              [page_id as number]: __activeSectionsByPageId,
+            },
+            deleteNode: null,
+            modal: '',
+          })
           setState({
             ...state,
             activeNode: __activeNode,

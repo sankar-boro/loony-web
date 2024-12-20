@@ -9,7 +9,7 @@ import { LuFileWarning } from 'react-icons/lu'
 
 import { getChapters } from 'loony-utils'
 import EditComponent from './edit.tsx'
-import { PageNavigation } from '../common/pageNavigation.tsx'
+import { PageNavigation } from '../common/editPageNavigation.tsx'
 import { PageNodeSettings } from './pageNodeSettings.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import AppContext from '../../context/AppContext.tsx'

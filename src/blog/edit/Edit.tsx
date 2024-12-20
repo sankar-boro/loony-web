@@ -384,11 +384,10 @@ const ActivityComponent = ({
             submitData
           )
           const orderChildNodes = orderBlogChildNodes(nodesAfterDelete, mainNode)
-          const newChildNodes = orderChildNodes.length >= 2 ? orderChildNodes.slice(1) : []
 
           setState({
             ...state,
-            childNodes: newChildNodes,
+            childNodes: orderChildNodes,
             modal: '',
           })
         })
