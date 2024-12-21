@@ -6,8 +6,7 @@ import { useParams, Link } from 'react-router-dom'
 import { timeAgo } from 'loony-utils'
 import { PageNavigation } from '../common/pageNavigation.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
-import { AppRouteProps, DocNode, ReadBookState } from 'loony-types'
-import { ApiEvent } from 'loony-types'
+import { AppRouteProps, DocNode, ReadBookState, PageStatus } from 'loony-types'
 import BasicMarkdown from '../../components/BasicMarkdown.tsx'
 
 const View = ({
@@ -21,7 +20,7 @@ const View = ({
   const { bookId } = useParams()
   const book_id = bookId && parseInt(bookId)
   const [pageStatus, setStatus] = useState({
-    status: ApiEvent.INIT,
+    status: PageStatus.IDLE,
     error: '',
   })
 
@@ -61,10 +60,7 @@ const View = ({
     mainNode,
   } = state
 
-  if (
-    pageStatus.status === ApiEvent.INIT ||
-    pageStatus.status === ApiEvent.START
-  )
+  if (pageStatus.status !== PageStatus.VIEW_PAGE)
     return <PageLoadingContainer isMobile={isMobile} />
 
   if (!parentNode || !mainNode || !frontPage) return null

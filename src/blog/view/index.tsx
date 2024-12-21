@@ -4,9 +4,7 @@ import { extractImage, timeAgo } from 'loony-utils'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import { getBlogNodes } from 'loony-utils'
 import { Chapters, Edit as EditPage } from '../common/BlogPageNavigation.tsx'
-
-import { ApiEvent, DocStatus } from 'loony-types'
-import { AppRouteProps, ReadBlogState } from 'loony-types'
+import { AppRouteProps, ReadBlogState, PageStatus } from 'loony-types'
 import BasicMarkdown from '../../components/BasicMarkdown.tsx'
 
 const View = (props: AppRouteProps) => {
@@ -17,14 +15,13 @@ const View = (props: AppRouteProps) => {
   const blog_id = blogId && parseInt(blogId)
 
   const [state, setState] = useState<ReadBlogState>({
-    status: DocStatus.None,
     mainNode: null,
     childNodes: [],
     topNode: null,
     doc_id: blog_id as number,
   })
   const [status, setStatus] = useState({
-    status: ApiEvent.IDLE,
+    status: PageStatus.IDLE,
     error: '',
   })
 
@@ -34,7 +31,7 @@ const View = (props: AppRouteProps) => {
     }
   }, [blog_id])
 
-  if (status.status === ApiEvent.IDLE || status.status === ApiEvent.START)
+  if (status.status !== PageStatus.VIEW_PAGE)
     return <PageLoadingContainer isMobile={isMobile} />
 
   const { childNodes, mainNode } = state

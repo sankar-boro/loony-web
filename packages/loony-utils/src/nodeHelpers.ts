@@ -7,7 +7,7 @@ import {
   GroupedNodesById,
   ReadBlogAction,
   ReadBookAction,
-  Status,
+  PageStatus,
 } from 'loony-types'
 import { DocNode } from 'loony-types'
 
@@ -25,7 +25,7 @@ export const getBlogNodes = (
   const url = `/blog/get/nodes?blog_id=${blog_id}`
   setStatus((prevState) => ({
     ...prevState,
-    status: Status.FETCHING,
+    status: PageStatus.FETCHING,
   }))
   axiosInstance.get(url).then(({ data }) => {
     const unOrderedChildNodes = data.child_nodes
@@ -41,7 +41,7 @@ export const getBlogNodes = (
     }))
     setStatus((prevState) => ({
       ...prevState,
-      status: Status.VIEW_PAGE,
+      status: PageStatus.VIEW_PAGE,
     }))
   })
 }
@@ -54,7 +54,7 @@ export const getChapters = (
   const url = `/book/get/nodes?book_id=${book_id}`
   setStatus((prevState) => ({
     ...prevState,
-    status: Status.FETCHING,
+    status: PageStatus.FETCHING,
   }))
   axiosInstance.get(url).then(({ data }) => {
     const bookTree = orderBookNodes(data.child_nodes, data.main_node, [])
@@ -71,7 +71,7 @@ export const getChapters = (
     }))
     setStatus((prevStatus) => ({
       ...prevStatus,
-      status: Status.VIEW_PAGE,
+      status: PageStatus.VIEW_PAGE,
     }))
   })
 }
@@ -97,7 +97,7 @@ export const getSections = (
   } else {
     setStatus((prevState) => ({
       ...prevState,
-      status: Status.FETCHING,
+      status: PageStatus.FETCHING,
     }))
     axiosInstance.get(url).then(({ data }) => {
       const res = orderNodes(data, __node)
@@ -115,7 +115,7 @@ export const getSections = (
       }))
       setStatus((prevState) => ({
         ...prevState,
-        status: Status.VIEW_PAGE,
+        status: PageStatus.VIEW_PAGE,
       }))
     })
   }
@@ -141,7 +141,7 @@ export const getSubSections = (
   } else {
     setStatus((prevState) => ({
       ...prevState,
-      status: Status.FETCHING,
+      status: PageStatus.FETCHING,
     }))
     axiosInstance.get(url).then(({ data }) => {
       const res = orderNodes(data, __node)
@@ -158,7 +158,7 @@ export const getSubSections = (
       }))
       setStatus((prevState) => ({
         ...prevState,
-        status: Status.VIEW_PAGE,
+        status: PageStatus.VIEW_PAGE,
       }))
     })
   }

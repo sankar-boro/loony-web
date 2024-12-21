@@ -2,8 +2,7 @@ import { useState, useEffect, lazy } from 'react'
 import { useParams } from 'react-router-dom'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import { getBlogNodes } from 'loony-utils'
-import { AppRouteProps, EditBlogState } from 'loony-types'
-import { ApiEvent, DocStatus } from 'loony-types'
+import { AppRouteProps, EditBlogState, PageStatus } from 'loony-types'
 const EditRenderComponent = lazy(() => import('./Edit.tsx'))
 
 export default function Edit(props: AppRouteProps) {
@@ -11,7 +10,6 @@ export default function Edit(props: AppRouteProps) {
   const blog_id = blogId && parseInt(blogId)
 
   const [state, setState] = useState<EditBlogState>({
-    status: DocStatus.None,
     mainNode: null,
     parentNode: null,
     addNode: null,
@@ -24,7 +22,7 @@ export default function Edit(props: AppRouteProps) {
     deleteNode: null,
   })
   const [status, setStatus] = useState({
-    status: ApiEvent.IDLE,
+    status: PageStatus.IDLE,
     error: '',
   })
 
@@ -34,7 +32,7 @@ export default function Edit(props: AppRouteProps) {
     }
   }, [blog_id])
 
-  if (status.status === ApiEvent.IDLE || status.status === ApiEvent.START)
+  if (status.status !== PageStatus.VIEW_PAGE)
     return <PageLoadingContainer isMobile={props.isMobile} />
 
   return (

@@ -21,8 +21,8 @@ import {
   EditBookAction,
   EditBookState,
   PageStatus,
-  Status,
   VoidReturnFunction,
+  PageState,
 } from 'loony-types'
 
 export default function Edit({
@@ -36,8 +36,8 @@ export default function Edit({
   const book_id = bookId && parseInt(bookId)
   const navigate = useNavigate()
   const { setAppContext } = useContext(AppContext)
-  const [status, setStatus] = useState<PageStatus>({
-    status: Status.IDLE,
+  const [status, setStatus] = useState<PageState>({
+    status: PageStatus.IDLE,
     error: '',
   })
   const [state, setState] = useState<EditBookState>({
@@ -77,7 +77,7 @@ export default function Edit({
     })
   }
 
-  if (status.status === Status.IDLE || status.status === Status.FETCHING)
+  if (status.status !== PageStatus.VIEW_PAGE)
     return <PageLoadingContainer isMobile={isMobile} />
 
   const { parentNode, activeSubSectionsBySectionId, mainNode } = state

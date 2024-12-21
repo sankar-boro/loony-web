@@ -24,7 +24,7 @@ export type ApiStatus = {
   error: string
 }
 
-export enum Status {
+export enum PageStatus {
   IDLE = 'IDLE',
   FETCHING = 'FETCHING',
   ERROR = 'ERROR',
@@ -34,15 +34,15 @@ export enum Status {
   DELETE_NODE = 'DELETE_NODE',
 }
 
-export type PageStatus = {
-  status: Status
+export type PageState = {
+  status: PageStatus
   error: string
 }
 
 export type AppDispatchAction = React.Dispatch<React.SetStateAction<AppState>>
 export type ApiDispatchAction = React.Dispatch<React.SetStateAction<ApiStatus>>
 export type PageStatusDispatchAction = React.Dispatch<
-  React.SetStateAction<PageStatus>
+  React.SetStateAction<PageState>
 >
 
 export type EditNodeComponentProps = {
