@@ -12,7 +12,7 @@ import { getSections, getSubSections } from 'loony-utils'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 import {
-  ApiDispatchAction,
+  PageStatusDispatchAction,
   ReadBookAction,
   ReadBookState,
   DocNode,
@@ -31,7 +31,7 @@ export const PageNavigation = ({
   viewFrontPage,
 }: {
   setState: ReadBookAction | EditBookAction
-  setStatus: ApiDispatchAction
+  setStatus: PageStatusDispatchAction
   nodes101: DocNode[]
   state: ReadBookState | EditBookState
   book_id: number
@@ -42,18 +42,18 @@ export const PageNavigation = ({
     page_id,
     activeSectionsByPageId,
     frontPage,
-    activeNode,
+    parentNode,
     allSectionsByPageId,
     allSubSectionsBySectionId,
   } = state
 
-  if (!frontPage || !activeNode) return null
+  if (!frontPage || !parentNode) return null
 
   return (
     <>
       <ChapterNavContainer
         onClick={viewFrontPage}
-        isActive={activeNode.uid === frontPage.uid}
+        isActive={parentNode.uid === frontPage.uid}
       >
         {frontPage.title}
       </ChapterNavContainer>
@@ -71,7 +71,7 @@ export const PageNavigation = ({
                   book_id
                 )
               }}
-              isActive={activeNode.uid === chapter.uid}
+              isActive={parentNode.uid === chapter.uid}
             >
               <div className="page-nav-title">{chapter.title}</div>
               <div className="page-nav-icon">
@@ -102,7 +102,7 @@ export const PageNavigation = ({
                           book_id
                         )
                       }}
-                      isActive={activeNode.uid === section.uid}
+                      isActive={parentNode.uid === section.uid}
                     >
                       {section.title}
                     </SectionNavContainer>

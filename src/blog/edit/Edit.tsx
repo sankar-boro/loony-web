@@ -348,7 +348,7 @@ const ActivityComponent = ({
   blog_id: number
   isMobile: boolean
 }) => {
-  const { activeNode, childNodes, modal, nodeIndex, mainNode, addNode } = state
+  const { parentNode, childNodes, modal, nodeIndex, mainNode, addNode } = state
 
   if (!mainNode) return null
 
@@ -370,20 +370,22 @@ const ActivityComponent = ({
           identity: delete_node.identity,
           uid: delete_node.uid,
         },
-        update_node: updateNode ? {
-          parent_id: delete_node.parent_id,
-          uid: updateNode ? updateNode.uid : null,
-        } : null,
+        update_node: updateNode
+          ? {
+              parent_id: delete_node.parent_id,
+              uid: updateNode ? updateNode.uid : null,
+            }
+          : null,
       }
 
       axiosInstance
         .post(`/blog/delete/node`, submitData)
         .then(() => {
-          const nodesAfterDelete = deleteBlogNode(
-            childNodes,
-            submitData
+          const nodesAfterDelete = deleteBlogNode(childNodes, submitData)
+          const orderChildNodes = orderBlogChildNodes(
+            nodesAfterDelete,
+            mainNode
           )
-          const orderChildNodes = orderBlogChildNodes(nodesAfterDelete, mainNode)
 
           setState({
             ...state,
@@ -407,7 +409,8 @@ const ActivityComponent = ({
     (data: DocNode) => {
       const nodesAfterUpdate = updateBlogNode(childNodes, data)
       const orderChildNodes = orderBlogChildNodes(nodesAfterUpdate, mainNode)
-      const newChildNodes = orderChildNodes.length >= 2 ? orderChildNodes.slice(1) : []
+      const newChildNodes =
+        orderChildNodes.length >= 2 ? orderChildNodes.slice(1) : []
 
       setState({
         ...state,
@@ -419,17 +422,17 @@ const ActivityComponent = ({
   )
 
   const addNodeCbFn = (data: AppendNodeResponse) => {
-      if (!addNode) return
-      const nodesAfterAdd = appendBlogNode(childNodes, addNode, data, mainNode)
-      const newChildNodes = orderBlogChildNodes(nodesAfterAdd, mainNode)
-      
-      setState({
-        ...state,
-        addNode: null,
-        childNodes: newChildNodes,
-        modal: '',
-      })
-    }
+    if (!addNode) return
+    const nodesAfterAdd = appendBlogNode(childNodes, addNode, data, mainNode)
+    const newChildNodes = orderBlogChildNodes(nodesAfterAdd, mainNode)
+
+    setState({
+      ...state,
+      addNode: null,
+      childNodes: newChildNodes,
+      modal: '',
+    })
+  }
 
   const onCancel = useCallback(() => {
     setState({

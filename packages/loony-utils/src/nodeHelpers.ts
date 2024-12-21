@@ -1,14 +1,15 @@
 import { axiosInstance } from 'loony-query'
 import {
-  ApiDispatchAction,
+  PageStatusDispatchAction,
   AppendNodeResponse,
   EditBookAction,
   EditBlogAction,
   GroupedNodesById,
   ReadBlogAction,
   ReadBookAction,
+  Status,
 } from 'loony-types'
-import { ApiEvent, DocNode } from 'loony-types'
+import { DocNode } from 'loony-types'
 
 const resetState = {
   editNode: null,
@@ -19,12 +20,12 @@ const resetState = {
 export const getBlogNodes = (
   blog_id: number,
   setState: ReadBlogAction | EditBlogAction,
-  setStatus: ApiDispatchAction
+  setStatus: PageStatusDispatchAction
 ) => {
   const url = `/blog/get/nodes?blog_id=${blog_id}`
   setStatus((prevState) => ({
     ...prevState,
-    status: ApiEvent.INIT,
+    status: Status.FETCHING,
   }))
   axiosInstance.get(url).then(({ data }) => {
     const unOrderedChildNodes = data.child_nodes
@@ -40,7 +41,7 @@ export const getBlogNodes = (
     }))
     setStatus((prevState) => ({
       ...prevState,
-      status: ApiEvent.SUCCESS,
+      status: Status.VIEW_PAGE,
     }))
   })
 }
@@ -48,9 +49,14 @@ export const getBlogNodes = (
 export const getChapters = (
   book_id: number,
   setState: ReadBookAction | EditBookAction,
-  setStatus: ApiDispatchAction
+  setStatus: PageStatusDispatchAction
 ) => {
-  axiosInstance.get(`/book/get/nodes?book_id=${book_id}`).then(({ data }) => {
+  const url = `/book/get/nodes?book_id=${book_id}`
+  setStatus((prevState) => ({
+    ...prevState,
+    status: Status.FETCHING,
+  }))
+  axiosInstance.get(url).then(({ data }) => {
     const bookTree = orderBookNodes(data.child_nodes, data.main_node, [])
     const mainNode = bookTree && bookTree[0]
     const __nodes101 = bookTree.slice(1)
@@ -59,13 +65,13 @@ export const getChapters = (
       ...prevState,
       mainNode,
       frontPage: mainNode,
-      activeNode: mainNode,
+      parentNode: mainNode,
       nodes101: __nodes101,
       page_id: mainNode.uid,
     }))
     setStatus((prevStatus) => ({
       ...prevStatus,
-      status: ApiEvent.SUCCESS,
+      status: Status.VIEW_PAGE,
     }))
   })
 }
@@ -73,7 +79,7 @@ export const getChapters = (
 export const getSections = (
   __node: DocNode,
   setState: ReadBookAction | EditBookAction,
-  setStatus: ApiDispatchAction,
+  setStatus: PageStatusDispatchAction,
   allSectionsByPageId: GroupedNodesById,
   book_id: number
 ) => {
@@ -85,13 +91,13 @@ export const getSections = (
       ...resetState,
       activeSectionsByPageId: allSectionsByPageId[uid],
       page_id: __node.uid,
-      activeNode: __node,
+      parentNode: __node,
       activeSubSectionsBySectionId: [],
     }))
   } else {
     setStatus((prevState) => ({
       ...prevState,
-      status: ApiEvent.START,
+      status: Status.FETCHING,
     }))
     axiosInstance.get(url).then(({ data }) => {
       const res = orderNodes(data, __node)
@@ -104,12 +110,12 @@ export const getSections = (
           [uid]: res,
         },
         page_id: __node.uid,
-        activeNode: __node,
+        parentNode: __node,
         activeSubSectionsBySectionId: [],
       }))
       setStatus((prevState) => ({
         ...prevState,
-        status: ApiEvent.SUCCESS,
+        status: Status.VIEW_PAGE,
       }))
     })
   }
@@ -118,7 +124,7 @@ export const getSections = (
 export const getSubSections = (
   __node: DocNode,
   setState: ReadBookAction | EditBookAction,
-  setStatus: ApiDispatchAction,
+  setStatus: PageStatusDispatchAction,
   allSubSectionsBySectionId: GroupedNodesById,
   book_id: number
 ) => {
@@ -130,12 +136,12 @@ export const getSubSections = (
       ...resetState,
       activeSubSectionsBySectionId: allSubSectionsBySectionId[uid],
       section_id: __node.uid,
-      activeNode: __node,
+      parentNode: __node,
     }))
   } else {
     setStatus((prevState) => ({
       ...prevState,
-      status: ApiEvent.START,
+      status: Status.FETCHING,
     }))
     axiosInstance.get(url).then(({ data }) => {
       const res = orderNodes(data, __node)
@@ -148,11 +154,11 @@ export const getSubSections = (
           [uid]: res,
         },
         section_id: __node.uid,
-        activeNode: __node,
+        parentNode: __node,
       }))
       setStatus((prevState) => ({
         ...prevState,
-        status: ApiEvent.SUCCESS,
+        status: Status.VIEW_PAGE,
       }))
     })
   }

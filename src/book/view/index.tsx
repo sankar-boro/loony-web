@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { extractImage, getChapters } from 'loony-utils'
 
@@ -6,7 +6,7 @@ import { useParams, Link } from 'react-router-dom'
 import { timeAgo } from 'loony-utils'
 import { PageNavigation } from '../common/pageNavigation.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
-import { AppRouteProps, ReadBookState } from 'loony-types'
+import { AppRouteProps, DocNode, ReadBookState } from 'loony-types'
 import { ApiEvent } from 'loony-types'
 import BasicMarkdown from '../../components/BasicMarkdown.tsx'
 
@@ -27,7 +27,7 @@ const View = ({
 
   const [state, setState] = useState<ReadBookState>({
     mainNode: null,
-    activeNode: null,
+    parentNode: null,
     page_id: null,
     section_id: null,
     activeSectionsByPageId: [],
@@ -48,23 +48,18 @@ const View = ({
     setState({
       ...state,
       page_id: state.frontPage?.uid || null,
-      activeNode: frontPage,
+      parentNode: frontPage,
       activeSubSectionsBySectionId: [],
     })
   }
 
   const {
-    activeNode,
+    parentNode,
     nodes101,
     frontPage,
     activeSubSectionsBySectionId,
     mainNode,
   } = state
-
-  const image = useMemo(
-    () => extractImage(activeNode?.images),
-    [activeNode?.images]
-  )
 
   if (
     pageStatus.status === ApiEvent.INIT ||
@@ -72,7 +67,7 @@ const View = ({
   )
     return <PageLoadingContainer isMobile={isMobile} />
 
-  if (!activeNode || !mainNode || !frontPage) return null
+  if (!parentNode || !mainNode || !frontPage) return null
 
   return (
     <div className="book-container">
@@ -150,52 +145,11 @@ const View = ({
             minHeight: '100vh',
           }}
         >
-          <div
-            style={{
-              marginBottom: 24,
-            }}
-          >
-            <div className="page-heading">{activeNode.title}</div>
-            {image && image.name ? (
-              <div style={{ width: '100%', borderRadius: 5 }}>
-                <img
-                  src={`${base_url}/api/book/${book_id}/720/${image.name}`}
-                  alt=""
-                  width="100%"
-                />
-              </div>
-            ) : null}
-
-            {activeNode.identity === 100 ? (
-              <div
-                className="flex-row"
-                style={{
-                  marginTop: 5,
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <div
-                  className="avatar"
-                  style={{
-                    width: 30,
-                    height: 30,
-                    backgroundColor: '#ccc',
-                    borderRadius: 30,
-                    marginRight: 10,
-                  }}
-                ></div>
-                <div style={{ fontSize: 12 }}>
-                  <div className="username">Sankar Boro</div>
-                  <div className="username">{timeAgo(mainNode.created_at)}</div>
-                </div>
-              </div>
-            ) : null}
-
-            <div style={{ marginTop: 16 }}>
-              <BasicMarkdown source={activeNode.content} />
-            </div>
-          </div>
+          <ParentNode
+            parentNode={parentNode}
+            book_id={book_id as number}
+            base_url={base_url}
+          />
           {activeSubSectionsBySectionId.map((subSectionNode) => {
             const nodeImage = extractImage(subSectionNode.images)
             return (
@@ -220,6 +174,66 @@ const View = ({
          * @Page End
          */}
         {isDesktop ? <RightBookContainer book_id={book_id as number} /> : null}
+      </div>
+    </div>
+  )
+}
+
+const ParentNode = ({
+  parentNode,
+  book_id,
+  base_url,
+}: {
+  parentNode: DocNode
+  book_id: number
+  base_url: string
+}) => {
+  const image = extractImage(parentNode.images)
+  return (
+    <div
+      style={{
+        marginBottom: 24,
+      }}
+    >
+      <div className="page-heading">{parentNode.title}</div>
+      {image && image.name ? (
+        <div style={{ width: '100%', borderRadius: 5 }}>
+          <img
+            src={`${base_url}/api/book/${book_id}/720/${image.name}`}
+            alt=""
+            width="100%"
+          />
+        </div>
+      ) : null}
+
+      {parentNode.identity === 100 ? (
+        <div
+          className="flex-row"
+          style={{
+            marginTop: 5,
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            className="avatar"
+            style={{
+              width: 30,
+              height: 30,
+              backgroundColor: '#ccc',
+              borderRadius: 30,
+              marginRight: 10,
+            }}
+          ></div>
+          <div style={{ fontSize: 12 }}>
+            <div className="username">Sankar Boro</div>
+            <div className="username">{timeAgo(parentNode.created_at)}</div>
+          </div>
+        </div>
+      ) : null}
+
+      <div style={{ marginTop: 16 }}>
+        <BasicMarkdown source={parentNode.content} />
       </div>
     </div>
   )

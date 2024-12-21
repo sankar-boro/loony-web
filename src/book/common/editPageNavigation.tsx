@@ -13,10 +13,9 @@ import { getSections, getSubSections } from 'loony-utils'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 import {
-  ApiDispatchAction,
-  DocNode,
   EditBookAction,
   EditBookState,
+  PageStatusDispatchAction,
   VoidReturnFunction,
 } from 'loony-types'
 
@@ -41,15 +40,13 @@ const Button = ({
 export const PageNavigation = ({
   setState,
   setStatus,
-  nodes101,
   state,
   book_id,
   isMobile,
   viewFrontPage,
 }: {
   setState: EditBookAction
-  setStatus: ApiDispatchAction
-  nodes101: DocNode[]
+  setStatus: PageStatusDispatchAction
   state: EditBookState
   book_id: number
   isMobile: boolean
@@ -59,18 +56,19 @@ export const PageNavigation = ({
     page_id,
     activeSectionsByPageId,
     frontPage,
-    activeNode,
+    parentNode,
     allSectionsByPageId,
     allSubSectionsBySectionId,
+    nodes101,
   } = state
 
-  if (!frontPage || !activeNode) return null
+  if (!frontPage || !parentNode) return null
 
   return (
     <>
       <ChapterNavContainer
         onClick={viewFrontPage}
-        isActive={activeNode.uid === frontPage.uid}
+        isActive={parentNode.uid === frontPage.uid}
       >
         {frontPage.title}
       </ChapterNavContainer>
@@ -101,7 +99,7 @@ export const PageNavigation = ({
                   book_id
                 )
               }}
-              isActive={activeNode.uid === chapter.uid}
+              isActive={parentNode.uid === chapter.uid}
             >
               <div style={{ width: '90%' }}>{chapter.title}</div>
               <div>
@@ -153,7 +151,7 @@ export const PageNavigation = ({
                             book_id
                           )
                         }}
-                        isActive={activeNode.uid === section.uid}
+                        isActive={parentNode.uid === section.uid}
                       >
                         {section.title}
                       </SectionNavContainer>

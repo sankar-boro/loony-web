@@ -57,7 +57,7 @@ export default function EditComponent({
           const __nodes101 = deleteOne(nodes101, res.data)
           setState({
             ...state,
-            activeNode: frontPage,
+            parentNode: frontPage,
             nodes101: __nodes101,
             deleteNode: null,
             modal: '',
@@ -68,15 +68,15 @@ export default function EditComponent({
             activeSectionsByPageId,
             res.data
           )
-          let __activeNode = null
+          let __parentNode = null
           nodes101.forEach((x) => {
             if (x.uid === page_id) {
-              __activeNode = x
+              __parentNode = x
             }
           })
           console.log({
             ...state,
-            activeNode: __activeNode,
+            parentNode: __parentNode,
             activeSectionsByPageId: __activeSectionsByPageId,
             allSectionsByPageId: {
               ...allSectionsByPageId,
@@ -87,7 +87,7 @@ export default function EditComponent({
           })
           setState({
             ...state,
-            activeNode: __activeNode,
+            parentNode: __parentNode,
             activeSectionsByPageId: __activeSectionsByPageId,
             allSectionsByPageId: {
               ...allSectionsByPageId,
@@ -135,21 +135,21 @@ export default function EditComponent({
 
   const editPage = (data: DocNode) => {
     if (!editNode) return
-    let __activeNode = null
+    let __parentNode = null
     const __nodes101 = nodes101.map((n) => {
       if (n.uid === editNode.uid) {
         const t = {
           ...n,
           ...data,
         }
-        __activeNode = t
+        __parentNode = t
         return t
       }
       return n
     })
     setState({
       ...state,
-      activeNode: __activeNode,
+      parentNode: __parentNode,
       nodes101: __nodes101,
       modal: '',
     })
@@ -173,7 +173,7 @@ export default function EditComponent({
         ...allSectionsByPageId,
         [page_id as number]: __activeSectionsByPageId,
       },
-      activeNode: __activeSection,
+      parentNode: __activeSection,
       modal: '',
       editNode: null,
     })
@@ -203,14 +203,14 @@ export default function EditComponent({
   }
 
   const updateFrontPage = (data: DocNode) => {
-    const __activeNode = {
+    const __parentNode = {
       ...frontPage,
       ...data,
     }
     setState({
       ...state,
-      activeNode: __activeNode,
-      page_id: __activeNode.uid,
+      parentNode: __parentNode,
+      page_id: __parentNode.uid,
       modal: '',
     })
   }
@@ -239,7 +239,7 @@ export default function EditComponent({
     const __nodes101 = appendChapters(nodes101, topNode, data)
     setState({
       ...state,
-      activeNode: data.new_node,
+      parentNode: data.new_node,
       nodes101: __nodes101,
       modal: '',
     })
@@ -260,7 +260,7 @@ export default function EditComponent({
     setState({
       ...state,
       section_id: newActiveNode.uid,
-      activeNode: newActiveNode,
+      parentNode: newActiveNode,
       activeSectionsByPageId: __activeSectionsByPageId,
       allSectionsByPageId: {
         ...allSectionsByPageId,

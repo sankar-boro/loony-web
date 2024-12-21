@@ -14,12 +14,16 @@ import { PageNodeSettings } from './pageNodeSettings.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import AppContext from '../../context/AppContext.tsx'
 import {
+  PageStatusDispatchAction,
   AppRouteProps,
-  DocStatus,
+  BooleanDispatchAction,
+  DocNode,
   EditBookAction,
   EditBookState,
+  PageStatus,
+  Status,
+  VoidReturnFunction,
 } from 'loony-types'
-import { ApiEvent } from 'loony-types'
 
 export default function Edit({
   mobileNavOpen,
@@ -32,16 +36,15 @@ export default function Edit({
   const book_id = bookId && parseInt(bookId)
   const navigate = useNavigate()
   const { setAppContext } = useContext(AppContext)
-  const [status, setStatus] = useState({
-    status: ApiEvent.INIT,
+  const [status, setStatus] = useState<PageStatus>({
+    status: Status.IDLE,
     error: '',
   })
   const [state, setState] = useState<EditBookState>({
-    status: DocStatus.None,
     mainNode: null,
     childNodes: [],
     modal: '',
-    activeNode: null,
+    parentNode: null,
     topNode: null,
     page_id: null,
     section_id: null,
@@ -67,58 +70,33 @@ export default function Edit({
     setState({
       ...state,
       page_id: state?.frontPage?.uid || null,
-      activeNode: state?.frontPage,
+      parentNode: state?.frontPage,
       editNode: null,
       addNode: null,
       modal: '',
     })
   }
 
-  if (status.status === ApiEvent.INIT || status.status === ApiEvent.START)
+  if (status.status === Status.IDLE || status.status === Status.FETCHING)
     return <PageLoadingContainer isMobile={isMobile} />
 
-  const { activeNode, nodes101, activeSubSectionsBySectionId, mainNode } = state
+  const { parentNode, activeSubSectionsBySectionId, mainNode } = state
 
-  if (!activeNode || !mainNode) return null
-
-  const image = extractImage(activeNode.images)
+  if (!parentNode || !mainNode) return null
 
   return (
     <div className="book-container">
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         {isMobile && mobileNavOpen ? (
-          <div
-            style={{
-              width: '100%',
-              backgroundColor: 'rgb(0,0,0,0.5)',
-              zIndex: 10,
-              height: '105vh',
-            }}
-            onClick={() => {
-              setMobileNavOpen(false)
-            }}
-          >
-            <div
-              style={{
-                width: 320,
-                backgroundColor: 'white',
-                maxWidth: '100%',
-                height: '100%',
-                position: 'relative',
-                padding: 12,
-              }}
-            >
-              <PageNavigation
-                setState={setState}
-                setStatus={setStatus}
-                nodes101={nodes101}
-                state={state}
-                book_id={book_id as number}
-                isMobile={isMobile}
-                viewFrontPage={viewFrontPage}
-              />
-            </div>
-          </div>
+          <MobileNav
+            state={state}
+            setState={setState}
+            book_id={book_id as number}
+            isMobile={isMobile}
+            setMobileNavOpen={setMobileNavOpen}
+            setStatus={setStatus}
+            viewFrontPage={viewFrontPage}
+          />
         ) : null}
         {!isMobile ? (
           <div
@@ -131,7 +109,6 @@ export default function Edit({
             <PageNavigation
               setState={setState}
               setStatus={setStatus}
-              nodes101={nodes101}
               state={state}
               book_id={book_id as number}
               isMobile={isMobile}
@@ -163,53 +140,10 @@ export default function Edit({
                 minHeight: '100vh',
               }}
             >
-              <div>
-                <div className="page-heading">{activeNode.title}</div>
-                {image && image.name ? (
-                  <div style={{ width: '100%', borderRadius: 5 }}>
-                    <img
-                      src={`${base_url}/api/book/${book_id}/720/${image.name}`}
-                      alt=""
-                      width="100%"
-                    />
-                  </div>
-                ) : null}
-
-                {activeNode.identity === 100 ? (
-                  <div
-                    className="flex-row"
-                    style={{
-                      marginTop: 5,
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <div
-                      className="avatar"
-                      style={{
-                        width: 30,
-                        height: 30,
-                        backgroundColor: '#ccc',
-                        borderRadius: 30,
-                        marginRight: 10,
-                      }}
-                    ></div>
-                    <div style={{ fontSize: 12 }}>
-                      <div className="username">Sankar Boro</div>
-                      <div className="username">
-                        {timeAgo(mainNode.created_at)}
-                      </div>
-                    </div>
-                  </div>
-                ) : null}
-                <div style={{ marginTop: 16 }}>
-                  <Suspense fallback={<div>Loading component...</div>}>
-                    <MarkdownPreview source={activeNode.content} />
-                  </Suspense>
-                </div>
-              </div>
-              <PageNodeSettings
-                node={activeNode}
+              <ParentNode
+                parentNode={parentNode}
+                book_id={book_id as number}
+                base_url={base_url}
                 setState={setState}
                 state={state}
               />
@@ -239,7 +173,7 @@ export default function Edit({
                         </div>
                       ) : null}
                       <Suspense fallback={<div>Loading component...</div>}>
-                        <MarkdownPreview source={activeNode.content} />
+                        <MarkdownPreview source={parentNode.content} />
                       </Suspense>
                       <PageNodeSettings
                         node={subSectionNode}
@@ -263,6 +197,124 @@ export default function Edit({
         )}
       </div>
     </div>
+  )
+}
+
+const MobileNav = ({
+  state,
+  setState,
+  book_id,
+  isMobile,
+  setMobileNavOpen,
+  setStatus,
+  viewFrontPage,
+}: {
+  state: EditBookState
+  setState: EditBookAction
+  book_id: number
+  isMobile: boolean
+  setMobileNavOpen: BooleanDispatchAction
+  setStatus: PageStatusDispatchAction
+  viewFrontPage: VoidReturnFunction
+}) => {
+  return (
+    <>
+      <div
+        style={{
+          width: '100%',
+          backgroundColor: 'rgb(0,0,0,0.5)',
+          zIndex: 10,
+          height: '105vh',
+        }}
+        onClick={() => {
+          setMobileNavOpen(false)
+        }}
+      >
+        <div
+          style={{
+            width: 320,
+            backgroundColor: 'white',
+            maxWidth: '100%',
+            height: '100%',
+            position: 'relative',
+            padding: 12,
+          }}
+        >
+          <PageNavigation
+            setState={setState}
+            setStatus={setStatus}
+            state={state}
+            book_id={book_id as number}
+            isMobile={isMobile}
+            viewFrontPage={viewFrontPage}
+          />
+        </div>
+      </div>
+    </>
+  )
+}
+
+const ParentNode = ({
+  parentNode,
+  book_id,
+  base_url,
+  setState,
+  state,
+}: {
+  parentNode: DocNode
+  book_id: number
+  base_url: string
+  setState: EditBookAction
+  state: EditBookState
+}) => {
+  const image = extractImage(parentNode.images)
+  return (
+    <>
+      <div>
+        <div className="page-heading">{parentNode.title}</div>
+        {image && image.name ? (
+          <div style={{ width: '100%', borderRadius: 5 }}>
+            <img
+              src={`${base_url}/api/book/${book_id}/720/${image.name}`}
+              alt=""
+              width="100%"
+            />
+          </div>
+        ) : null}
+
+        {parentNode.identity === 100 ? (
+          <div
+            className="flex-row"
+            style={{
+              marginTop: 5,
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <div
+              className="avatar"
+              style={{
+                width: 30,
+                height: 30,
+                backgroundColor: '#ccc',
+                borderRadius: 30,
+                marginRight: 10,
+              }}
+            ></div>
+            <div style={{ fontSize: 12 }}>
+              <div className="username">Sankar Boro</div>
+              <div className="username">{timeAgo(parentNode.created_at)}</div>
+            </div>
+          </div>
+        ) : null}
+        <div style={{ marginTop: 16 }}>
+          <Suspense fallback={<div>Loading component...</div>}>
+            <MarkdownPreview source={parentNode.content} />
+          </Suspense>
+        </div>
+      </div>
+      <PageNodeSettings node={parentNode} setState={setState} state={state} />
+    </>
   )
 }
 
