@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import { Link, useNavigate } from 'react-router-dom'
 
 const handleSignUpError = (data: object | string): string[] => {

@@ -16,7 +16,7 @@ import { LuFileWarning } from 'react-icons/lu'
 import { MdAdd, MdOutlineEdit, MdContentCopy } from 'react-icons/md'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import AddNode from '../../form/addNode.tsx'
 import EditNodeForm from '../../form/editNode.tsx'
 import ConfirmAction from '../../components/ConfirmAction.tsx'

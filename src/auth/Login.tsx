@@ -1,44 +1,47 @@
 import { useContext, useState } from 'react'
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import { AuthContext } from '../context/AuthContext.tsx'
 import { Link, useNavigate } from 'react-router-dom'
-import { AuthStatus } from 'loony-types'
+import { AuthStatus, NotificationContextProps } from 'loony-types'
+import { handleError } from 'loony-api'
 
-const handleLoginError = (err: any): string[] => {
-  const errs: string[] = []
-  if (typeof err === 'string') {
-    return [err]
-  }
+const Login = ({
+  isMobile,
+  notificationContext,
+}: {
+  isMobile: boolean
+  notificationContext: NotificationContextProps
+}) => {
+  const [state, setState] = useState({
+    username: '',
+    password: '',
+  })
 
-  if (typeof err === 'object') {
-    if (err && err.response && err.response.data) {
-      return [err.response.data]
-    }
-  }
-  return errs
-}
-
-const Login = ({ isMobile }: { isMobile: boolean }) => {
-  const [email, setemail] = useState('')
-  const [password, setPassword] = useState('')
   const [viewPassword, setViewPassword] = useState(false)
-  const [loginError, setLoginError] = useState<string[]>([])
+  const [loginError, setLoginError] = useState('')
+
   const navigate = useNavigate()
 
   const authContext = useContext(AuthContext)
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setState({ ...state, [name]: value })
+  }
+
   const onLogin = () => {
-    if (!email) {
-      setLoginError(['email is required.'])
+    if (!state.username) {
+      setLoginError('email is required.')
       return
     }
-    if (!password) {
-      setLoginError(['Password is required.'])
+    if (!state.password) {
+      setLoginError('Password is required.')
       return
     }
+
     const formData = {
-      email,
-      password,
+      email: state.username,
+      password: state.password,
     }
     axiosInstance
       .post('/auth/login', formData)
@@ -50,9 +53,18 @@ const Login = ({ isMobile }: { isMobile: boolean }) => {
         navigate('/', {})
       })
       .catch((err) => {
-        setLoginError(handleLoginError(err))
+        const __err = handleError(err)
+        notificationContext.setNotificationContext((prevState) => ({
+          ...prevState,
+          alert: {
+            title: 'Error',
+            content: __err,
+            status: '',
+          },
+        }))
       })
   }
+
   return (
     <div className="book-container">
       <div className="login-body">
@@ -119,27 +131,19 @@ const Login = ({ isMobile }: { isMobile: boolean }) => {
                 <h2 style={{ fontSize: 26, color: '#4da6ff' }}>Log in</h2>
               </div>
 
-              {loginError.length > 0 ? (
+              {loginError ? (
                 <div style={{ marginBottom: 24 }}>
-                  {loginError.map((e, i) => {
-                    return (
-                      <div key={i} style={{ color: 'red' }}>
-                        * {e}
-                      </div>
-                    )
-                  })}
+                  <div style={{ color: 'red' }}>{loginError}</div>
                 </div>
               ) : null}
 
               <div className="input-container">
                 <label htmlFor="phone">Email/Username</label>
                 <input
+                  name="username"
                   type="text"
-                  id="phone"
-                  value={email}
-                  onChange={(e) => {
-                    setemail(e.target.value)
-                  }}
+                  value={state.username}
+                  onChange={handleChange}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       onLogin()
@@ -153,12 +157,10 @@ const Login = ({ isMobile }: { isMobile: boolean }) => {
               <div className="input-container">
                 <label htmlFor="password">Password</label>
                 <input
+                  name="password"
                   type={viewPassword ? 'text' : 'password'}
-                  id="password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value)
-                  }}
+                  value={state.password}
+                  onChange={handleChange}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       onLogin()

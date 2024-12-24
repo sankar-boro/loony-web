@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import { AuthStatus } from 'loony-types'
 import PageLoader from '../components/PageLoader.tsx'
 import { Auth, AuthContextProps } from 'loony-types'

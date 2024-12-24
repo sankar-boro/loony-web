@@ -9,7 +9,7 @@ import PrivacyPolicyIcon from '../assets/svgs/PrivacyPolicy.svg'
 import UserAgreementIcon from '../assets/svgs/UserAgreement.svg'
 
 import { BasicMenuNavContainer } from '../components/Containers.tsx'
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import { JsonObject, AuthContextProps, AuthStatus } from 'loony-types'
 
 const Followed = ({ authContext }: { authContext: AuthContextProps }) => {

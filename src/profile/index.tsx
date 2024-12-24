@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Navbar from './Navbar.tsx'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import CardLoader from '../components/CardLoader.tsx'
 import { timeAgo } from 'loony-utils'
 import { User, AppRouteProps, DocNode } from 'loony-types'

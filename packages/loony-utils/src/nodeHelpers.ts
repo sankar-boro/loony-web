@@ -1,4 +1,4 @@
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import {
   PageStatusDispatchAction,
   AppendNodeResponse,

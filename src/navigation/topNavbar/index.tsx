@@ -4,7 +4,7 @@ import { Link, useNavigate, NavigateFunction } from 'react-router-dom'
 import { useCallback, useContext } from 'react'
 import { AuthStatus } from 'loony-types'
 import { AuthContext } from '../../context/AuthContext.tsx'
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import type {
   Auth,
   BooleanDispatchAction,

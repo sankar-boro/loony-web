@@ -7405,9 +7405,9 @@ longest-streak@^3.0.0:
   resolved "https://registry.npmjs.org/longest-streak/-/longest-streak-3.1.0.tgz"
   integrity sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==
 
-"loony-query@file:/home/sankar/code/sankar/loony-web/packages/loony-query":
+"loony-api@file:/home/sankar/code/sankar/loony-web/packages/loony-api":
   version "0.1.0"
-  resolved "file:packages/loony-query"
+  resolved "file:packages/loony-api"
   dependencies:
     axios "^1.6.7"
 

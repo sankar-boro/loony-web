@@ -1,7 +1,7 @@
 import { useState, lazy, Suspense } from 'react'
 import { Routes, Route as ReactRoute } from 'react-router-dom'
 
-import { CREATE_BOOK, CREATE_BLOG } from 'loony-query'
+import { CREATE_BOOK, CREATE_BLOG } from 'loony-api'
 import {
   NotificationContextProps,
   AppContextProps,

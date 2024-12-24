@@ -1,6 +1,6 @@
 import { useState, useCallback, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import { AuthContext } from '../context/AuthContext.tsx'
 import { TextArea } from './components/TextArea.tsx'
 import { MenuNavContainer } from '../components/Containers.tsx'

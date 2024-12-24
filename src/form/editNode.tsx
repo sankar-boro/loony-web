@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import { AuthContext } from '../context/AuthContext.tsx'
 import { TextArea } from './components/TextArea.tsx'
 import type {

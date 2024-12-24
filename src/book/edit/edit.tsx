@@ -1,5 +1,5 @@
 import { deleteOne } from 'loony-utils'
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import AddNode from '../../form/addNode.tsx'
 import EditDocument from '../../form/editNode.tsx'
 import ConfirmAction from '../../components/ConfirmAction.tsx'

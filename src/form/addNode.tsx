@@ -1,5 +1,5 @@
 import { useState, useCallback, useContext } from 'react'
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import { AuthContext } from '../context/AuthContext.tsx'
 import { TextArea } from './components/TextArea.tsx'
 import 'react-easy-crop/react-easy-crop.css'
@@ -108,16 +108,16 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
             setFormImages={setFormImages}
           />
           <div className="form-section">
-              <label>Tags</label>
-              <br />
-              <input
-                type="text"
-                value={tags}
-                onChange={(e) => {
-                  setTags(e.target.value)
-                }}
-              />
-            </div>
+            <label>Tags</label>
+            <br />
+            <input
+              type="text"
+              value={tags}
+              onChange={(e) => {
+                setTags(e.target.value)
+              }}
+            />
+          </div>
         </div>
       </div>
       <div

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { parseImage, timeAgo } from 'loony-utils'
 

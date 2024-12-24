@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { axiosInstance } from 'loony-query'
+import { axiosInstance } from 'loony-api'
 import Cropper, { Area } from 'react-easy-crop'
 import type {
   AfterImageSelect,
