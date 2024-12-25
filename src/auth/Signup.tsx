@@ -1,63 +1,38 @@
 import { useState } from 'react'
-import { axiosInstance } from 'loony-api'
+import { onSignup } from 'loony-api'
 import { Link, useNavigate } from 'react-router-dom'
+import { NotificationContextProps } from 'loony-types'
 
-const handleSignUpError = (data: object | string): string[] => {
-  return [data as string]
-  // const errs: string[] = []
-  // if (typeof data === 'string') {
-  //   return [data]
-  // }
+const Signup = ({
+  isMobile,
+  notificationContext,
+}: {
+  isMobile: boolean
+  notificationContext: NotificationContextProps
+}) => {
+  const [formData, setFormData] = useState({
+    fname: '',
+    lname: '',
+    username: '',
+    password: '',
+  })
 
-  // if (typeof data === 'object') {
-  //   // for (const key in data) {
-  //     // const x = data[key][0];
-  //     // if (x.code && x.code === "length") {
-  //     //   errs.push(`${key} length cannot be less then ${x.params.min}.`);
-  //     // } else {
-  //     //   errs.push(x.code);
-  //     // }
-  //   }
-  // }
-  // return errs
-}
-
-const Signup = ({ isMobile }: { isMobile: boolean }) => {
-  const [fname, setFname] = useState('')
-  const [lname, setLname] = useState('')
-  const [email, setemail] = useState('')
-  const [password, setPassword] = useState('')
   const [viewPassword, setViewPassword] = useState(false)
-  const [signupError, setSignupError] = useState<string[]>([])
+  const [formError, setFormError] = useState('')
   const navigate = useNavigate()
 
-  const signup = () => {
-    if (!fname) {
-      setSignupError(['Please enter your first name.'])
-      return
-    }
-    if (!email) {
-      setSignupError(['Phone number is required.'])
-      return
-    }
-    if (!password) {
-      setSignupError(['Please enter password.'])
-      return
-    }
-    const formData = {
-      fname,
-      lname,
-      email,
-      password,
-    }
-    axiosInstance
-      .post('/auth/signup', formData)
-      .then(() => {
-        navigate('/login', {})
-      })
-      .catch((err) => {
-        setSignupError(handleSignUpError(err.response.data))
-      })
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData({ ...formData, [name]: value })
+  }
+
+  const onHandleSignup = () => {
+    onSignup({
+      formData,
+      setFormError,
+      notificationContext,
+      navigate,
+    })
   }
 
   return (
@@ -124,30 +99,25 @@ const Signup = ({ isMobile }: { isMobile: boolean }) => {
               >
                 <h2 style={{ fontSize: 26, color: '#4da6ff' }}>Sign Up</h2>
               </div>
-              {signupError.length > 0 ? (
+
+              {formError ? (
                 <div style={{ marginBottom: 24 }}>
-                  {signupError.map((e, i) => {
-                    return (
-                      <div key={i} style={{ color: 'red' }}>
-                        * {e}
-                      </div>
-                    )
-                  })}
+                  <div style={{ color: 'red' }}>{formError}</div>
                 </div>
               ) : null}
+
               <div className="input-container">
                 <label htmlFor="fname">First Name</label>
                 <input
+                  name="fname"
                   id="fname"
                   type="text"
                   required
-                  value={fname}
-                  onChange={(e) => {
-                    setFname(e.target.value)
-                  }}
+                  value={formData.fname}
+                  onChange={handleChange}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      signup()
+                      onHandleSignup()
                     }
                   }}
                   autoFocus
@@ -156,16 +126,15 @@ const Signup = ({ isMobile }: { isMobile: boolean }) => {
               <div className="input-container">
                 <label htmlFor="lname">Last Name</label>
                 <input
+                  name="lname"
                   id="lname"
                   type="text"
                   required
-                  value={lname}
-                  onChange={(e) => {
-                    setLname(e.target.value)
-                  }}
+                  value={formData.lname}
+                  onChange={handleChange}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      signup()
+                      onHandleSignup()
                     }
                   }}
                 />
@@ -174,16 +143,15 @@ const Signup = ({ isMobile }: { isMobile: boolean }) => {
               <div className="input-container">
                 <label htmlFor="phone">Email or Phone Number</label>
                 <input
+                  name="username"
                   id="phone"
                   type="text"
                   required
-                  value={email}
-                  onChange={(e) => {
-                    setemail(e.target.value)
-                  }}
+                  value={formData.username}
+                  onChange={handleChange}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      signup()
+                      onHandleSignup()
                     }
                   }}
                 />
@@ -193,14 +161,13 @@ const Signup = ({ isMobile }: { isMobile: boolean }) => {
                 <label htmlFor="password">Password</label>
                 <input
                   type={viewPassword ? 'text' : 'password'}
+                  name="password"
                   id="password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value)
-                  }}
+                  value={formData.password}
+                  onChange={handleChange}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      signup()
+                      onHandleSignup()
                     }
                   }}
                   required
@@ -224,7 +191,7 @@ const Signup = ({ isMobile }: { isMobile: boolean }) => {
               </div>
               <button
                 style={{ width: '100%' }}
-                onClick={signup}
+                onClick={onHandleSignup}
                 className="btn-md blue-bg"
               >
                 Sign Up

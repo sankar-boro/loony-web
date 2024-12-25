@@ -1,9 +1,8 @@
 import { useContext, useState } from 'react'
-import { axiosInstance } from 'loony-api'
-import { AuthContext } from '../context/AuthContext.tsx'
 import { Link, useNavigate } from 'react-router-dom'
-import { AuthStatus, NotificationContextProps } from 'loony-types'
-import { handleError } from 'loony-api'
+import { NotificationContextProps } from 'loony-types'
+import { onLogin } from 'loony-api'
+import { AuthContext } from '../context/AuthContext.tsx'
 
 const Login = ({
   isMobile,
@@ -12,13 +11,13 @@ const Login = ({
   isMobile: boolean
   notificationContext: NotificationContextProps
 }) => {
-  const [state, setState] = useState({
+  const [formData, setFormData] = useState({
     username: '',
     password: '',
   })
 
   const [viewPassword, setViewPassword] = useState(false)
-  const [loginError, setLoginError] = useState('')
+  const [formError, setFormError] = useState('')
 
   const navigate = useNavigate()
 
@@ -26,43 +25,17 @@ const Login = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setState({ ...state, [name]: value })
+    setFormData({ ...formData, [name]: value })
   }
 
-  const onLogin = () => {
-    if (!state.username) {
-      setLoginError('email is required.')
-      return
-    }
-    if (!state.password) {
-      setLoginError('Password is required.')
-      return
-    }
-
-    const formData = {
-      email: state.username,
-      password: state.password,
-    }
-    axiosInstance
-      .post('/auth/login', formData)
-      .then(({ data }) => {
-        authContext.setAuthContext({
-          status: AuthStatus.AUTHORIZED,
-          user: data,
-        })
-        navigate('/', {})
-      })
-      .catch((err) => {
-        const __err = handleError(err)
-        notificationContext.setNotificationContext((prevState) => ({
-          ...prevState,
-          alert: {
-            title: 'Error',
-            content: __err,
-            status: '',
-          },
-        }))
-      })
+  const onHandleLogin = () => {
+    onLogin({
+      formData,
+      setFormError,
+      authContext,
+      notificationContext,
+      navigate,
+    })
   }
 
   return (
@@ -131,9 +104,9 @@ const Login = ({
                 <h2 style={{ fontSize: 26, color: '#4da6ff' }}>Log in</h2>
               </div>
 
-              {loginError ? (
+              {formError ? (
                 <div style={{ marginBottom: 24 }}>
-                  <div style={{ color: 'red' }}>{loginError}</div>
+                  <div style={{ color: 'red' }}>{formError}</div>
                 </div>
               ) : null}
 
@@ -142,11 +115,11 @@ const Login = ({
                 <input
                   name="username"
                   type="text"
-                  value={state.username}
+                  value={formData.username}
                   onChange={handleChange}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      onLogin()
+                      onHandleLogin()
                     }
                   }}
                   required
@@ -159,11 +132,11 @@ const Login = ({
                 <input
                   name="password"
                   type={viewPassword ? 'text' : 'password'}
-                  value={state.password}
+                  value={formData.password}
                   onChange={handleChange}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      onLogin()
+                      onHandleLogin()
                     }
                   }}
                   required
@@ -188,7 +161,7 @@ const Login = ({
 
               <button
                 style={{ width: '100%', marginTop: 30 }}
-                onClick={onLogin}
+                onClick={onHandleLogin}
                 className="btn-md blue-bg"
               >
                 Log In
