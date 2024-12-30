@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { onSignup } from 'loony-api'
 import { Link, useNavigate } from 'react-router-dom'
 import { NotificationContextProps } from 'loony-types'
@@ -17,8 +17,12 @@ const Signup = ({
     password: '',
   })
 
-  const [viewPassword, setViewPassword] = useState(false)
-  const [formError, setFormError] = useState('')
+  const [state, setState] = useState({
+    viewPassword: false,
+    formError: '',
+    state: 1,
+  })
+
   const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,14 +30,14 @@ const Signup = ({
     setFormData({ ...formData, [name]: value })
   }
 
-  const onHandleSignup = () => {
+  const onHandleSignup = useCallback(() => {
     onSignup({
       formData,
-      setFormError,
+      setState,
       notificationContext,
       navigate,
     })
-  }
+  }, [state.state])
 
   return (
     <div className="book-container">
@@ -100,9 +104,9 @@ const Signup = ({
                 <h2 style={{ fontSize: 26, color: '#4da6ff' }}>Sign Up</h2>
               </div>
 
-              {formError ? (
+              {state.formError ? (
                 <div style={{ marginBottom: 24 }}>
-                  <div style={{ color: 'red' }}>{formError}</div>
+                  <div style={{ color: 'red' }}>{state.formError}</div>
                 </div>
               ) : null}
 
@@ -160,7 +164,7 @@ const Signup = ({
               <div className="input-container">
                 <label htmlFor="password">Password</label>
                 <input
-                  type={viewPassword ? 'text' : 'password'}
+                  type={state.viewPassword ? 'text' : 'password'}
                   name="password"
                   id="password"
                   value={formData.password}
@@ -183,7 +187,10 @@ const Signup = ({
                     style={{ width: 16, height: 16 }}
                     type="checkbox"
                     onChange={() => {
-                      setViewPassword(!viewPassword)
+                      setState((prevState) => ({
+                        ...prevState,
+                        viewPassword: !prevState.viewPassword,
+                      }))
                     }}
                   />
                   <span style={{ marginLeft: 10 }}>Show password</span>

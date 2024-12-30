@@ -58,25 +58,40 @@ export const onLogin = async ({
 
 export const onSignup = async ({
   formData,
-  setFormError,
+  setState,
   notificationContext,
   navigate,
 }: {
   formData: { fname: string; lname: string; username: string; password: string }
-  setFormError: React.Dispatch<React.SetStateAction<string>>
+  setState: React.Dispatch<
+    React.SetStateAction<{
+      viewPassword: boolean
+      formError: string
+      state: number
+    }>
+  >
   notificationContext: NotificationContextProps
   navigate: NavigateFunction
 }) => {
   if (!formData.fname) {
-    setFormError('Please enter your first name.')
+    setState((prevState) => ({
+      ...prevState,
+      formError: 'Please enter your first name.',
+    }))
     return
   }
   if (!formData.username) {
-    setFormError('Phone number is required.')
+    setState((prevState) => ({
+      ...prevState,
+      formError: 'Phone number is required.',
+    }))
     return
   }
   if (!formData.password) {
-    setFormError('Please enter password.')
+    setState((prevState) => ({
+      ...prevState,
+      formError: 'Please enter password.',
+    }))
     return
   }
 
