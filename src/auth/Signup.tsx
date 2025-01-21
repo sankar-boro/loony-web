@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { onSignup } from 'loony-api'
 import { Link, useNavigate } from 'react-router-dom'
 import { NotificationContextProps } from 'loony-types'
@@ -30,14 +30,13 @@ const Signup = ({
     setFormData({ ...formData, [name]: value })
   }
 
-  const onHandleSignup = useCallback(() => {
+  const onHandleSignup = () =>
     onSignup({
       formData,
       setState,
       notificationContext,
       navigate,
     })
-  }, [state.state])
 
   return (
     <div className="book-container">
