@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext, Suspense } from 'react'
-import MarkdownPreview from '@uiw/react-markdown-preview'
 
 import { extractImage, timeAgo } from 'loony-utils'
 import { RxReader } from 'react-icons/rx'
@@ -13,6 +12,8 @@ import { PageNavigation } from '../common/editPageNavigation.tsx'
 import { PageNodeSettings } from './pageNodeSettings.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import AppContext from '../../context/AppContext.tsx'
+import BasicMarkdown from '../../components/BasicMarkdown.tsx'
+
 import {
   PageStatusDispatchAction,
   AppRouteProps,
@@ -173,7 +174,7 @@ export default function Edit({
                         </div>
                       ) : null}
                       <Suspense fallback={<div>Loading component...</div>}>
-                        <MarkdownPreview source={parentNode.content} />
+                        <BasicMarkdown source={parentNode.content} />
                       </Suspense>
                       <PageNodeSettings
                         node={subSectionNode}
@@ -309,7 +310,7 @@ const ParentNode = ({
         ) : null}
         <div style={{ marginTop: 16 }}>
           <Suspense fallback={<div>Loading component...</div>}>
-            <MarkdownPreview source={parentNode.content} />
+            <BasicMarkdown source={parentNode.content} />
           </Suspense>
         </div>
       </div>
