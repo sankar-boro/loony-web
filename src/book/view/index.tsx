@@ -64,7 +64,6 @@ const View = ({
     return <PageLoadingContainer isMobile={isMobile} />
 
   if (!parentNode || !mainNode || !frontPage) return null
-
   return (
     <div className="book-container">
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -95,7 +94,6 @@ const View = ({
             >
               <PageNavigation
                 setState={setState}
-                setStatus={setStatus}
                 nodes101={nodes101}
                 state={state}
                 book_id={book_id as number}
@@ -115,7 +113,6 @@ const View = ({
           >
             <PageNavigation
               setState={setState}
-              setStatus={setStatus}
               nodes101={nodes101}
               state={state}
               book_id={book_id as number}

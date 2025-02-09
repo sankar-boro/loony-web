@@ -85,6 +85,7 @@ export default function Edit({
 
   if (!parentNode || !mainNode) return null
 
+  console.log(activeSubSectionsBySectionId)
   return (
     <div className="book-container">
       <div style={{ display: 'flex', flexDirection: 'row' }}>

@@ -15,8 +15,8 @@ import { Link } from 'react-router-dom'
 import {
   EditBookAction,
   EditBookState,
-  PageStatusDispatchAction,
   VoidReturnFunction,
+  // PageStatusDispatchAction,
 } from 'loony-types'
 
 const Button = ({
@@ -39,18 +39,18 @@ const Button = ({
 
 export const PageNavigation = ({
   setState,
-  setStatus,
   state,
   book_id,
   isMobile,
   viewFrontPage,
-}: {
+}: // setStatus,
+{
   setState: EditBookAction
-  setStatus: PageStatusDispatchAction
   state: EditBookState
   book_id: number
   isMobile: boolean
   viewFrontPage: VoidReturnFunction
+  // setStatus: PageStatusDispatchAction
 }) => {
   const {
     page_id,
@@ -91,13 +91,7 @@ export const PageNavigation = ({
             <PageNavContainer
               onClick={(e) => {
                 e.stopPropagation()
-                getSections(
-                  chapter,
-                  setState,
-                  setStatus,
-                  allSectionsByPageId,
-                  book_id
-                )
+                getSections(chapter, setState, allSectionsByPageId, book_id)
               }}
               isActive={parentNode.uid === chapter.uid}
             >
@@ -146,7 +140,6 @@ export const PageNavigation = ({
                           getSubSections(
                             section,
                             setState,
-                            setStatus,
                             allSubSectionsBySectionId,
                             book_id
                           )

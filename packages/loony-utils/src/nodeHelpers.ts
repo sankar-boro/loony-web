@@ -79,9 +79,9 @@ export const getChapters = (
 export const getSections = (
   __node: DocNode,
   setState: ReadBookAction | EditBookAction,
-  setStatus: PageStatusDispatchAction,
   allSectionsByPageId: GroupedNodesById,
   book_id: number
+  // setStatus: PageStatusDispatchAction,
 ) => {
   const { uid } = __node
   const url = `/book/get/sections?book_id=${book_id}&page_id=${uid}`
@@ -95,10 +95,6 @@ export const getSections = (
       activeSubSectionsBySectionId: [],
     }))
   } else {
-    setStatus((prevState) => ({
-      ...prevState,
-      status: PageStatus.FETCHING,
-    }))
     axiosInstance.get(url).then(({ data }) => {
       const res = orderNodes(data, __node)
       setState((prevState) => ({
@@ -113,10 +109,6 @@ export const getSections = (
         parentNode: __node,
         activeSubSectionsBySectionId: [],
       }))
-      setStatus((prevState) => ({
-        ...prevState,
-        status: PageStatus.VIEW_PAGE,
-      }))
     })
   }
 }
@@ -124,9 +116,9 @@ export const getSections = (
 export const getSubSections = (
   __node: DocNode,
   setState: ReadBookAction | EditBookAction,
-  setStatus: PageStatusDispatchAction,
   allSubSectionsBySectionId: GroupedNodesById,
   book_id: number
+  // setStatus: PageStatusDispatchAction,
 ) => {
   const { uid } = __node
   const url = `/book/get/sub_sections?book_id=${book_id}&page_id=${uid}`
@@ -139,10 +131,6 @@ export const getSubSections = (
       parentNode: __node,
     }))
   } else {
-    setStatus((prevState) => ({
-      ...prevState,
-      status: PageStatus.FETCHING,
-    }))
     axiosInstance.get(url).then(({ data }) => {
       const res = orderNodes(data, __node)
       setState((prevState) => ({
@@ -155,10 +143,6 @@ export const getSubSections = (
         },
         section_id: __node.uid,
         parentNode: __node,
-      }))
-      setStatus((prevState) => ({
-        ...prevState,
-        status: PageStatus.VIEW_PAGE,
       }))
     })
   }

@@ -12,31 +12,31 @@ import { getSections, getSubSections } from 'loony-utils'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 import {
-  PageStatusDispatchAction,
   ReadBookAction,
   ReadBookState,
   DocNode,
   EditBookAction,
   EditBookState,
   VoidReturnFunction,
+  // PageStatusDispatchAction,
 } from 'loony-types'
 
 export const PageNavigation = ({
   setState,
-  setStatus,
   nodes101,
   state,
   book_id,
   isMobile,
   viewFrontPage,
-}: {
+}: // setStatus,
+{
   setState: ReadBookAction | EditBookAction
-  setStatus: PageStatusDispatchAction
   nodes101: DocNode[]
   state: ReadBookState | EditBookState
   book_id: number
   isMobile: boolean
   viewFrontPage: VoidReturnFunction
+  // setStatus: PageStatusDispatchAction
 }) => {
   const {
     page_id,
@@ -63,13 +63,7 @@ export const PageNavigation = ({
             <PageNavContainer
               onClick={(e) => {
                 e.stopPropagation()
-                getSections(
-                  chapter,
-                  setState,
-                  setStatus,
-                  allSectionsByPageId,
-                  book_id
-                )
+                getSections(chapter, setState, allSectionsByPageId, book_id)
               }}
               isActive={parentNode.uid === chapter.uid}
             >
@@ -97,7 +91,6 @@ export const PageNavigation = ({
                         getSubSections(
                           section,
                           setState,
-                          setStatus,
                           allSubSectionsBySectionId,
                           book_id
                         )
