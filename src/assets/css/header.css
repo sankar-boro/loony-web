@@ -11,7 +11,7 @@
   --hover: #f7f7f7;
   --hover-dark: #eeeeee;
   --red: #ff4949;
-  --LG-to-right: linear-gradient(to right, #ffffff, #f6f8fc);
+  --LG-to-right: linear-gradient(to right, #ffffff, #ffffff);
   --nav-text: #6f6f6f;
 }
 
@@ -31,7 +31,7 @@ html,
 body,
 #root {
   height: 100%;
-  background-color: #f6f8fc;
+  background-color: #ffffff;
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -86,7 +86,7 @@ hr {
   --border: #dfdfdf;
   --hover: #f7f7f7;
   --hover-dark: #eeeeee;
-  --LG-to-right: linear-gradient(to right, #ffffff, #f6f8fc);
+  --LG-to-right: linear-gradient(to right, #ffffff, #ffffff);
   --nav-text: #6f6f6f;
 }
 
@@ -107,7 +107,7 @@ html {
 html,
 body,
 #root {
-  background-color: #f6f8fc;
+  background-color: #ffffff;
 }
 @-ms-viewport {
   width: device-width;

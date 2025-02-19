@@ -6,6 +6,9 @@ import { TextArea } from './components/TextArea.tsx'
 import { MenuNavContainer } from '../components/Containers.tsx'
 import { GoHome } from 'react-icons/go'
 import { PiBookLight, PiNoteThin } from 'react-icons/pi'
+import MarkdownPreview from '@uiw/react-markdown-preview'
+// import MathsMarkdown from '../../components/MathsMarkdown.tsx'
+
 import { PiNotePencilThin } from 'react-icons/pi'
 import 'react-easy-crop/react-easy-crop.css'
 import AppContext from '../context/AppContext.tsx'
@@ -81,7 +84,6 @@ export default function CreateNewDocument({
         <div
           style={{
             width: '20%',
-            borderRight: '1px solid #ccc',
             paddingBottom: 100,
           }}
         >
@@ -117,9 +119,8 @@ export default function CreateNewDocument({
       )}
       <div
         style={{
-          width: isMobile ? '100%' : '65%',
+          width: isMobile ? '100%' : '40%',
           paddingBottom: 100,
-          background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
         }}
       >
         <div style={{ fontSize: 24, fontWeight: 'bold', padding: 45 }}>
@@ -190,6 +191,19 @@ export default function CreateNewDocument({
               Cancel
             </button>
           </div>
+        </div>
+
+        <div style={{ padding: 24 }}>
+          {
+            theme === 11 ? (
+              formContent
+            ) : theme === 24 ? (
+              <MarkdownPreview
+                source={formContent}
+                wrapperElement={{ 'data-color-mode': 'light' }}
+              />
+            ) : theme === 41 ? null : null // <MathsMarkdown source={formContent} />
+          }
         </div>
       </div>
     </div>

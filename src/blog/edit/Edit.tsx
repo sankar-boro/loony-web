@@ -107,7 +107,6 @@ export default function RenderComponent({
               paddingLeft: '5%',
               paddingRight: '5%',
               paddingBottom: '10vh',
-              background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
               minHeight: '110vh',
             }}
           >

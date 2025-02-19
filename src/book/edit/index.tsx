@@ -138,7 +138,6 @@ export default function Edit({
                 paddingLeft: '5%',
                 paddingRight: '5%',
                 paddingBottom: 100,
-                background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
                 minHeight: '100vh',
               }}
             >

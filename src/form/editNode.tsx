@@ -100,7 +100,6 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
       style={{
         width: isMobile ? '100%' : '60%',
         paddingLeft: '5%',
-        background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
         minHeight: '100vh',
         paddingBottom: '10vh',
       }}

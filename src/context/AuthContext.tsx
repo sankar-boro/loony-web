@@ -61,7 +61,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               width: '100%',
               paddingTop: 15,
               paddingLeft: '5%',
-              background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
               paddingBottom: 50,
             }}
           >

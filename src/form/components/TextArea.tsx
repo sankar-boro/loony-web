@@ -1,5 +1,5 @@
-import MathsMarkdown from '../../components/MathsMarkdown.tsx'
-import MarkdownPreview from '@uiw/react-markdown-preview'
+// import MathsMarkdown from '../../components/MathsMarkdown.tsx'
+// import MarkdownPreview from '@uiw/react-markdown-preview'
 
 type TextAreaProps = {
   formContent: string
@@ -64,8 +64,8 @@ export const TextArea = (props: TextAreaProps) => {
           onChange={(e) => {
             setFormContent(e.target.value)
           }}
-          rows={24}
-          cols={120}
+          rows={5}
+          cols={80}
           value={formContent}
           style={{
             border: 'none',
@@ -73,7 +73,7 @@ export const TextArea = (props: TextAreaProps) => {
           placeholder="Body"
         />
 
-        <div style={{ flex: 1, minHeight: 100, marginTop: 24, padding: 5 }}>
+        {/* <div style={{ flex: 1, minHeight: 100, marginTop: 24, padding: 5 }}>
           {theme === 11 ? (
             formContent
           ) : theme === 24 ? (
@@ -84,7 +84,7 @@ export const TextArea = (props: TextAreaProps) => {
           ) : theme === 41 ? (
             <MathsMarkdown source={formContent} />
           ) : null}
-        </div>
+        </div> */}
       </div>
     </div>
   )

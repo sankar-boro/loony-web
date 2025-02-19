@@ -86,7 +86,6 @@ const View = (props: AppRouteProps) => {
             paddingTop: 15,
             paddingLeft: '5%',
             paddingRight: '5%',
-            background: 'linear-gradient(to right, #ffffff, #F6F8FC)',
             marginBottom: 24,
             minHeight: '110vh',
           }}
