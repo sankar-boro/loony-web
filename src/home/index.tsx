@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback } from 'react'
 import { axiosInstance } from 'loony-api'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
-import { parseImage, timeAgo } from 'loony-utils'
-
-import CardLoader from '../components/CardLoader.tsx'
-import Navbar from './Navbar.tsx'
 import { AppRouteProps, DocNode, AuthStatus } from 'loony-types'
+
+import Navbar from './Navbar.tsx'
+import Card from '../components/Card.tsx'
+import CardLoader from '../components/CardLoader.tsx'
 
 // Utility function to handle data fetching based on auth status
 const fetchData = async (
@@ -58,7 +58,7 @@ const Home = (props: AppRouteProps) => {
 
   return (
     <div className="home-container flex-row">
-      {!isMobile ? <Navbar {...props} /> : null}
+      {!isMobile ? <Navbar /> : null}
       <div
         style={{
           width: isMobile ? '100%' : '60%',
@@ -127,71 +127,4 @@ const Documents = ({
   )
 }
 
-const Card = ({
-  node,
-  navigate,
-  nodeType,
-  base_url,
-}: {
-  node: DocNode
-  navigate: NavigateFunction
-  nodeType: string
-  base_url: string
-}) => {
-  const image = parseImage(node.images)
-  return (
-    <div className="card" key={node.uid}>
-      <div
-        className="card-image"
-        style={{
-          backgroundImage:
-            image && image.name
-              ? `url("${base_url}/api/${nodeType}/${node.uid}/340/${image.name}")`
-              : undefined,
-          overflow: 'hidden',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          borderTopLeftRadius: 3,
-          borderTopRightRadius: 3,
-        }}
-        onClick={() => {
-          navigate(`/view/${nodeType}/${node.uid}`)
-        }}
-      />
-      <div className="card-body">
-        <div
-          className="card-title cursor"
-          onClick={() => {
-            navigate(`/view/${nodeType}/${node.uid}`)
-          }}
-        >
-          {node.title}
-        </div>
-        <div
-          className="flex-row"
-          style={{
-            marginTop: 5,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <div
-            className="avatar"
-            style={{
-              width: 30,
-              height: 30,
-              backgroundColor: '#ccc',
-              borderRadius: 30,
-              marginRight: 10,
-            }}
-          ></div>
-          <div style={{ fontSize: 12 }}>
-            <div className="username">Sankar Boro</div>
-            <div className="username">{timeAgo(node.created_at)}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
 export default Home
