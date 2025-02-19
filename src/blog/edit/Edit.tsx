@@ -29,8 +29,7 @@ import {
   AuthContextProps,
 } from 'loony-types'
 import { DocNode, DocStatus } from 'loony-types'
-
-// const MathsMarkdown = lazy(() => import('../../components/MathsMarkdown.tsx'))
+import NodeInfo from '../../components/NodeInfo.tsx'
 
 export default function RenderComponent({
   props,
@@ -122,29 +121,7 @@ export default function RenderComponent({
                 </div>
               ) : null}
 
-              <div
-                className="flex-row"
-                style={{
-                  marginTop: 5,
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <div
-                  className="avatar"
-                  style={{
-                    width: 30,
-                    height: 30,
-                    backgroundColor: '#ccc',
-                    borderRadius: 30,
-                    marginRight: 10,
-                  }}
-                ></div>
-                <div style={{ fontSize: 12 }}>
-                  <div className="username">Sankar Boro</div>
-                  <div className="username">{timeAgo(mainNode.created_at)}</div>
-                </div>
-              </div>
+              <NodeInfo node={mainNode} />
 
               <div style={{ marginTop: 16 }}>
                 {/* {mainNode.theme === 11 ? (
@@ -171,7 +148,7 @@ export default function RenderComponent({
                 onClick={() => {
                   setState({
                     ...state,
-                    status: DocStatus.CreateNode,
+                    // status: DocStatus.CreateNode,
                     addNode: mainNode,
                     modal: 'add_node',
                   })
@@ -187,7 +164,7 @@ export default function RenderComponent({
                 onClick={() => {
                   setState({
                     ...state,
-                    status: DocStatus.DeleteNode,
+                    // status: DocStatus.DeleteNode,
                     editNode: mainNode,
                     modal: 'edit_node',
                   })
@@ -404,21 +381,18 @@ const ActivityComponent = ({
     })
   }, [])
 
-  const editFnCallback = useCallback(
-    (data: DocNode) => {
-      const nodesAfterUpdate = updateBlogNode(childNodes, data)
-      const orderChildNodes = orderBlogChildNodes(nodesAfterUpdate, mainNode)
-      const newChildNodes =
-        orderChildNodes.length >= 2 ? orderChildNodes.slice(1) : []
+  const editFnCallback = useCallback((data: DocNode) => {
+    const nodesAfterUpdate = updateBlogNode(childNodes, data)
+    const orderChildNodes = orderBlogChildNodes(nodesAfterUpdate, mainNode)
+    const newChildNodes =
+      orderChildNodes.length >= 2 ? orderChildNodes.slice(1) : []
 
-      setState({
-        ...state,
-        childNodes: newChildNodes,
-        modal: '',
-      })
-    },
-    [state.status]
-  )
+    setState({
+      ...state,
+      childNodes: newChildNodes,
+      modal: '',
+    })
+  }, [])
 
   const addNodeCbFn = (data: AppendNodeResponse) => {
     if (!addNode) return

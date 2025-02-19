@@ -4,9 +4,9 @@ import { GoHome } from 'react-icons/go'
 import { IoMdTime } from 'react-icons/io'
 import { AiOutlineLike } from 'react-icons/ai'
 
-import contentPolicy from '../assets/svgs/ContentPolicy.svg'
-import privacyPolicy from '../assets/svgs/PrivacyPolicy.svg'
-import userAgreement from '../assets/svgs/UserAgreement.svg'
+import ContentPolicy from '../assets/svgs/ContentPolicy.svg'
+import PrivacyPolicy from '../assets/svgs/PrivacyPolicy.svg'
+import UserAgreement from '../assets/svgs/UserAgreement.svg'
 
 export default function Navbar() {
   return (
@@ -45,19 +45,19 @@ export default function Navbar() {
               width: 16,
             }}
           >
-            <img src={contentPolicy} />
+            <ContentPolicy />
           </span>
           <div className="page-nav-title">Content Policy</div>
         </BasicMenuNavContainer>
         <BasicMenuNavContainer>
           <span style={{ marginRight: 10, height: 16, width: 16 }}>
-            <img src={privacyPolicy} />
+            <PrivacyPolicy />
           </span>
           <div className="page-nav-title">Privacy Policy</div>
         </BasicMenuNavContainer>
         <BasicMenuNavContainer>
           <span style={{ marginRight: 10, height: 16, width: 16 }}>
-            <img src={userAgreement} />
+            <UserAgreement />
           </span>
           <div className="page-nav-title">User Agreement</div>
         </BasicMenuNavContainer>

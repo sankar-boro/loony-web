@@ -155,13 +155,12 @@ button:hover {
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
-  min-width: 0;
   word-wrap: break-word;
   background-color: #fff;
   background-clip: border-box;
-  /* border: 1px solid rgba(0, 0, 0, 0.125); */
   border-radius: 0.25rem;
 }
+
 .empty-card {
   height: 200px;
   display: flex;
@@ -198,12 +197,12 @@ button:hover {
   border-radius: 30px;
   margin-right: 10px;
 }
-.card-info .uinfo .uname {
+.uinfo .uname {
   font-size: 14px;
   color: #4d4d4d;
   font-weight: 500;
 }
-.card-info .uinfo .time {
+.uinfo .time {
   font-size: 13px;
   color: #838383;
 }
@@ -389,8 +388,9 @@ button:hover {
 }
 .menu-nav:hover,
 .menu-nav:hover {
-  background-color: white;
+  background-color: #f4f4f4;
   cursor: pointer;
+  border-radius: 5px;
 }
 .active-menu {
   background-color: var(--hover-dark);
@@ -524,7 +524,7 @@ button:hover {
 
 @media (max-width: 2560px) {
   .card {
-    width: calc(25.33% - 20px);
+    width: calc(18.33% - 20px);
   }
   .book-container,
   .form-container {
@@ -534,15 +534,24 @@ button:hover {
   .blog-container {
     width: 100%;
   }
+  .left-navbar {
+    width: 15%;
+  }
+  .documents-container {
+    width: 80%;
+  }
 }
 
 @media (max-width: 1980px) {
   .card {
-    width: calc(18.33% - 20px);
+    width: calc(28.33% - 20px);
   }
   .book-container,
   .form-container {
     width: 80%;
+  }
+  .left-navbar {
+    width: 20%;
   }
 }
 
@@ -553,6 +562,9 @@ button:hover {
   .book-container,
   .form-container {
     width: 85%;
+  }
+  .left-navbar {
+    width: 25%;
   }
 }
 
@@ -576,6 +588,9 @@ button:hover {
   .book-container,
   .form-container {
     width: 100%;
+  }
+  .left-navbar {
+    display: none;
   }
 }
 

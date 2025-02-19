@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import Navbar from './Navbar.tsx'
+import LeftNavbar from './LeftNavbar.tsx'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { axiosInstance } from 'loony-api'
-import CardLoader from '../components/CardLoader.tsx'
-import { timeAgo } from 'loony-utils'
 import { User, AppRouteProps, DocNode } from 'loony-types'
+import { EmptyBlog, EmptyBook } from '../components/EmptyCard.tsx'
+import NodeInfo from '../components/NodeInfo.tsx'
 
 const Profile = (props: AppRouteProps) => {
   const { isMobile, authContext, appContext } = props
@@ -16,7 +16,7 @@ const Profile = (props: AppRouteProps) => {
 
   return (
     <div className="book-container flex-row">
-      {!isMobile ? <Navbar /> : null}
+      {!isMobile ? <LeftNavbar /> : null}
       <div
         style={{
           width: isMobile ? '100%' : '85%',
@@ -117,11 +117,7 @@ const Blogs = ({
           gap: 16,
         }}
       >
-        {!blogs
-          ? [1, 2, 3, 4].map((key) => {
-              return <CardLoader key={key} />
-            })
-          : null}
+        {!blogs ? <EmptyBlog /> : null}
         {blogs &&
           blogs.map((node) => {
             return (
@@ -175,11 +171,7 @@ const Books = ({
           gap: 16,
         }}
       >
-        {!books
-          ? [5, 6, 7, 8].map((key) => {
-              return <CardLoader key={key} />
-            })
-          : null}
+        {!books ? <EmptyBook /> : null}
         {books &&
           books.map((node: DocNode) => {
             return (
@@ -243,29 +235,7 @@ const Card = ({
         >
           {node.title}
         </div>
-        <div
-          className="flex-row"
-          style={{
-            marginTop: 5,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <div
-            className="avatar"
-            style={{
-              width: 30,
-              height: 30,
-              backgroundColor: '#ccc',
-              borderRadius: 30,
-              marginRight: 10,
-            }}
-          ></div>
-          <div style={{ fontSize: 12 }}>
-            <div className="username">Sankar Boro</div>
-            <div className="username">{timeAgo(node.created_at)}</div>
-          </div>
-        </div>
+        <NodeInfo node={node} />
       </div>
     </div>
   )

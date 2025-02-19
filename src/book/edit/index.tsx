@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, Suspense } from 'react'
 
-import { extractImage, timeAgo } from 'loony-utils'
+import { extractImage } from 'loony-utils'
 import { RxReader } from 'react-icons/rx'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { useParams, Link, useNavigate } from 'react-router-dom'
@@ -15,7 +15,7 @@ import AppContext from '../../context/AppContext.tsx'
 import BasicMarkdown from '../../components/BasicMarkdown.tsx'
 
 import {
-  PageStatusDispatchAction,
+  // PageStatusDispatchAction,
   AppRouteProps,
   BooleanDispatchAction,
   DocNode,
@@ -25,6 +25,7 @@ import {
   VoidReturnFunction,
   PageState,
 } from 'loony-types'
+import NodeInfo from '../../components/NodeInfo.tsx'
 
 export default function Edit({
   mobileNavOpen,
@@ -85,7 +86,6 @@ export default function Edit({
 
   if (!parentNode || !mainNode) return null
 
-  console.log(activeSubSectionsBySectionId)
   return (
     <div className="book-container">
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -96,7 +96,7 @@ export default function Edit({
             book_id={book_id as number}
             isMobile={isMobile}
             setMobileNavOpen={setMobileNavOpen}
-            setStatus={setStatus}
+            // setStatus={setStatus}
             viewFrontPage={viewFrontPage}
           />
         ) : null}
@@ -110,7 +110,7 @@ export default function Edit({
           >
             <PageNavigation
               setState={setState}
-              setStatus={setStatus}
+              // setStatus={setStatus}
               state={state}
               book_id={book_id as number}
               isMobile={isMobile}
@@ -207,7 +207,7 @@ const MobileNav = ({
   book_id,
   isMobile,
   setMobileNavOpen,
-  setStatus,
+  // setStatus,
   viewFrontPage,
 }: {
   state: EditBookState
@@ -215,7 +215,7 @@ const MobileNav = ({
   book_id: number
   isMobile: boolean
   setMobileNavOpen: BooleanDispatchAction
-  setStatus: PageStatusDispatchAction
+  // setStatus: PageStatusDispatchAction
   viewFrontPage: VoidReturnFunction
 }) => {
   return (
@@ -243,7 +243,7 @@ const MobileNav = ({
         >
           <PageNavigation
             setState={setState}
-            setStatus={setStatus}
+            // setStatus={setStatus}
             state={state}
             book_id={book_id as number}
             isMobile={isMobile}
@@ -283,31 +283,7 @@ const ParentNode = ({
           </div>
         ) : null}
 
-        {parentNode.identity === 100 ? (
-          <div
-            className="flex-row"
-            style={{
-              marginTop: 5,
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <div
-              className="avatar"
-              style={{
-                width: 30,
-                height: 30,
-                backgroundColor: '#ccc',
-                borderRadius: 30,
-                marginRight: 10,
-              }}
-            ></div>
-            <div style={{ fontSize: 12 }}>
-              <div className="username">Sankar Boro</div>
-              <div className="username">{timeAgo(parentNode.created_at)}</div>
-            </div>
-          </div>
-        ) : null}
+        {parentNode.identity === 100 ? <NodeInfo node={parentNode} /> : null}
         <div style={{ marginTop: 16 }}>
           <Suspense fallback={<div>Loading component...</div>}>
             <BasicMarkdown source={parentNode.content} />

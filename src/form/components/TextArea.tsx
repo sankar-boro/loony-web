@@ -65,7 +65,7 @@ export const TextArea = (props: TextAreaProps) => {
             setFormContent(e.target.value)
           }}
           rows={5}
-          cols={80}
+          cols={100}
           value={formContent}
           style={{
             border: 'none',

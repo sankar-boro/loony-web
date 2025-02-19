@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { parseImage, timeAgo } from 'loony-utils'
 import { NavigateFunction } from 'react-router-dom'
 import { DocNode } from 'loony-types'
+import NodeInfo from './NodeInfo'
 
 const Card = ({
   node,
@@ -42,13 +45,7 @@ const Card = ({
         >
           {node.title}
         </div>
-        <div className="flex-row card-info">
-          <div className="avatar" />
-          <div className="uinfo">
-            <div className="uname">Sankar Boro</div>
-            <div className="time">{timeAgo(node.created_at)}</div>
-          </div>
-        </div>
+        <NodeInfo node={node} />
       </div>
     </div>
   )

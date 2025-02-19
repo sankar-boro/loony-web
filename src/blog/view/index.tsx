@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { extractImage, timeAgo } from 'loony-utils'
+import { extractImage } from 'loony-utils'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import { getBlogNodes } from 'loony-utils'
 import { Chapters, Edit as EditPage } from '../common/BlogPageNavigation.tsx'
 import { AppRouteProps, ReadBlogState, PageStatus } from 'loony-types'
 import BasicMarkdown from '../../components/BasicMarkdown.tsx'
+import NodeInfo from '../../components/NodeInfo.tsx'
 
 const View = (props: AppRouteProps) => {
   const { isMobile, setMobileNavOpen, mobileNavOpen, appContext, authContext } =
@@ -102,29 +103,7 @@ const View = (props: AppRouteProps) => {
               </div>
             ) : null}
 
-            <div
-              className="flex-row"
-              style={{
-                marginTop: 5,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <div
-                className="avatar"
-                style={{
-                  width: 30,
-                  height: 30,
-                  backgroundColor: '#ccc',
-                  borderRadius: 30,
-                  marginRight: 10,
-                }}
-              ></div>
-              <div style={{ fontSize: 12 }}>
-                <div className="username">Sankar Boro</div>
-                <div className="username">{timeAgo(mainNode.created_at)}</div>
-              </div>
-            </div>
+            <NodeInfo node={mainNode} />
 
             <div style={{ marginTop: 16 }}>
               <BasicMarkdown source={mainNode.content} />

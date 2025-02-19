@@ -3,11 +3,11 @@ import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { extractImage, getChapters } from 'loony-utils'
 
 import { useParams, Link } from 'react-router-dom'
-import { timeAgo } from 'loony-utils'
 import { PageNavigation } from '../common/pageNavigation.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import { AppRouteProps, DocNode, ReadBookState, PageStatus } from 'loony-types'
 import BasicMarkdown from '../../components/BasicMarkdown.tsx'
+import NodeInfo from '../../components/NodeInfo.tsx'
 
 const View = ({
   mobileNavOpen,
@@ -198,31 +198,7 @@ const ParentNode = ({
         </div>
       ) : null}
 
-      {parentNode.identity === 100 ? (
-        <div
-          className="flex-row"
-          style={{
-            marginTop: 5,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <div
-            className="avatar"
-            style={{
-              width: 30,
-              height: 30,
-              backgroundColor: '#ccc',
-              borderRadius: 30,
-              marginRight: 10,
-            }}
-          ></div>
-          <div style={{ fontSize: 12 }}>
-            <div className="username">Sankar Boro</div>
-            <div className="username">{timeAgo(parentNode.created_at)}</div>
-          </div>
-        </div>
-      ) : null}
+      {parentNode.identity === 100 ? <NodeInfo node={parentNode} /> : null}
 
       <div style={{ marginTop: 16 }}>
         <BasicMarkdown source={parentNode.content} />

@@ -11,7 +11,7 @@ import { BasicMenuNavContainer } from '../components/Containers.tsx'
 
 export default function Navbar() {
   return (
-    <div style={{ width: '15%', paddingTop: 10 }}>
+    <div className="left-navbar">
       <div style={{ width: '95%', paddingLeft: '2%', paddingRight: '2%' }}>
         <BasicMenuNavContainer>
           <span style={{ marginRight: 10, position: 'relative', top: 3 }}>

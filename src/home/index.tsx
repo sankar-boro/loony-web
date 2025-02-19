@@ -62,13 +62,7 @@ const Home = (props: AppRouteProps) => {
   return (
     <div className="home-container flex-row">
       {!isMobile ? <LeftNavbar /> : null}
-      <div
-        style={{
-          width: isMobile ? '100%' : '60%',
-          paddingRight: isMobile ? '0%' : '5%',
-          paddingLeft: isMobile ? '0%' : '5%',
-        }}
-      >
+      <div className="documents-container">
         <Documents
           navigate={navigate}
           documents={blogs}
