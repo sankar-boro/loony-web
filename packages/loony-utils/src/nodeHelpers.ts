@@ -14,7 +14,7 @@ import { DocNode } from 'loony-types'
 const resetState = {
   editNode: null,
   addNode: null,
-  modal: '',
+  form: '',
 }
 
 export const getBlogNodes = (

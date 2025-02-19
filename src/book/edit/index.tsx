@@ -45,7 +45,7 @@ export default function Edit({
   const [state, setState] = useState<EditBookState>({
     mainNode: null,
     childNodes: [],
-    modal: '',
+    form: '',
     parentNode: null,
     topNode: null,
     page_id: null,
@@ -75,7 +75,7 @@ export default function Edit({
       parentNode: state?.frontPage,
       editNode: null,
       addNode: null,
-      modal: '',
+      form: '',
     })
   }
 
@@ -120,7 +120,7 @@ export default function Edit({
         ) : null}
 
         {/* Page */}
-        {state.modal ? (
+        {state.form && (
           <EditComponent
             state={state as EditBookState}
             setState={setState as EditBookAction}
@@ -129,7 +129,8 @@ export default function Edit({
             navigate={navigate}
             isMobile={isMobile}
           />
-        ) : (
+        )}
+        {!state.form && (
           <>
             <div
               style={{
@@ -315,7 +316,7 @@ const RightBookContainer = ({
           onClick={() => {
             setState({
               ...state,
-              modal: 'delete_book',
+              form: 'delete_book',
             })
           }}
         >

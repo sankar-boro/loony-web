@@ -47,7 +47,7 @@ type ReadDocState = {
 } & CommonDocState
 
 type EditDocState = {
-  modal: string
+  form: string
   addNode: DocNode | null
   editNode: DocNode | null
   parentNode: DocNode | null

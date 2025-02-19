@@ -39,7 +39,7 @@ export const PageNodeSettings = ({
               setState({
                 ...state,
                 topNode: node,
-                modal: 'add_sub_section',
+                form: 'add_sub_section',
               })
               e.stopPropagation()
             }}
@@ -51,7 +51,7 @@ export const PageNodeSettings = ({
             setState({
               ...state,
               deleteNode: node,
-              modal: 'delete_page',
+              form: 'delete_page',
             })
             e.stopPropagation()
           }}
@@ -63,7 +63,7 @@ export const PageNodeSettings = ({
               ...state,
               topNode: node,
               editNode: node,
-              modal: 'edit_node',
+              form: 'edit_node',
             })
             e.stopPropagation()
           }}

@@ -79,7 +79,7 @@ export const PageNavigation = ({
             setState((prevState) => ({
               ...prevState,
               topNode: frontPage,
-              modal: 'add_chapter',
+              form: 'add_chapter',
             }))
           }}
           title="Add Chapter"
@@ -110,7 +110,7 @@ export const PageNavigation = ({
                   setState({
                     ...state,
                     topNode: chapter,
-                    modal: 'add_chapter',
+                    form: 'add_chapter',
                   })
                 }}
                 title="Add Chapter"
@@ -126,7 +126,7 @@ export const PageNavigation = ({
                       setState({
                         ...state,
                         topNode: chapter,
-                        modal: 'add_section',
+                        form: 'add_section',
                       })
                     }}
                   />
@@ -154,7 +154,7 @@ export const PageNavigation = ({
                           setState({
                             ...state,
                             topNode: section,
-                            modal: 'add_section',
+                            form: 'add_section',
                           })
                           e.stopPropagation()
                         }}

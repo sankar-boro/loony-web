@@ -92,7 +92,7 @@ export default function RenderComponent({
             <Chapters state={state} />
           </div>
         ) : null}
-        {state.modal ? (
+        {state.form ? (
           <ActivityComponent
             state={state}
             setState={setState}
@@ -150,7 +150,7 @@ export default function RenderComponent({
                     ...state,
                     // status: DocStatus.CreateNode,
                     addNode: mainNode,
-                    modal: 'add_node',
+                    form: 'add_node',
                   })
                 }}
                 style={{ marginRight: 10 }}
@@ -166,7 +166,7 @@ export default function RenderComponent({
                     ...state,
                     // status: DocStatus.DeleteNode,
                     editNode: mainNode,
-                    modal: 'edit_node',
+                    form: 'edit_node',
                   })
                 }}
                 style={{ marginRight: 16 }}
@@ -241,7 +241,7 @@ export default function RenderComponent({
                             setState({
                               ...state,
                               addNode: node,
-                              modal: 'add_node',
+                              form: 'add_node',
                             })
                           }}
                           style={{ marginRight: 16 }}
@@ -256,7 +256,7 @@ export default function RenderComponent({
                             setState({
                               ...state,
                               editNode: node,
-                              modal: 'edit_node',
+                              form: 'edit_node',
                             })
                           }}
                           style={{ marginRight: 16 }}
@@ -272,7 +272,7 @@ export default function RenderComponent({
                               ...state,
                               deleteNode: node,
                               nodeIndex,
-                              modal: 'delete_node',
+                              form: 'delete_node',
                             })
                           }}
                           style={{ marginRight: 16 }}
@@ -324,7 +324,7 @@ const ActivityComponent = ({
   blog_id: number
   isMobile: boolean
 }) => {
-  const { parentNode, childNodes, modal, nodeIndex, mainNode, addNode } = state
+  const { parentNode, childNodes, form, nodeIndex, mainNode, addNode } = state
 
   if (!mainNode) return null
 
@@ -366,7 +366,7 @@ const ActivityComponent = ({
           setState({
             ...state,
             childNodes: orderChildNodes,
-            modal: '',
+            form: '',
           })
         })
         .catch((err) => {
@@ -390,7 +390,7 @@ const ActivityComponent = ({
     setState({
       ...state,
       childNodes: newChildNodes,
-      modal: '',
+      form: '',
     })
   }, [])
 
@@ -403,14 +403,14 @@ const ActivityComponent = ({
       ...state,
       addNode: null,
       childNodes: newChildNodes,
-      modal: '',
+      form: '',
     })
   }
 
   const onCancel = useCallback(() => {
     setState({
       ...state,
-      modal: '',
+      form: '',
       editNode: null,
       addNode: null,
     })
@@ -418,7 +418,7 @@ const ActivityComponent = ({
 
   return (
     <>
-      {modal === 'add_node' && state.addNode ? (
+      {form === 'add_node' && state.addNode ? (
         <AddNode
           heading="Add Node"
           FnCallback={addNodeCbFn}
@@ -433,7 +433,7 @@ const ActivityComponent = ({
           parent_identity={state.addNode.uid}
         />
       ) : null}
-      {modal === 'delete_node' && state.deleteNode ? (
+      {form === 'delete_node' && state.deleteNode ? (
         <ConfirmAction
           confirmTitle="Are you sure you want to delete Node?"
           confirmAction={deleteNode}
@@ -442,7 +442,7 @@ const ActivityComponent = ({
         />
       ) : null}
 
-      {modal === 'edit_node' && state.editNode ? (
+      {form === 'edit_node' && state.editNode ? (
         <EditNodeForm
           heading="Edit Node"
           state={state}
@@ -455,7 +455,7 @@ const ActivityComponent = ({
         />
       ) : null}
 
-      {modal === 'delete_blog' ? (
+      {form === 'delete_blog' ? (
         <ConfirmAction
           confirmTitle="Are you sure you want to delete Blog?"
           confirmAction={deleteBlog}
@@ -487,7 +487,7 @@ const RightBlogContainer = ({
           onClick={() => {
             setState({
               ...state,
-              modal: 'delete_blog',
+              form: 'delete_blog',
             })
           }}
         >

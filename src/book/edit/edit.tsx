@@ -33,7 +33,7 @@ export default function EditComponent({
     editNode,
     nodes101,
     frontPage,
-    modal,
+    form,
     page_id,
     section_id,
     activeSectionsByPageId,
@@ -60,7 +60,7 @@ export default function EditComponent({
             parentNode: frontPage,
             nodes101: __nodes101,
             deleteNode: null,
-            modal: '',
+            form: '',
           })
         }
         if (deleteNode.identity === 102) {
@@ -83,7 +83,7 @@ export default function EditComponent({
               [page_id as number]: __activeSectionsByPageId,
             },
             deleteNode: null,
-            modal: '',
+            form: '',
           })
           setState({
             ...state,
@@ -94,7 +94,7 @@ export default function EditComponent({
               [page_id as number]: __activeSectionsByPageId,
             },
             deleteNode: null,
-            modal: '',
+            form: '',
           })
         }
         if (deleteNode.identity === 103) {
@@ -109,7 +109,7 @@ export default function EditComponent({
               ...allSubSectionsBySectionId,
               [section_id as number]: __activeSubSectionsBySectionId,
             },
-            modal: '',
+            form: '',
             deleteNode: null,
           })
         }
@@ -151,7 +151,7 @@ export default function EditComponent({
       ...state,
       parentNode: __parentNode,
       nodes101: __nodes101,
-      modal: '',
+      form: '',
     })
   }
   const editSection = (data: DocNode) => {
@@ -174,7 +174,7 @@ export default function EditComponent({
         [page_id as number]: __activeSectionsByPageId,
       },
       parentNode: __activeSection,
-      modal: '',
+      form: '',
       editNode: null,
     })
   }
@@ -198,7 +198,7 @@ export default function EditComponent({
         ...allSubSectionsBySectionId,
         [section_id as number]: __activeSubSectionsBySectionId,
       },
-      modal: '',
+      form: '',
     })
   }
 
@@ -211,7 +211,7 @@ export default function EditComponent({
       ...state,
       parentNode: __parentNode,
       page_id: __parentNode.uid,
-      modal: '',
+      form: '',
     })
   }
 
@@ -241,7 +241,7 @@ export default function EditComponent({
       ...state,
       parentNode: data.new_node,
       nodes101: __nodes101,
-      modal: '',
+      form: '',
     })
   }
 
@@ -266,7 +266,7 @@ export default function EditComponent({
         ...allSectionsByPageId,
         [page_id as number]: __activeSectionsByPageId,
       },
-      modal: '',
+      form: '',
     })
   }
 
@@ -288,22 +288,22 @@ export default function EditComponent({
         [section_id as number]: __activeSubSectionsBySectionId,
       },
       activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
-      modal: '',
+      form: '',
     })
   }
 
   const onCancel = useCallback(() => {
     setState({
       ...state,
-      modal: '',
+      form: '',
       editNode: null,
       addNode: null,
     })
   }, [])
-
+  console.log('Edit Page')
   return (
     <>
-      {modal && modal === 'add_chapter' && topNode ? (
+      {form && form === 'add_chapter' && topNode ? (
         <AddNode
           FnCallback={addChapterFnCb}
           url="/book/append/node"
@@ -319,7 +319,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === 'add_section' && topNode ? (
+      {form && form === 'add_section' && topNode ? (
         <AddNode
           FnCallback={addSectionFnCb}
           url="/book/append/node"
@@ -335,7 +335,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === 'add_sub_section' && topNode ? (
+      {form && form === 'add_sub_section' && topNode ? (
         <AddNode
           FnCallback={addSubSectionFnCb}
           url="/book/append/node"
@@ -351,7 +351,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === 'edit_node' ? (
+      {form && form === 'edit_node' ? (
         <EditDocument
           docIdName="book_id"
           doc_id={doc_id}
@@ -364,7 +364,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === 'delete_book' ? (
+      {form && form === 'delete_book' ? (
         <ConfirmAction
           confirmTitle="Are you sure you want to delete Book?"
           confirmAction={deleteBook}
@@ -373,7 +373,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === 'delete_page' ? (
+      {form && form === 'delete_page' ? (
         <ConfirmAction
           confirmTitle="Are you sure you want to delete Page?"
           confirmAction={onDeleteNode}
@@ -382,7 +382,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {modal && modal === 'delete_node' ? (
+      {form && form === 'delete_node' ? (
         <ConfirmAction
           confirmTitle="Are you sure you want to delete Node?"
           confirmAction={onDeleteNode}

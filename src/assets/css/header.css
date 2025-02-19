@@ -88,6 +88,8 @@ hr {
   --hover-dark: #eeeeee;
   --LG-to-right: linear-gradient(to right, #ffffff, #ffffff);
   --nav-text: #6f6f6f;
+  --border-color: #ced4da;
+  --text-color: #ced4da;
 }
 
 *,

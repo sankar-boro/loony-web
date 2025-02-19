@@ -11,6 +11,7 @@ import { getUrl } from 'loony-utils'
 import AppContext from '../context/AppContext.tsx'
 import UploadImage from './uploadImage.tsx'
 import type { Auth } from 'loony-types'
+import MarkdownPreview from '@uiw/react-markdown-preview'
 
 export default function EditNodeComponent(props: EditNodeComponentProps) {
   const {
@@ -98,14 +99,13 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
   return (
     <div
       style={{
-        width: isMobile ? '100%' : '60%',
+        width: isMobile ? '100%' : '40%',
+        paddingBottom: 100,
         paddingLeft: '5%',
-        minHeight: '100vh',
-        paddingBottom: '10vh',
       }}
     >
       <h2>{heading}</h2>
-      <div style={{}}>
+      <div>
         <div>
           {error ? (
             <div style={{ color: '#ff4949', fontWeight: 'bold', fontSize: 14 }}>
@@ -141,24 +141,37 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
             setFormImages={setImage}
           />
         </div>
-      </div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-        }}
-      >
-        <button onClick={onCloseModal} className="grey-bg">
-          Cancel
-        </button>
-        <button
-          onClick={updateNode}
-          className="black-bg"
-          style={{ marginLeft: 15 }}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+          }}
         >
-          Update
-        </button>
+          <button onClick={onCloseModal} className="grey-bg">
+            Cancel
+          </button>
+          <button
+            onClick={updateNode}
+            className="black-bg"
+            style={{ marginLeft: 15 }}
+          >
+            Update
+          </button>
+        </div>
+      </div>
+
+      <div className="form-content">
+        {
+          theme === 11 ? (
+            content
+          ) : theme === 24 ? (
+            <MarkdownPreview
+              source={content}
+              wrapperElement={{ 'data-color-mode': 'light' }}
+            />
+          ) : theme === 41 ? null : null // <MathsMarkdown source={formContent} />
+        }
       </div>
     </div>
   )

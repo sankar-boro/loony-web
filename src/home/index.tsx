@@ -3,7 +3,7 @@ import { axiosInstance } from 'loony-api'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { AppRouteProps, DocNode, AuthStatus } from 'loony-types'
 
-import LeftNavbar from './LeftNavbar.tsx'
+import LeftNavbar from '../common/LeftNavbar.tsx'
 import Card from '../components/Card.tsx'
 // import CardLoader from '../components/CardLoader.tsx'
 import { EmptyBlog, EmptyBook } from '../components/EmptyCard.tsx'
