@@ -1,46 +1,5 @@
-:root {
-  --blue: #1885f2;
-  --hover-blue: #0053a7;
-  --border: #dfdfdf;
-  --hover: #f7f7f7;
-  --hover-dark: #eeeeee;
-  --red: #ff4949;
-  --LG-to-right: linear-gradient(to right, #ffffff, #f6f8fc);
-  --nav-text: #6f6f6f;
-}
+@import url('header.css');
 
-html,
-body,
-ul,
-li {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-html,
-body,
-#root {
-  height: 100%;
-  background-color: #f6f8fc;
-}
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-p {
-  color: #2d2d2d;
-  font-size: 16px !important;
-}
-
-hr {
-  border: 0;
-  border-top: 1px solid #bbb;
-}
 /* 
 * @Containers
 */
@@ -180,6 +139,9 @@ button:hover {
   background-color: #e2e2e2;
   cursor: pointer;
 }
+.border {
+  border: 1px solid #e2e2e2;
+}
 
 /* 
 * @Card
@@ -199,6 +161,14 @@ button:hover {
   background-clip: border-box;
   /* border: 1px solid rgba(0, 0, 0, 0.125); */
   border-radius: 0.25rem;
+}
+.empty-card {
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
 }
 .page-loader {
   height: 280px;
@@ -644,3 +614,5 @@ p,
 .wmde-markdown {
   background: linear-gradient(to right, #ffffff, #f6f8fc);
 }
+
+@import url('navbar.css');

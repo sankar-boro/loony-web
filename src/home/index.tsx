@@ -3,18 +3,21 @@ import { axiosInstance } from 'loony-api'
 import { NavigateFunction, useNavigate } from 'react-router-dom'
 import { AppRouteProps, DocNode, AuthStatus } from 'loony-types'
 
-import Navbar from './Navbar.tsx'
+import LeftNavbar from './LeftNavbar.tsx'
 import Card from '../components/Card.tsx'
-import CardLoader from '../components/CardLoader.tsx'
+// import CardLoader from '../components/CardLoader.tsx'
+import { EmptyBlog, EmptyBook } from '../components/EmptyCard.tsx'
 
 // Utility function to handle data fetching based on auth status
 const fetchData = async (
   url: string,
-  setData: React.Dispatch<React.SetStateAction<DocNode[]>>
+  setData: React.Dispatch<React.SetStateAction<DocNode[] | null>>
 ) => {
   try {
     const { data } = await axiosInstance.get(url)
-    setData(data)
+    if (data.length > 0) {
+      setData(data)
+    }
   } catch (err) {
     console.error('Error fetching data:', err)
   }
@@ -25,8 +28,8 @@ const Home = (props: AppRouteProps) => {
   const { user } = authContext
   const { base_url } = appContext.env
   const navigate = useNavigate()
-  const [blogs, setBlogs] = useState<DocNode[]>([])
-  const [books, setBooks] = useState<DocNode[]>([])
+  const [blogs, setBlogs] = useState<DocNode[] | null>(null)
+  const [books, setBooks] = useState<DocNode[] | null>(null)
   const [book_page_no] = useState(1)
   const [blog_page_no] = useState(1)
 
@@ -58,7 +61,7 @@ const Home = (props: AppRouteProps) => {
 
   return (
     <div className="home-container flex-row">
-      {!isMobile ? <Navbar /> : null}
+      {!isMobile ? <LeftNavbar /> : null}
       <div
         style={{
           width: isMobile ? '100%' : '60%',
@@ -90,7 +93,7 @@ const Documents = ({
   docType,
 }: {
   navigate: NavigateFunction
-  documents: DocNode[]
+  documents: DocNode[] | null
   base_url: string
   docType: string
 }) => {
@@ -105,11 +108,9 @@ const Documents = ({
           gap: 16,
         }}
       >
-        {!documents
-          ? [1, 2, 3, 4].map((key) => {
-              return <CardLoader key={key} />
-            })
-          : null}
+        {!documents && docType === 'blog' ? <EmptyBlog /> : null}
+        {!documents && docType === 'book' ? <EmptyBook /> : null}
+
         {Array.isArray(documents) &&
           documents.map((node: DocNode) => {
             return (
