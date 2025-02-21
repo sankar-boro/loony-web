@@ -172,7 +172,7 @@ export default function Edit({
                         </div>
                       ) : null}
                       <Suspense fallback={<div>Loading component...</div>}>
-                        <BasicMarkdown source={parentNode.content} />
+                        <BasicMarkdown source={subSectionNode.content} />
                       </Suspense>
                       <PageNodeSettings
                         node={subSectionNode}
