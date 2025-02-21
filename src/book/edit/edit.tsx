@@ -31,7 +31,7 @@ export default function EditComponent({
   const {
     deleteNode,
     editNode,
-    nodes101,
+    navNodes,
     frontPage,
     form,
     page_id,
@@ -54,11 +54,11 @@ export default function EditComponent({
       .post(`/book/delete/node`, submitData)
       .then((res) => {
         if (deleteNode.identity === 101) {
-          const __nodes101 = deleteOne(nodes101, res.data)
+          const __navNodes = deleteOne(navNodes, res.data)
           setState({
             ...state,
             parentNode: frontPage,
-            nodes101: __nodes101,
+            navNodes: __navNodes,
             deleteNode: null,
             form: '',
           })
@@ -69,7 +69,7 @@ export default function EditComponent({
             res.data
           )
           let __parentNode = null
-          nodes101.forEach((x) => {
+          navNodes.forEach((x) => {
             if (x.uid === page_id) {
               __parentNode = x
             }
@@ -136,7 +136,7 @@ export default function EditComponent({
   const editPage = (data: DocNode) => {
     if (!editNode) return
     let __parentNode = null
-    const __nodes101 = nodes101.map((n) => {
+    const __navNodes = navNodes.map((n) => {
       if (n.uid === editNode.uid) {
         const t = {
           ...n,
@@ -150,7 +150,7 @@ export default function EditComponent({
     setState({
       ...state,
       parentNode: __parentNode,
-      nodes101: __nodes101,
+      navNodes: __navNodes,
       form: '',
     })
   }
@@ -236,11 +236,11 @@ export default function EditComponent({
     update_node: DocNode
   }) => {
     if (!topNode) return
-    const __nodes101 = appendChapters(nodes101, topNode, data)
+    const __navNodes = appendChapters(navNodes, topNode, data)
     setState({
       ...state,
       parentNode: data.new_node,
-      nodes101: __nodes101,
+      navNodes: __navNodes,
       form: '',
     })
   }

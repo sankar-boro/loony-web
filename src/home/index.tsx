@@ -102,8 +102,12 @@ const Documents = ({
           gap: 16,
         }}
       >
-        {!documents && docType === 'blog' ? <EmptyBlog /> : null}
-        {!documents && docType === 'book' ? <EmptyBook /> : null}
+        {!documents && docType === 'blog' ? (
+          <EmptyBlog navigate={navigate} />
+        ) : null}
+        {!documents && docType === 'book' ? (
+          <EmptyBook navigate={navigate} />
+        ) : null}
 
         {Array.isArray(documents) &&
           documents.map((node: DocNode) => {

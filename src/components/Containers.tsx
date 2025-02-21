@@ -3,17 +3,14 @@ import React from 'react'
 export const ChapterNavContainer = ({
   children,
   onClick,
-  isActive,
-}: {
+}: // isActive,
+{
   children: React.ReactNode
   onClick: React.MouseEventHandler<HTMLDivElement>
   isActive: boolean
 }) => {
   return (
-    <div
-      className={`chapter-nav ${isActive ? 'active-nav' : ''}`}
-      onClick={onClick}
-    >
+    <div className="chapter-nav" onClick={onClick}>
       {children}
     </div>
   )
@@ -62,17 +59,14 @@ export const PageNavContainer = ChapterNavContainer
 export const SectionNavContainer = ({
   children,
   onClick,
-  isActive,
-}: {
+}: // isActive,
+{
   children: React.ReactNode
   onClick: React.MouseEventHandler<HTMLDivElement>
   isActive: boolean
 }) => {
   return (
-    <div
-      className={`section-nav ${isActive ? 'active-nav' : ''}`}
-      onClick={onClick}
-    >
+    <div className="section-nav" onClick={onClick}>
       {children}
     </div>
   )

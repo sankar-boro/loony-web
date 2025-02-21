@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
-import { extractImage, getChapters } from 'loony-utils'
+import { extractImage, getNav } from 'loony-utils'
 
 import { useParams, Link } from 'react-router-dom'
 import { PageNavigation } from '../common/pageNavigation.tsx'
@@ -33,13 +33,14 @@ const View = ({
     activeSubSectionsBySectionId: [],
     allSectionsByPageId: {},
     allSubSectionsBySectionId: {},
-    nodes101: [],
+    navNodes: [],
+    childNodes: [],
     frontPage: null,
   })
 
   useEffect(() => {
     if (book_id) {
-      getChapters(book_id, setState, setStatus)
+      getNav(book_id, setState, setStatus)
     }
   }, [book_id])
 
@@ -54,7 +55,7 @@ const View = ({
 
   const {
     parentNode,
-    nodes101,
+    navNodes,
     frontPage,
     activeSubSectionsBySectionId,
     mainNode,
@@ -94,7 +95,7 @@ const View = ({
             >
               <PageNavigation
                 setState={setState}
-                nodes101={nodes101}
+                navNodes={navNodes}
                 state={state}
                 book_id={book_id as number}
                 isMobile={isMobile}
@@ -113,7 +114,7 @@ const View = ({
           >
             <PageNavigation
               setState={setState}
-              nodes101={nodes101}
+              navNodes={navNodes}
               state={state}
               book_id={book_id as number}
               isMobile={isMobile}

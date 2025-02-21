@@ -71,9 +71,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
   return (
     <div
       style={{
-        width: isMobile ? '100%' : '60%',
-        paddingLeft: '5%',
-        minHeight: '100vh',
+        width: isMobile ? '100%' : '40%',
       }}
     >
       <div style={{}}>
@@ -128,12 +126,12 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
       >
         <button
           onClick={onCancel}
-          className="grey-bg"
+          className="white-bg shadow"
           style={{ marginRight: 10 }}
         >
           Cancel
         </button>
-        <button onClick={onCreateAction} className="black-bg">
+        <button onClick={onCreateAction} className="black-bg shadow">
           Submit
         </button>
       </div>

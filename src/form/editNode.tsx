@@ -102,9 +102,11 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
         width: isMobile ? '100%' : '40%',
         paddingBottom: 100,
         paddingLeft: '5%',
+        paddingTop: '1.5em',
       }}
     >
       <h2>{heading}</h2>
+      <hr />
       <div>
         <div>
           {error ? (
@@ -148,12 +150,12 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
             justifyContent: 'flex-end',
           }}
         >
-          <button onClick={onCloseModal} className="grey-bg">
+          <button onClick={onCloseModal} className="white-bg shadow">
             Cancel
           </button>
           <button
             onClick={updateNode}
-            className="black-bg"
+            className="black-bg shadow"
             style={{ marginLeft: 15 }}
           >
             Update

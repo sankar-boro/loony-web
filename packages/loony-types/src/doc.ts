@@ -75,7 +75,8 @@ type CommonBookState = {
 export type ReadBookState = CommonBookState & {
   mainNode: DocNode | null
   parentNode: DocNode | null
-  nodes101: DocNode[]
+  navNodes: DocNode[]
+  childNodes: DocNode[]
   frontPage: DocNode | null
 }
 

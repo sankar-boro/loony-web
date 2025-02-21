@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext, Suspense } from 'react'
 
-import { extractImage } from 'loony-utils'
+import { extractImage, getNav } from 'loony-utils'
 import { RxReader } from 'react-icons/rx'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { LuFileWarning } from 'react-icons/lu'
 
-import { getChapters } from 'loony-utils'
+// import { getChapters } from 'loony-utils'
 import EditComponent from './edit.tsx'
 import { PageNavigation } from '../common/editPageNavigation.tsx'
 import { PageNodeSettings } from './pageNodeSettings.tsx'
@@ -54,7 +54,7 @@ export default function Edit({
     allSectionsByPageId: {},
     activeSubSectionsBySectionId: [],
     allSubSectionsBySectionId: {},
-    nodes101: [],
+    navNodes: [],
     frontPage: null,
     addNode: null,
     deleteNode: null,
@@ -64,7 +64,7 @@ export default function Edit({
 
   useEffect(() => {
     if (book_id) {
-      getChapters(book_id, setState, setStatus)
+      getNav(book_id, setState, setStatus)
     }
   }, [book_id])
 

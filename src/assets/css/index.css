@@ -74,19 +74,11 @@ button {
   border-radius: 20px;
 }
 .black-bg {
-  background-color: #3d3d3d;
-  color: white;
-}
-.black-bg:hover {
   background-color: #2d2d2d;
   color: white;
 }
-.grey-bg {
-  background-color: #f4f4f4;
-  color: #2d2d2d;
-}
-.grey-bg:hover {
-  background-color: #e2e2e2;
+.white-bg {
+  background-color: #ffffff;
   color: #2d2d2d;
 }
 button:hover {
@@ -359,25 +351,24 @@ button:hover {
   display: flex;
   flex-direction: row;
   padding: 2px 0px;
-  color: #6f6f6f;
   font-size: 14px;
 }
 .chapter-nav {
   display: flex;
   flex-direction: row;
   padding: 2px 0px;
-  color: #6f6f6f;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: bold;
   width: 90%;
   padding-left: 16px;
   padding-right: 16px;
 }
-.chapter-nav:hover,
+/* .chapter-nav:hover,
 .section-nav:hover {
   background-color: #f7f6ff;
   cursor: pointer;
   color: #2d2d2d;
-}
+} */
 .active-nav {
   color: #2d2d2d;
   font-size: 14px;
@@ -616,7 +607,9 @@ button:hover {
 .cursor:hover {
   cursor: pointer;
 }
-
+.shadow:hover {
+  box-shadow: var(--box-shadow);
+}
 /** Markdown */
 pre {
   background-color: #f4f4f4;

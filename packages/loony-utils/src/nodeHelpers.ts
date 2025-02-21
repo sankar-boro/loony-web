@@ -46,12 +46,12 @@ export const getBlogNodes = (
   })
 }
 
-export const getChapters = (
+export const getNav = (
   book_id: number,
   setState: ReadBookAction | EditBookAction,
   setStatus: PageStatusDispatchAction
 ) => {
-  const url = `/book/get/nodes?book_id=${book_id}`
+  const url = `/book/get/nav?doc_id=${book_id}`
   setStatus((prevState) => ({
     ...prevState,
     status: PageStatus.FETCHING,
@@ -59,14 +59,13 @@ export const getChapters = (
   axiosInstance.get(url).then(({ data }) => {
     const bookTree = orderBookNodes(data.child_nodes, data.main_node, [])
     const mainNode = bookTree && bookTree[0]
-    const __nodes101 = bookTree.slice(1)
-
+    const __navNodes = bookTree.slice(1)
     setState((prevState) => ({
       ...prevState,
       mainNode,
       frontPage: mainNode,
       parentNode: mainNode,
-      nodes101: __nodes101,
+      navNodes: __navNodes,
       page_id: mainNode.uid,
     }))
     setStatus((prevStatus) => ({
@@ -74,6 +73,132 @@ export const getChapters = (
       status: PageStatus.VIEW_PAGE,
     }))
   })
+}
+
+export const getChapters = (
+  book_id: number,
+  setState: ReadBookAction | EditBookAction,
+  setStatus: PageStatusDispatchAction
+) => {
+  const url = `/book/get/nodes?doc_id=${book_id}`
+  setStatus((prevState) => ({
+    ...prevState,
+    status: PageStatus.FETCHING,
+  }))
+  axiosInstance.get(url).then(({ data }) => {
+    const bookTree = orderBookNodes(data.child_nodes, data.main_node, [])
+    const mainNode = bookTree && bookTree[0]
+    const __navNodes = bookTree.slice(1)
+
+    setState((prevState) => ({
+      ...prevState,
+      mainNode,
+      frontPage: mainNode,
+      parentNode: mainNode,
+      navNodes: __navNodes,
+      page_id: mainNode.uid,
+    }))
+    setStatus((prevStatus) => ({
+      ...prevStatus,
+      status: PageStatus.VIEW_PAGE,
+    }))
+  })
+}
+
+export const getChapter = (
+  __node: DocNode,
+  setState: ReadBookAction | EditBookAction,
+  allSectionsByPageId: GroupedNodesById,
+  book_id: number
+  // setStatus: PageStatusDispatchAction,
+) => {
+  const { uid } = __node
+  const url = `/book/get/chapter?doc_id=${book_id}&page_id=${uid}`
+  if (allSectionsByPageId[uid]) {
+    setState((prevState) => ({
+      ...prevState,
+      ...resetState,
+      activeSectionsByPageId: allSectionsByPageId[uid],
+      page_id: __node.uid,
+      parentNode: __node,
+      activeSubSectionsBySectionId: [],
+    }))
+  } else {
+    axiosInstance.get(url).then(({ data }) => {
+      console.log('data', data)
+      let parentNode = null
+      const childNodes = []
+      data.nodes.forEach((n) => {
+        if (n.uid != uid) {
+          childNodes.push(n)
+        } else {
+          parentNode = n
+        }
+      })
+      const res = orderNodes(childNodes, parentNode)
+      console.log('res', res)
+      setState((prevState) => ({
+        ...prevState,
+        ...resetState,
+        activeSectionsByPageId: res,
+        allSectionsByPageId: {
+          ...allSectionsByPageId,
+          [uid]: res,
+        },
+        page_id: __node.uid,
+        parentNode,
+        activeSubSectionsBySectionId: [],
+      }))
+    })
+  }
+}
+
+export const getSection = (
+  __node: DocNode,
+  setState: ReadBookAction | EditBookAction,
+  allSectionsByPageId: GroupedNodesById,
+  book_id: number
+  // setStatus: PageStatusDispatchAction,
+) => {
+  const { uid } = __node
+  const url = `/book/get/section?doc_id=${book_id}&page_id=${uid}`
+  if (allSectionsByPageId[uid]) {
+    setState((prevState) => ({
+      ...prevState,
+      ...resetState,
+      activeSectionsByPageId: allSectionsByPageId[uid],
+      page_id: __node.uid,
+      parentNode: __node,
+      activeSubSectionsBySectionId: [],
+    }))
+  } else {
+    axiosInstance.get(url).then(({ data }) => {
+      console.log('data', data)
+      let parentNode = null
+      const childNodes = []
+      data.nodes.forEach((n) => {
+        if (n.uid != uid) {
+          childNodes.push(n)
+        } else {
+          parentNode = n
+        }
+      })
+      const res = orderNodes(childNodes, parentNode)
+      console.log('res', res)
+      setState((prevState) => ({
+        ...prevState,
+        ...resetState,
+        activeSectionsByPageId: res,
+        allSectionsByPageId: {
+          ...allSectionsByPageId,
+          [uid]: res,
+        },
+        page_id: __node.uid,
+        parentNode,
+        activeSubSectionsBySectionId: [],
+      }))
+    })
+  }
 }
 
 export const getSections = (
@@ -84,7 +209,7 @@ export const getSections = (
   // setStatus: PageStatusDispatchAction,
 ) => {
   const { uid } = __node
-  const url = `/book/get/sections?book_id=${book_id}&page_id=${uid}`
+  const url = `/book/get/sections?doc_id=${book_id}&page_id=${uid}`
   if (allSectionsByPageId[uid]) {
     setState((prevState) => ({
       ...prevState,
@@ -121,7 +246,7 @@ export const getSubSections = (
   // setStatus: PageStatusDispatchAction,
 ) => {
   const { uid } = __node
-  const url = `/book/get/sub_sections?book_id=${book_id}&page_id=${uid}`
+  const url = `/book/get/sub_sections?doc_id=${book_id}&page_id=${uid}`
   if (allSubSectionsBySectionId[uid]) {
     setState((prevState) => ({
       ...prevState,
@@ -385,7 +510,7 @@ function reOrderFrontPage(
   return frontPages
 }
 
-function groupWithIdentity(apiData: DocNode[]) {
+function groupWithIdentity(nodes: DocNode[]) {
   const identityGroups = {
     100: [], // Front page
     101: [], // Chapter
@@ -393,7 +518,7 @@ function groupWithIdentity(apiData: DocNode[]) {
     103: [], // Section Nodes
   }
 
-  apiData.forEach((node) => {
+  nodes.forEach((node) => {
     if (identityGroups[node.identity]) {
       identityGroups[node.identity].push(node)
     }
@@ -442,6 +567,7 @@ export const orderBookNodes = (
   mainNode?: DocNode,
   removeIds: number[] = []
 ) => {
+  mainNode.identity = 100
   let allNodes = mainNode ? [mainNode, ...nodes] : nodes
   allNodes = filterNodes(allNodes, removeIds)
   const allGroups = groupWithIdentity(allNodes)

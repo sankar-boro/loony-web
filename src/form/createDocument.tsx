@@ -128,14 +128,12 @@ export default function CreateNewDocument({
           paddingBottom: 100,
         }}
       >
-        <div style={{ fontSize: 24, fontWeight: 'bold', padding: 45 }}>
-          {title}
-        </div>
+        <h2>{title}</h2>
+        <hr />
         {error ? (
           <div
             style={{
               color: '#ff4949',
-              paddingLeft: 55,
               fontWeight: 'bold',
               fontSize: 14,
             }}
@@ -143,8 +141,8 @@ export default function CreateNewDocument({
             {error}
           </div>
         ) : null}
-        <div style={{ padding: isMobile ? 0 : '0px 45px 15px 45px' }}>
-          <div style={{ padding: '0px 10px' }}>
+        <div style={{}}>
+          <div style={{}}>
             <div className="form-section">
               <input
                 type="text"
@@ -180,7 +178,7 @@ export default function CreateNewDocument({
           </div>
           <div className="flex-row" style={{ justifyContent: 'flex-end' }}>
             <button
-              className="black-bg"
+              className="black-bg shadow"
               onClick={createDoc}
               disabled={submitting}
               style={{ marginRight: 10 }}
@@ -188,7 +186,7 @@ export default function CreateNewDocument({
               {submitting ? 'Creating...' : 'Create'}
             </button>
             <button
-              className="grey-bg"
+              className="white-bg shadow"
               data-id="/"
               onClick={routeTo}
               disabled={submitting}

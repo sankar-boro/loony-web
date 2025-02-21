@@ -1,14 +1,14 @@
-import {
-  MdOutlineKeyboardArrowRight,
-  MdOutlineKeyboardArrowDown,
-} from 'react-icons/md'
+// import {
+//   MdOutlineKeyboardArrowRight,
+//   MdOutlineKeyboardArrowDown,
+// } from 'react-icons/md'
 import {
   ChapterNavContainer,
   PageNavContainer,
   SectionNavContainer,
   SectionsNavContainer,
 } from '../../components/Containers.tsx'
-import { getSections, getSubSections } from 'loony-utils'
+import { getChapter, getSection } from 'loony-utils'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 import {
@@ -23,7 +23,7 @@ import {
 
 export const PageNavigation = ({
   setState,
-  nodes101,
+  navNodes,
   state,
   book_id,
   isMobile,
@@ -31,16 +31,17 @@ export const PageNavigation = ({
 }: // setStatus,
 {
   setState: ReadBookAction | EditBookAction
-  nodes101: DocNode[]
+  navNodes: DocNode[]
   state: ReadBookState | EditBookState
   book_id: number
   isMobile: boolean
   viewFrontPage: VoidReturnFunction
   // setStatus: PageStatusDispatchAction
 }) => {
+  console.log(navNodes)
   const {
-    page_id,
-    activeSectionsByPageId,
+    // page_id,
+    // activeSectionsByPageId,
     frontPage,
     parentNode,
     allSectionsByPageId,
@@ -57,50 +58,51 @@ export const PageNavigation = ({
       >
         {frontPage.title}
       </ChapterNavContainer>
-      {nodes101.map((chapter) => {
+      {navNodes.map((chapter) => {
         return (
           <div key={chapter.uid}>
             <PageNavContainer
               onClick={(e) => {
                 e.stopPropagation()
-                getSections(chapter, setState, allSectionsByPageId, book_id)
+                getChapter(chapter, setState, allSectionsByPageId, book_id)
               }}
               isActive={parentNode.uid === chapter.uid}
             >
               <div className="page-nav-title">{chapter.title}</div>
-              <div className="page-nav-icon">
+              {/* <div className="page-nav-icon">
                 {page_id === chapter.uid ? (
                   <MdOutlineKeyboardArrowDown size={16} color="#2d2d2d" />
                 ) : (
                   <MdOutlineKeyboardArrowRight size={16} color="#2d2d2d" />
                 )}
-              </div>
+              </div> */}
             </PageNavContainer>
             <SectionsNavContainer
               onClick={() => {
                 return
               }}
             >
-              {page_id === chapter.uid &&
-                activeSectionsByPageId.map((section) => {
-                  return (
-                    <SectionNavContainer
-                      key={section.uid}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        getSubSections(
-                          section,
-                          setState,
-                          allSubSectionsBySectionId,
-                          book_id
-                        )
-                      }}
-                      isActive={parentNode.uid === section.uid}
-                    >
-                      {section.title}
-                    </SectionNavContainer>
-                  )
-                })}
+              {/* {page_id === chapter.uid &&
+                } */}
+              {chapter.child?.map((section) => {
+                return (
+                  <SectionNavContainer
+                    key={section.uid}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      getSection(
+                        section,
+                        setState,
+                        allSubSectionsBySectionId,
+                        book_id
+                      )
+                    }}
+                    isActive={parentNode.uid === section.uid}
+                  >
+                    {section.title}
+                  </SectionNavContainer>
+                )
+              })}
             </SectionsNavContainer>
           </div>
         )

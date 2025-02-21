@@ -1,13 +1,18 @@
-import { Link } from 'react-router-dom'
+import { NavigateFunction } from 'react-router-dom'
 
-const EmptyBlog = () => {
+const EmptyBlog = ({ navigate }: { navigate: NavigateFunction }) => {
   return (
     <div className="card border">
       <div className="empty-card">
         <div style={{ marginBottom: 10 }}>Create your first blog.</div>
         <div>
-          <button>
-            <Link to="/create/blog">Create</Link>
+          <button
+            className="white-bg shadow"
+            onClick={() => {
+              navigate('/create/blog')
+            }}
+          >
+            Create
           </button>
         </div>
       </div>
@@ -15,14 +20,19 @@ const EmptyBlog = () => {
   )
 }
 
-const EmptyBook = () => {
+const EmptyBook = ({ navigate }: { navigate: NavigateFunction }) => {
   return (
     <div className="card border">
       <div className="empty-card">
         <div style={{ marginBottom: 10 }}>Create your first book.</div>
         <div>
-          <button>
-            <Link to="/create/book">Create</Link>
+          <button
+            className="white-bg shadow"
+            onClick={() => {
+              navigate('/create/book')
+            }}
+          >
+            Create
           </button>
         </div>
       </div>

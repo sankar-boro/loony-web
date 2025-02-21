@@ -90,6 +90,7 @@ hr {
   --nav-text: #6f6f6f;
   --border-color: #ced4da;
   --text-color: #ced4da;
+  --box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 *,

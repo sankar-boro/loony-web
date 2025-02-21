@@ -92,14 +92,15 @@ export default function RenderComponent({
             <Chapters state={state} />
           </div>
         ) : null}
-        {state.form ? (
+        {state.form && (
           <ActivityComponent
             state={state}
             setState={setState}
             blog_id={blog_id as number}
             isMobile={isMobile}
           />
-        ) : (
+        )}
+        {!state.form && (
           <div
             style={{
               width: isMobile ? '90%' : '50%',
@@ -137,7 +138,10 @@ export default function RenderComponent({
                   </Suspense>
                 ) : null} */}
                 <Suspense fallback={<div>Loading component...</div>}>
-                  <MarkdownPreview source={mainNode.content} />
+                  <MarkdownPreview
+                    source={mainNode.content}
+                    wrapperElement={{ 'data-color-mode': 'light' }}
+                  />
                 </Suspense>
               </div>
             </div>

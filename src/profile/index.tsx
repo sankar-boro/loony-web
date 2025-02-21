@@ -117,7 +117,7 @@ const Blogs = ({
           gap: 16,
         }}
       >
-        {!blogs ? <EmptyBlog /> : null}
+        {!blogs ? <EmptyBlog navigate={navigate} /> : null}
         {blogs &&
           blogs.map((node) => {
             return (
@@ -171,7 +171,7 @@ const Books = ({
           gap: 16,
         }}
       >
-        {!books ? <EmptyBook /> : null}
+        {!books ? <EmptyBook navigate={navigate} /> : null}
         {books &&
           books.map((node: DocNode) => {
             return (

@@ -9,7 +9,12 @@ import {
   SectionsNavContainer,
   ButtonNavContainer,
 } from '../../components/Containers.tsx'
-import { getSections, getSubSections } from 'loony-utils'
+import {
+  getChapter,
+  getSection,
+  // getSections,
+  // getSubSections,
+} from 'loony-utils'
 import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 import {
@@ -54,12 +59,12 @@ export const PageNavigation = ({
 }) => {
   const {
     page_id,
-    activeSectionsByPageId,
+    // activeSectionsByPageId,
     frontPage,
     parentNode,
     allSectionsByPageId,
     allSubSectionsBySectionId,
-    nodes101,
+    navNodes,
   } = state
 
   if (!frontPage || !parentNode) return null
@@ -85,13 +90,13 @@ export const PageNavigation = ({
           title="Add Chapter"
         />
       </ButtonNavContainer>
-      {nodes101.map((chapter) => {
+      {navNodes.map((chapter) => {
         return (
           <div key={chapter.uid}>
             <PageNavContainer
               onClick={(e) => {
                 e.stopPropagation()
-                getSections(chapter, setState, allSectionsByPageId, book_id)
+                getChapter(chapter, setState, allSectionsByPageId, book_id)
               }}
               isActive={parentNode.uid === chapter.uid}
             >
@@ -117,53 +122,54 @@ export const PageNavigation = ({
               />
             </ButtonNavContainer>
             {/* Sections */}
-            {page_id === chapter.uid && (
-              <SectionsNavContainer>
-                <ButtonNavContainer>
-                  <Button
-                    title="Add Section"
-                    onClick={() => {
-                      setState({
-                        ...state,
-                        topNode: chapter,
-                        form: 'add_section',
-                      })
-                    }}
-                  />
-                </ButtonNavContainer>
-                {activeSectionsByPageId.map((section) => {
-                  return (
-                    <div key={section.uid}>
-                      <SectionNavContainer
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          getSubSections(
-                            section,
-                            setState,
-                            allSubSectionsBySectionId,
-                            book_id
-                          )
-                        }}
-                        isActive={parentNode.uid === section.uid}
-                      >
-                        {section.title}
-                      </SectionNavContainer>
-                      <Button
-                        title="Add Section"
-                        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                          setState({
-                            ...state,
-                            topNode: section,
-                            form: 'add_section',
-                          })
-                          e.stopPropagation()
-                        }}
-                      />
-                    </div>
-                  )
-                })}
-              </SectionsNavContainer>
-            )}
+            {/* {page_id === chapter.uid && (
+              
+            )} */}
+            <SectionsNavContainer>
+              <ButtonNavContainer>
+                <Button
+                  title="Add Section"
+                  onClick={() => {
+                    setState({
+                      ...state,
+                      topNode: chapter,
+                      form: 'add_section',
+                    })
+                  }}
+                />
+              </ButtonNavContainer>
+              {chapter.child?.map((section) => {
+                return (
+                  <div key={section.uid}>
+                    <SectionNavContainer
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        getSection(
+                          section,
+                          setState,
+                          allSubSectionsBySectionId,
+                          book_id
+                        )
+                      }}
+                      isActive={parentNode.uid === section.uid}
+                    >
+                      {section.title}
+                    </SectionNavContainer>
+                    <Button
+                      title="Add Section"
+                      onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+                        setState({
+                          ...state,
+                          topNode: section,
+                          form: 'add_section',
+                        })
+                        e.stopPropagation()
+                      }}
+                    />
+                  </div>
+                )
+              })}
+            </SectionsNavContainer>
           </div>
         )
       })}
