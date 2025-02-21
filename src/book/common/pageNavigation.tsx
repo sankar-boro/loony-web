@@ -38,7 +38,6 @@ export const PageNavigation = ({
   viewFrontPage: VoidReturnFunction
   // setStatus: PageStatusDispatchAction
 }) => {
-  console.log(navNodes)
   const {
     // page_id,
     // activeSectionsByPageId,
@@ -67,14 +66,7 @@ export const PageNavigation = ({
               }}
               isActive={parentNode.uid === chapter.uid}
             >
-              <div className="page-nav-title">{chapter.title}</div>
-              {/* <div className="page-nav-icon">
-                {page_id === chapter.uid ? (
-                  <MdOutlineKeyboardArrowDown size={16} color="#2d2d2d" />
-                ) : (
-                  <MdOutlineKeyboardArrowRight size={16} color="#2d2d2d" />
-                )}
-              </div> */}
+              {chapter.title}
             </PageNavContainer>
             <SectionsNavContainer
               onClick={() => {

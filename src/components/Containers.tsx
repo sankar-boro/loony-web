@@ -16,12 +16,20 @@ export const ChapterNavContainer = ({
   )
 }
 
-export const ButtonNavContainer = ({
+export const ChapterButtonNavContainer = ({
   children,
 }: {
   children: React.ReactNode
 }) => {
-  return <div className="chapter-nav">{children}</div>
+  return <div className="chapter-button-nav">{children}</div>
+}
+
+export const SectionButtonNavContainer = ({
+  children,
+}: {
+  children: React.ReactNode
+}) => {
+  return <div className="section-button-nav">{children}</div>
 }
 
 export const MenuNavContainer = ({
@@ -80,7 +88,7 @@ export const SectionsNavContainer = ({
   onClick?: React.MouseEventHandler<HTMLDivElement>
 }) => {
   return (
-    <div onClick={onClick} style={{ paddingLeft: '10%' }}>
+    <div className="sections-nav" onClick={onClick}>
       {children}
     </div>
   )

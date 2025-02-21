@@ -1,13 +1,14 @@
-import {
-  MdOutlineKeyboardArrowRight,
-  MdOutlineKeyboardArrowDown,
-} from 'react-icons/md'
+// import {
+//   MdOutlineKeyboardArrowRight,
+//   MdOutlineKeyboardArrowDown,
+// } from 'react-icons/md'
 import {
   ChapterNavContainer,
   PageNavContainer,
   SectionNavContainer,
   SectionsNavContainer,
-  ButtonNavContainer,
+  ChapterButtonNavContainer,
+  SectionButtonNavContainer,
 } from '../../components/Containers.tsx'
 import {
   getChapter,
@@ -57,14 +58,7 @@ export const PageNavigation = ({
   viewFrontPage: VoidReturnFunction
   // setStatus: PageStatusDispatchAction
 }) => {
-  const {
-    page_id,
-    // activeSectionsByPageId,
-    frontPage,
-    parentNode,
-    groupNodesById,
-    navNodes,
-  } = state
+  const { frontPage, parentNode, groupNodesById, navNodes } = state
 
   if (!frontPage || !parentNode) return null
 
@@ -76,7 +70,7 @@ export const PageNavigation = ({
       >
         {frontPage.title}
       </ChapterNavContainer>
-      <ButtonNavContainer>
+      <ChapterButtonNavContainer>
         <Button
           onClick={(e: React.MouseEvent<HTMLDivElement>) => {
             e.preventDefault()
@@ -88,7 +82,7 @@ export const PageNavigation = ({
           }}
           title="Add Chapter"
         />
-      </ButtonNavContainer>
+      </ChapterButtonNavContainer>
       {navNodes.map((chapter) => {
         return (
           <div key={chapter.uid}>
@@ -100,15 +94,8 @@ export const PageNavigation = ({
               isActive={parentNode.uid === chapter.uid}
             >
               <div style={{ width: '90%' }}>{chapter.title}</div>
-              <div>
-                {page_id === chapter.uid ? (
-                  <MdOutlineKeyboardArrowDown size={16} color="#2d2d2d" />
-                ) : (
-                  <MdOutlineKeyboardArrowRight size={16} color="#2d2d2d" />
-                )}
-              </div>
             </PageNavContainer>
-            <ButtonNavContainer>
+            <ChapterButtonNavContainer>
               <Button
                 onClick={() => {
                   setState({
@@ -119,13 +106,9 @@ export const PageNavigation = ({
                 }}
                 title="Add Chapter"
               />
-            </ButtonNavContainer>
-            {/* Sections */}
-            {/* {page_id === chapter.uid && (
-              
-            )} */}
+            </ChapterButtonNavContainer>
             <SectionsNavContainer>
-              <ButtonNavContainer>
+              <SectionButtonNavContainer>
                 <Button
                   title="Add Section"
                   onClick={() => {
@@ -136,7 +119,7 @@ export const PageNavigation = ({
                     })
                   }}
                 />
-              </ButtonNavContainer>
+              </SectionButtonNavContainer>
               {chapter.child?.map((section) => {
                 return (
                   <div key={section.uid}>
@@ -149,17 +132,19 @@ export const PageNavigation = ({
                     >
                       {section.title}
                     </SectionNavContainer>
-                    <Button
-                      title="Add Section"
-                      onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-                        setState({
-                          ...state,
-                          topNode: section,
-                          form: 'add_section',
-                        })
-                        e.stopPropagation()
-                      }}
-                    />
+                    <SectionButtonNavContainer>
+                      <Button
+                        title="Add Section"
+                        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+                          setState({
+                            ...state,
+                            topNode: section,
+                            form: 'add_section',
+                          })
+                          e.stopPropagation()
+                        }}
+                      />
+                    </SectionButtonNavContainer>
                   </div>
                 )
               })}

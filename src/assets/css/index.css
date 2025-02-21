@@ -153,7 +153,11 @@ button:hover {
   background-clip: border-box;
   border-radius: 0.25rem;
 }
-
+.section-title {
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
 .empty-card {
   height: 200px;
   display: flex;
@@ -342,33 +346,43 @@ button:hover {
 .page-section {
   margin-bottom: 24px;
 }
-.section-title {
-  font-weight: bold;
-  font-size: 24px;
-  margin-bottom: 16px;
-}
 .section-nav {
   display: flex;
   flex-direction: row;
   padding: 2px 0px;
+  color: #2d2d2d;
   font-size: 14px;
 }
 .chapter-nav {
-  display: flex;
-  flex-direction: row;
   padding: 2px 0px;
   font-size: 16px;
   font-weight: bold;
-  width: 90%;
   padding-left: 16px;
   padding-right: 16px;
 }
-/* .chapter-nav:hover,
+.chapter-button-nav {
+  padding: 2px 0px;
+  font-size: 16px;
+  font-weight: bold;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.section-button-nav {
+  padding: 2px 0px;
+  font-size: 16px;
+  font-weight: bold;
+  padding-left: 10%;
+  padding-right: 16px;
+}
+.section-nav {
+  padding-left: 10%;
+}
+.chapter-nav:hover,
 .section-nav:hover {
-  background-color: #f7f6ff;
+  background-color: #cccccc;
   cursor: pointer;
   color: #2d2d2d;
-} */
+}
 .active-nav {
   color: #2d2d2d;
   font-size: 14px;
@@ -389,13 +403,6 @@ button:hover {
 }
 .active-menu {
   background-color: var(--hover-dark);
-}
-.page-nav-title {
-  width: 95%;
-}
-.page-nav-title a {
-  text-decoration: none;
-  color: var(--nav-text);
 }
 .page-nav-icon {
   position: relative;
