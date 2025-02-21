@@ -59,6 +59,7 @@ export const getNav = (
   axiosInstance.get(url).then(({ data }) => {
     const bookTree = orderBookNodes(data.child_nodes, data.main_node, [])
     const mainNode = bookTree && bookTree[0]
+    mainNode.child = []
     const __navNodes = bookTree.slice(1)
     setState((prevState) => ({
       ...prevState,
@@ -67,6 +68,10 @@ export const getNav = (
       parentNode: mainNode,
       navNodes: __navNodes,
       page_id: mainNode.uid,
+      childNodes: [],
+      groupNodesById: {
+        [mainNode.uid]: mainNode,
+      },
     }))
     setStatus((prevStatus) => ({
       ...prevStatus,
@@ -134,7 +139,6 @@ export const getChapter = (
         }
       })
       const res = orderNodes(childNodes, parentNode)
-      console.log('res', res)
       setState((prevState) => ({
         ...prevState,
         ...resetState,
@@ -334,6 +338,55 @@ export const deleteOne = (
   return newNodes
 }
 
+export const deleteSection = (
+  navNodes: DocNode[],
+  {
+    delete_nodes,
+    update_node,
+  }: {
+    delete_nodes: number[]
+    update_node: { parent_id: number; uid: number }
+  }
+): DocNode[] => {
+  const newNodes: DocNode[] = navNodes.map((x) => {
+    return {
+      ...x,
+      child: x.child.filter((y) => !delete_nodes.includes(y.uid)),
+    }
+  })
+  if (update_node) {
+    newNodes.forEach((x) => {
+      x.child.forEach((y, i) => {
+        if (y.uid === update_node.uid) {
+          newNodes[i].parent_id = update_node.parent_id
+        }
+      })
+    })
+  }
+  return newNodes
+}
+
+export const deleteSubSection = (
+  nodes: DocNode[],
+  {
+    delete_nodes,
+    update_node,
+  }: {
+    delete_nodes: number[]
+    update_node: { parent_id: number; uid: number }
+  }
+) => {
+  const newNodes = nodes.filter((x) => !delete_nodes.includes(x.uid))
+  if (update_node) {
+    newNodes.forEach((x, i) => {
+      if (x.uid === update_node.uid) {
+        newNodes[i].parent_id = update_node.parent_id
+      }
+    })
+  }
+  return newNodes
+}
+
 /**
  *
  * @param childNodes DocNode[]
@@ -444,7 +497,51 @@ export const addNewNode = (
 
 export const appendBookNode = addNewNode
 export const appendChapters = addNewNode
-export const appendSections = addNewNode
+export const appendSections = (
+  navNodes: DocNode[],
+  topData: DocNode,
+  res: { new_node: DocNode; update_node: DocNode }
+) => {
+  const { new_node, update_node } = res
+  // const newNodes = []
+
+  if (update_node) {
+    navNodes.forEach((c) => {
+      const t = []
+      c.child.forEach((s) => {
+        if (s.uid === update_node.uid) {
+          s.parent_id = update_node.parent_id
+        }
+        if (topData.uid === s.uid) {
+          t.push(s)
+          t.push(new_node)
+        } else {
+          t.push(s)
+        }
+      })
+      c.child = t
+    })
+    return navNodes
+  } else {
+    navNodes.forEach((c) => {
+      const t = []
+      if (topData.uid === c.uid && c.child.length === 0) {
+        t.push(new_node)
+      }
+
+      c.child.forEach((s) => {
+        if (topData.uid === s.uid) {
+          t.push(s)
+          t.push(new_node)
+        } else {
+          t.push(s)
+        }
+      })
+      c.child = t
+    })
+    return navNodes
+  }
+}
 export const appendSubSections = addNewNode
 
 const groupSiblingsForParent = (parent: DocNode, child: DocNode[]) => {

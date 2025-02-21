@@ -48,7 +48,7 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
           setImage(__image[0].name)
         }
       }
-      if (Array.isArray(editNode.images)) {
+      if (Array.isArray(editNode.images) && editNode.images.length > 0) {
         setImage(editNode.images[0].name)
       }
       if (editNode.theme) {

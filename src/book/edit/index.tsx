@@ -80,7 +80,6 @@ export default function Edit({
     return <PageLoadingContainer isMobile={isMobile} />
 
   const { parentNode, childNodes, mainNode } = state
-
   if (!parentNode || !mainNode) return null
 
   return (

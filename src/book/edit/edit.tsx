@@ -1,4 +1,4 @@
-import { deleteOne } from 'loony-utils'
+import { deleteOne, deleteSubSection, deleteSection } from 'loony-utils'
 import { axiosInstance } from 'loony-api'
 import AddNode from '../../form/addNode.tsx'
 import EditDocument from '../../form/editNode.tsx'
@@ -36,15 +36,14 @@ export default function EditComponent({
     form,
     page_id,
     section_id,
-    activeSectionsByPageId,
-    activeSubSectionsBySectionId,
-    allSectionsByPageId,
-    allSubSectionsBySectionId,
+    groupNodesById,
+    childNodes,
+    parentNode,
     topNode,
   } = state
 
   const onDeleteNode = () => {
-    if (!deleteNode) return
+    if (!deleteNode || !parentNode) return
     const submitData = {
       identity: deleteNode.identity,
       parent_id: deleteNode.parent_id,
@@ -57,58 +56,37 @@ export default function EditComponent({
           const __navNodes = deleteOne(navNodes, res.data)
           setState({
             ...state,
-            parentNode: frontPage,
+            parentNode: groupNodesById[doc_id],
+            childNodes: groupNodesById[doc_id].child as DocNode[],
             navNodes: __navNodes,
             deleteNode: null,
             form: '',
           })
         }
         if (deleteNode.identity === 102) {
-          const __activeSectionsByPageId = deleteOne(
-            activeSectionsByPageId,
-            res.data
-          )
-          let __parentNode = null
-          navNodes.forEach((x) => {
-            if (x.uid === page_id) {
-              __parentNode = x
-            }
-          })
-          console.log({
-            ...state,
-            parentNode: __parentNode,
-            activeSectionsByPageId: __activeSectionsByPageId,
-            allSectionsByPageId: {
-              ...allSectionsByPageId,
-              [page_id as number]: __activeSectionsByPageId,
-            },
-            deleteNode: null,
-            form: '',
-          })
+          const newNavNodes: DocNode[] = deleteSection(navNodes, res.data)
+          delete groupNodesById[deleteNode.uid]
           setState({
             ...state,
-            parentNode: __parentNode,
-            activeSectionsByPageId: __activeSectionsByPageId,
-            allSectionsByPageId: {
-              ...allSectionsByPageId,
-              [page_id as number]: __activeSectionsByPageId,
-            },
+            navNodes: newNavNodes,
+            parentNode: groupNodesById[doc_id],
+            childNodes: groupNodesById[doc_id].child as DocNode[],
             deleteNode: null,
             form: '',
           })
         }
         if (deleteNode.identity === 103) {
-          const __activeSubSectionsBySectionId = deleteOne(
-            activeSubSectionsBySectionId,
-            res.data
-          )
+          const child = deleteSubSection(childNodes, res.data)
           setState({
             ...state,
-            activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
-            allSubSectionsBySectionId: {
-              ...allSubSectionsBySectionId,
-              [section_id as number]: __activeSubSectionsBySectionId,
+            groupNodesById: {
+              ...groupNodesById,
+              [parentNode?.uid as number]: {
+                ...parentNode,
+                child: child,
+              },
             },
+            childNodes: child,
             form: '',
             deleteNode: null,
           })
@@ -156,10 +134,28 @@ export default function EditComponent({
   }
   const editSection = (data: DocNode) => {
     if (!editNode) return
-    let __activeSection = null
-    const __activeSectionsByPageId = activeSectionsByPageId.map((innerNode) => {
+    setState({
+      ...state,
+      groupNodesById: {
+        ...groupNodesById,
+        [editNode.uid as number]: {
+          ...data,
+          child: editNode.child,
+        },
+      },
+      parentNode: data,
+      form: '',
+      editNode: null,
+    })
+  }
+  const editSubSection = (data: DocNode) => {
+    if (!editNode) return
+    if (!parentNode) return
+    const activeSection = groupNodesById[parentNode.uid]
+    const subSections = activeSection.child as DocNode[]
+    const child = subSections?.map((innerNode) => {
       if (innerNode.uid === editNode.uid) {
-        __activeSection = {
+        return {
           ...innerNode,
           ...data,
         }
@@ -168,37 +164,16 @@ export default function EditComponent({
     })
     setState({
       ...state,
-      activeSectionsByPageId: __activeSectionsByPageId,
-      allSectionsByPageId: {
-        ...allSectionsByPageId,
-        [page_id as number]: __activeSectionsByPageId,
+      groupNodesById: {
+        ...groupNodesById,
+        [parentNode.uid as number]: {
+          ...activeSection,
+          child,
+        },
       },
-      parentNode: __activeSection,
+      childNodes: child,
       form: '',
       editNode: null,
-    })
-  }
-  const editSubSection = (data: DocNode) => {
-    if (!editNode) return
-    const __activeSubSectionsBySectionId = activeSubSectionsBySectionId.map(
-      (innerNode) => {
-        if (innerNode.uid === editNode.uid) {
-          return {
-            ...innerNode,
-            ...data,
-          }
-        }
-        return innerNode
-      }
-    )
-    setState({
-      ...state,
-      activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
-      allSubSectionsBySectionId: {
-        ...allSubSectionsBySectionId,
-        [section_id as number]: __activeSubSectionsBySectionId,
-      },
-      form: '',
     })
   }
 
@@ -236,11 +211,13 @@ export default function EditComponent({
     update_node: DocNode
   }) => {
     if (!topNode) return
-    const __navNodes = appendChapters(navNodes, topNode, data)
+    const newNavNodes = appendChapters(navNodes, topNode, data)
     setState({
       ...state,
       parentNode: data.new_node,
-      navNodes: __navNodes,
+      navNodes: newNavNodes,
+      childNodes: [],
+      addNode: null,
       form: '',
     })
   }
@@ -249,22 +226,23 @@ export default function EditComponent({
     new_node: DocNode
     update_node: DocNode
   }) => {
-    if (!topNode) return
+    if (!topNode || !parentNode) return
 
-    const __activeSectionsByPageId = appendSections(
-      activeSectionsByPageId,
-      topNode,
-      data
-    )
+    const newNavNodes = appendSections(navNodes, topNode, data)
     const newActiveNode = data.new_node
     setState({
       ...state,
+      addNode: null,
+      navNodes: newNavNodes,
       section_id: newActiveNode.uid,
       parentNode: newActiveNode,
-      activeSectionsByPageId: __activeSectionsByPageId,
-      allSectionsByPageId: {
-        ...allSectionsByPageId,
-        [page_id as number]: __activeSectionsByPageId,
+      childNodes: [],
+      groupNodesById: {
+        ...groupNodesById,
+        [newActiveNode.uid]: {
+          ...newActiveNode,
+          child: [],
+        },
       },
       form: '',
     })
@@ -274,20 +252,20 @@ export default function EditComponent({
     new_node: DocNode
     update_node: DocNode
   }) => {
-    if (!topNode) return
-    const __activeSubSectionsBySectionId = appendSubSections(
-      activeSubSectionsBySectionId,
-      topNode,
-      data
-    )
+    if (!topNode || !parentNode) return
+    const newChildNodes = appendSubSections(childNodes, topNode, data)
 
     setState({
       ...state,
-      allSubSectionsBySectionId: {
-        ...allSubSectionsBySectionId,
-        [section_id as number]: __activeSubSectionsBySectionId,
+      groupNodesById: {
+        ...groupNodesById,
+        [parentNode?.uid as number]: {
+          ...parentNode,
+          child: newChildNodes,
+        },
       },
-      activeSubSectionsBySectionId: __activeSubSectionsBySectionId,
+      childNodes: newChildNodes,
+      addNode: null,
       form: '',
     })
   }
@@ -300,7 +278,7 @@ export default function EditComponent({
       addNode: null,
     })
   }, [])
-  console.log('Edit Page')
+
   return (
     <>
       {form && form === 'add_chapter' && topNode ? (
