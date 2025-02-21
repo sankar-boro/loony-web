@@ -24,7 +24,7 @@ export type AppendNodeResponse = {
 }
 
 export type GroupedNodesById = {
-  [key: number]: DocNode[]
+  [key: number]: DocNode
 }
 
 // Doc State
@@ -66,10 +66,11 @@ export type EditBlogState = ReadBlogState &
 type CommonBookState = {
   page_id: number | null
   section_id: number | null
-  activeSectionsByPageId: DocNode[]
-  activeSubSectionsBySectionId: DocNode[]
-  allSectionsByPageId: GroupedNodesById
-  allSubSectionsBySectionId: GroupedNodesById
+  groupNodesById: GroupedNodesById
+  // activeSectionsByPageId: DocNode[]
+  // activeSubSectionsBySectionId: DocNode[]
+  // allSectionsByPageId: GroupedNodesById
+  // allSubSectionsBySectionId: GroupedNodesById
 }
 
 export type ReadBookState = CommonBookState & {

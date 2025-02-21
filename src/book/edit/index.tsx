@@ -50,10 +50,7 @@ export default function Edit({
     topNode: null,
     page_id: null,
     section_id: null,
-    activeSectionsByPageId: [],
-    allSectionsByPageId: {},
-    activeSubSectionsBySectionId: [],
-    allSubSectionsBySectionId: {},
+    groupNodesById: {},
     navNodes: [],
     frontPage: null,
     addNode: null,
@@ -82,7 +79,7 @@ export default function Edit({
   if (status.status !== PageStatus.VIEW_PAGE)
     return <PageLoadingContainer isMobile={isMobile} />
 
-  const { parentNode, activeSubSectionsBySectionId, mainNode } = state
+  const { parentNode, childNodes, mainNode } = state
 
   if (!parentNode || !mainNode) return null
 
@@ -155,7 +152,7 @@ export default function Edit({
                   marginTop: 16,
                 }}
               >
-                {activeSubSectionsBySectionId.map((subSectionNode) => {
+                {childNodes.map((subSectionNode) => {
                   const subSectionNodeImage = extractImage(
                     subSectionNode.images
                   )

@@ -108,24 +108,22 @@ export const getChapters = (
 export const getChapter = (
   __node: DocNode,
   setState: ReadBookAction | EditBookAction,
-  allSectionsByPageId: GroupedNodesById,
+  groupNodesById: GroupedNodesById,
   book_id: number
   // setStatus: PageStatusDispatchAction,
 ) => {
   const { uid } = __node
   const url = `/book/get/chapter?doc_id=${book_id}&page_id=${uid}`
-  if (allSectionsByPageId[uid]) {
+  if (groupNodesById[uid]) {
     setState((prevState) => ({
       ...prevState,
       ...resetState,
-      activeSectionsByPageId: allSectionsByPageId[uid],
+      childNodes: groupNodesById[uid].child,
       page_id: __node.uid,
-      parentNode: __node,
-      activeSubSectionsBySectionId: [],
+      parentNode: groupNodesById[uid],
     }))
   } else {
     axiosInstance.get(url).then(({ data }) => {
-      console.log('data', data)
       let parentNode = null
       const childNodes = []
       data.nodes.forEach((n) => {
@@ -140,14 +138,16 @@ export const getChapter = (
       setState((prevState) => ({
         ...prevState,
         ...resetState,
-        activeSectionsByPageId: res,
-        allSectionsByPageId: {
-          ...allSectionsByPageId,
-          [uid]: res,
+        childNodes: res,
+        groupNodesById: {
+          ...groupNodesById,
+          [uid]: {
+            ...parentNode,
+            child: childNodes,
+          },
         },
         page_id: __node.uid,
         parentNode,
-        activeSubSectionsBySectionId: [],
       }))
     })
   }
@@ -156,24 +156,22 @@ export const getChapter = (
 export const getSection = (
   __node: DocNode,
   setState: ReadBookAction | EditBookAction,
-  allSectionsByPageId: GroupedNodesById,
+  groupNodesById: GroupedNodesById,
   book_id: number
   // setStatus: PageStatusDispatchAction,
 ) => {
   const { uid } = __node
   const url = `/book/get/section?doc_id=${book_id}&page_id=${uid}`
-  if (allSectionsByPageId[uid]) {
+  if (groupNodesById[uid]) {
     setState((prevState) => ({
       ...prevState,
       ...resetState,
-      activeSectionsByPageId: allSectionsByPageId[uid],
+      childNodes: groupNodesById[uid].child,
       page_id: __node.uid,
-      parentNode: __node,
-      activeSubSectionsBySectionId: [],
+      parentNode: groupNodesById[uid],
     }))
   } else {
     axiosInstance.get(url).then(({ data }) => {
-      console.log('data', data)
       let parentNode = null
       const childNodes = []
       data.nodes.forEach((n) => {
@@ -184,18 +182,19 @@ export const getSection = (
         }
       })
       const res = orderNodes(childNodes, parentNode)
-      console.log('res', res)
       setState((prevState) => ({
         ...prevState,
         ...resetState,
-        activeSectionsByPageId: res,
-        allSectionsByPageId: {
-          ...allSectionsByPageId,
-          [uid]: res,
+        childNodes: res,
+        groupNodesById: {
+          ...groupNodesById,
+          [uid]: {
+            ...parentNode,
+            child: childNodes,
+          },
         },
         page_id: __node.uid,
         parentNode,
-        activeSubSectionsBySectionId: [],
       }))
     })
   }

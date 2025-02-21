@@ -29,10 +29,7 @@ const View = ({
     parentNode: null,
     page_id: null,
     section_id: null,
-    activeSectionsByPageId: [],
-    activeSubSectionsBySectionId: [],
-    allSectionsByPageId: {},
-    allSubSectionsBySectionId: {},
+    groupNodesById: {},
     navNodes: [],
     childNodes: [],
     frontPage: null,
@@ -49,17 +46,11 @@ const View = ({
       ...state,
       page_id: state.frontPage?.uid || null,
       parentNode: frontPage,
-      activeSubSectionsBySectionId: [],
+      childNodes: [],
     })
   }
 
-  const {
-    parentNode,
-    navNodes,
-    frontPage,
-    activeSubSectionsBySectionId,
-    mainNode,
-  } = state
+  const { parentNode, navNodes, frontPage, childNodes, mainNode } = state
 
   if (pageStatus.status !== PageStatus.VIEW_PAGE)
     return <PageLoadingContainer isMobile={isMobile} />
@@ -143,7 +134,7 @@ const View = ({
             book_id={book_id as number}
             base_url={base_url}
           />
-          {activeSubSectionsBySectionId.map((subSectionNode) => {
+          {childNodes.map((subSectionNode) => {
             const nodeImage = extractImage(subSectionNode.images)
             return (
               <div className="page-section" key={subSectionNode.uid}>

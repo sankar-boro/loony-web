@@ -44,8 +44,7 @@ export const PageNavigation = ({
     // activeSectionsByPageId,
     frontPage,
     parentNode,
-    allSectionsByPageId,
-    allSubSectionsBySectionId,
+    groupNodesById,
   } = state
 
   if (!frontPage || !parentNode) return null
@@ -64,7 +63,7 @@ export const PageNavigation = ({
             <PageNavContainer
               onClick={(e) => {
                 e.stopPropagation()
-                getChapter(chapter, setState, allSectionsByPageId, book_id)
+                getChapter(chapter, setState, groupNodesById, book_id)
               }}
               isActive={parentNode.uid === chapter.uid}
             >
@@ -90,12 +89,7 @@ export const PageNavigation = ({
                     key={section.uid}
                     onClick={(e) => {
                       e.stopPropagation()
-                      getSection(
-                        section,
-                        setState,
-                        allSubSectionsBySectionId,
-                        book_id
-                      )
+                      getSection(section, setState, groupNodesById, book_id)
                     }}
                     isActive={parentNode.uid === section.uid}
                   >
