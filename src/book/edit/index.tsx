@@ -35,7 +35,7 @@ export default function Edit({
 }: AppRouteProps) {
   const { base_url } = appContext.env
   const { bookId } = useParams()
-  const book_id = bookId && parseInt(bookId)
+  const doc_id = bookId && parseInt(bookId)
   const navigate = useNavigate()
   const { setAppContext } = useContext(AppContext)
   const [status, setStatus] = useState<PageState>({
@@ -56,14 +56,14 @@ export default function Edit({
     addNode: null,
     deleteNode: null,
     editNode: null,
-    doc_id: book_id as number,
+    doc_id: doc_id as number,
   })
 
   useEffect(() => {
-    if (book_id) {
-      getNav(book_id, setState, setStatus)
+    if (doc_id) {
+      getNav(doc_id, setState, setStatus)
     }
-  }, [book_id])
+  }, [doc_id])
 
   const viewFrontPage = () => {
     setState({
@@ -89,7 +89,7 @@ export default function Edit({
           <MobileNav
             state={state}
             setState={setState}
-            book_id={book_id as number}
+            doc_id={doc_id as number}
             isMobile={isMobile}
             setMobileNavOpen={setMobileNavOpen}
             // setStatus={setStatus}
@@ -108,7 +108,7 @@ export default function Edit({
               setState={setState}
               // setStatus={setStatus}
               state={state}
-              book_id={book_id as number}
+              doc_id={doc_id as number}
               isMobile={isMobile}
               viewFrontPage={viewFrontPage}
             />
@@ -121,7 +121,7 @@ export default function Edit({
             state={state as EditBookState}
             setState={setState as EditBookAction}
             setAppContext={setAppContext}
-            doc_id={book_id as number}
+            doc_id={doc_id as number}
             navigate={navigate}
             isMobile={isMobile}
           />
@@ -140,7 +140,7 @@ export default function Edit({
             >
               <ParentNode
                 parentNode={parentNode}
-                book_id={book_id as number}
+                doc_id={doc_id as number}
                 base_url={base_url}
                 setState={setState}
                 state={state}
@@ -164,7 +164,7 @@ export default function Edit({
                       {subSectionNodeImage && subSectionNodeImage.name ? (
                         <div style={{ width: '100%', borderRadius: 5 }}>
                           <img
-                            src={`${base_url}/api/book/${book_id}/720/${subSectionNodeImage.name}`}
+                            src={`${base_url}/api/book/${doc_id}/720/${subSectionNodeImage.name}`}
                             alt=""
                             width="100%"
                           />
@@ -186,7 +186,7 @@ export default function Edit({
 
             {!isMobile ? (
               <RightBookContainer
-                book_id={book_id as string}
+                doc_id={doc_id as string}
                 setState={setState}
                 state={state}
               />
@@ -201,7 +201,7 @@ export default function Edit({
 const MobileNav = ({
   state,
   setState,
-  book_id,
+  doc_id,
   isMobile,
   setMobileNavOpen,
   // setStatus,
@@ -209,7 +209,7 @@ const MobileNav = ({
 }: {
   state: EditBookState
   setState: EditBookAction
-  book_id: number
+  doc_id: number
   isMobile: boolean
   setMobileNavOpen: BooleanDispatchAction
   // setStatus: PageStatusDispatchAction
@@ -242,7 +242,7 @@ const MobileNav = ({
             setState={setState}
             // setStatus={setStatus}
             state={state}
-            book_id={book_id as number}
+            doc_id={doc_id as number}
             isMobile={isMobile}
             viewFrontPage={viewFrontPage}
           />
@@ -254,13 +254,13 @@ const MobileNav = ({
 
 const ParentNode = ({
   parentNode,
-  book_id,
+  doc_id,
   base_url,
   setState,
   state,
 }: {
   parentNode: DocNode
-  book_id: number
+  doc_id: number
   base_url: string
   setState: EditBookAction
   state: EditBookState
@@ -273,7 +273,7 @@ const ParentNode = ({
         {image && image.name ? (
           <div style={{ width: '100%', borderRadius: 5 }}>
             <img
-              src={`${base_url}/api/book/${book_id}/720/${image.name}`}
+              src={`${base_url}/api/book/${doc_id}/720/${image.name}`}
               alt=""
               width="100%"
             />
@@ -293,11 +293,11 @@ const ParentNode = ({
 }
 
 const RightBookContainer = ({
-  book_id,
+  doc_id,
   setState,
   state,
 }: {
-  book_id: string
+  doc_id: string
   setState: EditBookAction
   state: EditBookState
 }) => {
@@ -306,7 +306,7 @@ const RightBookContainer = ({
       <ul style={{ paddingLeft: 0, listStyle: 'none' }} className="list-item">
         <li>
           <RxReader size={16} color="#2d2d2d" />
-          <Link to={`/view/book/${book_id}`}>Read Book</Link>
+          <Link to={`/view/book/${doc_id}`}>Read Book</Link>
         </li>
         <li
           onClick={() => {

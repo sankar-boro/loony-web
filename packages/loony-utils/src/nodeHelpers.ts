@@ -47,11 +47,11 @@ export const getBlogNodes = (
 }
 
 export const getNav = (
-  book_id: number,
+  doc_id: number,
   setState: ReadBookAction | EditBookAction,
   setStatus: PageStatusDispatchAction
 ) => {
-  const url = `/book/get/nav?doc_id=${book_id}`
+  const url = `/book/get/nav?doc_id=${doc_id}`
   setStatus((prevState) => ({
     ...prevState,
     status: PageStatus.FETCHING,
@@ -81,11 +81,11 @@ export const getNav = (
 }
 
 export const getChapters = (
-  book_id: number,
+  doc_id: number,
   setState: ReadBookAction | EditBookAction,
   setStatus: PageStatusDispatchAction
 ) => {
-  const url = `/book/get/nodes?doc_id=${book_id}`
+  const url = `/book/get/nodes?doc_id=${doc_id}`
   setStatus((prevState) => ({
     ...prevState,
     status: PageStatus.FETCHING,
@@ -114,11 +114,11 @@ export const getChapter = (
   __node: DocNode,
   setState: ReadBookAction | EditBookAction,
   groupNodesById: GroupedNodesById,
-  book_id: number
+  doc_id: number
   // setStatus: PageStatusDispatchAction,
 ) => {
   const { uid } = __node
-  const url = `/book/get/chapter?doc_id=${book_id}&page_id=${uid}`
+  const url = `/book/get/chapter?doc_id=${doc_id}&page_id=${uid}`
   if (groupNodesById[uid]) {
     setState((prevState) => ({
       ...prevState,
@@ -161,11 +161,11 @@ export const getSection = (
   __node: DocNode,
   setState: ReadBookAction | EditBookAction,
   groupNodesById: GroupedNodesById,
-  book_id: number
+  doc_id: number
   // setStatus: PageStatusDispatchAction,
 ) => {
   const { uid } = __node
-  const url = `/book/get/section?doc_id=${book_id}&page_id=${uid}`
+  const url = `/book/get/section?doc_id=${doc_id}&page_id=${uid}`
   if (groupNodesById[uid]) {
     setState((prevState) => ({
       ...prevState,
@@ -208,11 +208,11 @@ export const getSections = (
   __node: DocNode,
   setState: ReadBookAction | EditBookAction,
   allSectionsByPageId: GroupedNodesById,
-  book_id: number
+  doc_id: number
   // setStatus: PageStatusDispatchAction,
 ) => {
   const { uid } = __node
-  const url = `/book/get/sections?doc_id=${book_id}&page_id=${uid}`
+  const url = `/book/get/sections?doc_id=${doc_id}&page_id=${uid}`
   if (allSectionsByPageId[uid]) {
     setState((prevState) => ({
       ...prevState,
@@ -245,11 +245,11 @@ export const getSubSections = (
   __node: DocNode,
   setState: ReadBookAction | EditBookAction,
   allSubSectionsBySectionId: GroupedNodesById,
-  book_id: number
+  doc_id: number
   // setStatus: PageStatusDispatchAction,
 ) => {
   const { uid } = __node
-  const url = `/book/get/sub_sections?doc_id=${book_id}&page_id=${uid}`
+  const url = `/book/get/sub_sections?doc_id=${doc_id}&page_id=${uid}`
   if (allSubSectionsBySectionId[uid]) {
     setState((prevState) => ({
       ...prevState,

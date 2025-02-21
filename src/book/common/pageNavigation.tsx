@@ -25,7 +25,7 @@ export const PageNavigation = ({
   setState,
   navNodes,
   state,
-  book_id,
+  doc_id,
   isMobile,
   viewFrontPage,
 }: // setStatus,
@@ -33,7 +33,7 @@ export const PageNavigation = ({
   setState: ReadBookAction | EditBookAction
   navNodes: DocNode[]
   state: ReadBookState | EditBookState
-  book_id: number
+  doc_id: number
   isMobile: boolean
   viewFrontPage: VoidReturnFunction
   // setStatus: PageStatusDispatchAction
@@ -62,7 +62,7 @@ export const PageNavigation = ({
             <PageNavContainer
               onClick={(e) => {
                 e.stopPropagation()
-                getChapter(chapter, setState, groupNodesById, book_id)
+                getChapter(chapter, setState, groupNodesById, doc_id)
               }}
               isActive={parentNode.uid === chapter.uid}
             >
@@ -81,7 +81,7 @@ export const PageNavigation = ({
                     key={section.uid}
                     onClick={(e) => {
                       e.stopPropagation()
-                      getSection(section, setState, groupNodesById, book_id)
+                      getSection(section, setState, groupNodesById, doc_id)
                     }}
                     isActive={parentNode.uid === section.uid}
                   >
@@ -103,11 +103,11 @@ export const PageNavigation = ({
           >
             <li style={{ display: 'flex', alignItems: 'center' }}>
               <LuFileEdit color="#2d2d2d" size={16} />
-              <Link to={`/edit/book/${book_id}`}>Edit this page</Link>
+              <Link to={`/edit/book/${doc_id}`}>Edit this page</Link>
             </li>
             <li style={{ display: 'flex', alignItems: 'center' }}>
               <LuFileWarning color="#2d2d2d" size={16} />
-              <Link to={`/edit/book/${book_id}`}>Report</Link>
+              <Link to={`/edit/book/${doc_id}`}>Report</Link>
             </li>
           </ul>
         </div>

@@ -18,7 +18,7 @@ const View = ({
   const isDesktop = !isMobile
   const { base_url } = appContext.env
   const { bookId } = useParams()
-  const book_id = bookId && parseInt(bookId)
+  const doc_id = bookId && parseInt(bookId)
   const [pageStatus, setStatus] = useState({
     status: PageStatus.IDLE,
     error: '',
@@ -36,10 +36,10 @@ const View = ({
   })
 
   useEffect(() => {
-    if (book_id) {
-      getNav(book_id, setState, setStatus)
+    if (doc_id) {
+      getNav(doc_id, setState, setStatus)
     }
-  }, [book_id])
+  }, [doc_id])
 
   const viewFrontPage = () => {
     setState({
@@ -88,7 +88,7 @@ const View = ({
                 setState={setState}
                 navNodes={navNodes}
                 state={state}
-                book_id={book_id as number}
+                doc_id={doc_id as number}
                 isMobile={isMobile}
                 viewFrontPage={viewFrontPage}
               />
@@ -107,7 +107,7 @@ const View = ({
               setState={setState}
               navNodes={navNodes}
               state={state}
-              book_id={book_id as number}
+              doc_id={doc_id as number}
               isMobile={isMobile}
               viewFrontPage={viewFrontPage}
             />
@@ -131,7 +131,7 @@ const View = ({
         >
           <ParentNode
             parentNode={parentNode}
-            book_id={book_id as number}
+            doc_id={doc_id as number}
             base_url={base_url}
           />
           {childNodes.map((subSectionNode) => {
@@ -142,7 +142,7 @@ const View = ({
                 {nodeImage && nodeImage.name ? (
                   <div style={{ width: '100%', borderRadius: 5 }}>
                     <img
-                      src={`${base_url}/api/book/${book_id}/720/${nodeImage.name}`}
+                      src={`${base_url}/api/book/${doc_id}/720/${nodeImage.name}`}
                       alt=""
                       width="100%"
                     />
@@ -157,7 +157,7 @@ const View = ({
         {/*
          * @Page End
          */}
-        {isDesktop ? <RightBookContainer book_id={book_id as number} /> : null}
+        {isDesktop ? <RightBookContainer doc_id={doc_id as number} /> : null}
       </div>
     </div>
   )
@@ -165,11 +165,11 @@ const View = ({
 
 const ParentNode = ({
   parentNode,
-  book_id,
+  doc_id,
   base_url,
 }: {
   parentNode: DocNode
-  book_id: number
+  doc_id: number
   base_url: string
 }) => {
   const image = extractImage(parentNode.images)
@@ -183,7 +183,7 @@ const ParentNode = ({
       {image && image.name ? (
         <div style={{ width: '100%', borderRadius: 5 }}>
           <img
-            src={`${base_url}/api/book/${book_id}/720/${image.name}`}
+            src={`${base_url}/api/book/${doc_id}/720/${image.name}`}
             alt=""
             width="100%"
           />
@@ -199,13 +199,13 @@ const ParentNode = ({
   )
 }
 
-const RightBookContainer = ({ book_id }: { book_id: number }) => {
+const RightBookContainer = ({ doc_id }: { doc_id: number }) => {
   return (
     <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
       <ul className="list-item" style={{ paddingLeft: 0, listStyle: 'none' }}>
         <li>
           <LuFileEdit color="#2d2d2d" size={16} />
-          <Link to={`/edit/book/${book_id}`}>Edit this page</Link>
+          <Link to={`/edit/book/${doc_id}`}>Edit this page</Link>
         </li>
         <li>
           <LuFileWarning color="#2d2d2d" size={16} />

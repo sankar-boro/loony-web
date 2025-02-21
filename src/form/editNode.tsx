@@ -94,7 +94,7 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
     onCancel()
   }
 
-  const imageName = docIdName === 'book_id' ? 'book' : 'blog'
+  const imageName = docIdName === 'doc_id' ? 'book' : 'blog'
 
   return (
     <div
