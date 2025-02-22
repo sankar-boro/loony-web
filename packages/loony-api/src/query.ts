@@ -9,11 +9,34 @@ const { API_URL } = currentConfig
 export const CREATE_BOOK = '/book/create'
 export const CREATE_BLOG = '/blog/create'
 export const axiosInstance = axios.create({
-  baseURL: API_URL, // Base URL for all requests
+  baseURL: API_URL,
   withCredentials: true,
 })
 
+const handleBackendError = (data) => {
+  if (data.email && data.email[0] && data.email[0].code) {
+    return data.email[0].code
+  }
+  if (data.password && data.password[0] && data.password[0].code) {
+    if (data.password[0].code === 'length') {
+      return 'Password length should more then or equal to 6'
+    }
+  }
+  return null
+}
+
 export const handleError = (err: any): string => {
+  if (err.response && err.response.data && err.response.data) {
+    const data = handleBackendError(err.response.data)
+    if (data) {
+      return data
+    }
+  }
+
+  if (err.response && err.response.data && err.response.data.message) {
+    return err.response.data.message
+  }
+
   if (!err) {
     return 'An unknown error occurred.'
   }
