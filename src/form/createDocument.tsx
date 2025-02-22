@@ -84,7 +84,6 @@ export default function CreateNewDocument({
         <div
           style={{
             width: '15%',
-            paddingBottom: 100,
           }}
         >
           <div
@@ -126,6 +125,8 @@ export default function CreateNewDocument({
         style={{
           width: isMobile ? '100%' : '40%',
           paddingBottom: 100,
+          paddingLeft: '5%',
+          paddingTop: '1.5em',
         }}
       >
         <h2>{title}</h2>

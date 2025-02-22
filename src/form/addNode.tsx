@@ -72,6 +72,9 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
     <div
       style={{
         width: isMobile ? '100%' : '40%',
+        paddingBottom: 100,
+        paddingLeft: '5%',
+        paddingTop: '1.5em',
       }}
     >
       <div style={{}}>

@@ -5,7 +5,14 @@ import { extractImage, getNav } from 'loony-utils'
 import { useParams, Link } from 'react-router-dom'
 import { PageNavigation } from '../common/pageNavigation.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
-import { AppRouteProps, DocNode, ReadBookState, PageStatus } from 'loony-types'
+import {
+  AppRouteProps,
+  DocNode,
+  ReadBookState,
+  PageStatus,
+  AuthContextProps,
+  AuthStatus,
+} from 'loony-types'
 import BasicMarkdown from '../../components/BasicMarkdown.tsx'
 import NodeInfo from '../../components/NodeInfo.tsx'
 
@@ -14,6 +21,7 @@ const View = ({
   setMobileNavOpen,
   isMobile,
   appContext,
+  authContext,
 }: AppRouteProps) => {
   const isDesktop = !isMobile
   const { base_url } = appContext.env
@@ -157,7 +165,12 @@ const View = ({
         {/*
          * @Page End
          */}
-        {isDesktop ? <RightBookContainer doc_id={doc_id as number} /> : null}
+        {isDesktop ? (
+          <RightBookContainer
+            doc_id={doc_id as number}
+            authContext={authContext}
+          />
+        ) : null}
       </div>
     </div>
   )
@@ -199,14 +212,23 @@ const ParentNode = ({
   )
 }
 
-const RightBookContainer = ({ doc_id }: { doc_id: number }) => {
+const RightBookContainer = ({
+  doc_id,
+  authContext,
+}: {
+  doc_id: number
+  authContext: AuthContextProps
+}) => {
+  const isAuth = authContext.status === AuthStatus.AUTHORIZED
   return (
     <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
       <ul className="list-item" style={{ paddingLeft: 0, listStyle: 'none' }}>
-        <li>
-          <LuFileEdit color="#2d2d2d" size={16} />
-          <Link to={`/edit/book/${doc_id}`}>Edit this page</Link>
-        </li>
+        {isAuth && (
+          <li>
+            <LuFileEdit color="#2d2d2d" size={16} />
+            <Link to={`/edit/book/${doc_id}`}>Edit this page</Link>
+          </li>
+        )}
         <li>
           <LuFileWarning color="#2d2d2d" size={16} />
           <Link to="#">Report</Link>
