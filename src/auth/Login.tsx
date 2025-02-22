@@ -171,7 +171,7 @@ const Login = ({
               <button
                 style={{ width: '100%', marginTop: 30 }}
                 onClick={onHandleLogin}
-                className="shadow"
+                className="shadow black-bg"
               >
                 Log In
               </button>

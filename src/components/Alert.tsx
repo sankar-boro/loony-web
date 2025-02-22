@@ -31,7 +31,6 @@ const AlertComponent = ({
   alert: Alert
   onClose: React.MouseEventHandler<HTMLDivElement>
 }) => {
-  console.log(alert)
   if (!alert) return null
   const css = alertTypes[alert.status]
   return (

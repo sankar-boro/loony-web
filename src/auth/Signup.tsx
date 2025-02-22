@@ -102,7 +102,7 @@ const Signup = ({
                   marginBottom: 20,
                 }}
               >
-                <h2 style={{ fontSize: 26, color: '#4da6ff' }}>Sign Up</h2>
+                <h2>Sign Up</h2>
               </div>
 
               <div className="input-container">
@@ -213,7 +213,7 @@ const Signup = ({
               <button
                 style={{ width: '100%' }}
                 onClick={onHandleSignup}
-                className="shadow"
+                className="shadow black-bg"
               >
                 Sign Up
               </button>
