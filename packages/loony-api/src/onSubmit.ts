@@ -15,17 +15,25 @@ export const onLogin = async ({
   navigate,
 }: {
   formData: { username: string; password: string }
-  setFormError: React.Dispatch<React.SetStateAction<string>>
+  setFormError: React.Dispatch<
+    React.SetStateAction<{ label: string; message: string }>
+  >
   authContext: AuthContextProps
   notificationContext: NotificationContextProps
   navigate: NavigateFunction
 }) => {
   if (!formData.username) {
-    setFormError('email is required.')
+    setFormError({
+      label: 'username',
+      message: 'Email is required.',
+    })
     return
   }
   if (!formData.password) {
-    setFormError('Password is required.')
+    setFormError({
+      label: 'password',
+      message: 'Password is required.',
+    })
     return
   }
 
@@ -49,7 +57,7 @@ export const onLogin = async ({
           alert: {
             title: 'Error',
             content: __err,
-            status: '',
+            status: 'error',
           },
         })
       )
@@ -58,39 +66,42 @@ export const onLogin = async ({
 
 export const onSignup = async ({
   formData,
-  setState,
+  // setState,
   notificationContext,
   navigate,
+  setFormError,
 }: {
   formData: { fname: string; lname: string; username: string; password: string }
-  setState: React.Dispatch<
-    React.SetStateAction<{
-      viewPassword: boolean
-      formError: string
-      state: number
-    }>
-  >
+  // setState: React.Dispatch<
+  //   React.SetStateAction<{
+  //     viewPassword: boolean
+  //     state: number
+  //   }>
+  // >
   notificationContext: NotificationContextProps
   navigate: NavigateFunction
+  setFormError: React.Dispatch<
+    React.SetStateAction<{ label: string; message: string }>
+  >
 }) => {
   if (!formData.fname) {
-    setState((prevState) => ({
-      ...prevState,
-      formError: 'Please enter your first name.',
+    setFormError(() => ({
+      label: 'fname',
+      message: 'Please enter your first name.',
     }))
     return
   }
   if (!formData.username) {
-    setState((prevState) => ({
-      ...prevState,
-      formError: 'Phone number is required.',
+    setFormError(() => ({
+      label: 'username',
+      message: 'Phone number is required.',
     }))
     return
   }
   if (!formData.password) {
-    setState((prevState) => ({
-      ...prevState,
-      formError: 'Please enter password.',
+    setFormError(() => ({
+      label: 'password',
+      message: 'Please enter password.',
     }))
     return
   }
@@ -113,7 +124,7 @@ export const onSignup = async ({
           alert: {
             title: 'Error',
             content: __err,
-            status: '',
+            status: 'error',
           },
         })
       )

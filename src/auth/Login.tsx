@@ -15,9 +15,11 @@ const Login = ({
     username: '',
     password: '',
   })
-
   const [viewPassword, setViewPassword] = useState(false)
-  const [formError, setFormError] = useState('')
+  const [formError, setFormError] = useState({
+    label: '',
+    message: '',
+  })
 
   const navigate = useNavigate()
 
@@ -29,6 +31,7 @@ const Login = ({
   }
 
   const onHandleLogin = () => {
+    setFormError({ label: '', message: '' })
     onLogin({
       formData,
       setFormError,
@@ -101,14 +104,8 @@ const Login = ({
                   marginBottom: 20,
                 }}
               >
-                <h2 style={{ fontSize: 26, color: '#4da6ff' }}>Log in</h2>
+                <h2>Log in</h2>
               </div>
-
-              {formError ? (
-                <div style={{ marginBottom: 24 }}>
-                  <div style={{ color: 'red' }}>{formError}</div>
-                </div>
-              ) : null}
 
               <div className="input-container">
                 <label htmlFor="phone">Email/Username</label>
@@ -125,6 +122,12 @@ const Login = ({
                   required
                   autoFocus
                 />
+
+                {formError.label === 'username' ? (
+                  <div style={{ marginBottom: 24 }}>
+                    <div style={{ color: 'red' }}>{formError.message}</div>
+                  </div>
+                ) : null}
               </div>
 
               <div className="input-container">
@@ -141,6 +144,12 @@ const Login = ({
                   }}
                   required
                 />
+
+                {formError.label === 'password' ? (
+                  <div style={{ marginBottom: 24 }}>
+                    <div style={{ color: 'red' }}>{formError.message}</div>
+                  </div>
+                ) : null}
                 <div
                   style={{
                     display: 'flex',
@@ -162,7 +171,7 @@ const Login = ({
               <button
                 style={{ width: '100%', marginTop: 30 }}
                 onClick={onHandleLogin}
-                className="btn-md blue-bg"
+                className="shadow"
               >
                 Log In
               </button>

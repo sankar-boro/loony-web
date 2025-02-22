@@ -19,10 +19,12 @@ const Signup = ({
 
   const [state, setState] = useState({
     viewPassword: false,
-    formError: '',
     state: 1,
   })
-
+  const [formError, setFormError] = useState({
+    label: '',
+    message: '',
+  })
   const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,9 +35,9 @@ const Signup = ({
   const onHandleSignup = () =>
     onSignup({
       formData,
-      setState,
       notificationContext,
       navigate,
+      setFormError,
     })
 
   return (
@@ -103,12 +105,6 @@ const Signup = ({
                 <h2 style={{ fontSize: 26, color: '#4da6ff' }}>Sign Up</h2>
               </div>
 
-              {state.formError ? (
-                <div style={{ marginBottom: 24 }}>
-                  <div style={{ color: 'red' }}>{state.formError}</div>
-                </div>
-              ) : null}
-
               <div className="input-container">
                 <label htmlFor="fname">First Name</label>
                 <input
@@ -125,7 +121,14 @@ const Signup = ({
                   }}
                   autoFocus
                 />
+
+                {formError.label === 'fname' ? (
+                  <div style={{ marginBottom: 24 }}>
+                    <div style={{ color: 'red' }}>{formError.message}</div>
+                  </div>
+                ) : null}
               </div>
+
               <div className="input-container">
                 <label htmlFor="lname">Last Name</label>
                 <input
@@ -158,6 +161,12 @@ const Signup = ({
                     }
                   }}
                 />
+
+                {formError.label === 'username' ? (
+                  <div style={{ marginBottom: 24 }}>
+                    <div style={{ color: 'red' }}>{formError.message}</div>
+                  </div>
+                ) : null}
               </div>
 
               <div className="input-container">
@@ -175,6 +184,12 @@ const Signup = ({
                   }}
                   required
                 />
+
+                {formError.label === 'password' ? (
+                  <div style={{ marginBottom: 24 }}>
+                    <div style={{ color: 'red' }}>{formError.message}</div>
+                  </div>
+                ) : null}
                 <div
                   style={{
                     display: 'flex',
@@ -198,7 +213,7 @@ const Signup = ({
               <button
                 style={{ width: '100%' }}
                 onClick={onHandleSignup}
-                className="btn-md blue-bg"
+                className="shadow"
               >
                 Sign Up
               </button>

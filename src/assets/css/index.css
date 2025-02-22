@@ -60,6 +60,7 @@ input[type='file']::file-selector-button {
   margin-right: 10px;
 }
 input:focus,
+input:hover,
 textarea:focus {
   border: 1px solid #4da6ff;
   outline: none;
@@ -72,6 +73,9 @@ button {
   border: 1px solid #ccc;
   background-color: white;
   border-radius: 20px;
+}
+button:focus {
+  outline: none;
 }
 .black-bg {
   background-color: #2d2d2d;
