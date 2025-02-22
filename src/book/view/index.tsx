@@ -104,13 +104,7 @@ const View = ({
           </div>
         ) : null}
         {isDesktop ? (
-          <div
-            style={{
-              width: '15%',
-              paddingTop: 15,
-              borderRight: '1px solid #ebebeb',
-            }}
-          >
+          <div className="document-nav-container">
             <PageNavigation
               setState={setState}
               navNodes={navNodes}
@@ -128,15 +122,7 @@ const View = ({
         {/*
          * @Page
          */}
-        <div
-          style={{
-            width: isMobile ? '90%' : '50%',
-            paddingTop: 15,
-            paddingLeft: '5%',
-            paddingRight: '5%',
-            minHeight: '100vh',
-          }}
-        >
+        <div className="document-view-container">
           <ParentNode
             parentNode={parentNode}
             doc_id={doc_id as number}

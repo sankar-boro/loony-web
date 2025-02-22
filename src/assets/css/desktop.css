@@ -1,4 +1,5 @@
 @import url('header.css');
+@import url('common.css');
 
 /* 
 * @Containers
@@ -22,6 +23,22 @@
   margin-left: auto;
   margin-right: auto;
   min-height: 50%;
+}
+.documents-container {
+  width: 80%;
+}
+.document-nav-container {
+  width: 15%;
+  padding-top: 15px;
+  border-right: 1px solid #ebebeb;
+}
+.document-view-container {
+  width: 60%;
+  padding-top: 15px;
+  padding-left: 10%;
+  padding-right: 5%;
+  padding-bottom: 100px;
+  min-height: 100vh;
 }
 .flex-row {
   display: flex;
@@ -156,6 +173,7 @@ button:hover {
   background-color: #fff;
   background-clip: border-box;
   border-radius: 0.25rem;
+  width: 18%;
 }
 .section-title {
   font-weight: bold;
@@ -233,6 +251,7 @@ button:hover {
   background-color: black;
 }
 .left-navbar {
+  width: 15%;
   margin-top: 10px;
 }
 .top-navbar-container {
@@ -342,11 +361,6 @@ button:hover {
 /* 
 * @Page
 */
-.page-heading {
-  font-weight: bold;
-  font-size: 32px;
-  margin-bottom: 24px;
-}
 .page-section {
   margin-bottom: 24px;
 }
@@ -479,125 +493,6 @@ button:hover {
 }
 .modal-md-content-container {
   width: 100%;
-}
-
-/* Media query for screens smaller than 600px (adjust the breakpoint as needed) */
-@media (max-width: 600px) {
-  /* Adjust the width of the modal for smaller screens */
-  .modal-md-content-container {
-    width: 100%;
-  }
-  .modal {
-    width: 90%;
-  }
-}
-
-@media (max-width: 1460px) {
-  /* Adjust the width of the modal for smaller screens */
-  .modal-md-content-container {
-    width: 100%;
-  }
-  .modal {
-    width: 45%;
-  }
-}
-
-@media (max-width: 760px) {
-  /* Adjust the width of the modal for smaller screens */
-  .modal-md-content-container {
-    width: 100%;
-  }
-  .modal {
-    width: 90%;
-  }
-  .modal-md {
-    width: 90%;
-  }
-}
-
-@media (max-width: 460px) {
-  /* Adjust the width of the modal for smaller screens */
-  .modal-md-content-container {
-    width: 100%;
-  }
-  .modal {
-    width: 90%;
-  }
-  .modal-md {
-    width: 90%;
-  }
-}
-
-@media (max-width: 2560px) {
-  .card {
-    width: calc(18.33% - 20px);
-  }
-  .book-container,
-  .form-container {
-    width: 100%;
-    min-height: 100%;
-  }
-  .blog-container {
-    width: 100%;
-  }
-  .left-navbar {
-    width: 15%;
-  }
-  .documents-container {
-    width: 80%;
-  }
-}
-
-@media (max-width: 1980px) {
-  .card {
-    width: calc(28.33% - 20px);
-  }
-  .book-container,
-  .form-container {
-    width: 80%;
-  }
-  .left-navbar {
-    width: 20%;
-  }
-}
-
-@media (max-width: 1280px) {
-  .card {
-    width: calc(33.33% - 20px);
-  }
-  .book-container,
-  .form-container {
-    width: 85%;
-  }
-  .left-navbar {
-    width: 25%;
-  }
-}
-
-@media (max-width: 768px) {
-  .card {
-    width: calc(100% - 20px);
-  }
-  .book-container,
-  .form-container {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .card {
-    width: calc(100% - 50px);
-    margin-left: auto;
-    margin-right: auto;
-    flex-wrap: wrap;
-  }
-  .book-container,
-  .form-container {
-    width: 100%;
-  }
-  .left-navbar {
-    display: none;
-  }
 }
 
 .close-button {

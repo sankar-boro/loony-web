@@ -1,11 +1,21 @@
-import React from 'react'
+import React, { lazy } from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './assets/css/index.css'
+const Desktop = lazy(() => import('./Desktop.tsx'))
+const Mobile = lazy(() => import('./Mobile.tsx'))
+
+const width = window.screen.width
 
 const root = createRoot(document.getElementById('root') as HTMLElement)
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-)
+if (width <= 760) {
+  root.render(
+    <React.StrictMode>
+      <Mobile />
+    </React.StrictMode>
+  )
+} else {
+  root.render(
+    <React.StrictMode>
+      <Desktop />
+    </React.StrictMode>
+  )
+}

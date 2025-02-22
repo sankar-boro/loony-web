@@ -1,8 +1,12 @@
 #!/usr/bin/env sh
 
-echo "Build init."
+echo "=================================
+||       🎉 Build init!        ||
+================================="
 
 rm -rf build
 npx webpack --config ./config/webpack.config.js
 
-echo "Build completed."
+echo "=================================
+||       🎉 BUILD COMPLETED!     ||
+================================="
