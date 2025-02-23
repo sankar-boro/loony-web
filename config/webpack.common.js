@@ -7,6 +7,8 @@ const pkgRoot = path.join(__dirname, '..', 'packages')
 const main = path.resolve(__dirname, '..', './src/main.tsx')
 const indexHtml = path.resolve(__dirname, '..', './public/index.html')
 
+const version = 1
+
 function findPackages() {
   return fs
     .readdirSync(pkgRoot)
@@ -78,8 +80,10 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '..', './build'),
-    filename: 'bundle.js',
+    filename: `bundle.v${version}.js`,
+    chunkFilename: `chunk.[name].v${version}.js`,
     publicPath: '/',
+    clean: true,
   },
   plugins: [
     new HtmlWebpackPlugin({

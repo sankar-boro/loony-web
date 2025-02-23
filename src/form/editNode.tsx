@@ -125,6 +125,7 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
             <br />
             <input
               type="text"
+              placeholder="Title"
               value={title}
               onChange={(e) => {
                 setTitle(e.target.value)
