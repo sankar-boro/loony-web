@@ -1,5 +1,6 @@
-@import url('header.css');
-@import url('common.css');
+@import './header.css';
+@import './common.css';
+@import './navbar.css';
 
 /* 
 * @Containers
@@ -522,5 +523,3 @@ code {
   background-color: #f8f9fa;
   padding: 10px;
 }
-
-@import url('navbar.css');

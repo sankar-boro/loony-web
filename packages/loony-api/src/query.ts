@@ -13,7 +13,7 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 })
 
-const handleBackendError = (data) => {
+const handleBackendError = (data: any) => {
   if (data.email && data.email[0] && data.email[0].code) {
     return data.email[0].code
   }
@@ -123,4 +123,6 @@ export const handleError = (err: any): string => {
   if (typeof err === 'string') {
     return err
   }
+  
+  return ''
 }

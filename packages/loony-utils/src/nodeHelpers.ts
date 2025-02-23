@@ -23,7 +23,7 @@ export const getBlogNodes = (
   setStatus: PageStatusDispatchAction
 ) => {
   const url = `/blog/get/nodes?blog_id=${blog_id}`
-  setStatus((prevState) => ({
+  setStatus((prevState: any) => ({
     ...prevState,
     status: PageStatus.FETCHING,
   }))
@@ -31,15 +31,15 @@ export const getBlogNodes = (
     const unOrderedChildNodes = data.child_nodes
     const blogNodes = orderBlogNodes(unOrderedChildNodes, data.main_node)
     const mainNode = blogNodes && blogNodes[0]
-    const childNodes = blogNodes.length >= 2 ? blogNodes.slice(1) : []
+    const childNodes: DocNode[] = blogNodes.length >= 2 ? blogNodes.slice(1) : []
 
-    setState((prevState) => ({
+    setState((prevState: any) => ({
       ...prevState,
       mainNode,
       childNodes,
       blogNodes,
     }))
-    setStatus((prevState) => ({
+    setStatus((prevState: any) => ({
       ...prevState,
       status: PageStatus.VIEW_PAGE,
     }))
@@ -52,7 +52,7 @@ export const getNav = (
   setStatus: PageStatusDispatchAction
 ) => {
   const url = `/book/get/nav?doc_id=${doc_id}`
-  setStatus((prevState) => ({
+  setStatus((prevState: any) => ({
     ...prevState,
     status: PageStatus.FETCHING,
   }))
@@ -61,7 +61,7 @@ export const getNav = (
     const mainNode = bookTree && bookTree[0]
     mainNode.child = []
     const __navNodes = bookTree.slice(1)
-    setState((prevState) => ({
+    setState((prevState: any) => ({
       ...prevState,
       mainNode,
       frontPage: mainNode,
@@ -86,7 +86,7 @@ export const getChapters = (
   setStatus: PageStatusDispatchAction
 ) => {
   const url = `/book/get/nodes?doc_id=${doc_id}`
-  setStatus((prevState) => ({
+  setStatus((prevState: any) => ({
     ...prevState,
     status: PageStatus.FETCHING,
   }))
@@ -95,7 +95,7 @@ export const getChapters = (
     const mainNode = bookTree && bookTree[0]
     const __navNodes = bookTree.slice(1)
 
-    setState((prevState) => ({
+    setState((prevState: any) => ({
       ...prevState,
       mainNode,
       frontPage: mainNode,
@@ -120,7 +120,7 @@ export const getChapter = (
   const { uid } = __node
   const url = `/book/get/chapter?doc_id=${doc_id}&page_id=${uid}`
   if (groupNodesById[uid]) {
-    setState((prevState) => ({
+    setState((prevState: any) => ({
       ...prevState,
       ...resetState,
       childNodes: groupNodesById[uid].child,
@@ -129,9 +129,9 @@ export const getChapter = (
     }))
   } else {
     axiosInstance.get(url).then(({ data }) => {
-      let parentNode = null
-      const childNodes = []
-      data.nodes.forEach((n) => {
+      let parentNode: DocNode | null = null
+      const childNodes: DocNode[] = []
+      data.nodes.forEach((n: DocNode) => {
         if (n.uid != uid) {
           childNodes.push(n)
         } else {
@@ -139,7 +139,7 @@ export const getChapter = (
         }
       })
       const res = orderNodes(childNodes, parentNode)
-      setState((prevState) => ({
+      setState((prevState: any) => ({
         ...prevState,
         ...resetState,
         childNodes: res,
@@ -167,7 +167,7 @@ export const getSection = (
   const { uid } = __node
   const url = `/book/get/section?doc_id=${doc_id}&page_id=${uid}`
   if (groupNodesById[uid]) {
-    setState((prevState) => ({
+    setState((prevState: any) => ({
       ...prevState,
       ...resetState,
       childNodes: groupNodesById[uid].child,
@@ -176,9 +176,9 @@ export const getSection = (
     }))
   } else {
     axiosInstance.get(url).then(({ data }) => {
-      let parentNode = null
-      const childNodes = []
-      data.nodes.forEach((n) => {
+      let parentNode: DocNode | null = null
+      const childNodes: DocNode[] = []
+      data.nodes.forEach((n: DocNode) => {
         if (n.uid != uid) {
           childNodes.push(n)
         } else {
@@ -186,7 +186,7 @@ export const getSection = (
         }
       })
       const res = orderNodes(childNodes, parentNode)
-      setState((prevState) => ({
+      setState((prevState: any) => ({
         ...prevState,
         ...resetState,
         childNodes: res,
@@ -214,7 +214,7 @@ export const getSections = (
   const { uid } = __node
   const url = `/book/get/sections?doc_id=${doc_id}&page_id=${uid}`
   if (allSectionsByPageId[uid]) {
-    setState((prevState) => ({
+    setState((prevState: any) => ({
       ...prevState,
       ...resetState,
       activeSectionsByPageId: allSectionsByPageId[uid],
@@ -225,7 +225,7 @@ export const getSections = (
   } else {
     axiosInstance.get(url).then(({ data }) => {
       const res = orderNodes(data, __node)
-      setState((prevState) => ({
+      setState((prevState: any) => ({
         ...prevState,
         ...resetState,
         activeSectionsByPageId: res,
@@ -251,7 +251,7 @@ export const getSubSections = (
   const { uid } = __node
   const url = `/book/get/sub_sections?doc_id=${doc_id}&page_id=${uid}`
   if (allSubSectionsBySectionId[uid]) {
-    setState((prevState) => ({
+    setState((prevState: any) => ({
       ...prevState,
       ...resetState,
       activeSubSectionsBySectionId: allSubSectionsBySectionId[uid],
@@ -261,7 +261,7 @@ export const getSubSections = (
   } else {
     axiosInstance.get(url).then(({ data }) => {
       const res = orderNodes(data, __node)
-      setState((prevState) => ({
+      setState((prevState: any) => ({
         ...prevState,
         ...resetState,
         activeSubSectionsBySectionId: res,
@@ -305,16 +305,16 @@ export const deleteBlogNode = (
     return true
   })
 
-  if (submitData.update_node) {
-    returnNodes = returnNodes.map((node) => {
-      if (node.uid === submitData.update_node.uid) {
-        node.parent_id = submitData.update_node.parent_id
-      }
-      return node
-    })
+  if (!submitData.update_node || !submitData.update_node.uid || !submitData.update_node.parent_id) {
+    return returnNodes;
   }
 
-  return returnNodes
+  return returnNodes.map((node) => {
+    if (node.uid === submitData.update_node?.uid) {
+      node.parent_id = submitData.update_node.parent_id
+    }
+    return node
+  })
 }
 
 export const deleteOne = (
@@ -349,6 +349,7 @@ export const deleteSection = (
   }
 ): DocNode[] => {
   const newNodes: DocNode[] = navNodes.map((x) => {
+    if (!x.child) return x;
     return {
       ...x,
       child: x.child.filter((y) => !delete_nodes.includes(y.uid)),
@@ -356,7 +357,7 @@ export const deleteSection = (
   })
   if (update_node) {
     newNodes.forEach((x) => {
-      x.child.forEach((y, i) => {
+      x.child?.forEach((y, i) => {
         if (y.uid === update_node.uid) {
           newNodes[i].parent_id = update_node.parent_id
         }
@@ -503,12 +504,10 @@ export const appendSections = (
   res: { new_node: DocNode; update_node: DocNode }
 ) => {
   const { new_node, update_node } = res
-  // const newNodes = []
-
   if (update_node) {
-    navNodes.forEach((c) => {
-      const t = []
-      c.child.forEach((s) => {
+    navNodes.forEach((c: DocNode) => {
+      const t: DocNode[] = []
+      c.child?.forEach((s) => {
         if (s.uid === update_node.uid) {
           s.parent_id = update_node.parent_id
         }
@@ -525,11 +524,11 @@ export const appendSections = (
   } else {
     navNodes.forEach((c) => {
       const t = []
-      if (topData.uid === c.uid && c.child.length === 0) {
+      if (topData.uid === c.uid && c.child?.length === 0) {
         t.push(new_node)
       }
 
-      c.child.forEach((s) => {
+      c.child?.forEach((s) => {
         if (topData.uid === s.uid) {
           t.push(s)
           t.push(new_node)
@@ -585,12 +584,12 @@ function reOrderFrontPage(
   const { allSectionGroups } = samples
   const frontPages = groupSectionsForPage(frontPage, allSectionGroups)
 
-  if (frontPages.newParent.child.length === 0) {
+  if (frontPages.newParent.child && frontPages.newParent.child?.length === 0) {
     return frontPages
   }
 
-  if (frontPages.newParent.child.length > 0) {
-    const newSubSections = frontPages.newParent.child.map(
+  if (frontPages.newParent.child && frontPages.newParent.child?.length > 0) {
+    const newSubSections = frontPages.newParent.child?.map(
       (section: DocNode) => {
         const allSubSections = groupSubSectionsForSection(
           section,
@@ -607,7 +606,7 @@ function reOrderFrontPage(
 }
 
 function groupWithIdentity(nodes: DocNode[]) {
-  const identityGroups = {
+  const identityGroups: Record<number, any> = {
     100: [], // Front page
     101: [], // Chapter
     102: [], // Section
@@ -639,7 +638,7 @@ const groupChapters = (parent_id: number, chapters: DocNode[]) => {
   return orders
 }
 
-const filterNodes = (nodes: DocNode[], removeIds = []) => {
+const filterNodes = (nodes: DocNode[], removeIds: number[] = []) => {
   if (removeIds && removeIds.length > 0) {
     return nodes.filter((d) => {
       if (removeIds.includes(d.uid)) {
@@ -663,6 +662,7 @@ export const orderBookNodes = (
   mainNode?: DocNode,
   removeIds: number[] = []
 ) => {
+  if (!mainNode) return []
   mainNode.identity = 100
   let allNodes = mainNode ? [mainNode, ...nodes] : nodes
   allNodes = filterNodes(allNodes, removeIds)
@@ -695,7 +695,8 @@ export const orderBookNodes = (
  * @param parentNode DocNode
  * @returns DocNode[]
  */
-export const orderNodes = (nodes: DocNode[], parentNode: DocNode) => {
+export const orderNodes = (nodes: DocNode[], parentNode: DocNode | null) => {
+  if (!parentNode) return []
   let updateParentNode = parentNode
   const results = []
 
@@ -745,7 +746,7 @@ export const orderBlogChildNodes = (
   childNodes = filterNodes(childNodes, removeIds)
 
   const results = []
-  let parentNode = mainNode
+  let parentNode: DocNode = mainNode
 
   while (childNodes.length !== results.length) {
     for (let i = 0; i < childNodes.length; i++) {
