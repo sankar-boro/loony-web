@@ -3,9 +3,7 @@ import { MdHistory } from 'react-icons/md'
 import { GoHome } from 'react-icons/go'
 import { IoMdTime } from 'react-icons/io'
 import { AiOutlineLike } from 'react-icons/ai'
-import ContentPolicyIcon from '../assets/svgs/ContentPolicy.svg'
-import PrivacyPolicyIcon from '../assets/svgs/PrivacyPolicy.svg'
-import UserAgreementIcon from '../assets/svgs/UserAgreement.svg'
+import { ContentPolicyIcon, PrivacyPolicyIcon, UserAgreementIcon } from '../assets/svgs/icons.tsx'
 
 import { BasicMenuNavContainer } from '../components/Containers.tsx'
 
