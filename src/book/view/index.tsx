@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
+import { LuFileWarning } from 'react-icons/lu'
+import { FiEdit2 } from "react-icons/fi";
 import { extractImage, getNav } from 'loony-utils'
 
 import { useParams, Link } from 'react-router-dom'
@@ -211,7 +212,7 @@ const RightBookContainer = ({
       <ul className="list-item" style={{ paddingLeft: 0, listStyle: 'none' }}>
         {isAuth && (
           <li>
-            <LuFileEdit color="#2d2d2d" size={16} />
+            <FiEdit2 color="#2d2d2d" size={16} />
             <Link to={`/edit/book/${doc_id}`}>Edit this page</Link>
           </li>
         )}

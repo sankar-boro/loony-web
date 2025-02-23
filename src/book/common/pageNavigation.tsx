@@ -9,7 +9,8 @@ import {
   SectionsNavContainer,
 } from '../../components/Containers.tsx'
 import { getChapter, getSection } from 'loony-utils'
-import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
+import { LuFileWarning } from 'react-icons/lu'
+import { FiEdit2 } from "react-icons/fi";
 import { Link } from 'react-router-dom'
 import {
   ReadBookAction,
@@ -102,7 +103,7 @@ export const PageNavigation = ({
             style={{ paddingLeft: 0, listStyle: 'none' }}
           >
             <li style={{ display: 'flex', alignItems: 'center' }}>
-              <LuFileEdit color="#2d2d2d" size={16} />
+              <FiEdit2 color="#2d2d2d" size={16} />
               <Link to={`/edit/book/${doc_id}`}>Edit this page</Link>
             </li>
             <li style={{ display: 'flex', alignItems: 'center' }}>

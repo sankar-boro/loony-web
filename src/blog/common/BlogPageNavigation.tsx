@@ -1,5 +1,6 @@
 import { BasicMenuNavContainer } from '../../components/Containers.tsx'
-import { LuFileWarning, LuFileEdit } from 'react-icons/lu'
+import { LuFileWarning } from 'react-icons/lu'
+import { FiEdit2 } from "react-icons/fi";
 import { Link } from 'react-router-dom'
 import {
   AuthContextProps,
@@ -44,7 +45,7 @@ export const Edit = ({
       {authContext.status === AuthStatus.AUTHORIZED &&
       authContext.user?.uid === mainNode.user_id ? (
         <li>
-          <LuFileEdit color="#2d2d2d" size={16} />
+          <FiEdit2 color="#2d2d2d" size={16} />
           <Link to={`/edit/blog/${blog_id}`}>Edit this page</Link>
         </li>
       ) : null}
