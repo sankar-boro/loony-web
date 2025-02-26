@@ -15,7 +15,7 @@ import {
 } from "loony-types";
 import BasicMarkdown from "../../components/BasicMarkdown.tsx";
 import NodeInfo from "../../components/NodeInfo.tsx";
-import Nav from "../../nav/view/index.tsx";
+import Nav from "../../nav/book/view/index.tsx";
 
 const View = (props: AppRouteProps) => {
   const { isMobile, appContext, authContext } = props;
@@ -71,33 +71,31 @@ const View = (props: AppRouteProps) => {
         navNodes={navNodes}
         {...props}
       />
-      <div className="book-container">
-        <div className="document-view-container">
-          <ParentNode
-            parentNode={parentNode}
-            doc_id={doc_id as number}
-            base_url={base_url}
-          />
-          {childNodes.map((subSectionNode) => {
-            const nodeImage = extractImage(subSectionNode.images);
-            return (
-              <div className="page-section" key={subSectionNode.uid}>
-                <div className="section-title">{subSectionNode.title}</div>
-                {nodeImage && nodeImage.name ? (
-                  <div style={{ width: "100%", borderRadius: 5 }}>
-                    <img
-                      src={`${base_url}/api/book/${doc_id}/720/${nodeImage.name}`}
-                      alt=""
-                      width="100%"
-                    />
-                  </div>
-                ) : null}
-                <BasicMarkdown source={subSectionNode.content} />
-              </div>
-            );
-          })}
-          <div style={{ height: 50 }} />
-        </div>
+      <div className="con-40 margin-hor-5">
+        <ParentNode
+          parentNode={parentNode}
+          doc_id={doc_id as number}
+          base_url={base_url}
+        />
+        {childNodes.map((subSectionNode) => {
+          const nodeImage = extractImage(subSectionNode.images);
+          return (
+            <div className="page-section" key={subSectionNode.uid}>
+              <div className="section-title">{subSectionNode.title}</div>
+              {nodeImage && nodeImage.name ? (
+                <div style={{ width: "100%", borderRadius: 5 }}>
+                  <img
+                    src={`${base_url}/api/book/${doc_id}/720/${nodeImage.name}`}
+                    alt=""
+                    width="100%"
+                  />
+                </div>
+              ) : null}
+              <BasicMarkdown source={subSectionNode.content} />
+            </div>
+          );
+        })}
+        <div style={{ height: 50 }} />
       </div>
 
       {/*

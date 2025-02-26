@@ -24,7 +24,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
     page_id,
     onCancel,
     parent_identity,
-    isMobile,
+    // isMobile,
   } = props;
 
   const authContext = useContext<AuthContextProps>(AuthContext);
@@ -69,14 +69,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
   }, [formTitle, formContent]);
 
   return (
-    <div
-      style={{
-        width: isMobile ? "100%" : "40%",
-        paddingBottom: 100,
-        paddingLeft: "5%",
-        paddingTop: "1.5em",
-      }}
-    >
+    <div className="con-40 margin-hor-5">
       <div style={{}}>
         <h2>{heading}</h2>
         <div>

@@ -1,14 +1,14 @@
-import AddNode from '../../form/addNode.tsx'
-import EditDocument from '../../form/editNode.tsx'
-import { appendChapters, appendSections, appendSubSections } from 'loony-utils'
+import AddNode from "../../form/addNode.tsx";
+import EditDocument from "../../form/editNode.tsx";
+import { appendChapters, appendSections, appendSubSections } from "loony-utils";
 import {
   AppDispatchAction,
   EditBookAction,
   EditBookState,
   DocNode,
-} from 'loony-types'
-import { NavigateFunction } from 'react-router-dom'
-import { useCallback } from 'react'
+} from "loony-types";
+import { NavigateFunction } from "react-router-dom";
+import { useCallback } from "react";
 
 export default function EditComponent({
   state,
@@ -16,12 +16,12 @@ export default function EditComponent({
   doc_id,
   isMobile,
 }: {
-  state: EditBookState
-  setState: EditBookAction
-  setAppContext: AppDispatchAction
-  doc_id: number
-  navigate: NavigateFunction
-  isMobile: boolean
+  state: EditBookState;
+  setState: EditBookAction;
+  setAppContext: AppDispatchAction;
+  doc_id: number;
+  navigate: NavigateFunction;
+  isMobile: boolean;
 }) {
   const {
     editNode,
@@ -34,32 +34,31 @@ export default function EditComponent({
     childNodes,
     parentNode,
     topNode,
-  } = state
-
+  } = state;
 
   const editPage = (data: DocNode) => {
-    if (!editNode) return
-    let __parentNode = null
+    if (!editNode) return;
+    let __parentNode = null;
     const __navNodes = navNodes.map((n) => {
       if (n.uid === editNode.uid) {
         const t = {
           ...n,
           ...data,
-        }
-        __parentNode = t
-        return t
+        };
+        __parentNode = t;
+        return t;
       }
-      return n
-    })
+      return n;
+    });
     setState({
       ...state,
       parentNode: __parentNode,
       navNodes: __navNodes,
-      form: '',
-    })
-  }
+      form: "",
+    });
+  };
   const editSection = (data: DocNode) => {
-    if (!editNode) return
+    if (!editNode) return;
     setState({
       ...state,
       groupNodesById: {
@@ -70,24 +69,24 @@ export default function EditComponent({
         },
       },
       parentNode: data,
-      form: '',
+      form: "",
       editNode: null,
-    })
-  }
+    });
+  };
   const editSubSection = (data: DocNode) => {
-    if (!editNode) return
-    if (!parentNode) return
-    const activeSection = groupNodesById[parentNode.uid]
-    const subSections = activeSection.child as DocNode[]
+    if (!editNode) return;
+    if (!parentNode) return;
+    const activeSection = groupNodesById[parentNode.uid];
+    const subSections = activeSection.child as DocNode[];
     const child = subSections?.map((innerNode) => {
       if (innerNode.uid === editNode.uid) {
         return {
           ...innerNode,
           ...data,
-        }
+        };
       }
-      return innerNode
-    })
+      return innerNode;
+    });
     setState({
       ...state,
       groupNodesById: {
@@ -98,64 +97,64 @@ export default function EditComponent({
         },
       },
       childNodes: child,
-      form: '',
+      form: "",
       editNode: null,
-    })
-  }
+    });
+  };
 
   const updateFrontPage = (data: DocNode) => {
     const __parentNode = {
       ...frontPage,
       ...data,
-    }
+    };
     setState({
       ...state,
       parentNode: __parentNode,
       page_id: __parentNode.uid,
-      form: '',
-    })
-  }
+      form: "",
+    });
+  };
 
   const editFnCallback = (data: DocNode) => {
-    if (!editNode) return
+    if (!editNode) return;
     if (editNode.identity === 100) {
-      updateFrontPage(data)
+      updateFrontPage(data);
     }
     if (editNode.identity === 101) {
-      editPage(data)
+      editPage(data);
     }
     if (editNode.identity === 102) {
-      editSection(data)
+      editSection(data);
     }
     if (editNode.identity === 103) {
-      editSubSection(data)
+      editSubSection(data);
     }
-  }
+  };
 
   const addChapterFnCb = (data: {
-    new_node: DocNode
-    update_node: DocNode
+    new_node: DocNode;
+    update_node: DocNode;
   }) => {
-    if (!topNode) return
-    const newNavNodes = appendChapters(navNodes, topNode, data)
+    if (!topNode) return;
+    const newNavNodes = appendChapters(navNodes, topNode, data);
     setState({
       ...state,
       parentNode: data.new_node,
       navNodes: newNavNodes,
       childNodes: [],
       addNode: null,
-      form: '',
-    })
-  }
+      form: "",
+    });
+  };
 
   const addSectionFnCb = (data: {
-    new_node: DocNode
-    update_node: DocNode
+    new_node: DocNode;
+    update_node: DocNode;
   }) => {
-    if (!topNode || !parentNode) return
+    if (!topNode || !parentNode) return;
 
-    const newNavNodes = appendSections(navNodes, topNode, data)
-    const newActiveNode = data.new_node
+    const newNavNodes = appendSections(navNodes, topNode, data);
+    const newActiveNode = data.new_node;
     setState({
       ...state,
       addNode: null,
@@ -170,16 +169,16 @@ export default function EditComponent({
           child: [],
         },
       },
-      form: '',
-    })
-  }
+      form: "",
+    });
+  };
 
   const addSubSectionFnCb = (data: {
-    new_node: DocNode
-    update_node: DocNode
+    new_node: DocNode;
+    update_node: DocNode;
   }) => {
-    if (!topNode || !parentNode) return
-    const newChildNodes = appendSubSections(childNodes, topNode, data)
+    if (!topNode || !parentNode) return;
+    const newChildNodes = appendSubSections(childNodes, topNode, data);
 
     setState({
       ...state,
@@ -192,22 +191,22 @@ export default function EditComponent({
       },
       childNodes: newChildNodes,
       addNode: null,
-      form: '',
-    })
-  }
+      form: "",
+    });
+  };
 
   const onCancel = useCallback(() => {
     setState({
       ...state,
-      form: '',
+      form: "",
       editNode: null,
       addNode: null,
-    })
-  }, [])
+    });
+  }, [setState, state]);
 
   return (
     <>
-      {form && form === 'add_chapter' && topNode ? (
+      {form && form === "add_chapter" && topNode ? (
         <AddNode
           FnCallback={addChapterFnCb}
           url="/book/append/node"
@@ -223,7 +222,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {form && form === 'add_section' && topNode ? (
+      {form && form === "add_section" && topNode ? (
         <AddNode
           FnCallback={addSectionFnCb}
           url="/book/append/node"
@@ -239,7 +238,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {form && form === 'add_sub_section' && topNode ? (
+      {form && form === "add_sub_section" && topNode ? (
         <AddNode
           FnCallback={addSubSectionFnCb}
           url="/book/append/node"
@@ -255,7 +254,7 @@ export default function EditComponent({
         />
       ) : null}
 
-      {form && form === 'edit_node' ? (
+      {form && form === "edit_node" ? (
         <EditDocument
           docIdName="doc_id"
           doc_id={doc_id}
@@ -267,7 +266,6 @@ export default function EditComponent({
           isMobile={isMobile}
         />
       ) : null}
-
     </>
-  )
+  );
 }

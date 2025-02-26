@@ -21,7 +21,7 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
     docIdName,
     doc_id,
     url,
-    isMobile,
+    // isMobile,
     heading,
   } = props;
   const { editNode, mainNode } = state;
@@ -99,14 +99,7 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
   if (!editNode || !mainNode) return null;
 
   return (
-    <div
-      style={{
-        width: isMobile ? "100%" : "40%",
-        paddingBottom: 100,
-        paddingLeft: "5%",
-        paddingTop: "1.5em",
-      }}
-    >
+    <div className="con-40 margin-hor-5">
       <h2>{heading}</h2>
       <hr />
       <div>

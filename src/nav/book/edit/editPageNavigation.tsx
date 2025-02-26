@@ -5,7 +5,7 @@ import {
   SectionsNavContainer,
   ChapterButtonNavContainer,
   SectionButtonNavContainer,
-} from "../../components/Containers.tsx";
+} from "../../../components/Containers.tsx";
 import { getChapter, getSection } from "loony-utils";
 import { EditBookAction, EditBookState, VoidReturnFunction } from "loony-types";
 

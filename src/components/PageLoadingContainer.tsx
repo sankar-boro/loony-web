@@ -1,48 +1,40 @@
-import PageLoader from './PageLoader.tsx'
+import PageLoader from "./PageLoader.tsx";
 
 const PageLoadingContainer = ({
   isMobile,
   title,
 }: {
-  isMobile: boolean
-  title?: string
+  isMobile: boolean;
+  title?: string;
 }) => {
   return (
-    <div className="book-container">
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
+    <div className="full-con">
+      <div style={{ display: "flex", flexDirection: "row" }}>
         {isMobile ? null : (
           <div
             style={{
-              width: '15%',
+              width: "15%",
               paddingTop: 15,
-              borderRight: '1px solid #ebebeb',
+              borderRight: "1px solid #ebebeb",
             }}
           />
         )}
-        <div
-          style={{
-            width: isMobile ? '100%' : '50%',
-            paddingTop: 15,
-            paddingLeft: '5%',
-            paddingRight: '5%',
-            minHeight: '100vh',
-          }}
-        >
+        <div className="con-40 margin-hor-5">
           {title ? <h1>{title}</h1> : null}
           <PageLoader key_id={1} />
         </div>
         {isMobile ? null : (
           <div
             style={{
-              width: '20%',
+              width: "20%",
               paddingTop: 15,
-              borderRight: '1px solid #ebebeb',
+              borderRight: "1px solid #ebebeb",
             }}
           />
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PageLoadingContainer
+export default PageLoadingContainer;

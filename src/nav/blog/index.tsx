@@ -1,23 +1,15 @@
 import { Suspense, lazy } from "react";
 import {
-  ReadBookAction,
-  ReadBookState,
-  DocNode,
-  EditBookAction,
-  EditBookState,
-  VoidReturnFunction,
   BooleanDispatchAction,
+  ReadBlogState,
+  EditBlogState,
 } from "loony-types";
-import DesktopNav from "./view/DesktopNav";
+import DesktopNav from "./DesktopNav";
 const MobileNav = lazy(() => import("./MobileNav"));
 
 export default function Nav(props: {
   isMobile: boolean;
-  setState: ReadBookAction | EditBookAction;
-  navNodes: DocNode[];
-  state: ReadBookState | EditBookState;
-  doc_id: number;
-  viewFrontPage: VoidReturnFunction;
+  state: ReadBlogState | EditBlogState;
   setMobileNavOpen: BooleanDispatchAction;
 }) {
   if (props.isMobile) {
