@@ -1,56 +1,48 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import MarkdownPreview from '@uiw/react-markdown-preview'
-
-import { Suspense, useCallback } from 'react'
+import MarkdownPreview from "@uiw/react-markdown-preview";
+import { Suspense, useCallback } from "react";
 import {
-  deleteBlogNode,
   extractImage,
   updateBlogNode,
   appendBlogNode,
-  timeAgo,
   orderBlogChildNodes,
-} from 'loony-utils'
-import { RxReader } from 'react-icons/rx'
-import { AiOutlineDelete } from 'react-icons/ai'
-import { LuFileWarning } from 'react-icons/lu'
-import { MdAdd, MdOutlineEdit, MdContentCopy } from 'react-icons/md'
-import { Link, useNavigate } from 'react-router-dom'
-
-import { axiosInstance } from 'loony-api'
-import AddNode from '../../form/addNode.tsx'
-import EditNodeForm from '../../form/editNode.tsx'
-import ConfirmAction from '../../components/ConfirmAction.tsx'
-import { Chapters } from '../common/BlogPageNavigation.tsx'
+} from "loony-utils";
+import { RxReader } from "react-icons/rx";
+import { AiOutlineDelete } from "react-icons/ai";
+import { LuFileWarning } from "react-icons/lu";
+import { MdAdd, MdOutlineEdit, MdContentCopy } from "react-icons/md";
+import { Link } from "react-router-dom";
+import AddNode from "../../form/addNode.tsx";
+import EditNodeForm from "../../form/editNode.tsx";
+import { Chapters } from "../common/BlogPageNavigation.tsx";
 import {
   AppendNodeResponse,
   AppRouteProps,
   EditBlogState,
   EditBlogAction,
-  AuthContextProps,
-} from 'loony-types'
-import { DocNode, DocStatus } from 'loony-types'
-import NodeInfo from '../../components/NodeInfo.tsx'
+} from "loony-types";
+import { DocNode } from "loony-types";
+import NodeInfo from "../../components/NodeInfo.tsx";
+import Modal from "./modal.tsx";
 
 export default function RenderComponent({
   props,
   state,
   blog_id,
   setState,
-}: // authContext,
-{
-  props: AppRouteProps
-  state: EditBlogState
-  blog_id: number
-  setState: React.Dispatch<React.SetStateAction<EditBlogState>>
-  authContext: AuthContextProps
+}: {
+  props: AppRouteProps;
+  state: EditBlogState;
+  blog_id: number;
+  setState: React.Dispatch<React.SetStateAction<EditBlogState>>;
 }) {
-  const base_url = props.appContext.env.base_url
-  const { isMobile, mobileNavOpen, setMobileNavOpen } = props
-  const { mainNode, childNodes } = state
+  const base_url = props.appContext.env.base_url;
+  const { isMobile, mobileNavOpen, setMobileNavOpen } = props;
+  const { mainNode, childNodes } = state;
 
-  if (!mainNode || !mainNode) return null
+  if (!mainNode || !mainNode) return null;
 
-  const image = extractImage(mainNode.images)
+  const image = extractImage(mainNode.images);
 
   return (
     <div className="book-container">
@@ -58,22 +50,22 @@ export default function RenderComponent({
         {isMobile && mobileNavOpen ? (
           <div
             style={{
-              width: '100%',
-              backgroundColor: 'rgb(0,0,0,0.5)',
+              width: "100%",
+              backgroundColor: "rgb(0,0,0,0.5)",
               zIndex: 10,
-              height: '105vh',
+              height: "105vh",
             }}
             onClick={() => {
-              setMobileNavOpen(false)
+              setMobileNavOpen(false);
             }}
           >
             <div
               style={{
                 width: 320,
-                backgroundColor: 'white',
-                maxWidth: '100%',
-                height: '100%',
-                position: 'relative',
+                backgroundColor: "white",
+                maxWidth: "100%",
+                height: "100%",
+                position: "relative",
                 padding: 12,
               }}
             >
@@ -84,14 +76,21 @@ export default function RenderComponent({
         {!isMobile ? (
           <div
             style={{
-              width: '15%',
+              width: "15%",
               paddingTop: 15,
-              borderRight: '1px solid #ebebeb',
+              borderRight: "1px solid #ebebeb",
             }}
           >
             <Chapters state={state} />
           </div>
         ) : null}
+        {state.modal && (
+          <Modal
+            state={state}
+            setState={setState}
+            blog_id={blog_id as number}
+          />
+        )}
         {state.form && (
           <ActivityComponent
             state={state}
@@ -103,17 +102,17 @@ export default function RenderComponent({
         {!state.form && (
           <div
             style={{
-              width: isMobile ? '90%' : '50%',
-              paddingLeft: '5%',
-              paddingRight: '5%',
-              paddingBottom: '10vh',
-              minHeight: '110vh',
+              width: isMobile ? "90%" : "50%",
+              paddingLeft: "5%",
+              paddingRight: "5%",
+              paddingBottom: "10vh",
+              minHeight: "110vh",
             }}
           >
             <div>
               <div className="page-heading">{mainNode.title}</div>
               {image && image.name ? (
-                <div style={{ width: '100%', borderRadius: 5 }}>
+                <div style={{ width: "100%", borderRadius: 5 }}>
                   <img
                     src={`${base_url}/api/blog/${blog_id}/720/${image.name}`}
                     alt=""
@@ -140,7 +139,7 @@ export default function RenderComponent({
                 <Suspense fallback={<div>Loading component...</div>}>
                   <MarkdownPreview
                     source={mainNode.content}
-                    wrapperElement={{ 'data-color-mode': 'light' }}
+                    wrapperElement={{ "data-color-mode": "light" }}
                   />
                 </Suspense>
               </div>
@@ -154,8 +153,8 @@ export default function RenderComponent({
                     ...state,
                     // status: DocStatus.CreateNode,
                     addNode: mainNode,
-                    form: 'add_node',
-                  })
+                    form: "add_node",
+                  });
                 }}
                 style={{ marginRight: 10 }}
               >
@@ -170,8 +169,8 @@ export default function RenderComponent({
                     ...state,
                     // status: DocStatus.DeleteNode,
                     editNode: mainNode,
-                    form: 'edit_node',
-                  })
+                    form: "edit_node",
+                  });
                 }}
                 style={{ marginRight: 16 }}
               >
@@ -182,8 +181,8 @@ export default function RenderComponent({
               <div
                 className="button-none cursor"
                 onClick={(e) => {
-                  navigator.clipboard.writeText(mainNode.content)
-                  e.stopPropagation()
+                  navigator.clipboard.writeText(mainNode.content);
+                  e.stopPropagation();
                 }}
                 style={{ marginRight: 16 }}
               >
@@ -201,9 +200,9 @@ export default function RenderComponent({
             >
               {mainNode.identity !== 101 &&
                 childNodes.map((node, nodeIndex) => {
-                  const parseImage = JSON.parse(node.images as string)
+                  const parseImage = JSON.parse(node.images as string);
                   const nodeImage =
-                    parseImage.length > 0 ? parseImage[0].name : null
+                    parseImage.length > 0 ? parseImage[0].name : null;
                   return (
                     <div
                       style={{ marginBottom: 50, marginTop: 50 }}
@@ -211,7 +210,7 @@ export default function RenderComponent({
                     >
                       <div className="section-title">{node.title}</div>
                       {nodeImage ? (
-                        <div style={{ width: '100%', borderRadius: 5 }}>
+                        <div style={{ width: "100%", borderRadius: 5 }}>
                           <img
                             src={`${base_url}/api/blog/${blog_id}/720/${nodeImage}`}
                             alt=""
@@ -233,7 +232,10 @@ export default function RenderComponent({
                           </Suspense>
                         ) : null} */}
                         <Suspense fallback={<div>Loading component...</div>}>
-                          <MarkdownPreview source={node.content} />
+                          <MarkdownPreview
+                            source={node.content}
+                            wrapperElement={{ "data-color-mode": "light" }}
+                          />
                         </Suspense>
                       </div>
 
@@ -245,8 +247,8 @@ export default function RenderComponent({
                             setState({
                               ...state,
                               addNode: node,
-                              form: 'add_node',
-                            })
+                              form: "add_node",
+                            });
                           }}
                           style={{ marginRight: 16 }}
                         >
@@ -260,8 +262,8 @@ export default function RenderComponent({
                             setState({
                               ...state,
                               editNode: node,
-                              form: 'edit_node',
-                            })
+                              form: "edit_node",
+                            });
                           }}
                           style={{ marginRight: 16 }}
                         >
@@ -276,8 +278,8 @@ export default function RenderComponent({
                               ...state,
                               deleteNode: node,
                               nodeIndex,
-                              form: 'delete_node',
-                            })
+                              modal: "delete_node",
+                            });
                           }}
                           style={{ marginRight: 16 }}
                         >
@@ -288,8 +290,8 @@ export default function RenderComponent({
                         <div
                           className="button-none cursor"
                           onClick={(e) => {
-                            navigator.clipboard.writeText(node.content)
-                            e.stopPropagation()
+                            navigator.clipboard.writeText(node.content);
+                            e.stopPropagation();
                           }}
                           style={{ marginRight: 16 }}
                         >
@@ -301,7 +303,7 @@ export default function RenderComponent({
 
                       {/* Node settings end */}
                     </div>
-                  )
+                  );
                 })}
             </div>
           </div>
@@ -315,114 +317,65 @@ export default function RenderComponent({
         ) : null}
       </div>
     </div>
-  )
+  );
 }
+
 const ActivityComponent = ({
   state,
   setState,
   blog_id,
   isMobile,
 }: {
-  state: EditBlogState
-  setState: EditBlogAction
-  blog_id: number
-  isMobile: boolean
+  state: EditBlogState;
+  setState: EditBlogAction;
+  blog_id: number;
+  isMobile: boolean;
 }) => {
-  const { parentNode, childNodes, form, nodeIndex, mainNode, addNode } = state
+  const { childNodes, form, mainNode, addNode } = state;
 
-  if (!mainNode) return null
+  const editFnCallback = useCallback(
+    (data: DocNode) => {
+      const nodesAfterUpdate = updateBlogNode(childNodes, data);
+      const orderChildNodes = orderBlogChildNodes(nodesAfterUpdate, mainNode);
+      const newChildNodes =
+        orderChildNodes.length >= 2 ? orderChildNodes.slice(1) : [];
 
-  const navigate = useNavigate()
-
-  const deleteNode = () => {
-    if (!state.deleteNode) return
-    const delete_node = state.deleteNode
-    if (childNodes) {
-      let updateNode: DocNode | undefined
-      childNodes.forEach((r) => {
-        if (r.parent_id === delete_node.uid) {
-          updateNode = r
-        }
-      })
-
-      const submitData = {
-        delete_node: {
-          identity: delete_node.identity,
-          uid: delete_node.uid,
-        },
-        update_node: updateNode
-          ? {
-              parent_id: delete_node.parent_id,
-              uid: updateNode ? updateNode.uid : null,
-            }
-          : null,
-      }
-
-      axiosInstance
-        .post(`/blog/delete/node`, submitData)
-        .then(() => {
-          const nodesAfterDelete = deleteBlogNode(childNodes, submitData)
-          const orderChildNodes = orderBlogChildNodes(
-            nodesAfterDelete,
-            mainNode
-          )
-
-          setState({
-            ...state,
-            childNodes: orderChildNodes,
-            form: '',
-          })
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
-  }
-
-  const deleteBlog = useCallback(() => {
-    axiosInstance.post('/blog/delete', { blog_id }).then(() => {
-      navigate('/', { replace: true })
-    })
-  }, [])
-
-  const editFnCallback = useCallback((data: DocNode) => {
-    const nodesAfterUpdate = updateBlogNode(childNodes, data)
-    const orderChildNodes = orderBlogChildNodes(nodesAfterUpdate, mainNode)
-    const newChildNodes =
-      orderChildNodes.length >= 2 ? orderChildNodes.slice(1) : []
-
-    setState({
-      ...state,
-      childNodes: newChildNodes,
-      form: '',
-    })
-  }, [])
+      setState({
+        ...state,
+        childNodes: newChildNodes,
+        form: "",
+      });
+    },
+    [setState, childNodes, mainNode, state]
+  );
 
   const addNodeCbFn = (data: AppendNodeResponse) => {
-    if (!addNode) return
-    const nodesAfterAdd = appendBlogNode(childNodes, addNode, data, mainNode)
-    const newChildNodes = orderBlogChildNodes(nodesAfterAdd, mainNode)
+    if (!addNode) return;
+    const nodesAfterAdd = appendBlogNode(childNodes, addNode, data, mainNode);
+    const newChildNodes = orderBlogChildNodes(nodesAfterAdd, mainNode);
 
     setState({
       ...state,
       addNode: null,
       childNodes: newChildNodes,
-      form: '',
-    })
-  }
+      form: "",
+    });
+  };
 
   const onCancel = useCallback(() => {
     setState({
       ...state,
-      form: '',
+      form: "",
       editNode: null,
       addNode: null,
-    })
-  }, [])
+    });
+  }, [setState, state]);
+
+  if (!mainNode) return null;
 
   return (
     <>
-      {form === 'add_node' && state.addNode ? (
+      {form === "add_node" && state.addNode ? (
         <AddNode
           heading="Add Node"
           FnCallback={addNodeCbFn}
@@ -437,16 +390,8 @@ const ActivityComponent = ({
           parent_identity={state.addNode.uid}
         />
       ) : null}
-      {form === 'delete_node' && state.deleteNode ? (
-        <ConfirmAction
-          confirmTitle="Are you sure you want to delete Node?"
-          confirmAction={deleteNode}
-          title="Delete Node"
-          onCancel={onCancel}
-        />
-      ) : null}
 
-      {form === 'edit_node' && state.editNode ? (
+      {form === "edit_node" && state.editNode ? (
         <EditNodeForm
           heading="Edit Node"
           state={state}
@@ -458,31 +403,22 @@ const ActivityComponent = ({
           isMobile={isMobile}
         />
       ) : null}
-
-      {form === 'delete_blog' ? (
-        <ConfirmAction
-          confirmTitle="Are you sure you want to delete Blog?"
-          confirmAction={deleteBlog}
-          title="Delete Blog"
-          onCancel={onCancel}
-        />
-      ) : null}
     </>
-  )
-}
+  );
+};
 
 const RightBlogContainer = ({
   blog_id,
   setState,
   state,
 }: {
-  blog_id: number
-  setState: EditBlogAction
-  state: EditBlogState
+  blog_id: number;
+  setState: EditBlogAction;
+  state: EditBlogState;
 }) => {
   return (
-    <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
-      <ul style={{ paddingLeft: 0, listStyle: 'none' }} className="list-item">
+    <div style={{ width: "20%", paddingLeft: 15, paddingTop: 15 }}>
+      <ul style={{ paddingLeft: 0, listStyle: "none" }} className="list-item">
         <li>
           <RxReader size={16} color="#2d2d2d" />
           <Link to={`/view/blog/${blog_id}`}>Read Blog</Link>
@@ -491,8 +427,8 @@ const RightBlogContainer = ({
           onClick={() => {
             setState({
               ...state,
-              form: 'delete_blog',
-            })
+              modal: "delete_blog",
+            });
           }}
         >
           <AiOutlineDelete size={16} color="#2d2d2d" />
@@ -504,5 +440,5 @@ const RightBlogContainer = ({
         </li>
       </ul>
     </div>
-  )
-}
+  );
+};

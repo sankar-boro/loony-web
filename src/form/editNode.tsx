@@ -1,17 +1,17 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { axiosInstance } from 'loony-api'
-import { AuthContext } from '../context/AuthContext.tsx'
-import { TextArea } from './components/TextArea.tsx'
+import React, { useEffect, useState, useContext } from "react";
+import { axiosInstance } from "loony-api";
+import { AuthContext } from "../context/AuthContext.tsx";
+import { TextArea } from "./components/TextArea.tsx";
 import type {
   EditNodeComponentProps,
   AuthContextProps,
   AppContextProps,
-} from 'loony-types'
-import { getUrl } from 'loony-utils'
-import AppContext from '../context/AppContext.tsx'
-import UploadImage from './uploadImage.tsx'
-import type { Auth } from 'loony-types'
-import MarkdownPreview from '@uiw/react-markdown-preview'
+} from "loony-types";
+import { getUrl } from "loony-utils";
+import AppContext from "../context/AppContext.tsx";
+import UploadImage from "./uploadImage.tsx";
+import type { Auth } from "loony-types";
+import MarkdownPreview from "@uiw/react-markdown-preview";
 
 export default function EditNodeComponent(props: EditNodeComponentProps) {
   const {
@@ -23,52 +23,52 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
     url,
     isMobile,
     heading,
-  } = props
-  const { editNode, mainNode } = state
-  if (!editNode || !mainNode) return null
-  const authContext = useContext<AuthContextProps>(AuthContext)
-  const appContext = useContext<AppContextProps>(AppContext)
-  const { base_url } = appContext.env
+  } = props;
+  const { editNode, mainNode } = state;
+  const authContext = useContext<AuthContextProps>(AuthContext);
+  const appContext = useContext<AppContextProps>(AppContext);
+  const { base_url } = appContext.env;
 
-  const { user } = authContext as Auth
+  const { user } = authContext as Auth;
 
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [image, setImage] = useState('')
-  const [theme, setTheme] = useState(11)
-  const [error, setError] = useState('')
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [image, setImage] = useState("");
+  const [theme, setTheme] = useState(11);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (editNode) {
-      setTitle(editNode.title)
-      setContent(editNode.content)
-      if (typeof editNode.images === 'string') {
-        const __image = JSON.parse(editNode.images)
+      setTitle(editNode.title);
+      setContent(editNode.content);
+      if (typeof editNode.images === "string") {
+        const __image = JSON.parse(editNode.images);
         if (__image.length > 0) {
-          setImage(__image[0].name)
+          setImage(__image[0].name);
         }
       }
       if (Array.isArray(editNode.images) && editNode.images.length > 0) {
-        setImage(editNode.images[0].name)
+        setImage(editNode.images[0].name);
       }
       if (editNode.theme) {
-        setTheme(editNode.theme)
+        setTheme(editNode.theme);
       }
     }
-  }, [editNode])
+  }, [editNode]);
 
   const updateNode: React.MouseEventHandler<HTMLButtonElement> = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    const url__ = getUrl(editNode, mainNode, url)
-    e.preventDefault()
+    if (!editNode || !mainNode) return;
+    const url__ = getUrl(editNode, mainNode, url);
+    e.preventDefault();
     if (!title) {
-      setError('Title is required.')
-      return
+      setError("Title is required.");
+      return;
     }
     if (!title) {
-      setError('Body is required.')
-      return
+      setError("Body is required.");
+      return;
     }
     const submitData = {
       title,
@@ -78,31 +78,33 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
       identity: editNode.identity ? editNode.identity : null,
       images: image ? [{ name: image }] : [],
       theme,
-    }
+    };
     axiosInstance
       .post(url__, submitData)
       .then((res) => {
-        FnCallback(res.data)
+        FnCallback(res.data);
       })
       .catch(() => {
-        onCloseModal()
-      })
-  }
+        onCloseModal();
+      });
+  };
   const onCloseModal = () => {
-    setTitle('')
-    setContent('')
-    onCancel()
-  }
+    setTitle("");
+    setContent("");
+    onCancel();
+  };
 
-  const imageName = docIdName === 'doc_id' ? 'book' : 'blog'
+  const imageName = docIdName === "doc_id" ? "book" : "blog";
+
+  if (!editNode || !mainNode) return null;
 
   return (
     <div
       style={{
-        width: isMobile ? '100%' : '40%',
+        width: isMobile ? "100%" : "40%",
         paddingBottom: 100,
-        paddingLeft: '5%',
-        paddingTop: '1.5em',
+        paddingLeft: "5%",
+        paddingTop: "1.5em",
       }}
     >
       <h2>{heading}</h2>
@@ -110,7 +112,7 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
       <div>
         <div>
           {error ? (
-            <div style={{ color: '#ff4949', fontWeight: 'bold', fontSize: 14 }}>
+            <div style={{ color: "#ff4949", fontWeight: "bold", fontSize: 14 }}>
               {error}
             </div>
           ) : null}
@@ -128,7 +130,7 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
               placeholder="Title"
               value={title}
               onChange={(e) => {
-                setTitle(e.target.value)
+                setTitle(e.target.value);
               }}
             />
           </div>
@@ -146,9 +148,9 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
         </div>
         <div
           style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
           }}
         >
           <button onClick={onCloseModal} className="white-bg shadow">
@@ -171,11 +173,11 @@ export default function EditNodeComponent(props: EditNodeComponentProps) {
           ) : theme === 24 ? (
             <MarkdownPreview
               source={content}
-              wrapperElement={{ 'data-color-mode': 'light' }}
+              wrapperElement={{ "data-color-mode": "light" }}
             />
           ) : theme === 41 ? null : null // <MathsMarkdown source={formContent} />
         }
       </div>
     </div>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-import { useState, useCallback, useContext } from 'react'
-import { axiosInstance } from 'loony-api'
-import { AuthContext } from '../context/AuthContext.tsx'
-import { TextArea } from './components/TextArea.tsx'
-import 'react-easy-crop/react-easy-crop.css'
+import { useState, useCallback, useContext } from "react";
+import { axiosInstance } from "loony-api";
+import { AuthContext } from "../context/AuthContext.tsx";
+import { TextArea } from "./components/TextArea.tsx";
+import "react-easy-crop/react-easy-crop.css";
 import type {
   AuthContextProps,
   AppContextProps,
   AddNodeComponentProps,
-} from 'loony-types'
-import AppContext from '../context/AppContext.tsx'
-import UploadImage from './uploadImage.tsx'
-import type { Auth } from 'loony-types'
+} from "loony-types";
+import AppContext from "../context/AppContext.tsx";
+import UploadImage from "./uploadImage.tsx";
+import type { Auth } from "loony-types";
 
 export default function AddNodeComponent(props: AddNodeComponentProps) {
   const {
@@ -25,35 +25,35 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
     onCancel,
     parent_identity,
     isMobile,
-  } = props
+  } = props;
 
-  const authContext = useContext<AuthContextProps>(AuthContext)
-  const appContext = useContext<AppContextProps>(AppContext)
-  const { base_url } = appContext.env
+  const authContext = useContext<AuthContextProps>(AuthContext);
+  const appContext = useContext<AppContextProps>(AppContext);
+  const { base_url } = appContext.env;
 
-  const { user } = authContext as Auth
-  const [formTitle, setFormTitle] = useState('')
-  const [formContent, setFormContent] = useState('')
-  const [theme, setTheme] = useState(11)
-  const [error, setError] = useState('')
-  const [formImages, setFormImages] = useState(null)
-  const [tags, setTags] = useState('')
+  const { user } = authContext as Auth;
+  const [formTitle, setFormTitle] = useState("");
+  const [formContent, setFormContent] = useState("");
+  const [theme, setTheme] = useState(11);
+  const [error, setError] = useState("");
+  const [formImages, setFormImages] = useState(null);
+  const [tags, setTags] = useState("");
 
   const onCreateAction = useCallback(async () => {
     if (!formTitle) {
-      setError('Title is required.')
-      return
+      setError("Title is required.");
+      return;
     }
     if (!formContent) {
-      setError('Body is required.')
-      return
+      setError("Body is required.");
+      return;
     }
     axiosInstance
       .post(url, {
         title: formTitle,
         content: formContent,
         images: formImages ? formImages : [],
-        tags: tags.split(' '),
+        tags: tags.split(" "),
         [docIdName]: doc_id,
         parent_id,
         identity,
@@ -61,27 +61,27 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
         parent_identity,
       })
       .then(({ data }) => {
-        FnCallback(data)
+        FnCallback(data);
       })
       .catch((e) => {
-        console.log(e)
-      })
-  }, [formTitle, formContent])
+        console.log(e);
+      });
+  }, [formTitle, formContent]);
 
   return (
     <div
       style={{
-        width: isMobile ? '100%' : '40%',
+        width: isMobile ? "100%" : "40%",
         paddingBottom: 100,
-        paddingLeft: '5%',
-        paddingTop: '1.5em',
+        paddingLeft: "5%",
+        paddingTop: "1.5em",
       }}
     >
       <div style={{}}>
         <h2>{heading}</h2>
         <div>
           {error ? (
-            <div style={{ color: '#ff4949', fontWeight: 'bold', fontSize: 14 }}>
+            <div style={{ color: "#ff4949", fontWeight: "bold", fontSize: 14 }}>
               {error}
             </div>
           ) : null}
@@ -92,7 +92,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
               type="text"
               value={formTitle}
               onChange={(e) => {
-                setFormTitle(e.target.value)
+                setFormTitle(e.target.value);
               }}
             />
           </div>
@@ -114,7 +114,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
               type="text"
               value={tags}
               onChange={(e) => {
-                setTags(e.target.value)
+                setTags(e.target.value);
               }}
             />
           </div>
@@ -122,9 +122,9 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
       </div>
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-end",
         }}
       >
         <button
@@ -139,5 +139,5 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
         </button>
       </div>
     </div>
-  )
+  );
 }

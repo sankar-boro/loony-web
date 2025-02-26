@@ -19,6 +19,7 @@ export default function Edit(props: AppRouteProps) {
     doc_id: blog_id as number,
     childNodes: [],
     form: '',
+    modal: '',
     deleteNode: null,
   })
   const [status, setStatus] = useState({
@@ -41,7 +42,6 @@ export default function Edit(props: AppRouteProps) {
       props={props}
       blog_id={blog_id as number}
       setState={setState}
-      authContext={props.authContext}
     />
   )
 }
