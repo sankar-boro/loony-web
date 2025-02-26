@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react'
-import { LuFileWarning } from 'react-icons/lu'
+import { useState, useEffect } from "react";
+import { LuFileWarning } from "react-icons/lu";
 import { FiEdit2 } from "react-icons/fi";
-import { extractImage, getNav } from 'loony-utils'
+import { extractImage, getNav } from "loony-utils";
 
-import { useParams, Link } from 'react-router-dom'
-import { PageNavigation } from '../common/pageNavigation.tsx'
-import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
+import { useParams, Link } from "react-router-dom";
+import PageLoadingContainer from "../../components/PageLoadingContainer.tsx";
 import {
   AppRouteProps,
   DocNode,
@@ -13,25 +12,21 @@ import {
   PageStatus,
   AuthContextProps,
   AuthStatus,
-} from 'loony-types'
-import BasicMarkdown from '../../components/BasicMarkdown.tsx'
-import NodeInfo from '../../components/NodeInfo.tsx'
+} from "loony-types";
+import BasicMarkdown from "../../components/BasicMarkdown.tsx";
+import NodeInfo from "../../components/NodeInfo.tsx";
+import Nav from "../../nav/index.tsx";
 
-const View = ({
-  mobileNavOpen,
-  setMobileNavOpen,
-  isMobile,
-  appContext,
-  authContext,
-}: AppRouteProps) => {
-  const isDesktop = !isMobile
-  const { base_url } = appContext.env
-  const { bookId } = useParams()
-  const doc_id = bookId && parseInt(bookId)
+const View = (props: AppRouteProps) => {
+  const { isMobile, appContext, authContext } = props;
+  const isDesktop = !isMobile;
+  const { base_url } = appContext.env;
+  const { bookId } = useParams();
+  const doc_id = bookId && parseInt(bookId);
   const [pageStatus, setStatus] = useState({
     status: PageStatus.IDLE,
-    error: '',
-  })
+    error: "",
+  });
 
   const [state, setState] = useState<ReadBookState>({
     mainNode: null,
@@ -42,13 +37,13 @@ const View = ({
     navNodes: [],
     childNodes: [],
     frontPage: null,
-  })
+  });
 
   useEffect(() => {
     if (doc_id) {
-      getNav(doc_id, setState, setStatus)
+      getNav(doc_id, setState, setStatus);
     }
-  }, [doc_id])
+  }, [doc_id]);
 
   const viewFrontPage = () => {
     setState({
@@ -56,73 +51,26 @@ const View = ({
       page_id: state.frontPage?.uid || null,
       parentNode: frontPage,
       childNodes: [],
-    })
-  }
+    });
+  };
 
-  const { parentNode, navNodes, frontPage, childNodes, mainNode } = state
+  const { parentNode, navNodes, frontPage, childNodes, mainNode } = state;
 
   if (pageStatus.status !== PageStatus.VIEW_PAGE)
-    return <PageLoadingContainer isMobile={isMobile} />
+    return <PageLoadingContainer isMobile={isMobile} />;
 
-  if (!parentNode || !mainNode || !frontPage) return null
+  if (!parentNode || !mainNode || !frontPage) return null;
   return (
-    <div className="book-container">
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        {/*
-         * @ Left Navigation
-         */}
-        {isMobile && mobileNavOpen ? (
-          <div
-            style={{
-              width: '100%',
-              backgroundColor: 'rgb(0,0,0,0.5)',
-              zIndex: 10,
-              height: '105vh',
-            }}
-            onClick={() => {
-              setMobileNavOpen(false)
-            }}
-          >
-            <div
-              style={{
-                width: 320,
-                backgroundColor: 'white',
-                maxWidth: '100%',
-                height: '100%',
-                position: 'relative',
-                padding: 12,
-              }}
-            >
-              <PageNavigation
-                setState={setState}
-                navNodes={navNodes}
-                state={state}
-                doc_id={doc_id as number}
-                isMobile={isMobile}
-                viewFrontPage={viewFrontPage}
-              />
-            </div>
-          </div>
-        ) : null}
-        {isDesktop ? (
-          <div className="document-nav-container">
-            <PageNavigation
-              setState={setState}
-              navNodes={navNodes}
-              state={state}
-              doc_id={doc_id as number}
-              isMobile={isMobile}
-              viewFrontPage={viewFrontPage}
-            />
-          </div>
-        ) : null}
-        {/*
-         * @ Left Navigation End
-         */}
-
-        {/*
-         * @Page
-         */}
+    <div className="flex-row full-con">
+      <Nav
+        doc_id={doc_id as number}
+        setState={setState}
+        state={state}
+        viewFrontPage={viewFrontPage}
+        navNodes={navNodes}
+        {...props}
+      />
+      <div className="book-container">
         <div className="document-view-container">
           <ParentNode
             parentNode={parentNode}
@@ -130,12 +78,12 @@ const View = ({
             base_url={base_url}
           />
           {childNodes.map((subSectionNode) => {
-            const nodeImage = extractImage(subSectionNode.images)
+            const nodeImage = extractImage(subSectionNode.images);
             return (
               <div className="page-section" key={subSectionNode.uid}>
                 <div className="section-title">{subSectionNode.title}</div>
                 {nodeImage && nodeImage.name ? (
-                  <div style={{ width: '100%', borderRadius: 5 }}>
+                  <div style={{ width: "100%", borderRadius: 5 }}>
                     <img
                       src={`${base_url}/api/book/${doc_id}/720/${nodeImage.name}`}
                       alt=""
@@ -145,34 +93,35 @@ const View = ({
                 ) : null}
                 <BasicMarkdown source={subSectionNode.content} />
               </div>
-            )
+            );
           })}
           <div style={{ height: 50 }} />
         </div>
-        {/*
-         * @Page End
-         */}
-        {isDesktop ? (
-          <RightBookContainer
-            doc_id={doc_id as number}
-            authContext={authContext}
-          />
-        ) : null}
       </div>
+
+      {/*
+       * @Page End
+       */}
+      {isDesktop ? (
+        <RightBookContainer
+          doc_id={doc_id as number}
+          authContext={authContext}
+        />
+      ) : null}
     </div>
-  )
-}
+  );
+};
 
 const ParentNode = ({
   parentNode,
   doc_id,
   base_url,
 }: {
-  parentNode: DocNode
-  doc_id: number
-  base_url: string
+  parentNode: DocNode;
+  doc_id: number;
+  base_url: string;
 }) => {
-  const image = extractImage(parentNode.images)
+  const image = extractImage(parentNode.images);
   return (
     <div
       style={{
@@ -181,7 +130,7 @@ const ParentNode = ({
     >
       <div className="page-heading">{parentNode.title}</div>
       {image && image.name ? (
-        <div style={{ width: '100%', borderRadius: 5 }}>
+        <div style={{ width: "100%", borderRadius: 5 }}>
           <img
             src={`${base_url}/api/book/${doc_id}/720/${image.name}`}
             alt=""
@@ -196,20 +145,20 @@ const ParentNode = ({
         <BasicMarkdown source={parentNode.content} />
       </div>
     </div>
-  )
-}
+  );
+};
 
 const RightBookContainer = ({
   doc_id,
   authContext,
 }: {
-  doc_id: number
-  authContext: AuthContextProps
+  doc_id: number;
+  authContext: AuthContextProps;
 }) => {
-  const isAuth = authContext.status === AuthStatus.AUTHORIZED
+  const isAuth = authContext.status === AuthStatus.AUTHORIZED;
   return (
-    <div style={{ width: '20%', paddingLeft: 15, paddingTop: 15 }}>
-      <ul className="list-item" style={{ paddingLeft: 0, listStyle: 'none' }}>
+    <div className="doc-settings-container">
+      <ul className="list-item" style={{ paddingLeft: 0, listStyle: "none" }}>
         {isAuth && (
           <li>
             <FiEdit2 color="#2d2d2d" size={16} />
@@ -222,7 +171,7 @@ const RightBookContainer = ({
         </li>
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default View
+export default View;

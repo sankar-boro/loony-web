@@ -1,43 +1,43 @@
-import { useState, useEffect } from 'react'
-import LeftNavbar from '../common/LeftNavbar.tsx'
-import { NavigateFunction, useNavigate } from 'react-router-dom'
-import { axiosInstance } from 'loony-api'
-import { User, AppRouteProps, DocNode } from 'loony-types'
-import { EmptyBlog, EmptyBook } from '../components/EmptyCard.tsx'
-import NodeInfo from '../components/NodeInfo.tsx'
+import { useState, useEffect } from "react";
+import LeftNavbar from "../common/HomeLeftNavbar.tsx";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import { axiosInstance } from "loony-api";
+import { User, AppRouteProps, DocNode } from "loony-types";
+import { EmptyBlog, EmptyBook } from "../components/EmptyCard.tsx";
+import NodeInfo from "../components/NodeInfo.tsx";
 
 const Profile = (props: AppRouteProps) => {
-  const { isMobile, authContext, appContext } = props
-  const { base_url } = appContext.env
-  const { user } = authContext
-  const navigate = useNavigate()
+  const { isMobile, authContext, appContext } = props;
+  const { base_url } = appContext.env;
+  const { user } = authContext;
+  const navigate = useNavigate();
 
-  const { fname, lname, uid } = user as User
+  const { fname, lname, uid } = user as User;
 
   return (
     <div className="book-container flex-row">
       {!isMobile ? <LeftNavbar /> : null}
       <div
         style={{
-          width: isMobile ? '100%' : '85%',
-          padding: isMobile ? '16px 0px' : 24,
+          width: isMobile ? "100%" : "85%",
+          padding: isMobile ? "16px 0px" : 24,
         }}
       >
         <div
           className="profile-info"
           style={{
-            width: isMobile ? '90%' : '90%',
+            width: isMobile ? "90%" : "90%",
             height: 150,
-            paddingLeft: isMobile ? '5%' : '5%',
-            paddingRight: isMobile ? '5%' : '5%',
+            paddingLeft: isMobile ? "5%" : "5%",
+            paddingRight: isMobile ? "5%" : "5%",
           }}
         >
           <div
             className="flex-row"
             style={{
               marginTop: 5,
-              display: 'flex',
-              alignItems: 'center',
+              display: "flex",
+              alignItems: "center",
             }}
           >
             <div
@@ -45,7 +45,7 @@ const Profile = (props: AppRouteProps) => {
               style={{
                 width: 80,
                 height: 80,
-                backgroundColor: '#ccc',
+                backgroundColor: "#ccc",
                 borderRadius: 80,
                 marginRight: 10,
               }}
@@ -57,12 +57,12 @@ const Profile = (props: AppRouteProps) => {
             </div>
           </div>
         </div>
-        <hr style={{ marginTop: 25, marginBottom: 25, width: '90%' }} />
+        <hr style={{ marginTop: 25, marginBottom: 25, width: "90%" }} />
         <div
           style={{
-            width: isMobile ? '100%' : '90%',
-            paddingLeft: isMobile ? '0%' : '5%',
-            paddingRight: isMobile ? '0%' : '5%',
+            width: isMobile ? "100%" : "90%",
+            paddingLeft: isMobile ? "0%" : "5%",
+            paddingRight: isMobile ? "0%" : "5%",
           }}
         >
           <Blogs
@@ -80,8 +80,8 @@ const Profile = (props: AppRouteProps) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Blogs = ({
   navigate,
@@ -89,31 +89,31 @@ const Blogs = ({
   user_id,
   base_url,
 }: {
-  navigate: NavigateFunction
-  isMobile: boolean
-  user_id: number
-  base_url: string
+  navigate: NavigateFunction;
+  isMobile: boolean;
+  user_id: number;
+  base_url: string;
 }) => {
-  const [blogs, setBlogs] = useState<DocNode[] | null>(null)
+  const [blogs, setBlogs] = useState<DocNode[] | null>(null);
 
   useEffect(() => {
     axiosInstance
       .get(`/blog/get/${user_id}/user_blogs`)
       .then(({ data }) => {
-        setBlogs(data)
+        setBlogs(data);
       })
       .catch((err) => {
-        console.log(err)
-      })
-  }, [])
+        console.log(err);
+      });
+  }, []);
   return (
     <>
       <div
         className="flex-row"
         style={{
-          flexWrap: 'wrap',
+          flexWrap: "wrap",
           marginTop: 20,
-          display: 'flex',
+          display: "flex",
           gap: 16,
         }}
       >
@@ -130,12 +130,12 @@ const Blogs = ({
                 isMobile={isMobile}
                 base_url={base_url}
               />
-            )
+            );
           })}
       </div>
     </>
-  )
-}
+  );
+};
 
 const Books = ({
   navigate,
@@ -143,31 +143,31 @@ const Books = ({
   user_id,
   base_url,
 }: {
-  navigate: NavigateFunction
-  isMobile: boolean
-  user_id: number
-  base_url: string
+  navigate: NavigateFunction;
+  isMobile: boolean;
+  user_id: number;
+  base_url: string;
 }) => {
-  const [books, setBooks] = useState<DocNode[] | null>(null)
+  const [books, setBooks] = useState<DocNode[] | null>(null);
   useEffect(() => {
     axiosInstance
       .get(`/book/get/${user_id}/user_books`)
       .then(({ data }) => {
-        setBooks(data)
+        setBooks(data);
       })
       .catch((err) => {
-        console.log(err)
-      })
-  }, [])
+        console.log(err);
+      });
+  }, []);
 
   return (
     <>
       <div
         className="flex-row"
         style={{
-          flexWrap: 'wrap',
+          flexWrap: "wrap",
           marginTop: 20,
-          display: 'flex',
+          display: "flex",
           gap: 16,
         }}
       >
@@ -184,12 +184,12 @@ const Books = ({
                 isMobile={isMobile}
                 base_url={base_url}
               />
-            )
+            );
           })}
       </div>
     </>
-  )
-}
+  );
+};
 
 const Card = ({
   node,
@@ -198,14 +198,14 @@ const Card = ({
   nodeIdType,
   base_url,
 }: {
-  navigate: NavigateFunction
-  isMobile: boolean
-  nodeIdType: string
-  nodeType: string
-  node: DocNode
-  base_url: string
+  navigate: NavigateFunction;
+  isMobile: boolean;
+  nodeIdType: string;
+  nodeType: string;
+  node: DocNode;
+  base_url: string;
 }) => {
-  const image = JSON.parse(node.images)[0]
+  const image = JSON.parse(node.images)[0];
 
   return (
     <div className="card" key={node[nodeIdType]}>
@@ -216,21 +216,21 @@ const Card = ({
             image && image.name
               ? `url("${base_url}/api/${nodeType}/${node[nodeIdType]}/340/${image.name}")`
               : undefined,
-          overflow: 'hidden',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          overflow: "hidden",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
           borderTopLeftRadius: 3,
           borderTopRightRadius: 3,
         }}
         onClick={() => {
-          navigate(`/view/${nodeType}/${node[nodeIdType]}`)
+          navigate(`/view/${nodeType}/${node[nodeIdType]}`);
         }}
       />
       <div className="card-body">
         <div
           className="card-title cursor"
           onClick={() => {
-            navigate(`/view/${nodeType}/${node[nodeIdType]}`)
+            navigate(`/view/${nodeType}/${node[nodeIdType]}`);
           }}
         >
           {node.title}
@@ -238,7 +238,7 @@ const Card = ({
         <NodeInfo node={node} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

@@ -6,7 +6,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { LuFileWarning } from "react-icons/lu";
 import EditComponent from "./edit.tsx";
-import { PageNavigation } from "../common/editPageNavigation.tsx";
+import { PageNavigation } from "../../nav/editPageNavigation.tsx";
 import { PageNodeSettings } from "./pageNodeSettings.tsx";
 import PageLoadingContainer from "../../components/PageLoadingContainer.tsx";
 import AppContext from "../../context/AppContext.tsx";
@@ -95,8 +95,8 @@ export default function Edit({
   }
 
   return (
-    <div className="book-container">
-      <div style={{ display: "flex", flexDirection: "row" }}>
+    <div className="flex-row">
+      <>
         {isMobile && mobileNavOpen ? (
           <MobileNav
             state={state}
@@ -109,7 +109,7 @@ export default function Edit({
           />
         ) : null}
         {!isMobile ? (
-          <div className="document-nav-container">
+          <div className="con-15 bor-right pad-top-15">
             <PageNavigation
               setState={setState}
               // setStatus={setStatus}
@@ -120,78 +120,80 @@ export default function Edit({
             />
           </div>
         ) : null}
+      </>
+      <div className="book-container">
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          {/* Page */}
+          {state.modal && (
+            <Modal
+              state={state as EditBookState}
+              setState={setState as EditBookAction}
+              setAppContext={setAppContext}
+              doc_id={doc_id as number}
+              navigate={navigate}
+              isMobile={isMobile}
+            />
+          )}
 
-        {/* Page */}
-        {state.modal && (
-          <Modal
-            state={state as EditBookState}
-            setState={setState as EditBookAction}
-            setAppContext={setAppContext}
-            doc_id={doc_id as number}
-            navigate={navigate}
-            isMobile={isMobile}
-          />
-        )}
+          {!state.form && (
+            <>
+              <div className="document-view-container">
+                <ParentNode
+                  parentNode={parentNode}
+                  doc_id={doc_id as number}
+                  base_url={base_url}
+                  setState={setState}
+                  state={state}
+                />
 
-        {!state.form && (
-          <>
-            <div className="document-view-container">
-              <ParentNode
-                parentNode={parentNode}
-                doc_id={doc_id as number}
-                base_url={base_url}
-                setState={setState}
-                state={state}
-              />
+                <div
+                  style={{
+                    marginTop: 16,
+                  }}
+                >
+                  {childNodes.map((subSectionNode) => {
+                    const subSectionNodeImage = extractImage(
+                      subSectionNode.images
+                    );
 
-              <div
-                style={{
-                  marginTop: 16,
-                }}
-              >
-                {childNodes.map((subSectionNode) => {
-                  const subSectionNodeImage = extractImage(
-                    subSectionNode.images
-                  );
-
-                  return (
-                    <div className="page-section" key={subSectionNode.uid}>
-                      <div className="section-title">
-                        {subSectionNode.title}
-                      </div>
-                      {subSectionNodeImage && subSectionNodeImage.name ? (
-                        <div style={{ width: "100%", borderRadius: 5 }}>
-                          <img
-                            src={`${base_url}/api/book/${doc_id}/720/${subSectionNodeImage.name}`}
-                            alt=""
-                            width="100%"
-                          />
+                    return (
+                      <div className="page-section" key={subSectionNode.uid}>
+                        <div className="section-title">
+                          {subSectionNode.title}
                         </div>
-                      ) : null}
-                      <Suspense fallback={<div>Loading component...</div>}>
-                        <BasicMarkdown source={subSectionNode.content} />
-                      </Suspense>
-                      <PageNodeSettings
-                        node={subSectionNode}
-                        setState={setState}
-                        state={state}
-                      />
-                    </div>
-                  );
-                })}
+                        {subSectionNodeImage && subSectionNodeImage.name ? (
+                          <div style={{ width: "100%", borderRadius: 5 }}>
+                            <img
+                              src={`${base_url}/api/book/${doc_id}/720/${subSectionNodeImage.name}`}
+                              alt=""
+                              width="100%"
+                            />
+                          </div>
+                        ) : null}
+                        <Suspense fallback={<div>Loading component...</div>}>
+                          <BasicMarkdown source={subSectionNode.content} />
+                        </Suspense>
+                        <PageNodeSettings
+                          node={subSectionNode}
+                          setState={setState}
+                          state={state}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-
-            {!isMobile ? (
-              <RightBookContainer
-                doc_id={doc_id as string}
-                setState={setState}
-                state={state}
-              />
-            ) : null}
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
+      {!isMobile ? (
+        <RightBookContainer
+          doc_id={doc_id as string}
+          setState={setState}
+          state={state}
+        />
+      ) : null}
     </div>
   );
 }
@@ -300,7 +302,7 @@ const RightBookContainer = ({
   state: EditBookState;
 }) => {
   return (
-    <div style={{ width: "18%", paddingLeft: 15, paddingTop: 15 }}>
+    <div className="doc-settings-container">
       <ul style={{ paddingLeft: 0, listStyle: "none" }} className="list-item">
         <li>
           <RxReader size={16} color="#2d2d2d" />

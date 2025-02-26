@@ -1,16 +1,20 @@
-import { Link } from 'react-router-dom'
-import { MdHistory } from 'react-icons/md'
-import { GoHome } from 'react-icons/go'
-import { IoMdTime } from 'react-icons/io'
-import { AiOutlineLike } from 'react-icons/ai'
-import { ContentPolicyIcon, PrivacyPolicyIcon, UserAgreementIcon } from '../assets/svgs/icons.tsx'
+import { Link } from "react-router-dom";
+import { MdHistory } from "react-icons/md";
+import { GoHome } from "react-icons/go";
+import { IoMdTime } from "react-icons/io";
+import { AiOutlineLike } from "react-icons/ai";
+import {
+  ContentPolicyIcon,
+  PrivacyPolicyIcon,
+  UserAgreementIcon,
+} from "../assets/svgs/icons.tsx";
 
-import { BasicMenuNavContainer } from '../components/Containers.tsx'
+import { BasicMenuNavContainer } from "../components/Containers.tsx";
 
-export default function Navbar() {
+export default function DesktopLeftNavbar() {
   return (
     <div className="left-navbar">
-      <div style={{ width: '95%', paddingLeft: '2%', paddingRight: '2%' }}>
+      <div style={{ width: "95%", paddingLeft: "2%", paddingRight: "2%" }}>
         <BasicMenuNavContainer>
           <span style={{ marginRight: 10, height: 16 }}>
             <GoHome size={16} color="#2d2d2d" />
@@ -76,5 +80,5 @@ export default function Navbar() {
         </BasicMenuNavContainer>
       </div>
     </div>
-  )
+  );
 }
