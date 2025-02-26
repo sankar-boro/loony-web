@@ -6,7 +6,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { LuFileWarning } from "react-icons/lu";
 import EditComponent from "./edit.tsx";
-import { PageNavigation } from "../../nav/editPageNavigation.tsx";
+import Nav from "../../nav/edit/index.tsx";
 import { PageNodeSettings } from "./pageNodeSettings.tsx";
 import PageLoadingContainer from "../../components/PageLoadingContainer.tsx";
 import AppContext from "../../context/AppContext.tsx";
@@ -15,22 +15,16 @@ import Modal from "./modal.tsx";
 
 import {
   AppRouteProps,
-  BooleanDispatchAction,
   DocNode,
   EditBookAction,
   EditBookState,
   PageStatus,
-  VoidReturnFunction,
   PageState,
 } from "loony-types";
 import NodeInfo from "../../components/NodeInfo.tsx";
 
-export default function Edit({
-  mobileNavOpen,
-  setMobileNavOpen,
-  isMobile,
-  appContext,
-}: AppRouteProps) {
+export default function Edit(props: AppRouteProps) {
+  const { isMobile, appContext } = props;
   const { base_url } = appContext.env;
   const { bookId } = useParams();
   const doc_id = bookId && parseInt(bookId);
@@ -95,32 +89,14 @@ export default function Edit({
   }
 
   return (
-    <div className="flex-row">
-      <>
-        {isMobile && mobileNavOpen ? (
-          <MobileNav
-            state={state}
-            setState={setState}
-            doc_id={doc_id as number}
-            isMobile={isMobile}
-            setMobileNavOpen={setMobileNavOpen}
-            // setStatus={setStatus}
-            viewFrontPage={viewFrontPage}
-          />
-        ) : null}
-        {!isMobile ? (
-          <div className="con-15 bor-right pad-top-15">
-            <PageNavigation
-              setState={setState}
-              // setStatus={setStatus}
-              state={state}
-              doc_id={doc_id as number}
-              isMobile={isMobile}
-              viewFrontPage={viewFrontPage}
-            />
-          </div>
-        ) : null}
-      </>
+    <div className="flex-row full-con">
+      <Nav
+        doc_id={doc_id as number}
+        setState={setState}
+        state={state}
+        viewFrontPage={viewFrontPage}
+        {...props}
+      />
       <div className="book-container">
         <div style={{ display: "flex", flexDirection: "row" }}>
           {/* Page */}
@@ -197,60 +173,6 @@ export default function Edit({
     </div>
   );
 }
-
-const MobileNav = ({
-  state,
-  setState,
-  doc_id,
-  isMobile,
-  setMobileNavOpen,
-  // setStatus,
-  viewFrontPage,
-}: {
-  state: EditBookState;
-  setState: EditBookAction;
-  doc_id: number;
-  isMobile: boolean;
-  setMobileNavOpen: BooleanDispatchAction;
-  // setStatus: PageStatusDispatchAction
-  viewFrontPage: VoidReturnFunction;
-}) => {
-  return (
-    <>
-      <div
-        style={{
-          width: "100%",
-          backgroundColor: "rgb(0,0,0,0.5)",
-          zIndex: 10,
-          height: "105vh",
-        }}
-        onClick={() => {
-          setMobileNavOpen(false);
-        }}
-      >
-        <div
-          style={{
-            width: 320,
-            backgroundColor: "white",
-            maxWidth: "100%",
-            height: "100%",
-            position: "relative",
-            padding: 12,
-          }}
-        >
-          <PageNavigation
-            setState={setState}
-            // setStatus={setStatus}
-            state={state}
-            doc_id={doc_id as number}
-            isMobile={isMobile}
-            viewFrontPage={viewFrontPage}
-          />
-        </div>
-      </div>
-    </>
-  );
-};
 
 const ParentNode = ({
   parentNode,

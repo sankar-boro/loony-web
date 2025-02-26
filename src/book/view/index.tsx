@@ -15,7 +15,7 @@ import {
 } from "loony-types";
 import BasicMarkdown from "../../components/BasicMarkdown.tsx";
 import NodeInfo from "../../components/NodeInfo.tsx";
-import Nav from "../../nav/index.tsx";
+import Nav from "../../nav/view/index.tsx";
 
 const View = (props: AppRouteProps) => {
   const { isMobile, appContext, authContext } = props;
@@ -60,6 +60,7 @@ const View = (props: AppRouteProps) => {
     return <PageLoadingContainer isMobile={isMobile} />;
 
   if (!parentNode || !mainNode || !frontPage) return null;
+
   return (
     <div className="flex-row full-con">
       <Nav

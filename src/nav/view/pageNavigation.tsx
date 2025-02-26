@@ -3,7 +3,7 @@ import {
   PageNavContainer,
   SectionNavContainer,
   SectionsNavContainer,
-} from "../components/Containers.tsx";
+} from "../../components/Containers.tsx";
 import { getChapter, getSection } from "loony-utils";
 import {
   ReadBookAction,

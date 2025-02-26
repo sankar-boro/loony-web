@@ -8,7 +8,7 @@ import {
   VoidReturnFunction,
   BooleanDispatchAction,
 } from "loony-types";
-import DesktopNav from "./view/DesktopNav";
+import DesktopNav from "./DesktopNav";
 const MobileNav = lazy(() => import("./MobileNav"));
 
 export default function Nav(props: {

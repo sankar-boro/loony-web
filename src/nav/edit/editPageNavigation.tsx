@@ -5,11 +5,8 @@ import {
   SectionsNavContainer,
   ChapterButtonNavContainer,
   SectionButtonNavContainer,
-} from "../components/Containers.tsx";
+} from "../../components/Containers.tsx";
 import { getChapter, getSection } from "loony-utils";
-import { LuFileWarning } from "react-icons/lu";
-import { FiEdit2 } from "react-icons/fi";
-import { Link } from "react-router-dom";
 import { EditBookAction, EditBookState, VoidReturnFunction } from "loony-types";
 
 const Button = ({
@@ -34,13 +31,11 @@ export const PageNavigation = ({
   setState,
   state,
   doc_id,
-  isMobile,
   viewFrontPage,
 }: {
   setState: EditBookAction;
   state: EditBookState;
   doc_id: number;
-  isMobile: boolean;
   viewFrontPage: VoidReturnFunction;
 }) => {
   const { frontPage, parentNode, groupNodesById, navNodes } = state;
@@ -137,26 +132,6 @@ export const PageNavigation = ({
           </div>
         );
       })}
-
-      {isMobile ? (
-        <div
-          style={{ marginTop: 20, borderTop: "1px solid #ccc", paddingTop: 12 }}
-        >
-          <ul
-            className="list-item"
-            style={{ paddingLeft: 0, listStyle: "none" }}
-          >
-            <li style={{ display: "flex", alignItems: "center" }}>
-              <FiEdit2 color="#2d2d2d" size={16} />
-              <Link to={`/view/book/${doc_id}`}>Read Book</Link>
-            </li>
-            <li style={{ display: "flex", alignItems: "center" }}>
-              <LuFileWarning color="#2d2d2d" size={16} />
-              <Link to="#">Report</Link>
-            </li>
-          </ul>
-        </div>
-      ) : null}
     </>
   );
 };
