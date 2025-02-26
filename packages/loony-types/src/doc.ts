@@ -48,6 +48,7 @@ type ReadDocState = {
 
 type EditDocState = {
   form: string
+  modal: string
   addNode: DocNode | null
   editNode: DocNode | null
   parentNode: DocNode | null

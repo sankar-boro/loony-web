@@ -5,17 +5,15 @@ import { RxReader } from 'react-icons/rx'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { LuFileWarning } from 'react-icons/lu'
-
-// import { getChapters } from 'loony-utils'
 import EditComponent from './edit.tsx'
 import { PageNavigation } from '../common/editPageNavigation.tsx'
 import { PageNodeSettings } from './pageNodeSettings.tsx'
 import PageLoadingContainer from '../../components/PageLoadingContainer.tsx'
 import AppContext from '../../context/AppContext.tsx'
 import BasicMarkdown from '../../components/BasicMarkdown.tsx'
+import Modal from './modal.tsx'
 
 import {
-  // PageStatusDispatchAction,
   AppRouteProps,
   BooleanDispatchAction,
   DocNode,
@@ -46,6 +44,7 @@ export default function Edit({
     mainNode: null,
     childNodes: [],
     form: '',
+    modal: '',
     parentNode: null,
     topNode: null,
     page_id: null,
@@ -110,6 +109,13 @@ export default function Edit({
         ) : null}
 
         {/* Page */}
+        {state.modal && <Modal 
+            state={state as EditBookState}
+            setState={setState as EditBookAction}
+            setAppContext={setAppContext}
+            doc_id={doc_id as number}
+            navigate={navigate}
+            isMobile={isMobile}/>}
         {state.form && (
           <EditComponent
             state={state as EditBookState}
@@ -297,7 +303,7 @@ const RightBookContainer = ({
           onClick={() => {
             setState({
               ...state,
-              form: 'delete_book',
+              modal: 'delete_book',
             })
           }}
         >

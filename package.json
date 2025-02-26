@@ -22,13 +22,13 @@
     "loony-types": "0.1.0",
     "loony-utils": "0.1.0",
     "marked": "^14.1.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-easy-crop": "^5.0.6",
     "react-icons": "^5.0.1",
     "react-image-crop": "^11.0.5",
     "react-router-dom": "^6.23.0",
-    "rehype-rewrite": "^4.0.2",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "rehype-rewrite": "^4.0.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

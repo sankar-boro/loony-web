@@ -51,7 +51,7 @@ export const PageNodeSettings = ({
             setState({
               ...state,
               deleteNode: node,
-              form: 'delete_page',
+              modal: 'delete_page',
             })
             e.stopPropagation()
           }}
