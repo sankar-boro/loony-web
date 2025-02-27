@@ -76,7 +76,7 @@ export default function Edit(props: AppRouteProps) {
         />
       )}
       {!state.form && (
-        <div className="con-sm-12 con-xxl-5 mar-hor-5">
+        <div className="con-sm-12 con-xxl-5 mar-hor-1">
           <div>
             <div className="page-heading">{mainNode.title}</div>
             {image && image.name ? (

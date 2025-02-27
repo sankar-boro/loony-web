@@ -9,19 +9,24 @@ import { LuFileWarning } from "react-icons/lu"
 import { FiEdit2 } from "react-icons/fi"
 import { Link } from "react-router-dom"
 
-export default function MobileNav({
-  state,
-  setState,
-  doc_id,
-  setMobileNavOpen,
-  viewFrontPage,
-}: {
+export default function MobileNav(props: {
   state: EditBookState
   setState: EditBookAction
   doc_id: number
   setMobileNavOpen: BooleanDispatchAction
   viewFrontPage: VoidReturnFunction
+  mobileNavOpen: boolean
 }) {
+  const {
+    mobileNavOpen,
+    setMobileNavOpen,
+    setState,
+    state,
+    doc_id,
+    viewFrontPage,
+  } = props
+  if (!mobileNavOpen) return null
+
   return (
     <>
       <div

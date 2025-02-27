@@ -43,7 +43,7 @@ const PageLoader = ({ key_id }: { key_id: string | number }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PageLoader;
+export default PageLoader

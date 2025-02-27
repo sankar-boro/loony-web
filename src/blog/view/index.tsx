@@ -43,7 +43,7 @@ const View = (props: AppRouteProps) => {
   return (
     <div className="flex-row full-con">
       <Nav state={state} {...props} />
-      <div className="con-sm-12 con-xxl-5 mar-hor-5">
+      <div className="con-sm-12 con-xxl-5 mar-hor-1">
         <div style={{ marginBottom: 24 }}>
           <div className="page-heading">{mainNode.title}</div>
           {image && image.name ? (

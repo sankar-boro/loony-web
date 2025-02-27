@@ -71,7 +71,7 @@ const View = (props: AppRouteProps) => {
         navNodes={navNodes}
         {...props}
       />
-      <div className="con-sm-12 con-xxl-5 mar-hor-5">
+      <div className="con-sm-12 con-xxl-5 mar-hor-1">
         <ParentNode
           parentNode={parentNode}
           doc_id={doc_id as number}

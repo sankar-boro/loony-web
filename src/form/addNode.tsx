@@ -69,7 +69,7 @@ export default function AddNodeComponent(props: AddNodeComponentProps) {
   }, [formTitle, formContent])
 
   return (
-    <div className="con-sm-12 con-xxl-5 mar-hor-5">
+    <div className="con-sm-12 con-xxl-5 mar-hor-1">
       <div style={{}}>
         <h2>{heading}</h2>
         <div>
