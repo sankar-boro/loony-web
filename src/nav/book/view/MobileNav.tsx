@@ -1,4 +1,4 @@
-import { PageNavigation } from "./pageNavigation.tsx";
+import { PageNavigation } from "./pageNavigation.tsx"
 import {
   ReadBookAction,
   ReadBookState,
@@ -7,21 +7,22 @@ import {
   EditBookState,
   VoidReturnFunction,
   BooleanDispatchAction,
-} from "loony-types";
-import { LuFileWarning } from "react-icons/lu";
-import { FiEdit2 } from "react-icons/fi";
-import { Link } from "react-router-dom";
+} from "loony-types"
+import { LuFileWarning } from "react-icons/lu"
+import { FiEdit2 } from "react-icons/fi"
+import { Link } from "react-router-dom"
 
 export default function MobileNav(props: {
-  setState: ReadBookAction | EditBookAction;
-  navNodes: DocNode[];
-  state: ReadBookState | EditBookState;
-  doc_id: number;
-  viewFrontPage: VoidReturnFunction;
-  setMobileNavOpen: BooleanDispatchAction;
+  setState: ReadBookAction | EditBookAction
+  navNodes: DocNode[]
+  state: ReadBookState | EditBookState
+  doc_id: number
+  viewFrontPage: VoidReturnFunction
+  setMobileNavOpen: BooleanDispatchAction
+  mobileNavOpen: boolean
 }) {
-  const { setMobileNavOpen, doc_id } = props;
-
+  const { setMobileNavOpen, doc_id } = props
+  if (!props.mobileNavOpen) return null
   return (
     <div
       style={{
@@ -31,7 +32,7 @@ export default function MobileNav(props: {
         height: "105vh",
       }}
       onClick={() => {
-        setMobileNavOpen(false);
+        setMobileNavOpen(false)
       }}
     >
       <div
@@ -65,5 +66,5 @@ export default function MobileNav(props: {
         </div>
       </div>
     </div>
-  );
+  )
 }

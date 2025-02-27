@@ -1,17 +1,17 @@
-import { useState, useEffect, useContext, Suspense } from "react";
+import { useState, useEffect, useContext, Suspense } from "react"
 
-import { extractImage, getNav } from "loony-utils";
-import { RxReader } from "react-icons/rx";
-import { AiOutlineDelete } from "react-icons/ai";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { LuFileWarning } from "react-icons/lu";
-import EditComponent from "./edit.tsx";
-import Nav from "../../nav/book/edit/index.tsx";
-import { PageNodeSettings } from "./pageNodeSettings.tsx";
-import PageLoadingContainer from "../../components/PageLoadingContainer.tsx";
-import AppContext from "../../context/AppContext.tsx";
-import BasicMarkdown from "../../components/BasicMarkdown.tsx";
-import Modal from "./modal.tsx";
+import { extractImage, getNav } from "loony-utils"
+import { RxReader } from "react-icons/rx"
+import { AiOutlineDelete } from "react-icons/ai"
+import { useParams, Link, useNavigate } from "react-router-dom"
+import { LuFileWarning } from "react-icons/lu"
+import EditComponent from "./edit.tsx"
+import Nav from "../../nav/book/edit/index.tsx"
+import { PageNodeSettings } from "./pageNodeSettings.tsx"
+import PageLoadingContainer from "../../components/PageLoadingContainer.tsx"
+import AppContext from "../../context/AppContext.tsx"
+import BasicMarkdown from "../../components/BasicMarkdown.tsx"
+import Modal from "./modal.tsx"
 
 import {
   AppRouteProps,
@@ -20,20 +20,20 @@ import {
   EditBookState,
   PageStatus,
   PageState,
-} from "loony-types";
-import NodeInfo from "../../components/NodeInfo.tsx";
+} from "loony-types"
+import NodeInfo from "../../components/NodeInfo.tsx"
 
 export default function Edit(props: AppRouteProps) {
-  const { isMobile, appContext } = props;
-  const { base_url } = appContext.env;
-  const { bookId } = useParams();
-  const doc_id = bookId && parseInt(bookId);
-  const navigate = useNavigate();
-  const { setAppContext } = useContext(AppContext);
+  const { isMobile, appContext } = props
+  const { base_url } = appContext.env
+  const { bookId } = useParams()
+  const doc_id = bookId && parseInt(bookId)
+  const navigate = useNavigate()
+  const { setAppContext } = useContext(AppContext)
   const [status, setStatus] = useState<PageState>({
     status: PageStatus.IDLE,
     error: "",
-  });
+  })
   const [state, setState] = useState<EditBookState>({
     mainNode: null,
     childNodes: [],
@@ -50,13 +50,13 @@ export default function Edit(props: AppRouteProps) {
     deleteNode: null,
     editNode: null,
     doc_id: doc_id as number,
-  });
+  })
 
   useEffect(() => {
     if (doc_id) {
-      getNav(doc_id, setState, setStatus);
+      getNav(doc_id, setState, setStatus)
     }
-  }, [doc_id]);
+  }, [doc_id])
 
   const viewFrontPage = () => {
     setState({
@@ -66,14 +66,14 @@ export default function Edit(props: AppRouteProps) {
       editNode: null,
       addNode: null,
       form: "",
-    });
-  };
+    })
+  }
 
   if (status.status !== PageStatus.VIEW_PAGE)
-    return <PageLoadingContainer isMobile={isMobile} />;
+    return <PageLoadingContainer isMobile={isMobile} />
 
-  const { parentNode, childNodes, mainNode } = state;
-  if (!parentNode || !mainNode) return null;
+  const { parentNode, childNodes, mainNode } = state
+  if (!parentNode || !mainNode) return null
 
   return (
     <div className="flex-row full-con">
@@ -105,7 +105,7 @@ export default function Edit(props: AppRouteProps) {
         />
       )}
       {!state.form && (
-        <div className="con-40 margin-hor-5">
+        <div className="con-sm-12 con-xxl-5 mar-hor-5">
           <ParentNode
             parentNode={parentNode}
             doc_id={doc_id as number}
@@ -120,7 +120,7 @@ export default function Edit(props: AppRouteProps) {
             }}
           >
             {childNodes.map((subSectionNode) => {
-              const subSectionNodeImage = extractImage(subSectionNode.images);
+              const subSectionNodeImage = extractImage(subSectionNode.images)
 
               return (
                 <div className="page-section" key={subSectionNode.uid}>
@@ -143,7 +143,7 @@ export default function Edit(props: AppRouteProps) {
                     state={state}
                   />
                 </div>
-              );
+              )
             })}
           </div>
         </div>
@@ -156,7 +156,7 @@ export default function Edit(props: AppRouteProps) {
         />
       ) : null}
     </div>
-  );
+  )
 }
 
 const ParentNode = ({
@@ -166,13 +166,13 @@ const ParentNode = ({
   setState,
   state,
 }: {
-  parentNode: DocNode;
-  doc_id: number;
-  base_url: string;
-  setState: EditBookAction;
-  state: EditBookState;
+  parentNode: DocNode
+  doc_id: number
+  base_url: string
+  setState: EditBookAction
+  state: EditBookState
 }) => {
-  const image = extractImage(parentNode.images);
+  const image = extractImage(parentNode.images)
   return (
     <>
       <div>
@@ -196,17 +196,17 @@ const ParentNode = ({
       </div>
       <PageNodeSettings node={parentNode} setState={setState} state={state} />
     </>
-  );
-};
+  )
+}
 
 const RightBookContainer = ({
   doc_id,
   setState,
   state,
 }: {
-  doc_id: string;
-  setState: EditBookAction;
-  state: EditBookState;
+  doc_id: string
+  setState: EditBookAction
+  state: EditBookState
 }) => {
   return (
     <div className="doc-settings-container">
@@ -220,7 +220,7 @@ const RightBookContainer = ({
             setState({
               ...state,
               modal: "delete_book",
-            });
+            })
           }}
         >
           <AiOutlineDelete size={16} color="#2d2d2d" />
@@ -232,5 +232,5 @@ const RightBookContainer = ({
         </li>
       </ul>
     </div>
-  );
-};
+  )
+}

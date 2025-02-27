@@ -1,22 +1,22 @@
-import { NavigateFunction, useNavigate } from "react-router-dom";
-import { AppRouteProps, DocNode } from "loony-types";
+import { NavigateFunction, useNavigate } from "react-router-dom"
+import { AppRouteProps, DocNode } from "loony-types"
 
-import { DesktopLeftNavbar } from "../common/index.tsx";
-import Card from "../components/Card.tsx";
-import { EmptyBlog, EmptyBook } from "../components/EmptyCard.tsx";
-import { useHomeBlogs, useHomeBooks } from "../hooks/home.ts";
+import { DesktopLeftNavbar } from "../common/index.tsx"
+import Card from "../components/Card.tsx"
+import { EmptyBlog, EmptyBook } from "../components/EmptyCard.tsx"
+import { useHomeBlogs, useHomeBooks } from "../hooks/home.ts"
 
 const Home = (props: AppRouteProps) => {
-  const { isMobile, authContext, appContext } = props;
-  const { base_url } = appContext.env;
-  const navigate = useNavigate();
-  const [blogs] = useHomeBlogs(authContext);
-  const [books] = useHomeBooks(authContext);
+  const { isMobile, authContext, appContext } = props
+  const { base_url } = appContext.env
+  const navigate = useNavigate()
+  const [blogs] = useHomeBlogs(authContext)
+  const [books] = useHomeBooks(authContext)
 
   return (
     <div className="full-container flex-row">
       <DesktopLeftNavbar isMobile={isMobile} />
-      <div className="con-80">
+      <div className="con-xxl-11 con-sm-12">
         <Documents
           navigate={navigate}
           documents={blogs}
@@ -31,8 +31,8 @@ const Home = (props: AppRouteProps) => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
 const Documents = ({
   navigate,
@@ -40,10 +40,10 @@ const Documents = ({
   base_url,
   docType,
 }: {
-  navigate: NavigateFunction;
-  documents: DocNode[] | null;
-  base_url: string;
-  docType: string;
+  navigate: NavigateFunction
+  documents: DocNode[] | null
+  base_url: string
+  docType: string
 }) => {
   return (
     <div className="flex-row cards-con">
@@ -64,10 +64,10 @@ const Documents = ({
               nodeType={docType}
               base_url={base_url}
             />
-          );
+          )
         })}
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

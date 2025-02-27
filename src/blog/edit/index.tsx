@@ -1,34 +1,34 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import PageLoadingContainer from "../../components/PageLoadingContainer.tsx";
-import { extractImage, getBlogNodes } from "loony-utils";
-import { AppRouteProps, EditBlogState, PageStatus } from "loony-types";
-import MarkdownPreview from "@uiw/react-markdown-preview";
-import { Suspense, useCallback } from "react";
+import { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
+import PageLoadingContainer from "../../components/PageLoadingContainer.tsx"
+import { extractImage, getBlogNodes } from "loony-utils"
+import { AppRouteProps, EditBlogState, PageStatus } from "loony-types"
+import MarkdownPreview from "@uiw/react-markdown-preview"
+import { Suspense, useCallback } from "react"
 import {
   updateBlogNode,
   appendBlogNode,
   orderBlogChildNodes,
-} from "loony-utils";
-import { RxReader } from "react-icons/rx";
-import { AiOutlineDelete } from "react-icons/ai";
-import { LuFileWarning } from "react-icons/lu";
-import { MdAdd, MdOutlineEdit, MdContentCopy } from "react-icons/md";
-import { Link } from "react-router-dom";
-import AddNode from "../../form/addNode.tsx";
-import EditNodeForm from "../../form/editNode.tsx";
-import Nav from "../../nav/blog/index.tsx";
+} from "loony-utils"
+import { RxReader } from "react-icons/rx"
+import { AiOutlineDelete } from "react-icons/ai"
+import { LuFileWarning } from "react-icons/lu"
+import { MdAdd, MdOutlineEdit, MdContentCopy } from "react-icons/md"
+import { Link } from "react-router-dom"
+import AddNode from "../../form/addNode.tsx"
+import EditNodeForm from "../../form/editNode.tsx"
+import Nav from "../../nav/blog/index.tsx"
 
-import { AppendNodeResponse, EditBlogAction } from "loony-types";
-import { DocNode } from "loony-types";
-import NodeInfo from "../../components/NodeInfo.tsx";
-import Modal from "./modal.tsx";
+import { AppendNodeResponse, EditBlogAction } from "loony-types"
+import { DocNode } from "loony-types"
+import NodeInfo from "../../components/NodeInfo.tsx"
+import Modal from "./modal.tsx"
 
 export default function Edit(props: AppRouteProps) {
-  const { isMobile } = props;
-  const { blogId } = useParams();
-  const blog_id = blogId && parseInt(blogId);
-  const base_url = props.appContext.env.base_url;
+  const { isMobile } = props
+  const { blogId } = useParams()
+  const blog_id = blogId && parseInt(blogId)
+  const base_url = props.appContext.env.base_url
 
   const [state, setState] = useState<EditBlogState>({
     mainNode: null,
@@ -42,24 +42,24 @@ export default function Edit(props: AppRouteProps) {
     form: "",
     modal: "",
     deleteNode: null,
-  });
+  })
   const [status, setStatus] = useState({
     status: PageStatus.IDLE,
     error: "",
-  });
+  })
 
   useEffect(() => {
     if (blog_id) {
-      getBlogNodes(blog_id, setState, setStatus);
+      getBlogNodes(blog_id, setState, setStatus)
     }
-  }, [blog_id]);
-  const { mainNode, childNodes } = state;
+  }, [blog_id])
+  const { mainNode, childNodes } = state
 
-  if (!mainNode) return null;
-  const image = extractImage(mainNode.images);
+  if (!mainNode) return null
+  const image = extractImage(mainNode.images)
 
   if (status.status !== PageStatus.VIEW_PAGE)
-    return <PageLoadingContainer isMobile={props.isMobile} />;
+    return <PageLoadingContainer isMobile={props.isMobile} />
 
   return (
     <div className="flex-row full-con">
@@ -76,7 +76,7 @@ export default function Edit(props: AppRouteProps) {
         />
       )}
       {!state.form && (
-        <div className="con-40 margin-hor-5">
+        <div className="con-sm-12 con-xxl-5 mar-hor-5">
           <div>
             <div className="page-heading">{mainNode.title}</div>
             {image && image.name ? (
@@ -122,7 +122,7 @@ export default function Edit(props: AppRouteProps) {
                   // status: DocStatus.CreateNode,
                   addNode: mainNode,
                   form: "add_node",
-                });
+                })
               }}
               style={{ marginRight: 10 }}
             >
@@ -138,7 +138,7 @@ export default function Edit(props: AppRouteProps) {
                   // status: DocStatus.DeleteNode,
                   editNode: mainNode,
                   form: "edit_node",
-                });
+                })
               }}
               style={{ marginRight: 16 }}
             >
@@ -149,8 +149,8 @@ export default function Edit(props: AppRouteProps) {
             <div
               className="button-none cursor"
               onClick={(e) => {
-                navigator.clipboard.writeText(mainNode.content);
-                e.stopPropagation();
+                navigator.clipboard.writeText(mainNode.content)
+                e.stopPropagation()
               }}
               style={{ marginRight: 16 }}
             >
@@ -168,9 +168,9 @@ export default function Edit(props: AppRouteProps) {
           >
             {mainNode.identity !== 101 &&
               childNodes.map((node, nodeIndex) => {
-                const parseImage = JSON.parse(node.images as string);
+                const parseImage = JSON.parse(node.images as string)
                 const nodeImage =
-                  parseImage.length > 0 ? parseImage[0].name : null;
+                  parseImage.length > 0 ? parseImage[0].name : null
                 return (
                   <div
                     style={{ marginBottom: 50, marginTop: 50 }}
@@ -216,7 +216,7 @@ export default function Edit(props: AppRouteProps) {
                             ...state,
                             addNode: node,
                             form: "add_node",
-                          });
+                          })
                         }}
                         style={{ marginRight: 16 }}
                       >
@@ -231,7 +231,7 @@ export default function Edit(props: AppRouteProps) {
                             ...state,
                             editNode: node,
                             form: "edit_node",
-                          });
+                          })
                         }}
                         style={{ marginRight: 16 }}
                       >
@@ -247,7 +247,7 @@ export default function Edit(props: AppRouteProps) {
                             deleteNode: node,
                             nodeIndex,
                             modal: "delete_node",
-                          });
+                          })
                         }}
                         style={{ marginRight: 16 }}
                       >
@@ -258,8 +258,8 @@ export default function Edit(props: AppRouteProps) {
                       <div
                         className="button-none cursor"
                         onClick={(e) => {
-                          navigator.clipboard.writeText(node.content);
-                          e.stopPropagation();
+                          navigator.clipboard.writeText(node.content)
+                          e.stopPropagation()
                         }}
                         style={{ marginRight: 16 }}
                       >
@@ -271,7 +271,7 @@ export default function Edit(props: AppRouteProps) {
 
                     {/* Node settings end */}
                   </div>
-                );
+                )
               })}
           </div>
         </div>
@@ -285,7 +285,7 @@ export default function Edit(props: AppRouteProps) {
         />
       ) : null}
     </div>
-  );
+  )
 }
 
 const ActivityComponent = ({
@@ -294,41 +294,41 @@ const ActivityComponent = ({
   blog_id,
   isMobile,
 }: {
-  state: EditBlogState;
-  setState: EditBlogAction;
-  blog_id: number;
-  isMobile: boolean;
+  state: EditBlogState
+  setState: EditBlogAction
+  blog_id: number
+  isMobile: boolean
 }) => {
-  const { childNodes, form, mainNode, addNode } = state;
+  const { childNodes, form, mainNode, addNode } = state
 
   const editFnCallback = useCallback(
     (data: DocNode) => {
-      const nodesAfterUpdate = updateBlogNode(childNodes, data);
-      const orderChildNodes = orderBlogChildNodes(nodesAfterUpdate, mainNode);
+      const nodesAfterUpdate = updateBlogNode(childNodes, data)
+      const orderChildNodes = orderBlogChildNodes(nodesAfterUpdate, mainNode)
       const newChildNodes =
-        orderChildNodes.length >= 2 ? orderChildNodes.slice(1) : [];
+        orderChildNodes.length >= 2 ? orderChildNodes.slice(1) : []
 
       setState({
         ...state,
         childNodes: newChildNodes,
         form: "",
-      });
+      })
     },
-    [setState, childNodes, mainNode, state]
-  );
+    [setState, childNodes, mainNode, state],
+  )
 
   const addNodeCbFn = (data: AppendNodeResponse) => {
-    if (!addNode) return;
-    const nodesAfterAdd = appendBlogNode(childNodes, addNode, data, mainNode);
-    const newChildNodes = orderBlogChildNodes(nodesAfterAdd, mainNode);
+    if (!addNode) return
+    const nodesAfterAdd = appendBlogNode(childNodes, addNode, data, mainNode)
+    const newChildNodes = orderBlogChildNodes(nodesAfterAdd, mainNode)
 
     setState({
       ...state,
       addNode: null,
       childNodes: newChildNodes,
       form: "",
-    });
-  };
+    })
+  }
 
   const onCancel = useCallback(() => {
     setState({
@@ -336,10 +336,10 @@ const ActivityComponent = ({
       form: "",
       editNode: null,
       addNode: null,
-    });
-  }, [setState, state]);
+    })
+  }, [setState, state])
 
-  if (!mainNode) return null;
+  if (!mainNode) return null
 
   return (
     <>
@@ -372,17 +372,17 @@ const ActivityComponent = ({
         />
       ) : null}
     </>
-  );
-};
+  )
+}
 
 const RightBlogContainer = ({
   blog_id,
   setState,
   state,
 }: {
-  blog_id: number;
-  setState: EditBlogAction;
-  state: EditBlogState;
+  blog_id: number
+  setState: EditBlogAction
+  state: EditBlogState
 }) => {
   return (
     <div style={{ width: "20%", paddingLeft: 15, paddingTop: 15 }}>
@@ -396,7 +396,7 @@ const RightBlogContainer = ({
             setState({
               ...state,
               modal: "delete_blog",
-            });
+            })
           }}
         >
           <AiOutlineDelete size={16} color="#2d2d2d" />
@@ -408,5 +408,5 @@ const RightBlogContainer = ({
         </li>
       </ul>
     </div>
-  );
-};
+  )
+}

@@ -1,11 +1,11 @@
-import { BooleanDispatchAction, ReadBlogState } from "loony-types";
-import { Chapters } from "./BlogPageNavigation.tsx";
+import { BooleanDispatchAction, ReadBlogState } from "loony-types"
+import { Chapters } from "./BlogPageNavigation.tsx"
 
 export default function ViewNav(props: {
-  setMobileNavOpen: BooleanDispatchAction;
-  state: ReadBlogState;
+  setMobileNavOpen: BooleanDispatchAction
+  state: ReadBlogState
 }) {
-  const { setMobileNavOpen, state } = props;
+  const { setMobileNavOpen, state } = props
   return (
     <div
       style={{
@@ -15,7 +15,7 @@ export default function ViewNav(props: {
         height: "105vh",
       }}
       onClick={() => {
-        setMobileNavOpen(false);
+        setMobileNavOpen(false)
       }}
     >
       <div
@@ -31,5 +31,5 @@ export default function ViewNav(props: {
         <Chapters state={state} />
       </div>
     </div>
-  );
+  )
 }

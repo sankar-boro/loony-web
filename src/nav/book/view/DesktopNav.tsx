@@ -1,4 +1,4 @@
-import { PageNavigation } from "./pageNavigation.tsx";
+import { PageNavigation } from "./pageNavigation.tsx"
 import {
   ReadBookAction,
   ReadBookState,
@@ -7,20 +7,20 @@ import {
   EditBookState,
   VoidReturnFunction,
   BooleanDispatchAction,
-} from "loony-types";
+} from "loony-types"
 
 export default function DesktopNav(props: {
-  isMobile: boolean;
-  setState: ReadBookAction | EditBookAction;
-  navNodes: DocNode[];
-  state: ReadBookState | EditBookState;
-  doc_id: number;
-  viewFrontPage: VoidReturnFunction;
-  setMobileNavOpen: BooleanDispatchAction;
+  isMobile: boolean
+  setState: ReadBookAction | EditBookAction
+  navNodes: DocNode[]
+  state: ReadBookState | EditBookState
+  doc_id: number
+  viewFrontPage: VoidReturnFunction
+  setMobileNavOpen: BooleanDispatchAction
 }) {
   return (
-    <div className="con-15 bor-right pad-top-15">
+    <div className="con-xxl-2 bor-right pad-top-15">
       <PageNavigation {...props} />
     </div>
-  );
+  )
 }

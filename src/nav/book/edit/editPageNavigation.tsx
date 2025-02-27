@@ -5,16 +5,16 @@ import {
   SectionsNavContainer,
   ChapterButtonNavContainer,
   SectionButtonNavContainer,
-} from "../../../components/Containers.tsx";
-import { getChapter, getSection } from "loony-utils";
-import { EditBookAction, EditBookState, VoidReturnFunction } from "loony-types";
+} from "../../../components/Containers.tsx"
+import { getChapter, getSection } from "loony-utils"
+import { EditBookAction, EditBookState, VoidReturnFunction } from "loony-types"
 
 const Button = ({
   onClick,
   title,
 }: {
-  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
-  title: string;
+  onClick: (e: React.MouseEvent<HTMLDivElement>) => void
+  title: string
 }) => {
   return (
     <div
@@ -24,8 +24,8 @@ const Button = ({
     >
       {title}
     </div>
-  );
-};
+  )
+}
 
 export const PageNavigation = ({
   setState,
@@ -33,14 +33,14 @@ export const PageNavigation = ({
   doc_id,
   viewFrontPage,
 }: {
-  setState: EditBookAction;
-  state: EditBookState;
-  doc_id: number;
-  viewFrontPage: VoidReturnFunction;
+  setState: EditBookAction
+  state: EditBookState
+  doc_id: number
+  viewFrontPage: VoidReturnFunction
 }) => {
-  const { frontPage, parentNode, groupNodesById, navNodes } = state;
+  const { frontPage, parentNode, groupNodesById, navNodes } = state
 
-  if (!frontPage || !parentNode) return null;
+  if (!frontPage || !parentNode) return null
 
   return (
     <>
@@ -53,12 +53,12 @@ export const PageNavigation = ({
       <ChapterButtonNavContainer>
         <Button
           onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-            e.preventDefault();
+            e.preventDefault()
             setState((prevState) => ({
               ...prevState,
               topNode: frontPage,
               form: "add_chapter",
-            }));
+            }))
           }}
           title="Add Chapter"
         />
@@ -68,8 +68,8 @@ export const PageNavigation = ({
           <div key={chapter.uid}>
             <PageNavContainer
               onClick={(e) => {
-                e.stopPropagation();
-                getChapter(chapter, setState, groupNodesById, doc_id);
+                e.stopPropagation()
+                getChapter(chapter, setState, groupNodesById, doc_id)
               }}
               isActive={parentNode.uid === chapter.uid}
             >
@@ -82,7 +82,7 @@ export const PageNavigation = ({
                     ...state,
                     topNode: chapter,
                     form: "add_chapter",
-                  });
+                  })
                 }}
                 title="Add Chapter"
               />
@@ -96,7 +96,7 @@ export const PageNavigation = ({
                       ...state,
                       topNode: chapter,
                       form: "add_section",
-                    });
+                    })
                   }}
                 />
               </SectionButtonNavContainer>
@@ -105,8 +105,8 @@ export const PageNavigation = ({
                   <div key={section.uid}>
                     <SectionNavContainer
                       onClick={(e) => {
-                        e.stopPropagation();
-                        getSection(section, setState, groupNodesById, doc_id);
+                        e.stopPropagation()
+                        getSection(section, setState, groupNodesById, doc_id)
                       }}
                       isActive={parentNode.uid === section.uid}
                     >
@@ -120,18 +120,18 @@ export const PageNavigation = ({
                             ...state,
                             topNode: section,
                             form: "add_section",
-                          });
-                          e.stopPropagation();
+                          })
+                          e.stopPropagation()
                         }}
                       />
                     </SectionButtonNavContainer>
                   </div>
-                );
+                )
               })}
             </SectionsNavContainer>
           </div>
-        );
+        )
       })}
     </>
-  );
-};
+  )
+}

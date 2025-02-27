@@ -1,21 +1,21 @@
-import { BasicMenuNavContainer } from "../../components/Containers.tsx";
-import { LuFileWarning } from "react-icons/lu";
-import { FiEdit2 } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { BasicMenuNavContainer } from "../../components/Containers.tsx"
+import { LuFileWarning } from "react-icons/lu"
+import { FiEdit2 } from "react-icons/fi"
+import { Link } from "react-router-dom"
 import {
   AuthContextProps,
   AuthStatus,
   DocNode,
   EditBlogState,
   ReadBlogState,
-} from "loony-types";
+} from "loony-types"
 
 export const Chapters = ({
   state,
 }: {
-  state: EditBlogState | ReadBlogState;
+  state: EditBlogState | ReadBlogState
 }) => {
-  const { childNodes } = state;
+  const { childNodes } = state
   return (
     <>
       {childNodes.map((chapter) => {
@@ -25,20 +25,20 @@ export const Chapters = ({
               <div className="page-nav-title">{chapter.title}</div>
             </BasicMenuNavContainer>
           </div>
-        );
+        )
       })}
     </>
-  );
-};
+  )
+}
 
 export const Edit = ({
   blog_id,
   authContext,
   mainNode,
 }: {
-  blog_id: number;
-  authContext: AuthContextProps;
-  mainNode: DocNode;
+  blog_id: number
+  authContext: AuthContextProps
+  mainNode: DocNode
 }) => {
   return (
     <ul className="list-item" style={{ paddingLeft: 0, listStyle: "none" }}>
@@ -54,5 +54,5 @@ export const Edit = ({
         <Link to="#">Report</Link>
       </li>
     </ul>
-  );
-};
+  )
+}

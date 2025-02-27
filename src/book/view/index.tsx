@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { LuFileWarning } from "react-icons/lu";
-import { FiEdit2 } from "react-icons/fi";
-import { extractImage, getNav } from "loony-utils";
+import { useState, useEffect } from "react"
+import { LuFileWarning } from "react-icons/lu"
+import { FiEdit2 } from "react-icons/fi"
+import { extractImage, getNav } from "loony-utils"
 
-import { useParams, Link } from "react-router-dom";
-import PageLoadingContainer from "../../components/PageLoadingContainer.tsx";
+import { useParams, Link } from "react-router-dom"
+import PageLoadingContainer from "../../components/PageLoadingContainer.tsx"
 import {
   AppRouteProps,
   DocNode,
@@ -12,21 +12,21 @@ import {
   PageStatus,
   AuthContextProps,
   AuthStatus,
-} from "loony-types";
-import BasicMarkdown from "../../components/BasicMarkdown.tsx";
-import NodeInfo from "../../components/NodeInfo.tsx";
-import Nav from "../../nav/book/view/index.tsx";
+} from "loony-types"
+import BasicMarkdown from "../../components/BasicMarkdown.tsx"
+import NodeInfo from "../../components/NodeInfo.tsx"
+import Nav from "../../nav/book/view/index.tsx"
 
 const View = (props: AppRouteProps) => {
-  const { isMobile, appContext, authContext } = props;
-  const isDesktop = !isMobile;
-  const { base_url } = appContext.env;
-  const { bookId } = useParams();
-  const doc_id = bookId && parseInt(bookId);
+  const { isMobile, appContext, authContext } = props
+  const isDesktop = !isMobile
+  const { base_url } = appContext.env
+  const { bookId } = useParams()
+  const doc_id = bookId && parseInt(bookId)
   const [pageStatus, setStatus] = useState({
     status: PageStatus.IDLE,
     error: "",
-  });
+  })
 
   const [state, setState] = useState<ReadBookState>({
     mainNode: null,
@@ -37,13 +37,13 @@ const View = (props: AppRouteProps) => {
     navNodes: [],
     childNodes: [],
     frontPage: null,
-  });
+  })
 
   useEffect(() => {
     if (doc_id) {
-      getNav(doc_id, setState, setStatus);
+      getNav(doc_id, setState, setStatus)
     }
-  }, [doc_id]);
+  }, [doc_id])
 
   const viewFrontPage = () => {
     setState({
@@ -51,15 +51,15 @@ const View = (props: AppRouteProps) => {
       page_id: state.frontPage?.uid || null,
       parentNode: frontPage,
       childNodes: [],
-    });
-  };
+    })
+  }
 
-  const { parentNode, navNodes, frontPage, childNodes, mainNode } = state;
+  const { parentNode, navNodes, frontPage, childNodes, mainNode } = state
 
   if (pageStatus.status !== PageStatus.VIEW_PAGE)
-    return <PageLoadingContainer isMobile={isMobile} />;
+    return <PageLoadingContainer isMobile={isMobile} />
 
-  if (!parentNode || !mainNode || !frontPage) return null;
+  if (!parentNode || !mainNode || !frontPage) return null
 
   return (
     <div className="flex-row full-con">
@@ -71,14 +71,14 @@ const View = (props: AppRouteProps) => {
         navNodes={navNodes}
         {...props}
       />
-      <div className="con-40 margin-hor-5">
+      <div className="con-sm-12 con-xxl-5 mar-hor-5">
         <ParentNode
           parentNode={parentNode}
           doc_id={doc_id as number}
           base_url={base_url}
         />
         {childNodes.map((subSectionNode) => {
-          const nodeImage = extractImage(subSectionNode.images);
+          const nodeImage = extractImage(subSectionNode.images)
           return (
             <div className="page-section" key={subSectionNode.uid}>
               <div className="section-title">{subSectionNode.title}</div>
@@ -93,7 +93,7 @@ const View = (props: AppRouteProps) => {
               ) : null}
               <BasicMarkdown source={subSectionNode.content} />
             </div>
-          );
+          )
         })}
         <div style={{ height: 50 }} />
       </div>
@@ -108,19 +108,19 @@ const View = (props: AppRouteProps) => {
         />
       ) : null}
     </div>
-  );
-};
+  )
+}
 
 const ParentNode = ({
   parentNode,
   doc_id,
   base_url,
 }: {
-  parentNode: DocNode;
-  doc_id: number;
-  base_url: string;
+  parentNode: DocNode
+  doc_id: number
+  base_url: string
 }) => {
-  const image = extractImage(parentNode.images);
+  const image = extractImage(parentNode.images)
   return (
     <div
       style={{
@@ -144,17 +144,17 @@ const ParentNode = ({
         <BasicMarkdown source={parentNode.content} />
       </div>
     </div>
-  );
-};
+  )
+}
 
 const RightBookContainer = ({
   doc_id,
   authContext,
 }: {
-  doc_id: number;
-  authContext: AuthContextProps;
+  doc_id: number
+  authContext: AuthContextProps
 }) => {
-  const isAuth = authContext.status === AuthStatus.AUTHORIZED;
+  const isAuth = authContext.status === AuthStatus.AUTHORIZED
   return (
     <div className="doc-settings-container">
       <ul className="list-item" style={{ paddingLeft: 0, listStyle: "none" }}>
@@ -170,7 +170,7 @@ const RightBookContainer = ({
         </li>
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default View;
+export default View

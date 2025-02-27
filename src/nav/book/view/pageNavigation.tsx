@@ -3,8 +3,8 @@ import {
   PageNavContainer,
   SectionNavContainer,
   SectionsNavContainer,
-} from "../../../components/Containers.tsx";
-import { getChapter, getSection } from "loony-utils";
+} from "../../../components/Containers.tsx"
+import { getChapter, getSection } from "loony-utils"
 import {
   ReadBookAction,
   ReadBookState,
@@ -12,7 +12,7 @@ import {
   EditBookAction,
   EditBookState,
   VoidReturnFunction,
-} from "loony-types";
+} from "loony-types"
 
 export const PageNavigation = ({
   setState,
@@ -21,15 +21,15 @@ export const PageNavigation = ({
   doc_id,
   viewFrontPage,
 }: {
-  setState: ReadBookAction | EditBookAction;
-  navNodes: DocNode[];
-  state: ReadBookState | EditBookState;
-  doc_id: number;
-  viewFrontPage: VoidReturnFunction;
+  setState: ReadBookAction | EditBookAction
+  navNodes: DocNode[]
+  state: ReadBookState | EditBookState
+  doc_id: number
+  viewFrontPage: VoidReturnFunction
 }) => {
-  const { frontPage, parentNode, groupNodesById } = state;
+  const { frontPage, parentNode, groupNodesById } = state
 
-  if (!frontPage || !parentNode) return null;
+  if (!frontPage || !parentNode) return null
 
   return (
     <>
@@ -44,8 +44,8 @@ export const PageNavigation = ({
           <div key={chapter.uid}>
             <PageNavContainer
               onClick={(e) => {
-                e.stopPropagation();
-                getChapter(chapter, setState, groupNodesById, doc_id);
+                e.stopPropagation()
+                getChapter(chapter, setState, groupNodesById, doc_id)
               }}
               isActive={parentNode.uid === chapter.uid}
             >
@@ -53,7 +53,7 @@ export const PageNavigation = ({
             </PageNavContainer>
             <SectionsNavContainer
               onClick={() => {
-                return;
+                return
               }}
             >
               {/* {page_id === chapter.uid &&
@@ -63,19 +63,19 @@ export const PageNavigation = ({
                   <SectionNavContainer
                     key={section.uid}
                     onClick={(e) => {
-                      e.stopPropagation();
-                      getSection(section, setState, groupNodesById, doc_id);
+                      e.stopPropagation()
+                      getSection(section, setState, groupNodesById, doc_id)
                     }}
                     isActive={parentNode.uid === section.uid}
                   >
                     {section.title}
                   </SectionNavContainer>
-                );
+                )
               })}
             </SectionsNavContainer>
           </div>
-        );
+        )
       })}
     </>
-  );
-};
+  )
+}

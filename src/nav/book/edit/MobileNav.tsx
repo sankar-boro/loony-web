@@ -3,11 +3,11 @@ import {
   EditBookState,
   VoidReturnFunction,
   BooleanDispatchAction,
-} from "loony-types";
-import { PageNavigation } from "./editPageNavigation";
-import { LuFileWarning } from "react-icons/lu";
-import { FiEdit2 } from "react-icons/fi";
-import { Link } from "react-router-dom";
+} from "loony-types"
+import { PageNavigation } from "./editPageNavigation"
+import { LuFileWarning } from "react-icons/lu"
+import { FiEdit2 } from "react-icons/fi"
+import { Link } from "react-router-dom"
 
 export default function MobileNav({
   state,
@@ -16,11 +16,11 @@ export default function MobileNav({
   setMobileNavOpen,
   viewFrontPage,
 }: {
-  state: EditBookState;
-  setState: EditBookAction;
-  doc_id: number;
-  setMobileNavOpen: BooleanDispatchAction;
-  viewFrontPage: VoidReturnFunction;
+  state: EditBookState
+  setState: EditBookAction
+  doc_id: number
+  setMobileNavOpen: BooleanDispatchAction
+  viewFrontPage: VoidReturnFunction
 }) {
   return (
     <>
@@ -32,7 +32,7 @@ export default function MobileNav({
           height: "105vh",
         }}
         onClick={() => {
-          setMobileNavOpen(false);
+          setMobileNavOpen(false)
         }}
       >
         <div
@@ -76,5 +76,5 @@ export default function MobileNav({
         </div>
       </div>
     </>
-  );
+  )
 }

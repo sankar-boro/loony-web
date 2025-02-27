@@ -1,16 +1,16 @@
-import { DocNode, AuthContextProps, AuthStatus } from "loony-types";
-import { Link } from "react-router-dom";
-import { LuFileWarning } from "react-icons/lu";
-import { FiEdit2 } from "react-icons/fi";
+import { DocNode, AuthContextProps, AuthStatus } from "loony-types"
+import { Link } from "react-router-dom"
+import { LuFileWarning } from "react-icons/lu"
+import { FiEdit2 } from "react-icons/fi"
 
 export default function RightNav({
   blog_id,
   authContext,
   mainNode,
 }: {
-  blog_id: number;
-  authContext: AuthContextProps;
-  mainNode: DocNode;
+  blog_id: number
+  authContext: AuthContextProps
+  mainNode: DocNode
 }) {
   return (
     <ul className="list-item" style={{ paddingLeft: 0, listStyle: "none" }}>
@@ -26,5 +26,5 @@ export default function RightNav({
         <Link to="#">Report</Link>
       </li>
     </ul>
-  );
+  )
 }

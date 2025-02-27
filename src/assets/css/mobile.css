@@ -1,5 +1,6 @@
-@import url('header.css');
-@import url('common.css');
+@import url("header.css");
+@import url("common.css");
+@import url("con.css");
 
 p {
   font-size: 1em;
@@ -52,8 +53,8 @@ label {
   font-size: 16px;
   color: #303030;
 }
-input[type='text'],
-input[type='password'],
+input[type="text"],
+input[type="password"],
 textarea {
   width: 100%;
   border: 1px solid var(--border-color);
@@ -64,7 +65,7 @@ textarea {
   background: var(--LG-to-right);
   color: #212529;
 }
-input[type='file']::file-selector-button {
+input[type="file"]::file-selector-button {
   font-weight: bold;
   padding: 8px 18px 8px 18px;
   text-align: center;
@@ -512,7 +513,7 @@ pre {
 
 /* Style for code element */
 code {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
 }
 .form-content {
   margin-top: 1.5em;
@@ -523,4 +524,4 @@ code {
   padding: 10px;
 }
 
-@import url('navbar.css');
+@import url("navbar.css");
